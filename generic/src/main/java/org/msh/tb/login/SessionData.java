@@ -3,14 +3,14 @@
  */
 package org.msh.tb.login;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Store temporary and very tiny objects into the user session. This component

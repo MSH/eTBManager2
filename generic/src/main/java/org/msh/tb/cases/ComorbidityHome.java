@@ -1,10 +1,5 @@
 package org.msh.tb.cases;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -17,6 +12,10 @@ import org.msh.tb.misc.FieldsQuery;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

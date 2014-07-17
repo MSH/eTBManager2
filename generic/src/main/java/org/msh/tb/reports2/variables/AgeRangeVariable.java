@@ -1,9 +1,6 @@
 package org.msh.tb.reports2.variables;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
@@ -12,6 +9,9 @@ import org.msh.tb.AgeRangeHome;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgeRangeVariable extends VariableImpl {
 

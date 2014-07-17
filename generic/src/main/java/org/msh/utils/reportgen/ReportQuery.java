@@ -1,16 +1,11 @@
 package org.msh.utils.reportgen;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.jboss.seam.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
-import org.jboss.seam.Component;
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * Generate a single query to the database returning consolidated data based on filters, variables and a master table

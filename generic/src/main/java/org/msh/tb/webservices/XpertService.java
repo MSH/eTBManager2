@@ -1,12 +1,5 @@
 package org.msh.tb.webservices;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.Style;
-import javax.xml.bind.ValidationException;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.framework.EntityNotFoundException;
 import org.msh.tb.cases.CaseHome;
@@ -17,6 +10,13 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.tb.laboratories.LaboratoryHome;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.Style;
+import javax.xml.bind.ValidationException;
 
 /**
  * Web-service to post new or update xpert exam results.

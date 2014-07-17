@@ -1,9 +1,5 @@
 package org.msh.tb.cases;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -12,6 +8,9 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Name("caseTagHome")
 public class CaseTagHome {

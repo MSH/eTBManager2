@@ -1,8 +1,5 @@
 package org.msh.tb.reports2;
 
-import java.text.MessageFormat;
-import java.util.List;
-
 import org.jboss.seam.core.Expressions;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.Filter;
@@ -10,6 +7,9 @@ import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.reports.variables.Variable;
+
+import java.text.MessageFormat;
+import java.util.List;
 
 /**
  * Default implementation of a variable that stores the id, the

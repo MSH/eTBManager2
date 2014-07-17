@@ -3,15 +3,6 @@
  */
 package org.msh.tb.sync.actions;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.ValidationException;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -20,6 +11,14 @@ import org.msh.tb.application.tasks.TaskManager;
 import org.msh.tb.sync.SyncFileTask;
 import org.msh.tb.sync.SyncFileUploadFilter;
 import org.msh.tb.webservices.RemoteActionHandler;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.ValidationException;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Prepare the answer to the client app that sent the synchronization file. The file is read

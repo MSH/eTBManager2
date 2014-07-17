@@ -1,26 +1,14 @@
 package org.msh.tb.workspaces;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.tasks.TaskManager;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.HealthSystem;
-import org.msh.tb.entities.Laboratory;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.UserProfile;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
+
+import javax.persistence.EntityManager;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Copy data from one workspace into another

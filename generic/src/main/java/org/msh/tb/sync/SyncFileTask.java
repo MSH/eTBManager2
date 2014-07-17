@@ -3,16 +3,16 @@
  */
 package org.msh.tb.sync;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Date;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.application.tasks.AsyncTaskImpl;
 import org.msh.tb.entities.ClientSyncResult;
 import org.msh.tb.entities.UserWorkspace;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 
 /**
  * @author Ricardo Memoria

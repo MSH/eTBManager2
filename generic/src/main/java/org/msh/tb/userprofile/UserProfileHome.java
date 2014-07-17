@@ -1,10 +1,5 @@
 package org.msh.tb.userprofile;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -19,6 +14,10 @@ import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 
 

@@ -1,17 +1,16 @@
 package org.msh.tb.reports;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 
 @Name("orderLeadTimeReport")

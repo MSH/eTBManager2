@@ -2,5 +2,5 @@ package org.msh.tb.client.commons;
 
 public interface StandardEventHandler {
 
-	void eventHandler(Object eventType, Object data);
+	void handleEvent(Object eventType, Object data);
 }

@@ -3,14 +3,6 @@
  */
 package org.msh.tb.tbunits;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.core.Events;
@@ -18,6 +10,9 @@ import org.msh.tb.application.App;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 /**
  * This is a set of services to support TB unit operations.

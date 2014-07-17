@@ -3,11 +3,10 @@
  */
 package org.msh.tb.client.shared;
 
-import java.util.ArrayList;
-
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.msh.tb.client.shared.model.CIndicator;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.ArrayList;
 
 /**
  * @author Ricardo Memoria

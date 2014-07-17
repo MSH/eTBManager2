@@ -1,21 +1,15 @@
 package org.msh.tb.medicines.estimating;
 
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.CaseState;
+import org.msh.utils.date.Period;
+
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.utils.date.Period;
 
 @Name("medicineEstimation")
 public class MedicineEstimation {

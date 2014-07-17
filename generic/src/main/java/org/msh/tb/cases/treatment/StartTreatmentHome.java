@@ -1,9 +1,5 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -14,8 +10,11 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
 
 
 /**

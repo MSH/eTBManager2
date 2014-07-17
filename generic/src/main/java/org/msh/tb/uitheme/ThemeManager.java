@@ -1,11 +1,5 @@
 package org.msh.tb.uitheme;
 
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
@@ -17,6 +11,11 @@ import org.msh.tb.application.App;
 import org.msh.tb.entities.UITheme;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
+
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Manages the selection of the UI theme in use by the user logged into the system

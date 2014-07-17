@@ -3,14 +3,14 @@
  */
 package org.msh.tb.reports2.variables;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Generate ART or CPT report based on HIV exam results. The type of report

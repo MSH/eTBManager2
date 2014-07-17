@@ -1,8 +1,5 @@
 package org.msh.tb.indicators;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ResistancePattern;
@@ -12,6 +9,9 @@ import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Generates indicator about DST resistances for previously treated patients

@@ -1,16 +1,15 @@
 package org.msh.tb.medicines.orders;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.OrderComment;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 @Name("orderCommentsHome")
 public class OrderCommentHome extends EntityHomeEx<OrderComment>{

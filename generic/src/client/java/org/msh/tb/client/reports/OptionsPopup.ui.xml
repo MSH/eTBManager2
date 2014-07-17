@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder' 
-	xmlns:g='urn:import:com.google.gwt.user.client.ui'
-	xmlns:c='urn:import:org.msh.tb.client.commons'
-	xmlns:rep='urn:import:org.msh.tb.client.reports'>
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:h='urn:import:org.msh.tb.client.ui'
+        >
 	
-	<ui:with field='msg' type='org.msh.tb.client.reports.resources.ReportConstants'/>
-	
-	<g:HTMLPanel ui:field="pnl">
-	    <ul class="dropdown-menu">
-	        <li>
-	            <g:Anchor ui:field="lnkNew">New report</g:Anchor>
-	        </li>
-	        <li>
-	            <g:Anchor ui:field="lnkSaveAs">Save report as...</g:Anchor>
-	        </li>
-	        <li>
-	            <g:Anchor ui:field="lnkDelete">Delete report</g:Anchor>
-	        </li>
-	        <li>
-	            <g:Anchor ui:field="lnkSettings">Options...</g:Anchor>
-	        </li>
-	    </ul>
-	</g:HTMLPanel>
-		
+	<ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
+
+    <h:MenuPanel ui:field="pnlMenu">
+        <g:Anchor ui:field="lnkNew">New report</g:Anchor>
+        <g:Anchor ui:field="lnkNewIndicator">Add indicator</g:Anchor>
+        <g:Anchor ui:field="lnkSave">Save report</g:Anchor>
+        <g:Anchor ui:field="lnkSaveAs">Save report as...</g:Anchor>
+        <g:Anchor ui:field="lnkDelete">Delete report</g:Anchor>
+        <g:Anchor ui:field="lnkSettings">Options...</g:Anchor>
+    </h:MenuPanel>
+
 </ui:UiBinder>

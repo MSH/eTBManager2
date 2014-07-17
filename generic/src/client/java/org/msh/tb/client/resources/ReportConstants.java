@@ -1,4 +1,4 @@
-package org.msh.tb.client.reports.resources;
+package org.msh.tb.client.resources;
 
 import com.google.gwt.i18n.client.Constants;
 

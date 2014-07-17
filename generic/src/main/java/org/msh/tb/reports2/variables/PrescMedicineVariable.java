@@ -1,10 +1,5 @@
 package org.msh.tb.reports2.variables;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
@@ -12,6 +7,10 @@ import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PrescMedicineVariable extends VariableImpl {
 

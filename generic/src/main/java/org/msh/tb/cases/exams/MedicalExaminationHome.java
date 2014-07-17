@@ -1,7 +1,5 @@
 package org.msh.tb.cases.exams;
 
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -12,6 +10,8 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.transactionlog.LogInfo;
+
+import java.util.List;
 
 
 /**

@@ -1,8 +1,5 @@
 package org.msh.tb.reports;
 
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.adminunits.InfoCountryLevels;
@@ -10,6 +7,9 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.export.ExcelCreator;
+
+import java.util.List;
+import java.util.Map;
 @Name("stockPosResportExcel")
 public class StockPosResportExcel {
 	@In(create=true) Map<String, String> messages;

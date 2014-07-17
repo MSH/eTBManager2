@@ -1,10 +1,5 @@
 package org.msh.tb.reports2;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.persistence.EntityManager;
-
 import org.hibernate.Session;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.jboss.seam.Component;
@@ -16,6 +11,10 @@ import org.msh.reports.IndicatorReport;
 import org.msh.reports.ReportConfiguration;
 import org.msh.reports.ReportResourceProvider;
 import org.msh.tb.entities.Workspace;
+
+import javax.persistence.EntityManager;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @Name("indicatorReportFactory")
 public class IndicatorReportFactory implements ReportResourceProvider {

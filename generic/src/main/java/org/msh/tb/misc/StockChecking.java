@@ -1,9 +1,5 @@
 package org.msh.tb.misc;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.async.Asynchronous;
@@ -15,6 +11,10 @@ import org.msh.tb.entities.StockPosition;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.medicines.movs.MinBufferStockList;
 import org.msh.tb.medicines.movs.StockPositionList;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
  
 @Name("stockChecking")
 public class StockChecking {

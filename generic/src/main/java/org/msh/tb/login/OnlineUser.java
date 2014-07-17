@@ -1,8 +1,8 @@
 package org.msh.tb.login;
 
-import java.util.Date;
-
 import org.msh.tb.entities.UserLogin;
+
+import java.util.Date;
 
 
 public class OnlineUser {

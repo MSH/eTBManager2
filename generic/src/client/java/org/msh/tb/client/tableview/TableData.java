@@ -1,12 +1,9 @@
 package org.msh.tb.client.tableview;
 
+import org.msh.tb.client.shared.model.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.msh.tb.client.shared.model.CReportResponse;
-import org.msh.tb.client.shared.model.CTableColumn;
-import org.msh.tb.client.shared.model.CTableRow;
-import org.msh.tb.client.shared.model.CVariable;
 
 /**
  * Store in-memory data about the table and its information
@@ -16,19 +13,17 @@ import org.msh.tb.client.shared.model.CVariable;
  */
 public class TableData {
 
-	public enum TableSelection { ROW, COLUMN };
-	
 	public static int CELL_TOTAL = -2;
 	public static int CELL_TITLE = -1;
 
 	// selected column and row to draw the chart
 	private int selectedCell = TableData.CELL_TITLE;
-	private TableSelection selection = TableSelection.ROW;
+	private CTableSelection selection = CTableSelection.ROW;
 
 	/**
 	 * Table sent from the server
 	 */
-	private CReportResponse table;
+	private CIndicatorResponse table;
 	/**
 	 * Variables that compound the column of the table
 	 */
@@ -140,11 +135,11 @@ public class TableData {
 	
 	
 	/**
-	 * Update the data with an instance of the {@link CReportResponse} containing
+	 * Update the data with an instance of the {@link org.msh.tb.client.shared.model.CIndicatorResponse} containing
 	 * data for a new report
 	 * @param table contains data of a report
 	 */
-	public void update(CReportResponse table) {
+	public void update(CIndicatorResponse table) {
 		// initialize list of columns per row
 		List<List<CTableColumn>> columnRows = new ArrayList<List<CTableColumn>>();
 		rowsHeader = columnRows;
@@ -332,7 +327,7 @@ public class TableData {
 	/**
 	 * @return the table
 	 */
-	public CReportResponse getTable() {
+	public CIndicatorResponse getTable() {
 		return table;
 	}
 	/**
@@ -460,14 +455,14 @@ public class TableData {
 	/**
 	 * @return the selection
 	 */
-	public TableSelection getSelection() {
+	public CTableSelection getSelection() {
 		return selection;
 	}
 
 	/**
 	 * @param selection the selection to set
 	 */
-	public void setSelection(TableSelection selection) {
+	public void setSelection(CTableSelection selection) {
 		this.selection = selection;
 	}
 

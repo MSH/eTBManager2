@@ -1,24 +1,11 @@
 package org.msh.tb.test;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchMovement;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.Container;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
@@ -29,6 +16,12 @@ import org.msh.tb.medicines.MedicineManStartHome.SourceInfo;
 import org.msh.tb.medicines.movs.MovementException;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Execute test about medicine movements under several different situations

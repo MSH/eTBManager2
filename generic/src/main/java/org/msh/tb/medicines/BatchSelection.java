@@ -1,9 +1,12 @@
 package org.msh.tb.medicines;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.msh.tb.entities.*;
+import org.msh.utils.ItemSelect;
+import org.msh.utils.ItemSelectHelper;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -11,18 +14,10 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
-
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Tbunit;
-import org.msh.utils.ItemSelect;
-import org.msh.utils.ItemSelectHelper;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**

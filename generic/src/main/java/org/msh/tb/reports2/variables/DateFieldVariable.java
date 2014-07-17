@@ -1,9 +1,5 @@
 package org.msh.tb.reports2.variables;
 
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-import java.util.Date;
-
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
@@ -11,6 +7,10 @@ import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Standard variable to be used in date fields

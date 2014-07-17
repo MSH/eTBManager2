@@ -1,19 +1,14 @@
 package org.msh.utils;
 
-import java.text.DateFormatSymbols;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.faces.model.SelectItem;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.LocaleSelector;
+
+import javax.faces.model.SelectItem;
+import java.text.DateFormatSymbols;
+import java.util.*;
 
 @Name("monthsUtils")
 public class MonthsList {

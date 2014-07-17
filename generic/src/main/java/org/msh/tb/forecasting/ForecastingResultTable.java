@@ -1,17 +1,17 @@
 package org.msh.tb.forecasting;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.international.LocaleSelector;
 import org.msh.tb.entities.Forecasting;
 import org.msh.tb.entities.ForecastingMedicine;
 import org.msh.tb.entities.ForecastingResult;
 import org.msh.utils.date.DateUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 /**

@@ -1,12 +1,11 @@
 package org.msh.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Extend SEAM EntityQuery class including more functionalities like paging, restrictions by string, etc

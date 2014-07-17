@@ -1,16 +1,5 @@
 package org.msh.tb.test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import javax.faces.context.FacesContext;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
@@ -20,6 +9,9 @@ import org.jboss.seam.core.SeamResourceBundle;
 import org.jboss.seam.international.LocaleSelector;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
+
+import javax.faces.context.FacesContext;
+import java.util.*;
 
 
 /**

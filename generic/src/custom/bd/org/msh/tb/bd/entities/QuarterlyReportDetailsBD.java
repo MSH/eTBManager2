@@ -1,18 +1,10 @@
 package org.msh.tb.bd.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.msh.tb.bd.entities.enums.QuarterMonths;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Tbunit;
+
+import javax.persistence.*;
 
 /**
  * Store information about the quarterly upazilla report

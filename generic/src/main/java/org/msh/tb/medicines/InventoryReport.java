@@ -1,10 +1,5 @@
 package org.msh.tb.medicines;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -17,6 +12,10 @@ import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.StockPositionList;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 @Name("inventoryReport")
 public class InventoryReport {

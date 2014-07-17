@@ -1,11 +1,11 @@
 package org.msh.tb.workspaces.customizable;
 
-import java.text.MessageFormat;
-import java.util.Date;
-
 import org.jboss.seam.core.Locale;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.TbCase;
+
+import java.text.MessageFormat;
+import java.util.Date;
 
 public class ExamControl {
 

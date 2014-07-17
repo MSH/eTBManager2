@@ -1,16 +1,5 @@
 package org.msh.tb.login;
 
-import java.security.Principal;
-import java.security.acl.Group;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
@@ -21,16 +10,17 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.web.ServletContexts;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserProfile;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.utils.Passwords;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.security.acl.Group;
+import java.util.*;
 
 
 /**

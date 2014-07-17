@@ -1,13 +1,6 @@
 package org.msh.tb.cases;
 
 
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -16,6 +9,9 @@ import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.utils.EntityQuery;
+
+import java.text.Collator;
+import java.util.*;
 
 
 @Name("patients")

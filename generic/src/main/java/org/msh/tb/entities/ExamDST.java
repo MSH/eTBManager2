@@ -1,20 +1,11 @@
 package org.msh.tb.entities;
 
+import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.msh.tb.transactionlog.PropertyLog;
 
 @Entity
 @Table(name="examdst")

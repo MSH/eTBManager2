@@ -1,8 +1,8 @@
 package org.msh.utils;
 
-import java.util.StringTokenizer;
-
 import org.apache.commons.beanutils.PropertyUtils;
+
+import java.util.StringTokenizer;
 
 public class TextUtils {
 

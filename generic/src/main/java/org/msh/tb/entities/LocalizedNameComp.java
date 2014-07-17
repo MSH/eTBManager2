@@ -1,12 +1,11 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
+import org.jboss.seam.Component;
+import org.jboss.seam.contexts.Contexts;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
-import org.jboss.seam.Component;
-import org.jboss.seam.contexts.Contexts;
+import java.io.Serializable;
 
 @Embeddable
 public class LocalizedNameComp implements Serializable {

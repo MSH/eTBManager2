@@ -1,10 +1,10 @@
 package org.msh.tb.indicators.core;
 
+import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
-
-import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
 
 /**
  * Generates indicator about DST resistance profile report

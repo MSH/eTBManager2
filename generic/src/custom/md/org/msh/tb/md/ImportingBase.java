@@ -1,12 +1,5 @@
 package org.msh.tb.md;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.contexts.Contexts;
 import org.msh.tb.entities.AdministrativeUnit;
@@ -16,6 +9,12 @@ import org.msh.tb.entities.Workspace;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public abstract class ImportingBase {
 

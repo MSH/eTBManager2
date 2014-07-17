@@ -1,19 +1,12 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
-
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.SampleType;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="exammicroscopy")

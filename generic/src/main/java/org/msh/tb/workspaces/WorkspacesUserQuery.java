@@ -1,12 +1,12 @@
 package org.msh.tb.workspaces;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.Workspace;
 import org.msh.utils.EntityQuery;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Name("workspacesUser")
 @BypassInterceptors

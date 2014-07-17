@@ -1,22 +1,12 @@
 package org.msh.tb.reports;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.ProductGroup;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.StockPosition;
+import org.msh.tb.entities.*;
 import org.msh.tb.login.UserSession;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 
 

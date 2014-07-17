@@ -1,27 +1,12 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.msh.tb.entities.enums.ClinicalEvolution;
-import org.msh.tb.entities.enums.DotBy;
-import org.msh.tb.entities.enums.MedAppointmentType;
-import org.msh.tb.entities.enums.ReferredBy;
-import org.msh.tb.entities.enums.ReferredTo;
-import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 
 
@@ -29,7 +14,7 @@ import org.msh.tb.transactionlog.PropertyLog;
  *
  * Records information about a medical examination of a case
  *
- * @author Ricardo Memória
+ * @author Ricardo Memï¿½ria
  *
  */
 @Entity

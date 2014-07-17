@@ -1,13 +1,12 @@
 package org.msh.tb.reports;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Medicine;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -121,7 +120,7 @@ public class StockEvolutionReport {
 			it.setInitialQuantity(sp.getQuantity());
 		}
 
-		// calcula movimentos de entrada no período
+		// calcula movimentos de entrada no perï¿½odo
 		List<Object[]> res = entityManager.createQuery("select m.medicine.id, sum(m.quantity) from Movement m " + 
 				"where m.date >= :dtini and m.date < :dtfim " + 
 				"and m.oper = 1 and m.quantity > 0 " +
@@ -136,7 +135,7 @@ public class StockEvolutionReport {
 			it.setInQuantity((Long)vals[1]);
 		}
 
-		// calcula movimentos de saída no período
+		// calcula movimentos de saï¿½da no perï¿½odo
 		res = entityManager.createQuery("select m.medicine.id, sum(-m.oper * m.quantity) from Movement m " + 
 				"where m.date >= :dtini and m.date < :dtfim " + 
 				"and ((m.oper = -1) or (m.quantity < 0)) " +

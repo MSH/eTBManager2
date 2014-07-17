@@ -1,11 +1,6 @@
 package org.msh.tb.application.mail;
 
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.Queue;
-import java.util.TimeZone;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.Component;
@@ -16,6 +11,11 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.Renderer;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.TimeZoneSelector;
+
+import java.util.Locale;
+import java.util.Map;
+import java.util.Queue;
+import java.util.TimeZone;
 
 
 /**

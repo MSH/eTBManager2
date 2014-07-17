@@ -3,12 +3,11 @@
  */
 package org.msh.tb.client.shared;
 
-import java.util.ArrayList;
-
-import org.msh.tb.client.shared.model.CIndicator;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import org.msh.tb.client.shared.model.CIndicator;
+
+import java.util.ArrayList;
 
 /**
  * Server services available to display the dashboard

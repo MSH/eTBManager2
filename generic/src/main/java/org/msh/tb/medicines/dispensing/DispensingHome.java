@@ -1,31 +1,18 @@
 package org.msh.tb.medicines.dispensing;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchMovement;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineDispensing;
-import org.msh.tb.entities.MedicineDispensingCase;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.medicines.MedicineGroup;
 import org.msh.tb.medicines.movs.MovementHome;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 /**
  * Standard API to register medicine dispensing (by patient or consolidated by unit).

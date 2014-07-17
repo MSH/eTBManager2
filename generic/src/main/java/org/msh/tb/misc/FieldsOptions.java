@@ -1,12 +1,5 @@
 package org.msh.tb.misc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -14,6 +7,12 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.TbField;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**

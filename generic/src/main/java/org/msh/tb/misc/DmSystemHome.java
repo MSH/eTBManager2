@@ -1,11 +1,11 @@
 package org.msh.tb.misc;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.Renderer;
 import org.msh.tb.application.EtbmanagerApp;
+
+import javax.persistence.EntityManager;
 
 /**
  * Handle system configuration issues and centralized operations, like e-mail shippment
@@ -29,7 +29,7 @@ public class DmSystemHome {
 	
 
 	/**
-	 * Envia uma nova mensagem de e-mail. A mensagem é uma página de e-mail no diretório /mail das páginas
+	 * Envia uma nova mensagem de e-mail. A mensagem ï¿½ uma pï¿½gina de e-mail no diretï¿½rio /mail das pï¿½ginas
 	 * @param mailPage
 	 * @return true=mensagem enviada com sucesso
 	 */

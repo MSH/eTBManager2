@@ -3,17 +3,16 @@
  */
 package org.msh.tb.reports2;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.entities.Report;
 import org.msh.tb.entities.User;
 import org.msh.tb.login.UserSession;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Handle CRUD operations with a report

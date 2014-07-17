@@ -1,24 +1,8 @@
 package org.msh.tb.indicators;
 
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
-import org.msh.tb.entities.ExamCulture;
-import org.msh.tb.entities.ExamDST;
-import org.msh.tb.entities.ExamMicroscopy;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.entities.enums.ValidationState;
@@ -26,6 +10,9 @@ import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorController;
 import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.utils.date.DateUtils;
+
+import java.text.Collator;
+import java.util.*;
 
 /**
  * Base class supporting TB/MDR-TB indicator generation in a 2-dimension table with possibilities 

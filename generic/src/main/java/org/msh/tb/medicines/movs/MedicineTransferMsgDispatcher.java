@@ -1,9 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -11,6 +7,9 @@ import org.jboss.seam.annotations.Observer;
 import org.msh.tb.MsgDispatcher;
 import org.msh.tb.entities.Transfer;
 import org.msh.tb.entities.User;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Component responsible to send asynchronous messages to the users based on order events

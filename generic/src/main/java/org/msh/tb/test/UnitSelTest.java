@@ -3,19 +3,18 @@
  */
 package org.msh.tb.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.component.html.HtmlSelectOneMenu;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.tbunits.TBUnitSelection;
+
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Ricardo Memoria

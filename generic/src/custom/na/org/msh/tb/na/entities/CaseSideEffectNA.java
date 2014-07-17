@@ -1,12 +1,5 @@
 package org.msh.tb.na.entities;
 
-import java.util.Date;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.na.entities.enums.SideEffectAction;
 import org.msh.tb.na.entities.enums.SideEffectGrading;
@@ -14,6 +7,12 @@ import org.msh.tb.na.entities.enums.SideEffectOutcome;
 import org.msh.tb.na.entities.enums.SideEffectSeriousness;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
  * Implementation of the side effect entity data for Namibia

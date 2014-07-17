@@ -1,7 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.List;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -16,6 +14,8 @@ import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.misc.FieldsQuery;
+
+import java.util.List;
 
 
 @Name("sideEffectBDHome")

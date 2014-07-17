@@ -3,11 +3,6 @@
  */
 package org.msh.tb.reports2;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.IndicatorReport;
@@ -18,28 +13,20 @@ import org.msh.reports.indicator.DataTableIndicator;
 import org.msh.reports.query.DataTableQuery;
 import org.msh.reports.variables.Variable;
 import org.msh.tb.application.App;
-import org.msh.tb.client.shared.model.CFilter;
-import org.msh.tb.client.shared.model.CGroup;
-import org.msh.tb.client.shared.model.CInitializationData;
-import org.msh.tb.client.shared.model.CItem;
-import org.msh.tb.client.shared.model.CPatient;
-import org.msh.tb.client.shared.model.CPatientList;
-import org.msh.tb.client.shared.model.CReport;
-import org.msh.tb.client.shared.model.CReportRequest;
-import org.msh.tb.client.shared.model.CReportResponse;
-import org.msh.tb.client.shared.model.CVariable;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.Report;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.client.shared.model.*;
+import org.msh.tb.entities.*;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.reports2.variables.DateFieldVariable;
 import org.msh.tb.reports2.variables.EmptyVariable;
 import org.msh.utils.date.DateUtils;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
- * Simple helper class that generates the report and pack it inside a {@link CReportResponse}
+ * Simple helper class that generates the report and pack it inside a {@link org.msh.tb.client.shared.model.CIndicatorResponse}
  * class, ready to be sent back to the client
  * 
  * @author Ricardo Memoria
@@ -51,9 +38,9 @@ public class ReportGenerator {
 	/**
 	 * Return initialized data to be sent back to the client, containing all
 	 * variables, filters and org.msh.reports available for the current user and current workspace
-	 * @return instance of {@link CInitializationData} 
+	 * @return instance of {@link org.msh.tb.client.shared.model.CReportUIData}
 	 */
-	public static CInitializationData createInitializationData() {
+	public static CReportUIData createInitializationData() {
 		// get resources containing groups, filters and variables
 		ReportResources res = ReportResources.instance();
 
@@ -94,7 +81,7 @@ public class ReportGenerator {
 			lst.add(grp);
 		}
 
-		CInitializationData rep = new CInitializationData();
+		CReportUIData rep = new CReportUIData();
 		rep.setGroups( lst );
 		
 		rep.setReports(getReportList());
@@ -134,11 +121,11 @@ public class ReportGenerator {
 	
 	
 	/**
-	 * Generate a report from an instance of {@link CReportRequest} class
-	 * @param reportData instance of {@link CReportRequest} containing the data
-	 * @return the report content in a {@link CReportResponse} class
+	 * Generate a report from an instance of {@link org.msh.tb.client.shared.model.CIndicatorRequest} class
+	 * @param reportData instance of {@link org.msh.tb.client.shared.model.CIndicatorRequest} containing the data
+	 * @return the report content in a {@link org.msh.tb.client.shared.model.CIndicatorResponse} class
 	 */
-	public static CReportResponse generateReport(CReportRequest reportData) {
+	public static CIndicatorResponse generateReport(CIndicatorRequest reportData) {
 		// check validation rules
         if (reportData == null) {
             return null;
@@ -252,7 +239,7 @@ public class ReportGenerator {
 			return null;
 
 		ClientTableGenerator gen = new ClientTableGenerator();
-		CReportResponse ctable = gen.execute(rep);
+		CIndicatorResponse ctable = gen.execute(rep);
 
 		// set the label used in the y-axis of the chart
 		if (varUnitRef != null)
@@ -262,12 +249,12 @@ public class ReportGenerator {
 	}
 	
 	/**
-	 * Return an instance of the {@link CReportResponse} containing an error message
+	 * Return an instance of the {@link org.msh.tb.client.shared.model.CIndicatorResponse} containing an error message
 	 * @param errorKey
 	 * @return
 	 */
-	protected static CReportResponse returnError(String errorKey, Object... params) {
-		CReportResponse tbl = new CReportResponse();
+	protected static CIndicatorResponse returnError(String errorKey, Object... params) {
+		CIndicatorResponse tbl = new CIndicatorResponse();
 		String msg = Messages.instance().get(errorKey);
 		if (params != null) 
 			msg = MessageFormat.format(msg, params);

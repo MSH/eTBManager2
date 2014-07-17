@@ -1,11 +1,5 @@
 package org.msh.tb.cases.exams;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Query;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.End;
 import org.jboss.seam.annotations.Factory;
@@ -20,6 +14,11 @@ import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.resistpattern.ResistancePatternService;
 import org.msh.tb.transactionlog.LogInfo;
+
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Handle basic operations of a DST exam test - New, edit, remove and open the 

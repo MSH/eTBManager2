@@ -1,15 +1,11 @@
 package org.msh.reports.tableoperations;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.Row;
 import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.variables.Variable;
+
+import java.util.*;
 
 /**
  * Converts a data table loaded from a query to another data table with its

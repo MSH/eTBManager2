@@ -3,19 +3,6 @@
  */
 package org.msh.tb.sync.actions;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-
-import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.ValidationException;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -24,6 +11,13 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.sync.DesktopIniFileGenerator;
 import org.msh.tb.webservices.RemoteActionHandler;
+
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.ValidationException;
+import java.io.*;
+import java.util.Date;
 
 /**
  * Home class that get information from the UI and send the initialization file

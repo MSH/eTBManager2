@@ -1,9 +1,5 @@
 package org.msh.tb.transactionlog;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
@@ -16,6 +12,10 @@ import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.reports.ReportSelection;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.date.DateUtils;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 
 /**

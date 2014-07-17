@@ -3,15 +3,7 @@
  */
 package org.msh.tb.sync;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPOutputStream;
-
-import javax.persistence.EntityManager;
-
+import com.rmemoria.datastream.*;
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
 import org.jboss.seam.Component;
@@ -19,23 +11,16 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
-import org.msh.tb.entities.ExamCulture;
-import org.msh.tb.entities.ExamDST;
-import org.msh.tb.entities.ExamHIV;
-import org.msh.tb.entities.ExamMicroscopy;
-import org.msh.tb.entities.MedicalExamination;
-import org.msh.tb.entities.SystemConfig;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.TbContact;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.WeeklyFrequency;
+import org.msh.tb.entities.*;
 import org.msh.utils.DataStreamUtils;
 
-import com.rmemoria.datastream.DataConverter;
-import com.rmemoria.datastream.DataInterceptor;
-import com.rmemoria.datastream.DataMarshaller;
-import com.rmemoria.datastream.ObjectProvider;
-import com.rmemoria.datastream.StreamContext;
+import javax.persistence.EntityManager;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * @author Ricardo Memoria

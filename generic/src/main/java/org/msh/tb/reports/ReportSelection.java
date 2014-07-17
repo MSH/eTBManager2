@@ -1,13 +1,5 @@
 package org.msh.tb.reports;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -17,15 +9,16 @@ import org.jboss.seam.framework.EntityQuery;
 import org.jboss.seam.security.management.action.RoleAction;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.ViewService;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.UserLog;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserRole;
-import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.utils.date.DateUtils;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 @Name("reportSelection")

@@ -1,11 +1,5 @@
 package org.msh.tb.reports;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.Medicine;
@@ -16,6 +10,11 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.estimating.CaseInfo;
 import org.msh.tb.medicines.estimating.MedicineEstimation;
 import org.msh.tb.medicines.estimating.MedicineQuantity;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 

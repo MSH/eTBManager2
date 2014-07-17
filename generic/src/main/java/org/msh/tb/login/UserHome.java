@@ -1,14 +1,5 @@
 package org.msh.tb.login;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -16,12 +7,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.misc.DmSystemHome;
@@ -29,6 +15,14 @@ import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.userprofile.UserProfilesQuery;
 import org.msh.utils.Passwords;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -92,7 +86,7 @@ public class UserHome extends EntityHomeEx<User> {
 			user.setRegistrationDate(new Date());
 			user.setState(UserState.PASSWD_EXPIRED);
 
-			// gera senha para o novo usuário
+			// gera senha para o novo usuï¿½rio
 			String senha = null;
 			if (password != null)
 				 senha = password;
@@ -130,7 +124,7 @@ public class UserHome extends EntityHomeEx<User> {
 
 	
 	/**
-	 * Valida a conta do usuário
+	 * Valida a conta do usuï¿½rio
 	 * @param context
 	 * @param compConta
 	 * @param value

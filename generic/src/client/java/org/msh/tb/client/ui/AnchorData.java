@@ -1,4 +1,4 @@
-package org.msh.tb.client.commons;
+package org.msh.tb.client.ui;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.Anchor;

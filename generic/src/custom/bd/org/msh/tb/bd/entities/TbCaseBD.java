@@ -1,8 +1,5 @@
 package org.msh.tb.bd.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import org.msh.tb.bd.entities.enums.Occupation;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.bd.entities.enums.SalaryRange;
@@ -10,6 +7,9 @@ import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.YesNoType;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 
 @Entity

@@ -1,18 +1,14 @@
 package org.msh.tb.login;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.contexts.Contexts;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
+
+import javax.persistence.EntityManager;
 
 /**
  * Request scope component to serve as a factory of session scoped objects commonly used during user session,

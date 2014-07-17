@@ -1,12 +1,5 @@
 package org.msh.tb.test;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -15,17 +8,19 @@ import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitHome;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.HealthSystem;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserProfile;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.DispensingFrequency;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserHome;
 import org.msh.tb.tbunits.TbUnitHome;
 import org.msh.utils.date.DateUtils;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Name("trainingHome")
 public class TrainingHome {

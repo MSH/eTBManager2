@@ -1,15 +1,5 @@
 package org.msh.tb.cases;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -17,17 +7,22 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.SubstancesQuery;
-import org.msh.tb.entities.MedicineComponent;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.PrevTBTreatment;
-import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 @Name("prevTBTreatmentHome")

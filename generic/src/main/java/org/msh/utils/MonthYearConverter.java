@@ -1,16 +1,15 @@
 package org.msh.utils;
 
-import java.text.DateFormatSymbols;
-import java.util.Locale;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.international.LocaleSelector;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.international.LocaleSelector;
+import java.text.DateFormatSymbols;
+import java.util.Locale;
 
 @Name("monthYearConverter")
 @org.jboss.seam.annotations.faces.Converter(id="monthYearConverter")

@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
-                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                 xmlns:h="http://java.sun.com/jsf/html"
-                 xmlns:f="http://java.sun.com/jsf/core"
-                 xmlns:s="http://jboss.com/products/seam/taglib">
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+        >
                  
 	<img src="#{request.contextPath}/public/themes/default/images/#{caseregimen.phase=='INTENSIVE'? 'intphase': 'contphase'}.gif" style="float:left;"/>
 	<b><h:outputText value="#{caseregimen.regimen.name}" rendered="#{caseregimen.regimen != null}" />

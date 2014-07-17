@@ -1,7 +1,5 @@
 package org.msh.tb.vi;
 
-import java.util.List;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
@@ -9,6 +7,8 @@ import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.dispensing.CaseDispensingHome;
 import org.msh.tb.cases.dispensing.WeekInfo;
 import org.msh.tb.vi.entities.TreatmentMonitoringVI;
+
+import java.util.List;
 
 
 /**

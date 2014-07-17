@@ -1,21 +1,16 @@
 package org.msh.tb.application;
 
-import java.io.File;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.util.*;
 
 /**
  * Handle conversion from URI page address to custom workspace pages. It also contains the factory to "wspage" component, which

@@ -1,9 +1,9 @@
 package org.msh.tb.webservices;
 
-import java.util.Date;
-
 import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.entities.enums.XpertRifResult;
+
+import java.util.Date;
 
 /**
  * Store information about an XPert result send from an external application

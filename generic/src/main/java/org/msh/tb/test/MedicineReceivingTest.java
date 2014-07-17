@@ -1,9 +1,5 @@
 package org.msh.tb.test;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.MedicinesQuery;
@@ -12,6 +8,10 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.enums.Container;
 import org.msh.tb.medicines.MedicineReceivingHome;
 import org.msh.utils.date.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
 
 
 @Name("medicineReceivingTest")

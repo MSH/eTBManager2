@@ -1,15 +1,14 @@
 package org.msh.tb.misc;
 
-import java.util.List;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.entities.FieldValue;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.entities.FieldValue;
+import java.util.List;
 
 @Name("fieldListScriptConverter")
 @org.jboss.seam.annotations.faces.Converter(id="fieldListScriptConverter")

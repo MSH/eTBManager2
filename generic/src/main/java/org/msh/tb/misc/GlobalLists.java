@@ -1,11 +1,5 @@
 package org.msh.tb.misc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.model.SelectItem;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
@@ -15,46 +9,18 @@ import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.cases.FilterHealthUnit;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.BufferStockMeasure;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.DispensingFrequency;
-import org.msh.tb.entities.enums.DisplayCaseNumber;
-import org.msh.tb.entities.enums.DrugResistanceType;
-import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.entities.enums.ExtraOutcomeInfo;
-import org.msh.tb.entities.enums.ForecastNewCaseFreq;
-import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.HIVResult;
-import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.LocalityType;
-import org.msh.tb.entities.enums.MedAppointmentType;
-import org.msh.tb.entities.enums.MedicineLine;
-import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.entities.enums.NameComposition;
-import org.msh.tb.entities.enums.Nationality;
-import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
-import org.msh.tb.entities.enums.RegimenPhase;
-import org.msh.tb.entities.enums.SampleType;
-import org.msh.tb.entities.enums.ShippedReceivedDiffTypes;
-import org.msh.tb.entities.enums.TbCategory;
-import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.entities.enums.UserState;
-import org.msh.tb.entities.enums.UserView;
-import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.entities.enums.XRayBaseline;
-import org.msh.tb.entities.enums.XRayEvolution;
-import org.msh.tb.entities.enums.XRayResult;
-import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.indicators.core.IndicatorDate;
 import org.msh.tb.indicators.core.IndicatorSite;
 
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Contains common arrays used in several parts of the application
- * @author Ricardo Memória
+ * @author Ricardo Memï¿½ria
  *  
  */
 @Name("globalLists")

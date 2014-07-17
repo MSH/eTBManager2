@@ -1,8 +1,8 @@
 package org.msh.tb.transactionlog;
 
-import java.util.Date;
-
 import org.apache.commons.beanutils.PropertyUtils;
+
+import java.util.Date;
 
 /**
  * Store information about a property value of an object that is properties must be logged

@@ -1,7 +1,4 @@
-package org.msh.tb.client.reports.chart;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.msh.tb.client.chart;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
@@ -13,6 +10,9 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.ui.Widget;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Display the chart

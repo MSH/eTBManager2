@@ -3,16 +3,7 @@ package org.msh.tb.kh;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.entities.enums.DotBy;
-import org.msh.tb.entities.enums.DrugResistanceType;
-import org.msh.tb.entities.enums.HIVResult;
-import org.msh.tb.entities.enums.HIVResultNg;
-import org.msh.tb.entities.enums.Nationality;
-import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.ReferredBy;
-import org.msh.tb.entities.enums.ReferredTo;
-import org.msh.tb.entities.enums.SampleType;
-import org.msh.tb.entities.enums.TbField;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.kh.entities.enums.Dot;
 import org.msh.tb.kh.entities.enums.SideEffectGrading;
 

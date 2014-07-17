@@ -3,6 +3,16 @@
  */
 package org.msh.tb.sync;
 
+import com.rmemoria.datastream.*;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.msh.tb.ETB;
+import org.msh.tb.application.App;
+import org.msh.tb.application.TransactionManager;
+import org.msh.tb.entities.*;
+import org.msh.tb.login.UserSession;
+import org.msh.utils.DataStreamUtils;
+
+import javax.persistence.EntityManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,27 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
-
-import javax.persistence.EntityManager;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.msh.tb.ETB;
-import org.msh.tb.application.App;
-import org.msh.tb.application.TransactionManager;
-import org.msh.tb.entities.SyncKey;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.WSObject;
-import org.msh.tb.entities.WeeklyFrequency;
-import org.msh.tb.entities.Workspace;
-import org.msh.tb.login.UserSession;
-import org.msh.utils.DataStreamUtils;
-
-import com.rmemoria.datastream.DataConverter;
-import com.rmemoria.datastream.DataInterceptor;
-import com.rmemoria.datastream.DataUnmarshaller;
-import com.rmemoria.datastream.ObjectConsumer;
-import com.rmemoria.datastream.StreamContext;
 
 
 /**

@@ -1,9 +1,9 @@
 package org.msh.tb.client.shared.model;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Contains report data about the report to be requested by the client side
@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Ricardo Memoria
  *
  */
-public class CReportRequest implements IsSerializable {
+public class CIndicatorRequest implements IsSerializable {
 
 	/**
 	 * List of variables selected for the column

@@ -1,9 +1,5 @@
 package org.msh.tb.login;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
@@ -12,6 +8,9 @@ import org.jboss.seam.framework.Controller;
 import org.msh.tb.entities.User;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.utils.Passwords;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 
 /**

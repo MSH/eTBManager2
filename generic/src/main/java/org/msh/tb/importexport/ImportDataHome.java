@@ -1,17 +1,16 @@
 package org.msh.tb.importexport;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.Workspace;
+
+import javax.faces.model.SelectItem;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Collects information to import data from a file to a table

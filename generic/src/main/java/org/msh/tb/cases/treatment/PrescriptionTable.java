@@ -1,11 +1,5 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -18,6 +12,8 @@ import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import java.util.*;
 
 
 /**

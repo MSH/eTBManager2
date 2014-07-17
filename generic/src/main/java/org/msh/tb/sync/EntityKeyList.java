@@ -3,12 +3,12 @@
  */
 package org.msh.tb.sync;
 
+import org.msh.tb.sync.EntityKey.EntityKeyAction;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.msh.tb.sync.EntityKey.EntityKeyAction;
 
 /**
  * @author Ricardo Memoria

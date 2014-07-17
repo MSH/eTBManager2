@@ -1,14 +1,14 @@
 package org.msh.tb.webservices;
 
+import org.jboss.seam.Component;
+import org.msh.tb.cases.exams.ExamDSTHome;
+import org.msh.tb.entities.ExamDST;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
-
-import org.jboss.seam.Component;
-import org.msh.tb.cases.exams.ExamDSTHome;
-import org.msh.tb.entities.ExamDST;
 
 @WebService(name="dataExchangeService", serviceName="dataExchangeService")
 @SOAPBinding(style=Style.RPC)

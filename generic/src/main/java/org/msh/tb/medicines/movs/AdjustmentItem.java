@@ -1,9 +1,9 @@
 package org.msh.tb.medicines.movs;
 
+import org.msh.tb.entities.StockPosition;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.msh.tb.entities.StockPosition;
 
 
 

@@ -1,31 +1,16 @@
 package org.msh.tb.md;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
-import org.msh.tb.entities.Address;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TreatmentHealthUnit;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.DrugResistanceType;
-import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.Nationality;
-import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.misc.FieldsOptions;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 import org.w3c.dom.Element;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Import a single case from a XML data sent by SYMETA into etbmanager database 

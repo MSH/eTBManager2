@@ -1,13 +1,8 @@
 package org.msh.tb.entities;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
 
 /**
  * Represent an age range for the workspace

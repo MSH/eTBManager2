@@ -1,8 +1,8 @@
 package org.msh.reports.query;
 
-import java.util.List;
-
 import org.msh.reports.datatable.DataTable;
+
+import java.util.List;
 
 /**
  * Standard implementation of a data table that contains

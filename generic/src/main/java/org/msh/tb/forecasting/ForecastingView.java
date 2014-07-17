@@ -1,17 +1,5 @@
 package org.msh.tb.forecasting;
 
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -28,22 +16,19 @@ import org.msh.tb.adminunits.AdminUnitChangeListener;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.adminunits.AdminUnitSelector;
 import org.msh.tb.adminunits.AdminUnitSelector.ValueChangeListener;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.Forecasting;
-import org.msh.tb.entities.ForecastingBatch;
-import org.msh.tb.entities.ForecastingMedicine;
-import org.msh.tb.entities.ForecastingNewCases;
-import org.msh.tb.entities.ForecastingOrder;
-import org.msh.tb.entities.ForecastingRegimen;
-import org.msh.tb.entities.ForecastingResult;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**

@@ -1,16 +1,17 @@
 /**
  * 
  */
-package org.msh.tb.client.reports.chart;
-
-import java.util.List;
+package org.msh.tb.client.chart;
 
 import org.msh.tb.client.App;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
+import org.msh.tb.client.shared.model.CTableSelection;
 import org.msh.tb.client.tableview.TableData;
 import org.msh.tb.client.tableview.TableData.HeaderLabel;
-import org.msh.tb.client.tableview.TableData.TableSelection;
+
+import java.util.List;
+
 
 /**
  * Update a chart based on the data from the report response
@@ -36,7 +37,7 @@ public class ChartReport {
 		chart.setyAxisTitle(title);
 
 		// is row selected ?
-		if (tableData.getSelection() == TableSelection.ROW) {
+		if (tableData.getSelection() == CTableSelection.ROW) {
 			// clicked on the position of the table 0,0 ?
 			if (tableData.getSelectedCell() == TableData.CELL_TITLE) {
 				chart.setTitle(tableData.getRowVariables().get(0).getName() + " x " + tableData.getColVariables().get(0).getName());

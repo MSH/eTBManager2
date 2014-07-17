@@ -1,4 +1,4 @@
-package org.msh.tb.client.reports.chart;
+package org.msh.tb.client.chart;
 
 public class SerieValue {
 	private String label;

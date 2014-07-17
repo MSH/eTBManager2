@@ -1,9 +1,9 @@
 package org.msh.tb.application.tasks;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.msh.tb.application.TransactionManager;
+
+import javax.persistence.EntityManager;
 
 
 /**

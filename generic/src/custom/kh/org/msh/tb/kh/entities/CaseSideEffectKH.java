@@ -1,10 +1,10 @@
 package org.msh.tb.kh.entities;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.kh.entities.enums.SideEffectGrading;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("kh")

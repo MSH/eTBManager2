@@ -1,9 +1,9 @@
 package org.msh.tb.na;
 
-import java.text.DateFormatSymbols;
-
 import org.jboss.seam.core.Locale;
 import org.msh.tb.na.entities.enums.Dot;
+
+import java.text.DateFormatSymbols;
 
 /**
  * Stores information about an specific treatment day

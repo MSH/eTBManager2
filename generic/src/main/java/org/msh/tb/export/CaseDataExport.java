@@ -1,15 +1,5 @@
 package org.msh.tb.export;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -17,15 +7,13 @@ import org.jboss.seam.transaction.UserTransaction;
 import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.HIVResult;
-import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.entities.enums.TbField;
+import org.msh.tb.entities.enums.*;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Handle export of cases to an Excel file, placing one case by row and displaying

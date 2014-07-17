@@ -1,17 +1,16 @@
 package org.msh.tb.test;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Workspace;
+
+import javax.persistence.EntityManager;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.List;
 
 @Name("adjustAdminUnits")
 public class AdjustAdminUnits {

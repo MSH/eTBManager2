@@ -1,10 +1,10 @@
 package org.msh.tb.test;
 
-import java.util.Random;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.tasks.TaskManager;
+
+import java.util.Random;
 
 /**
  * Test class made just for testing task execution 

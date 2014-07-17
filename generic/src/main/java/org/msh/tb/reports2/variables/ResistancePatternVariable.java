@@ -1,10 +1,5 @@
 package org.msh.tb.reports2.variables;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
@@ -13,6 +8,10 @@ import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.ResistancePattern;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handle user defined resistance patterns in an indicator variable

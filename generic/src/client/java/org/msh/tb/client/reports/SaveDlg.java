@@ -4,9 +4,6 @@
 package org.msh.tb.client.reports;
 
 
-import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.shared.model.CReport;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -17,6 +14,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.TextBox;
+import org.msh.tb.client.AppResources;
+import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.commons.StandardEvent;
+import org.msh.tb.client.commons.StandardEventHandler;
+import org.msh.tb.client.shared.model.CReport;
 
 /**
  * @author Ricardo Memoria
@@ -26,30 +28,51 @@ public class SaveDlg extends Composite {
 	private static final Binder binder = GWT.create(Binder.class);
 	private static final SaveDlg myinstance = new SaveDlg();
 
+    private static final String RESOURCE_KEY = "report.ui.savedlg";
+
 	interface Binder extends UiBinder<DialogBox, SaveDlg> { };
 	
 	private boolean saveAs;
 	private DialogBox dialogBox;
-	
+    private StandardEventHandler eventHandler;
+    private CReport report;
+
 	@UiField TextBox edtTitle;
 	@UiField Button btnSave;
 
+    /**
+     * Default constructor
+     */
 	public SaveDlg() {
 		dialogBox = binder.createAndBindUi(this);
 		btnSave.addStyleName("btn-alt");
 	}
-	
-	
-	public static void openDialog(boolean saveAs) {
-		myinstance.open(saveAs);
-	}
-	
-	/**
-	 * Open dialog box
-	 */
-	protected void open(boolean saveAs) {
-		this.saveAs = saveAs;
-		edtTitle.setText( ReportMain.instance().getReport().getTitle() );
+
+
+    /**
+     * Create and open the dialog
+     * @param report the instance of CReport to save
+     * @param eventHandler event handle to be notified when it's done
+     */
+	public static void openDialog(CReport report, StandardEventHandler eventHandler) {
+        SaveDlg dlg = (SaveDlg)AppResources.instance().get(RESOURCE_KEY);
+        if (dlg == null){
+            dlg = new SaveDlg();
+            AppResources.instance().set(RESOURCE_KEY, dlg);
+        }
+        dlg.open(report, eventHandler);
+    }
+
+    /**
+     * Create and open the dialog
+     * @param report the instance of CReport to save
+     * @param eventHandler event handle to be notified when it's done
+     */
+	protected void open(CReport report, StandardEventHandler eventHandler) {
+		this.saveAs = report.getId() == null;
+        this.eventHandler = eventHandler;
+
+		edtTitle.setText( report.getTitle() );
 		dialogBox.center();
 		dialogBox.show();
 		edtTitle.setFocus(true);
@@ -74,6 +97,7 @@ public class SaveDlg extends Composite {
 			@Override
 			public void onSuccess(CReport result) {
 				dialogBox.hide();
+                fireEvent(StandardEvent.OK);
 			}
 		};
 		
@@ -88,5 +112,24 @@ public class SaveDlg extends Composite {
 	@UiHandler("btnCancel")
 	public void btnCancelClick(ClickEvent event) {
 		dialogBox.hide();
+        fireEvent(StandardEvent.CANCEL);
 	}
+
+    /**
+     * Notify the event handler about dialog event
+     * @param evt type of event
+     */
+    private void fireEvent(StandardEvent evt) {
+        if (eventHandler != null) {
+            eventHandler.handleEvent(this.getClass(), evt);
+        }
+    }
+
+    public CReport getReport() {
+        return report;
+    }
+
+    public void setReport(CReport report) {
+        this.report = report;
+    }
 }

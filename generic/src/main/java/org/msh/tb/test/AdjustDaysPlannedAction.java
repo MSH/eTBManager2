@@ -1,15 +1,14 @@
 package org.msh.tb.test;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.CaseState;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Name("adjustDaysPlannedAction")
 public class AdjustDaysPlannedAction {

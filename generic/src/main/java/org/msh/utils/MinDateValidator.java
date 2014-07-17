@@ -1,18 +1,17 @@
 package org.msh.utils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.international.Messages;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.international.Messages;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 @Name("minDateValidator")
 @org.jboss.seam.annotations.faces.Validator(id="minDateValidator")

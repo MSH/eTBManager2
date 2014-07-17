@@ -1,16 +1,10 @@
 package org.msh.tb.client.shared;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.msh.tb.client.shared.model.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.msh.tb.client.shared.model.CItem;
-import org.msh.tb.client.shared.model.CPatientList;
-import org.msh.tb.client.shared.model.CReport;
-import org.msh.tb.client.shared.model.CReportRequest;
-import org.msh.tb.client.shared.model.CInitializationData;
-import org.msh.tb.client.shared.model.CReportResponse;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * Asyncronous service used by the client side wrapping the {@link ReportService} interface
@@ -20,9 +14,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface ReportServiceAsync {
 
-	void initialize(AsyncCallback<CInitializationData> callback);
+	void initialize(AsyncCallback<CReportUIData> callback);
 
-	void executeReport(CReportRequest reportData, AsyncCallback<CReportResponse> callback);
+	void executeIndicator(CIndicatorRequest reportData, AsyncCallback<CIndicatorResponse> callback);
 
 	void getFilterOptions(String filterid, String param,
 			AsyncCallback<ArrayList<CItem>> callback);

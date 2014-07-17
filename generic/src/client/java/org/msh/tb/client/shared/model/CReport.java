@@ -3,10 +3,10 @@
  */
 package org.msh.tb.client.shared.model;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Store information about a saved report sent from the server to the client side 
@@ -19,17 +19,11 @@ public class CReport implements IsSerializable {
 	private String title;
 	private boolean myReport;
 
-	// extra information sent when detailed data is loaded 
-	private ArrayList<String> columnVariables;
-	private ArrayList<String> rowVariables;
+	// extra information sent when detailed data is loaded
 	private HashMap<String, String> filters;
+    private ArrayList<CIndicator> indicators;
 	private boolean published;
 	private boolean dashboard;
-	private Integer chartType;
-	// indicate if it's selected row or column
-	private Integer tblSelection;
-	// indicate which cell of the column or row is selected
-	private Integer tblSelectedCell;
 
 	/**
 	 * @return the id
@@ -74,34 +68,6 @@ public class CReport implements IsSerializable {
 	}
 
 	/**
-	 * @return the columnVariables
-	 */
-	public ArrayList<String> getColumnVariables() {
-		return columnVariables;
-	}
-
-	/**
-	 * @param columnVariables the columnVariables to set
-	 */
-	public void setColumnVariables(ArrayList<String> columnVariables) {
-		this.columnVariables = columnVariables;
-	}
-
-	/**
-	 * @return the rowVariables
-	 */
-	public ArrayList<String> getRowVariables() {
-		return rowVariables;
-	}
-
-	/**
-	 * @param rowVariables the rowVariables to set
-	 */
-	public void setRowVariables(ArrayList<String> rowVariables) {
-		this.rowVariables = rowVariables;
-	}
-
-	/**
 	 * @return the filters
 	 */
 	public HashMap<String, String> getFilters() {
@@ -143,45 +109,11 @@ public class CReport implements IsSerializable {
 		this.dashboard = dashboard;
 	}
 
-	/**
-	 * @return the chartType
-	 */
-	public Integer getChartType() {
-		return chartType;
-	}
+    public ArrayList<CIndicator> getIndicators() {
+        return indicators;
+    }
 
-	/**
-	 * @param chartType the chartType to set
-	 */
-	public void setChartType(Integer chartType) {
-		this.chartType = chartType;
-	}
-
-	/**
-	 * @return the tblSelection
-	 */
-	public Integer getTblSelection() {
-		return tblSelection;
-	}
-
-	/**
-	 * @param tblSelection the tblSelection to set
-	 */
-	public void setTblSelection(Integer tblSelection) {
-		this.tblSelection = tblSelection;
-	}
-
-	/**
-	 * @return the tblSelectedCell
-	 */
-	public Integer getTblSelectedCell() {
-		return tblSelectedCell;
-	}
-
-	/**
-	 * @param tblSelectedCell the tblSelectedCell to set
-	 */
-	public void setTblSelectedCell(Integer tblSelectedCell) {
-		this.tblSelectedCell = tblSelectedCell;
-	}
+    public void setIndicators(ArrayList<CIndicator> indicators) {
+        this.indicators = indicators;
+    }
 }

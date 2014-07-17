@@ -1,13 +1,5 @@
 package org.msh.tb.cases.dispensing;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -18,6 +10,9 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentMonitoring;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 
 /**

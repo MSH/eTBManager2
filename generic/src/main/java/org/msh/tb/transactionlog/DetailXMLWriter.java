@@ -1,9 +1,9 @@
 package org.msh.tb.transactionlog;
 
-import java.util.Date;
-
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+
+import java.util.Date;
 
 /**
  * Writer class to create a XML representation of the details of the transaction log

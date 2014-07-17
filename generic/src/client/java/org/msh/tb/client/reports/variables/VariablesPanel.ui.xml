@@ -1,0 +1,27 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:c='urn:import:org.msh.tb.client.ui'
+        >
+
+    <ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
+
+    <g:HTMLPanel>
+        <table width="100%" style="border-collapse:collapse">
+            <tr>
+                <td colspan="2">
+                    <c:MessagePanel ui:field="pnlMessage" visible="false" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width:460px;margin-right:20px;vertical-align:top">
+                    <h2><ui:text from="{msg.rows}" /></h2>
+                    <g:VerticalPanel ui:field="pnlRowVariables"></g:VerticalPanel>
+                </td>
+                <td style="width:460px;vertical-align:top">
+                    <h2><ui:text from="{msg.columns}" /></h2>
+                    <g:VerticalPanel ui:field="pnlColVariables"></g:VerticalPanel>
+                </td>
+            </tr>
+        </table>
+    </g:HTMLPanel>
+</ui:UiBinder>

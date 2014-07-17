@@ -1,11 +1,5 @@
 package org.msh.tb.cases;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -15,6 +9,11 @@ import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseComment;
 import org.msh.tb.entities.UserLogin;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Name("caseCommentsHome")
 public class CaseCommentsHome extends EntityHomeEx<CaseComment> {

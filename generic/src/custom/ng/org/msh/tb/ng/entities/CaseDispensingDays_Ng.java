@@ -1,13 +1,9 @@
 package org.msh.tb.ng.entities;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.msh.tb.ng.entities.enums.Dot;
+
+import javax.persistence.*;
 
 /**
  * Store information about daily dispensing for an specific month of a case 

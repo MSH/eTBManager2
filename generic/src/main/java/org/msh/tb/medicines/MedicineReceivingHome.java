@@ -1,22 +1,11 @@
 package org.msh.tb.medicines;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchMovement;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineReceiving;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
@@ -24,6 +13,11 @@ import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.transactionlog.Operation;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 

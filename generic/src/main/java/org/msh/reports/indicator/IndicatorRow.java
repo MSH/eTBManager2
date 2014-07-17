@@ -1,11 +1,11 @@
 package org.msh.reports.indicator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.datatable.impl.RowImpl;
 import org.msh.reports.variables.Variable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IndicatorRow extends RowImpl {
 

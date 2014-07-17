@@ -1,9 +1,10 @@
-package org.msh.tb.client.reports;
-
-import org.msh.tb.client.shared.model.CGroup;
-import org.msh.tb.client.shared.model.CVariable;
+package org.msh.tb.client.reports.variables;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.msh.tb.client.AppResources;
+import org.msh.tb.client.reports.GroupPopup;
+import org.msh.tb.client.shared.model.CGroup;
+import org.msh.tb.client.shared.model.CVariable;
 
 /**
  * Popup window that displays a list of variables by group to be selected
@@ -13,18 +14,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class GroupVariablesPopup extends GroupPopup {
 
-	private static GroupVariablesPopup myinstance;
-	
-	/**
-	 * Default constructor
-	 * @param eventHandler
-	 */
-	protected GroupVariablesPopup() {
-		super(null);
-		setGroups(ReportMain.instance().getGroups());
-	}
+    private static final String KEY_VARIABLESPOPUP = "report.ui.variablePopup";
 
-	
 	/**
 	 * Mount the list of options for the given group
 	 * @param grp
@@ -50,9 +41,11 @@ public class GroupVariablesPopup extends GroupPopup {
 	 * @return instance of {@link GroupVariablesPopup}
 	 */
 	public static GroupVariablesPopup instance() {
-		if (myinstance == null) {
-			myinstance = new GroupVariablesPopup();
-		}
-		return myinstance;
+        GroupVariablesPopup popup = (GroupVariablesPopup)AppResources.instance().get(KEY_VARIABLESPOPUP);
+        if (popup == null) {
+            popup = new GroupVariablesPopup();
+            AppResources.instance().set(KEY_VARIABLESPOPUP, popup);
+        }
+        return popup;
 	}
 }

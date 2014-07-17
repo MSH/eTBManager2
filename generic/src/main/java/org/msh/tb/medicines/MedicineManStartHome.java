@@ -1,31 +1,19 @@
 package org.msh.tb.medicines;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.AutoCreate;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.SourceGroup;
 import org.msh.tb.SourcesQuery;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.transactionlog.TransactionLogService;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 /**
  * Home class to handle a TB Unit that start medicine management in e-TB Manager

@@ -1,12 +1,12 @@
 package org.msh.utils;
 
+import org.jboss.seam.annotations.Name;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-
-import org.jboss.seam.annotations.Name;
 
 @Name("textFileReader")
 public class TextFileReader {

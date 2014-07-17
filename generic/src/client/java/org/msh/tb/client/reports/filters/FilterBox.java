@@ -1,11 +1,9 @@
-package org.msh.tb.client.reports;
-
-import org.msh.tb.client.reports.filters.FilterFactory;
-import org.msh.tb.client.reports.filters.FilterWidget;
-import org.msh.tb.client.shared.model.CFilter;
+package org.msh.tb.client.reports.filters;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import org.msh.tb.client.reports.HoverPanel;
+import org.msh.tb.client.shared.model.CFilter;
 
 /**
  * Panel where the filter is displayed

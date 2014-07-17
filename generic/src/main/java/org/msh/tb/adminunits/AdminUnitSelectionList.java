@@ -1,14 +1,13 @@
 package org.msh.tb.adminunits;
 
+import org.jboss.seam.Component;
+import org.msh.tb.entities.AdministrativeUnit;
+
+import javax.persistence.EntityManager;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.Component;
-import org.msh.tb.entities.AdministrativeUnit;
 
 public class AdminUnitSelectionList {
 

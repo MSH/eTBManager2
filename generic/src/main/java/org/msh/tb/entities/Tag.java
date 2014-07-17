@@ -1,17 +1,10 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-
 import org.hibernate.validator.NotNull;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Store information about a tag. A tag may be assigned to cases. This

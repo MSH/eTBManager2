@@ -1,16 +1,15 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
+import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.SampleType;
+import org.msh.tb.transactionlog.Operation;
+import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-
-import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.entities.enums.SampleType;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.PropertyLog;
+import java.io.Serializable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

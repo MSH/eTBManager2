@@ -1,14 +1,13 @@
 package org.msh.tb.vi;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.PatientType;
+
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
 
 @Name("globalLists_vi")
 public class GlobalLists {

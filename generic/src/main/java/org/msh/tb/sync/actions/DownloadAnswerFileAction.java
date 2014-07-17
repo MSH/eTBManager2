@@ -3,10 +3,10 @@
  */
 package org.msh.tb.sync.actions;
 
-import java.io.File;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.sync.DesktopAnswerFileGenerator;
+
+import java.io.File;
 
 /**
  * @author Ricardo Memoria

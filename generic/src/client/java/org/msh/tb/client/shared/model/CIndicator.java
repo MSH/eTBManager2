@@ -3,9 +3,10 @@
  */
 package org.msh.tb.client.shared.model;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Contain information about an indicator to be displayed in the page
@@ -19,22 +20,18 @@ public class CIndicator implements IsSerializable {
 	private Integer chartType;
 	private Integer tblSelection;
 	private Integer tblSelectedCell;
-	private CReportResponse reportResponse;
-	private ArrayList<CVariable> colVariables;
-	private ArrayList<CVariable> rowVariables;
+	private ArrayList<String> colVariables;
+	private ArrayList<String> rowVariables;
+    private HashMap<String, String> filters;
 
-	/**
-	 * @return the reportResponse
-	 */
-	public CReportResponse getReportResponse() {
-		return reportResponse;
-	}
-	/**
-	 * @param reportResponse the reportResponse to set
-	 */
-	public void setReportResponse(CReportResponse reportResponse) {
-		this.reportResponse = reportResponse;
-	}
+    public HashMap<String, String> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(HashMap<String, String> filters) {
+        this.filters = filters;
+    }
+
 	/**
 	 * @return the title
 	 */
@@ -62,25 +59,25 @@ public class CIndicator implements IsSerializable {
 	/**
 	 * @return the colVariables
 	 */
-	public ArrayList<CVariable> getColVariables() {
+	public ArrayList<String> getColVariables() {
 		return colVariables;
 	}
 	/**
 	 * @param colVariables the colVariables to set
 	 */
-	public void setColVariables(ArrayList<CVariable> colVariables) {
+	public void setColVariables(ArrayList<String> colVariables) {
 		this.colVariables = colVariables;
 	}
 	/**
 	 * @return the rowVariables
 	 */
-	public ArrayList<CVariable> getRowVariables() {
+	public ArrayList<String> getRowVariables() {
 		return rowVariables;
 	}
 	/**
 	 * @param rowVariables the rowVariables to set
 	 */
-	public void setRowVariables(ArrayList<CVariable> rowVariables) {
+	public void setRowVariables(ArrayList<String> rowVariables) {
 		this.rowVariables = rowVariables;
 	}
 	/**

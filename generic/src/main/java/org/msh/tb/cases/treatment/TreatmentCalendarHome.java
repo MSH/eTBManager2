@@ -1,12 +1,5 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
@@ -16,6 +9,12 @@ import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.entities.enums.TreatmentDayOption;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 /**

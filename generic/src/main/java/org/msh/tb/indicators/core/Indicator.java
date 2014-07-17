@@ -1,13 +1,5 @@
 package org.msh.tb.indicators.core;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.msh.tb.AgeRangeHome;
@@ -15,6 +7,13 @@ import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.indicators.core.IndicatorTable.TableCell;
+
+import javax.persistence.EntityManager;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Base class supporting TB/MDR-TB indicator generation

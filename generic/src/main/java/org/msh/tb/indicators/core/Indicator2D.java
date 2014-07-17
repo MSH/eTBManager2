@@ -1,8 +1,8 @@
 package org.msh.tb.indicators.core;
 
-import java.util.List;
-
 import org.msh.tb.indicators.core.IndicatorTable.TableCell;
+
+import java.util.List;
 
 /**
  * Base class supporting TB/MDR-TB indicator generation in a 2-dimension table

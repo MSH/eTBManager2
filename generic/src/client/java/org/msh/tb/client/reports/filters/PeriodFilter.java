@@ -1,21 +1,16 @@
 package org.msh.tb.client.reports.filters;
 
-import java.util.Date;
-
-import org.msh.tb.client.App;
-import org.msh.tb.client.reports.ReportMain;
-import org.msh.tb.client.shared.model.CFilter;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
+import org.msh.tb.client.App;
+import org.msh.tb.client.reports.ReportUtils;
+import org.msh.tb.client.shared.model.CFilter;
+
+import java.util.Date;
 
 /**
  * Filter that enable the user to select a period of initial and final date,
@@ -183,7 +178,7 @@ public class PeriodFilter extends FilterWidget {
 		ListBox lb = new ListBox();
 		lb.setVisibleItemCount(1);
 
-		Date dt = ReportMain.instance().getReportUI().getCurrentDate();
+		Date dt = ReportUtils.getReportUIData().getCurrentDate();
 		String syear = DateTimeFormat.getFormat("yyyy").format(dt);
 		int year = Integer.parseInt(syear);
 		lb.addItem("-", "0");

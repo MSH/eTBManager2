@@ -1,11 +1,11 @@
 package org.msh.tb.reports;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.BatchQuantity;
 import org.msh.utils.EntityQuery;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @Name("batchesReport")

@@ -1,14 +1,10 @@
 package org.msh.tb.indicators;
 
-import java.util.List;
-
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.MedicineLine;
-import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.indicators.core.Indicator2D;
+
+import java.util.List;
 
 @Name("suspectConfirmedIndicator")
 public class SuspectConfirmedIndicator extends Indicator2D {

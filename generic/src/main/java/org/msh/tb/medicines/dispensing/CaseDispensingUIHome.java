@@ -1,27 +1,15 @@
 package org.msh.tb.medicines.dispensing;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineDispensing;
-import org.msh.tb.entities.MedicineDispensingCase;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.medicines.movs.StockPositionList;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 
 @Name("caseDispensingUIHome")

@@ -1,21 +1,13 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.hibernate.validator.NotNull;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Store information about an available quantity of medicines from one specific batch in a TB unit
- * @author Ricardo Memória
+ * @author Ricardo Memï¿½ria
  *
  */
 @Entity

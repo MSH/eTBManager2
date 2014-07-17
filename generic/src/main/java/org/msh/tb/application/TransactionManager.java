@@ -3,12 +3,12 @@
  */
 package org.msh.tb.application;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.transaction.UserTransaction;
+
+import javax.persistence.EntityManager;
 
 /**
  * Simple SEAM component (but may be used as an ordinary object) to manage 

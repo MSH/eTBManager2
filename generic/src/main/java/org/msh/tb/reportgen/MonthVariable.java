@@ -1,10 +1,10 @@
 package org.msh.tb.reportgen;
 
-import java.text.DateFormatSymbols;
-
 import org.jboss.seam.international.LocaleSelector;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
+
+import java.text.DateFormatSymbols;
 
 public class MonthVariable implements Variable {
 

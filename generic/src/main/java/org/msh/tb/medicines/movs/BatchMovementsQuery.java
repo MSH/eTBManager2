@@ -1,10 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.BatchMovement;
@@ -13,6 +8,11 @@ import org.msh.utils.EntityQuery;
 import org.msh.utils.RowGrouping;
 import org.msh.utils.RowGroupingComparator;
 import org.msh.utils.RowGroupingItem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 
 @Name("batchMovements")

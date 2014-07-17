@@ -1,9 +1,9 @@
 package org.msh.tb.tbunits;
 
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.msh.tb.entities.Tbunit;
+
+import java.util.List;
 
 public class TBUnitSelection2 extends TBUnitSelection {
 

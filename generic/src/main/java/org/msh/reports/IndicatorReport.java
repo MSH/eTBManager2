@@ -1,10 +1,5 @@
 package org.msh.reports;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.filters.Filter;
@@ -19,6 +14,11 @@ import org.msh.reports.tableoperations.ConcatTables;
 import org.msh.reports.tableoperations.IndicatorTransform;
 import org.msh.reports.tableoperations.KeyConverter;
 import org.msh.reports.variables.Variable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generate an indicator report, consisting of variables compounding the rows and columns

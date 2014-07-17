@@ -1,28 +1,15 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.bd.entities.enums.BiopsyResult;
-import org.msh.tb.bd.entities.enums.DotProvider;
-import org.msh.tb.bd.entities.enums.Occupation;
-import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
-import org.msh.tb.bd.entities.enums.QuarterMonths;
-import org.msh.tb.bd.entities.enums.SalaryRange;
-import org.msh.tb.bd.entities.enums.SideEffectAction;
-import org.msh.tb.bd.entities.enums.SideEffectGrading;
-import org.msh.tb.bd.entities.enums.SideEffectOutcome;
-import org.msh.tb.bd.entities.enums.SideEffectSeriousness;
-import org.msh.tb.bd.entities.enums.SkinTestResult;
-import org.msh.tb.entities.enums.DrugResistanceType;
-import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.bd.entities.enums.*;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.entities.enums.ReferredTo;
-import org.msh.tb.entities.enums.SampleType;
-import org.msh.tb.entities.enums.TbField;
 import org.msh.utils.date.DateUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Name("globalLists_bd")

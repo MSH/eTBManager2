@@ -1,9 +1,5 @@
 package org.msh.tb;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -16,6 +12,10 @@ import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 

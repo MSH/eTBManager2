@@ -1,17 +1,5 @@
 package org.msh.tb.bd;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
@@ -19,6 +7,11 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.indicators.core.Indicator2D;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import java.text.ParseException;
+import java.util.*;
 
 
 /**

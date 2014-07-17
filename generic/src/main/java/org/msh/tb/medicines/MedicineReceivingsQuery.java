@@ -1,12 +1,12 @@
 package org.msh.tb.medicines;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.MedicineReceiving;
 import org.msh.tb.entities.Source;
 import org.msh.utils.EntityQuery;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @Name("medicineReceivings")

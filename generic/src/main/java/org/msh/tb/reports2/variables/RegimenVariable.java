@@ -1,16 +1,15 @@
 package org.msh.tb.reports2.variables;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOption;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegimenVariable extends VariableImpl {
 

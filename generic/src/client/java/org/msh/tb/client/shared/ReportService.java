@@ -1,18 +1,12 @@
 package org.msh.tb.client.shared;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.msh.tb.client.shared.model.CItem;
-import org.msh.tb.client.shared.model.CPatientList;
-import org.msh.tb.client.shared.model.CReport;
-import org.msh.tb.client.shared.model.CReportRequest;
-import org.msh.tb.client.shared.model.CInitializationData;
-import org.msh.tb.client.shared.model.CReportResponse;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import org.msh.tb.client.shared.model.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Report services exposed by the server side
@@ -27,7 +21,7 @@ public interface ReportService extends RemoteService {
 	 * Initialize the report UI, return data to be displayed in the selection boxes
 	 * @return
 	 */
-	CInitializationData initialize();
+	CReportUIData initialize();
 
 	/**
 	 * Load report detailed data, like filters and variables in use
@@ -62,7 +56,7 @@ public interface ReportService extends RemoteService {
 	 * @param reportData
 	 * @return
 	 */
-	CReportResponse executeReport(CReportRequest reportData);
+	CIndicatorResponse executeIndicator(CIndicatorRequest reportData);
 
 
 	/**

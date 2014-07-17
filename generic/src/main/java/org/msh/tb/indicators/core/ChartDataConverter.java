@@ -1,13 +1,13 @@
 package org.msh.tb.indicators.core;
 
+import org.jboss.seam.Component;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-
-import org.jboss.seam.Component;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
 @Name("chartDataConverter")
 @org.jboss.seam.annotations.faces.Converter(id="chartDataConverter")

@@ -1,10 +1,9 @@
 package org.msh.utils.date;
 
-import java.util.Date;
-
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.Date;
 
 
 /**

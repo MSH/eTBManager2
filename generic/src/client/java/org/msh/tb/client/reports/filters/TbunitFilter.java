@@ -3,16 +3,15 @@
  */
 package org.msh.tb.client.reports.filters;
 
-import java.util.ArrayList;
-
-import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.shared.model.CFilter;
-import org.msh.tb.client.shared.model.CItem;
-
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.shared.model.CFilter;
+import org.msh.tb.client.shared.model.CItem;
+
+import java.util.ArrayList;
 
 /**
  * Filter widget to support TB unit selection

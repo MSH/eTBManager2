@@ -1,7 +1,9 @@
 package org.msh.utils;
 
-import java.util.Date;
-import java.util.Map;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.international.Messages;
+import org.msh.utils.date.DateUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -9,11 +11,8 @@ import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.international.Messages;
-import org.msh.utils.date.DateUtils;
+import java.util.Date;
+import java.util.Map;
 
 @Name("futureDateValidator")
 @org.jboss.seam.annotations.faces.Validator(id="futureDateValidator")

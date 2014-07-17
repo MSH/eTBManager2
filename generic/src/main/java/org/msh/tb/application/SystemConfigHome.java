@@ -1,9 +1,5 @@
 package org.msh.tb.application;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -16,6 +12,9 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.TransactionLogService;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Name("systemConfigHome")
 @Scope(ScopeType.CONVERSATION)

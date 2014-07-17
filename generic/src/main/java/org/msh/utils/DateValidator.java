@@ -1,14 +1,14 @@
 package org.msh.utils;
 
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.application.App;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.application.App;
 
 @Name("dateValidator")
 @org.jboss.seam.annotations.faces.Validator(id="dateValidator")

@@ -1,10 +1,10 @@
-package org.msh.tb.client.reports;
-
-import org.msh.tb.client.commons.StandardEventHandler;
-import org.msh.tb.client.shared.model.CFilter;
-import org.msh.tb.client.shared.model.CGroup;
+package org.msh.tb.client.reports.filters;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.msh.tb.client.AppResources;
+import org.msh.tb.client.reports.GroupPopup;
+import org.msh.tb.client.shared.model.CFilter;
+import org.msh.tb.client.shared.model.CGroup;
 
 /**
  * Popup window that displays a list of filters to be selected by the user
@@ -13,9 +13,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class GroupFiltersPopup extends GroupPopup {
 
-	public GroupFiltersPopup(StandardEventHandler eventHandler) {
-		super(eventHandler);
-	}
+    private static final String KEY_FILTERSPOPUP = "report.filters";
 
 	/**
 	 * Mount the list of options for the given group
@@ -38,5 +36,15 @@ public class GroupFiltersPopup extends GroupPopup {
 	protected boolean hasItems(CGroup group) {
 		return (group.getFilters() != null && group.getFilters().length > 0);
 	}
-	
+
+
+    public static GroupFiltersPopup instance() {
+        GroupFiltersPopup popup = (GroupFiltersPopup)AppResources.instance().get(KEY_FILTERSPOPUP);
+
+        if (popup == null) {
+            popup = new GroupFiltersPopup();
+            AppResources.instance().set(KEY_FILTERSPOPUP, popup);
+        }
+        return popup;
+    }
 }

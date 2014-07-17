@@ -1,13 +1,5 @@
 package org.msh.tb.login;
 
-import java.util.regex.Pattern;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
@@ -16,6 +8,13 @@ import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.utils.Passwords;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import java.util.regex.Pattern;
 
 
 
@@ -39,7 +38,7 @@ public class ChangePasswordService {
 		
 		User user = entityManager.find(User.class, userLogin.getUser().getId());
 
-		// verifica se a senha atual é igual a senha do usuário
+		// verifica se a senha atual ï¿½ igual a senha do usuï¿½rio
 		if (!pwd.equalsIgnoreCase(user.getPassword())) {
 			facesMessages.addFromResourceBundle("changepwd.wrongpass1");
 			return "error";
@@ -54,7 +53,7 @@ public class ChangePasswordService {
 	 * @return
 	 */
 	public String updatePassword() {
-		// verifica se as 2 novas senhas são iguais
+		// verifica se as 2 novas senhas sï¿½o iguais
 		if (!newPassword1.equals(newPassword2)) {
 			facesMessages.addFromResourceBundle("changepwd.wrongpass2");
 			return "error";

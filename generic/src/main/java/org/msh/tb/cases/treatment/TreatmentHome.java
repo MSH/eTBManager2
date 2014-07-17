@@ -1,12 +1,5 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -19,21 +12,22 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.SourcesQuery;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TreatmentHealthUnit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**

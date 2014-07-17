@@ -3,20 +3,16 @@
  */
 package org.msh.tb.reports2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
 import org.msh.reports.variables.Variable;
 import org.msh.tb.client.shared.DashboardService;
-import org.msh.tb.client.shared.model.CIndicator;
-import org.msh.tb.client.shared.model.CReport;
-import org.msh.tb.client.shared.model.CReportRequest;
-import org.msh.tb.client.shared.model.CReportResponse;
-import org.msh.tb.client.shared.model.CVariable;
+import org.msh.tb.client.shared.model.*;
 import org.msh.tb.entities.Report;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implement the services exposed to the GWT client application
@@ -48,15 +44,16 @@ public class DashboardServiceGWT implements DashboardService {
 	@WebRemote
 	public CIndicator generateIndicator(Integer id) {
 		// get information about the report in order to generate request 
+/*
 		CReport rep = ReportGenerator.getReport(id);
 
-		CReportRequest req = new CReportRequest();
+		CIndicatorRequest req = new CIndicatorRequest();
 		req.setColVariables(rep.getColumnVariables());
 		req.setRowVariables(rep.getRowVariables());
 		req.setFilters(rep.getFilters());
 
 		// generate report response
-		CReportResponse res = ReportGenerator.generateReport(req);
+		CIndicatorResponse res = ReportGenerator.generateReport(req);
 
 		// mount response to the client
 		CIndicator indicator = new CIndicator();
@@ -83,6 +80,8 @@ public class DashboardServiceGWT implements DashboardService {
 		indicator.setRowVariables(rowvars);
 		
 		return indicator;
+*/
+        return null;
 	}
 
 }

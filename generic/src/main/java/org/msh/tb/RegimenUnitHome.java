@@ -1,9 +1,5 @@
 package org.msh.tb;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -14,6 +10,9 @@ import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.RegimenUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Name("regimenUnitHome")
 @Scope(ScopeType.CONVERSATION)

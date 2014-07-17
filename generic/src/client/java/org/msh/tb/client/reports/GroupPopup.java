@@ -1,53 +1,49 @@
 package org.msh.tb.client.reports;
 
-import java.util.List;
-
-import org.msh.tb.client.commons.AnchorData;
-import org.msh.tb.client.commons.StandardEventHandler;
-import org.msh.tb.client.shared.model.CGroup;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.ui.*;
+import org.msh.tb.client.commons.StandardEventHandler;
+import org.msh.tb.client.shared.model.CGroup;
+import org.msh.tb.client.ui.AnchorData;
+
+import java.util.List;
 
 public abstract class GroupPopup extends PopupPanel {
 
 	public static Integer ITEM_SELECTED = 100;
 	
-	private List<CGroup> groups;
 	private ScrollPanel pnlContent;
 	private StandardEventHandler eventHandler;
 	
-	public GroupPopup(StandardEventHandler eventHandler) {
+	public GroupPopup() {
 		super(true);
-		this.eventHandler = eventHandler;
 
 		setStyleName("group-popup");
 		pnlContent = new ScrollPanel();
 		pnlContent.setWidth("300px");
 		pnlContent.setHeight("400px");
 		add(pnlContent);
+
+        final GroupPopup grp = this;
+        addCloseHandler(new CloseHandler<PopupPanel>() {
+            @Override
+            public void onClose(CloseEvent<PopupPanel> popupPanelCloseEvent) {
+                grp.eventHandler = null;
+            }
+        });
 	}
 
 	/**
 	 * @return the groups
 	 */
 	public List<CGroup> getGroups() {
-		return groups;
+		return ReportUtils.getReportUIData().getGroups();
 	}
 
-	/**
-	 * @param groups the groups to set
-	 */
-	public void setGroups(List<CGroup> groups) {
-		this.groups = groups;
-	}
 
-	
 	/**
 	 * Mount the list of options for the given group
 	 * @param grp
@@ -92,6 +88,7 @@ public abstract class GroupPopup extends PopupPanel {
 	private void initializeGroups() {
 		pnlContent.clear();
 
+        List<CGroup> groups = getGroups();
 		if (groups == null)
 			return;
 
@@ -140,7 +137,7 @@ public abstract class GroupPopup extends PopupPanel {
 			public void onClick(ClickEvent event) {
 				if (eventHandler != null) {
 					AnchorData lnk = (AnchorData)event.getSource();
-					eventHandler.eventHandler(ITEM_SELECTED, lnk.getData());
+					eventHandler.handleEvent(ITEM_SELECTED, lnk.getData());
 				}
 			}
 		});

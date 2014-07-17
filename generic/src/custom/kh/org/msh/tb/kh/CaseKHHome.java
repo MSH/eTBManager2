@@ -10,14 +10,13 @@ import org.msh.tb.cases.treatment.TreatmentHome;
 import org.msh.tb.entities.Address;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.kh.entities.TbCaseKH;
-import org.msh.tb.ng.entities.TbCaseNG;
 
 
 
 /**
  * Handle basic operations with a TB/MDR case. Check {@link CaseEditingHome} for notification and editing of case data
  * Specific operations concerning exams, case regimes, heath units and medical consultations are handled by other classes.
- * @author Ricardo Memória 
+ * @author Ricardo Memï¿½ria 
  * Cambodia - Vani Rao
  */
 @Name("caseKHHome")

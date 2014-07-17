@@ -1,16 +1,5 @@
 package org.msh.utils;
 
-import java.text.MessageFormat;
-import java.util.Date;
-import java.util.Map;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIParameter;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.Validator;
-import javax.faces.validator.ValidatorException;
-
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
@@ -19,6 +8,16 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.utils.date.DateUtils;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
+import java.text.MessageFormat;
+import java.util.Date;
+import java.util.Map;
 
 @Name("patientDateValidator")
 @org.jboss.seam.annotations.faces.Validator(id="patientDateValidator")

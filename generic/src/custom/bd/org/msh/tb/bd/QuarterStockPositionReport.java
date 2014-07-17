@@ -1,11 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -20,6 +14,11 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitSelection2;
 import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author MSANTOS

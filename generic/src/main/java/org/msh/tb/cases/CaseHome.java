@@ -1,11 +1,5 @@
 package org.msh.tb.cases;
 
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Factory;
@@ -16,27 +10,23 @@ import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.ETB;
 import org.msh.tb.TagsCasesHome;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TreatmentHealthUnit;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.CaseValidationOption;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.transactionlog.LogInfo;
+
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 
 /**
  * Handle basic operations with a TB/MDR case. Check {@link CaseEditingHome} for notification and editing of case data
  * Specific operations concerning exams, case regimes, heath units and medical consultations are handled by other classes.
- * @author Ricardo Memória
+ * @author Ricardo Memï¿½ria
  *
  */
 @Name("caseHome")

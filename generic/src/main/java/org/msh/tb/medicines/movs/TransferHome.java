@@ -1,11 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -15,24 +9,19 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.SourceGroup;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.StockPosition;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.Transfer;
-import org.msh.tb.entities.TransferBatch;
-import org.msh.tb.entities.TransferItem;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.entities.enums.TransferStatus;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.MedicineStockSelection;
-import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
+
+import java.util.*;
 
 
 

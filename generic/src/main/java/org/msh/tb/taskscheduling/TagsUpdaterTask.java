@@ -1,8 +1,5 @@
 package org.msh.tb.taskscheduling;
 
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
@@ -13,6 +10,9 @@ import org.jboss.seam.annotations.async.Expiration;
 import org.jboss.seam.annotations.async.IntervalCron;
 import org.jboss.seam.async.QuartzTriggerHandle;
 import org.msh.tb.entities.Tag;
+
+import java.util.Date;
+import java.util.List;
  
 @Name("tagsUpdaterTask")
 @AutoCreate

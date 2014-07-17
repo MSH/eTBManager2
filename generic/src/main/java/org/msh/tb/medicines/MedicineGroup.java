@@ -1,9 +1,9 @@
 package org.msh.tb.medicines;
 
+import org.msh.tb.entities.Medicine;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.msh.tb.entities.Medicine;
 
 public class MedicineGroup<E> {
 	

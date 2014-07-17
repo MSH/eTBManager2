@@ -1,13 +1,13 @@
 package org.msh.tb.reportgen;
 
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
+
+import java.util.List;
 
 public class AdminUnitVariable implements Variable {
 

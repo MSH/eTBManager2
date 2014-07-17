@@ -1,25 +1,18 @@
 package org.msh.tb.kh;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.DayInfo;
 import org.msh.tb.cases.treatment.TreatmentCalendarHome;
-import org.msh.tb.cases.treatment.TreatmentCalendarHome.PhaseInfo;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.TreatmentMonitoring;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.entities.enums.TreatmentDayOption;
 import org.msh.tb.kh.entities.TreatmentMonitoringKH;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 /**

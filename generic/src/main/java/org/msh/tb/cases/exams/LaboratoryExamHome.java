@@ -1,8 +1,5 @@
 package org.msh.tb.cases.exams;
 
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.AuthorizationException;
@@ -12,6 +9,9 @@ import org.msh.tb.entities.Laboratory;
 import org.msh.tb.entities.LaboratoryExamResult;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.laboratories.LaboratorySelection;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Home class for laboratory exam handling (culture, microscopy and DST)

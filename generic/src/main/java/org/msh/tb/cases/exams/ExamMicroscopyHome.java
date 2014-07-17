@@ -1,11 +1,6 @@
 package org.msh.tb.cases.exams;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
@@ -13,6 +8,10 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.transactionlog.LogInfo;
+
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

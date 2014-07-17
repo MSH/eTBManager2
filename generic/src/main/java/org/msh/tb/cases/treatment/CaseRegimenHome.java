@@ -1,28 +1,21 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.RegimensQuery;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineRegimen;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TreatmentHealthUnit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Name("caseRegimenHome")
 @Scope(ScopeType.CONVERSATION)

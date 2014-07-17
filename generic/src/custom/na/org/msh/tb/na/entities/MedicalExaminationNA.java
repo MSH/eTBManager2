@@ -1,11 +1,11 @@
 package org.msh.tb.na.entities;
 
+import org.msh.tb.entities.MedicalExamination;
+import org.msh.tb.na.entities.enums.DotOptions;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-
-import org.msh.tb.entities.MedicalExamination;
-import org.msh.tb.na.entities.enums.DotOptions;
 
 @Entity
 @DiscriminatorValue("na")

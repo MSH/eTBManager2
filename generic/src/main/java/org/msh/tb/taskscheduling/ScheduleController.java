@@ -1,16 +1,11 @@
 package org.msh.tb.taskscheduling;
 
-import static org.jboss.seam.ScopeType.APPLICATION;
+import org.jboss.seam.annotations.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.jboss.seam.annotations.AutoCreate;
-import org.jboss.seam.annotations.Create;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Startup;
+import static org.jboss.seam.ScopeType.APPLICATION;
 
 @Name("taskSchedulerController")
 @Scope(APPLICATION)

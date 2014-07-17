@@ -1,9 +1,5 @@
 package org.msh.tb;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -13,6 +9,9 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.Tag;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Name("tagsCasesHome")
 public class TagsCasesHome {

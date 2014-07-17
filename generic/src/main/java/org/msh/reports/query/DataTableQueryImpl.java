@@ -1,10 +1,10 @@
 package org.msh.reports.query;
 
-import java.util.AbstractList;
-import java.util.List;
-
 import org.msh.reports.datatable.impl.ColumnImpl;
 import org.msh.reports.datatable.impl.DataTableImpl;
+
+import java.util.AbstractList;
+import java.util.List;
 
 /**
  * Implementation of the {@link DataTableQuery} interface

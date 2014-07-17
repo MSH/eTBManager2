@@ -1,13 +1,13 @@
 package org.msh.utils.reportgen.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.jboss.seam.international.Messages;
 import org.msh.utils.reportgen.ReportData;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class DataTableTransform {
 

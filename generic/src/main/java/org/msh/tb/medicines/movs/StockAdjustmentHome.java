@@ -1,11 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -15,20 +9,15 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.msh.tb.application.App;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.FieldValueComponent;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.StockPosition;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.InventoryReport;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
+
+import java.util.*;
 
 
 /**

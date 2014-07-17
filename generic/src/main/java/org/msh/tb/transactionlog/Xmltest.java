@@ -1,14 +1,13 @@
 package org.msh.tb.transactionlog;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
 
 @Name("xmltest")
 public class Xmltest {
@@ -21,7 +20,7 @@ public class Xmltest {
 
 		writer.addMessage("MovementException.NEGATIVE_STOCK", "12345", new Date());
 		
-		writer.addText("Este é um simples exemplo de texto.\nEle tem várias linhas e uma <tag> no meio.");
+		writer.addText("Este ï¿½ um simples exemplo de texto.\nEle tem vï¿½rias linhas e uma <tag> no meio.");
 		
 		writer.addTableRow("form.save", 213.4, "teste");
 		

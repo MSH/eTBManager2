@@ -1,9 +1,5 @@
 package org.msh.tb.medicines.orders;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -16,6 +12,9 @@ import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 
+import javax.persistence.EntityManager;
+import java.util.Date;
+
 @Name("orderAuthorizingHome")
 public class OrderAuthorizingHome extends Controller {
 	private static final long serialVersionUID = 3935785222496509854L;
@@ -27,7 +26,7 @@ public class OrderAuthorizingHome extends Controller {
 	@In(create=true) FacesMessages facesMessages;
 
 	/**
-	 * Inicializa os dados para a autorização
+	 * Inicializa os dados para a autorizaï¿½ï¿½o
 	 */
 	public void initialize() {
 		for (SourceOrderItem s: orderHome.getSources()) 
@@ -53,7 +52,7 @@ public class OrderAuthorizingHome extends Controller {
 		Tbunit unit = entityManager.merge(userSession.getTbunit());
 		order.setAuthorizer(unit);
 
-		// pega os valores informados pelo usuário e atualiza no pedido
+		// pega os valores informados pelo usuï¿½rio e atualiza no pedido
 		for (SourceOrderItem s: orderHome.getSources())
 			for (OrderItemAux item: s.getItems()) {
 				item.getItem().setApprovedQuantity(item.getApprovedQuantity());

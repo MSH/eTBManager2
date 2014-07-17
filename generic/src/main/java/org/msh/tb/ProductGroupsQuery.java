@@ -1,11 +1,11 @@
 package org.msh.tb;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ProductGroup;
 import org.msh.utils.EntityQuery;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @Name("productGroups")

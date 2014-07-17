@@ -1,9 +1,9 @@
 package org.msh.utils;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.transaction.UserTransaction;
+
+import javax.persistence.EntityManager;
 
 /**
  * Base class to give access to transaction control for the entity manager by exposing methods 

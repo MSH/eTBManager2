@@ -3,11 +3,6 @@
  */
 package org.msh.tb.reports2.variables;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Query;
-
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
@@ -17,6 +12,10 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
+
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Variable and filter to support TB units

@@ -1,9 +1,9 @@
 package org.msh.utils.reportgen.data;
 
+import org.msh.utils.reportgen.Variable;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.msh.utils.reportgen.Variable;
 
 public class TableItem implements Comparable<TableItem> {
 

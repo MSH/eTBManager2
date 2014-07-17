@@ -1,10 +1,10 @@
 package org.msh.reports.datatable.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.Row;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class RowImpl implements Row {
 

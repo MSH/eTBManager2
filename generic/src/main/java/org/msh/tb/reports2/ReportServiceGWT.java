@@ -1,19 +1,14 @@
 package org.msh.tb.reports2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
 import org.jboss.seam.annotations.security.Restrict;
 import org.msh.reports.filters.Filter;
 import org.msh.tb.client.shared.ReportService;
-import org.msh.tb.client.shared.model.CInitializationData;
-import org.msh.tb.client.shared.model.CItem;
-import org.msh.tb.client.shared.model.CPatientList;
-import org.msh.tb.client.shared.model.CReport;
-import org.msh.tb.client.shared.model.CReportRequest;
-import org.msh.tb.client.shared.model.CReportResponse;
+import org.msh.tb.client.shared.model.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -32,17 +27,17 @@ public class ReportServiceGWT implements ReportService {
 	 */
 	@Override
 	@WebRemote
-	public CInitializationData initialize() {
+	public CReportUIData initialize() {
 		return ReportGenerator.createInitializationData();
 	}
 
 
 	/* (non-Javadoc)
-	 * @see org.msh.tb.client.shared.ReportService#executeReport(org.msh.tb.client.shared.model.CReportData)
+	 * @see org.msh.tb.client.shared.ReportService#executeIndicator(org.msh.tb.client.shared.model.CReportData)
 	 */
 	@Override
 	@WebRemote
-	public CReportResponse executeReport(CReportRequest reportData) {
+	public CIndicatorResponse executeIndicator(CIndicatorRequest reportData) {
 		return ReportGenerator.generateReport(reportData);
 	}
 

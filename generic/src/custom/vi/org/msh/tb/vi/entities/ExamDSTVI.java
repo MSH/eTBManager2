@@ -1,11 +1,11 @@
 package org.msh.tb.vi.entities;
 
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.vi.MtbDetected;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("vi")

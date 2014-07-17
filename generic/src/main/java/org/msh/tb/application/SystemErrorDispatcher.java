@@ -1,11 +1,5 @@
 package org.msh.tb.application;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -18,6 +12,11 @@ import org.msh.tb.entities.SystemConfig;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.misc.DmSystemHome;
+
+import javax.persistence.EntityManager;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Date;
 
 /**
  * Register information about exceptions and its associated user session and

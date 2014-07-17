@@ -1,56 +1,18 @@
 package org.msh.tb.reports2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.entities.enums.DrugResistanceType;
-import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.entities.enums.Nationality;
-import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.entities.enums.XpertResult;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.reports2.VariableImpl.UnitType;
-import org.msh.tb.reports2.variables.AdminUnitVariable;
-import org.msh.tb.reports2.variables.AgeRangeVariable;
-import org.msh.tb.reports2.variables.CaseItemDateVariable;
-import org.msh.tb.reports2.variables.ComorbiditiesVariable;
-import org.msh.tb.reports2.variables.CountingExamsVariable;
-import org.msh.tb.reports2.variables.CountingVariable;
-import org.msh.tb.reports2.variables.DateFieldVariable;
-import org.msh.tb.reports2.variables.EnumFieldVariable;
-import org.msh.tb.reports2.variables.ExtrapulmonarVariable;
-import org.msh.tb.reports2.variables.HivCptArtVariable;
-import org.msh.tb.reports2.variables.HivResultVariable;
-import org.msh.tb.reports2.variables.LabExamDateVariable;
-import org.msh.tb.reports2.variables.LabMethodVariable;
-import org.msh.tb.reports2.variables.LabResultDiagVariable;
-import org.msh.tb.reports2.variables.LabResultVariable;
-import org.msh.tb.reports2.variables.MonthOfTreatVariable;
-import org.msh.tb.reports2.variables.NegativationMonthVariable;
-import org.msh.tb.reports2.variables.PrescMedicineVariable;
-import org.msh.tb.reports2.variables.PulmonaryVariable;
-import org.msh.tb.reports2.variables.RegimenTypeVariable;
-import org.msh.tb.reports2.variables.RegimenVariable;
-import org.msh.tb.reports2.variables.ResistancePatternVariable;
-import org.msh.tb.reports2.variables.SideEffectVariable;
-import org.msh.tb.reports2.variables.SuspectConfirmedVariable;
-import org.msh.tb.reports2.variables.TbunitVariable;
-import org.msh.tb.reports2.variables.TreatmentSourceVariable;
-import org.msh.tb.reports2.variables.TypeTBCaseVariable;
-import org.msh.tb.reports2.variables.TreatOutcomeVariable;
+import org.msh.tb.reports2.variables.*;
 import org.msh.tb.reports2.variables.HivCptArtVariable.ReportType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

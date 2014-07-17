@@ -1,26 +1,16 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.entities.enums.HIVResultKe;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- * @author Ricardo Memória
+ * @author Ricardo Memï¿½ria
  *
  * Records information about an HIV result during the treatment
  */

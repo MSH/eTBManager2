@@ -3,12 +3,6 @@
  */
 package org.msh.tb.client.reports;
 
-import java.util.ArrayList;
-
-import org.msh.tb.client.commons.AnchorData;
-import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.shared.model.CReport;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -21,6 +15,13 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.msh.tb.client.AppResources;
+import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.commons.StandardEventHandler;
+import org.msh.tb.client.shared.model.CReport;
+import org.msh.tb.client.ui.AnchorData;
+
+import java.util.ArrayList;
 
 /**
  * @author Ricardo Memoria
@@ -30,6 +31,8 @@ public class ReportListPanel extends Composite {
 	private static final Binder binder = GWT.create(Binder.class);
 	interface Binder extends UiBinder<VerticalPanel, ReportListPanel> { };
 
+    public enum ReportListEvent { NEW_REPORT, OPEN, CLOSE };
+
 	private VerticalPanel content;
 	private int index = 0;
 	private ClickHandler reportClickHandler = new ClickHandler() {
@@ -38,6 +41,7 @@ public class ReportListPanel extends Composite {
 			reportClickHandler(event);
 		}
 	};
+    private StandardEventHandler eventHandler;
 	
 	@UiField FlexTable tblReports;
 	@UiField Button btnClose;
@@ -58,20 +62,21 @@ public class ReportListPanel extends Composite {
 	 * Display the panel and show the list of org.msh.reports
 	 * @param reload informs the panel to reload the list of org.msh.reports from the server
 	 */
-	public void show(boolean reload) {
+	public void show(boolean reload, StandardEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
 		tblReports.removeAllRows();
 		if (reload) {
-			ArrayList<CReport> lst = ReportMain.instance().getReportUI().getReports();
+			ArrayList<CReport> lst = ReportUtils.getReportUIData().getReports();
 			updateList(lst);
 		}
 		else {
 			// call server for the list of org.msh.reports
-			ReportMain.instance().getService().getReportList(new StandardCallback<ArrayList<CReport>>() {
-				@Override
-				public void onSuccess(ArrayList<CReport> result) {
-					updateList(result);
-				}
-			});
+			AppResources.reportServices().getReportList(new StandardCallback<ArrayList<CReport>>() {
+                @Override
+                public void onSuccess(ArrayList<CReport> result) {
+                    updateList(result);
+                }
+            });
 		}
 		content.setVisible(true);
 	}
@@ -101,9 +106,7 @@ public class ReportListPanel extends Composite {
 	
 	/**
 	 * Add a new report to the list of org.msh.reports
-	 * @param title
-	 * @param newRep
-	 * @param myReport
+	 * @param rep the report to add
 	 */
 	protected void addReport(CReport rep) {
 		String sicon = "<i class='";
@@ -137,7 +140,7 @@ public class ReportListPanel extends Composite {
 	 */
 	@UiHandler("btnClose")
 	public void btnCancelClick(ClickEvent event) {
-		ReportMain.instance().closeReportList();
+        eventHandler.handleEvent(ReportListEvent.CLOSE, null);
 	}
 	
 	
@@ -149,10 +152,11 @@ public class ReportListPanel extends Composite {
 		AnchorData lnk = (AnchorData)event.getSource();
 		Integer repId = (Integer)lnk.getData();
 		if (repId == null) {
-			ReportMain.instance().newReport();
+            eventHandler.handleEvent(ReportListEvent.NEW_REPORT, null);
 		}
 		else {
-			ReportMain.instance().openReport(repId);
+            eventHandler.handleEvent(ReportListEvent.OPEN, repId);
 		}
 	}
+
 }

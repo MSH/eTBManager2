@@ -1,13 +1,5 @@
 package org.msh.tb.client.tableview;
 
-import java.util.List;
-
-import org.msh.tb.client.App;
-import org.msh.tb.client.reports.ReportMain;
-import org.msh.tb.client.shared.model.CTableColumn;
-import org.msh.tb.client.shared.model.CTableRow;
-import org.msh.tb.client.shared.model.CVariable;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -16,6 +8,12 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import org.msh.tb.client.App;
+import org.msh.tb.client.shared.model.CTableColumn;
+import org.msh.tb.client.shared.model.CTableRow;
+import org.msh.tb.client.shared.model.CVariable;
+
+import java.util.List;
 
 /**
  * Display a table with the indicator data on that
@@ -49,9 +47,7 @@ public class TableView extends Composite {
 	/**
 	 * Update the data of the table
 	 * @param tableData
-	 * @param rowVars
-	 * @param colVars
-	 */
+     */
 	public void update(TableData tableData) {
 		if (tableData == null)
 			return;
@@ -203,10 +199,11 @@ public class TableView extends Composite {
 
 	/**
 	 * Generates the chart according to the cell selected
-	 * @param cellIndex
-	 * @param rowIndex
+	 * @param col
+	 * @param row
 	 */
 	protected void tableCellClick(int col, int row) {
+/*
 		int colheadersize = data.getColHeaderSize();
 		
 		int rowcount = data.getRowCount();
@@ -254,6 +251,7 @@ public class TableView extends Composite {
 		else
 			if ((col == 0) && (row > colheadersize))
 					ReportMain.instance().setSelectedRow(row - colheadersize - 1);
+*/
 	}
 
 }

@@ -1,11 +1,11 @@
 package org.msh.tb.userprofile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.msh.tb.entities.UserPermission;
 import org.msh.tb.entities.UserRole;
 import org.msh.tb.entities.enums.CaseClassification;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a node in the list of permissions of the user. A node is used as a representative display of

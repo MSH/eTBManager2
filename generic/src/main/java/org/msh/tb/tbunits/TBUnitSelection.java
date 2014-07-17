@@ -1,7 +1,5 @@
 package org.msh.tb.tbunits;
 
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -10,6 +8,8 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.UserView;
+
+import java.util.List;
 
 
 /**

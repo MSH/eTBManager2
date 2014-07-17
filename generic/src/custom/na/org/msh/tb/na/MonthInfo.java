@@ -1,13 +1,12 @@
 package org.msh.tb.na;
 
+import org.msh.tb.na.entities.enums.Dot;
+import org.msh.utils.date.DateUtils;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import org.msh.tb.na.DayInfo;
-import org.msh.tb.na.entities.enums.Dot;
-import org.msh.utils.date.DateUtils;
 
 
 

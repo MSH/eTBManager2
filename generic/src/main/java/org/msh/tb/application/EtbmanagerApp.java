@@ -1,12 +1,5 @@
 package org.msh.tb.application;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-
-import javax.persistence.EntityManager;
-import javax.servlet.ServletContext;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
@@ -17,6 +10,12 @@ import org.jboss.seam.contexts.ServletLifecycle;
 import org.jboss.seam.log.Log;
 import org.jboss.seam.log.Logging;
 import org.msh.tb.entities.SystemConfig;
+
+import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Store application specific information like version number, build number and implementation title

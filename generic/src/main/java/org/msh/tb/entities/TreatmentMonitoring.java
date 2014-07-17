@@ -3,25 +3,13 @@
  */
 package org.msh.tb.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.enums.TreatmentDayOption;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Store information about medicine in-take along the treatment

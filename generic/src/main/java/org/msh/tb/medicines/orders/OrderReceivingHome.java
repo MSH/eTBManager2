@@ -1,17 +1,5 @@
 package org.msh.tb.medicines.orders;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIParameter;
-import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -19,15 +7,22 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.jboss.seam.international.Messages;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Order;
-import org.msh.tb.entities.OrderBatch;
-import org.msh.tb.entities.OrderItem;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Name("orderReceivingHome")
@@ -51,7 +46,7 @@ public class OrderReceivingHome extends Controller {
 
 		sources = orderHome.getSources();
 		for (SourceOrderItem s: sources) {
-			// remove items que não foram enviados
+			// remove items que nï¿½o foram enviados
 			int i = 0;
 			while (i < s.getItems().size()) {
 				Integer qtd = s.getItems().get(i).getItem().getShippedQuantity(); 
@@ -108,7 +103,7 @@ public class OrderReceivingHome extends Controller {
 		
 		MovementType type = MovementType.ORDERRECEIVING;
 
-		// gera os movimentos de saída do pedido
+		// gera os movimentos de saï¿½da do pedido
 		movementHome.initMovementRecording();
 		Map<OrderItem, Movement> itens = new HashMap<OrderItem, Movement>();
 		for (OrderItem it: order.getItems())
@@ -166,7 +161,7 @@ public class OrderReceivingHome extends Controller {
 
 
 	/**
-	 * Valida a quantidade informada pelo usuário
+	 * Valida a quantidade informada pelo usuï¿½rio
 	 * @param context
 	 * @param compQtd
 	 * @param value
@@ -174,17 +169,17 @@ public class OrderReceivingHome extends Controller {
 	public void validateQuantity(FacesContext context, UIComponent compQtd, Object value) {
 		OrderBatch dobatch = (OrderBatch) ((UIParameter)compQtd.findComponent("batch")).getValue();
 
-		// os valores são diferentes?
+		// os valores sï¿½o diferentes?
 		if (dobatch.getQuantity() != (Integer)value) {
 			dobatch.setReceivedQuantity((Integer)value);
 
-			// procura por inputText com comentário
+			// procura por inputText com comentï¿½rio
 			UIComponent table = compQtd.getParent().getParent();
 			List<UIComponent> children = table.getParent().getChildren();
 			int index = children.indexOf(table);
 			UIComponent txt = children.get(index - 1).getChildren().get(0);
 
-			// comentário foi definido ?
+			// comentï¿½rio foi definido ?
 			if (((UIInput)txt).getValue().toString().isEmpty()) {
 				((UIInput)txt).setValid(false);
 

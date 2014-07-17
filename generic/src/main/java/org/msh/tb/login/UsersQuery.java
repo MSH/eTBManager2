@@ -1,12 +1,12 @@
 package org.msh.tb.login;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.utils.EntityQuery;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**

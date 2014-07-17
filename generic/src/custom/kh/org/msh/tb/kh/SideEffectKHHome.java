@@ -1,11 +1,5 @@
 package org.msh.tb.kh;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
 import org.hibernate.validator.InvalidStateException;
 import org.hibernate.validator.InvalidValue;
 import org.jboss.seam.annotations.In;
@@ -19,6 +13,11 @@ import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 import org.msh.utils.date.Period;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 @Name("sideEffectKHHome")
 public class SideEffectKHHome {

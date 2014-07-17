@@ -1,14 +1,5 @@
 package org.msh.tb.cases.drugogram;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
@@ -16,17 +7,12 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
-import org.msh.tb.entities.ExamCulture;
-import org.msh.tb.entities.ExamMicroscopy;
-import org.msh.tb.entities.ExamXRay;
-import org.msh.tb.entities.MedicalExamination;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineComponent;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 
 /**

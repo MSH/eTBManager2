@@ -3,23 +3,12 @@
  */
 package org.msh.tb.vi.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.hibernate.validator.NotNull;
 import org.msh.tb.entities.TreatmentMonitoring;
-import org.msh.tb.entities.enums.TreatmentDayOption;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Store information about patient weight in addition to medicine in-take. 

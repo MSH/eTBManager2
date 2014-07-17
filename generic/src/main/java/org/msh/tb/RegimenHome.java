@@ -1,10 +1,5 @@
 package org.msh.tb;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -16,6 +11,10 @@ import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
+
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
 
 
 

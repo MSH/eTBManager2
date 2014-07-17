@@ -1,10 +1,5 @@
 package org.msh.tb;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -15,6 +10,10 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineUnit;
 import org.msh.tb.entities.Source;
 import org.msh.tb.login.UserSession;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Name("medicineUnitHome")

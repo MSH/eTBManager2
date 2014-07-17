@@ -1,9 +1,6 @@
 package org.msh.tb.cases;
 
 
-import java.util.Calendar;
-import java.util.Date;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -16,18 +13,15 @@ import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.DisplayCaseNumber;
-import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.misc.GlobalLists;
 import org.msh.tb.tbunits.TBUnitSelection2;
 import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.ItemSelectList;
 import org.msh.utils.date.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**

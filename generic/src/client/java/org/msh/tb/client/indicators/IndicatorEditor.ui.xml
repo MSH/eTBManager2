@@ -1,0 +1,43 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:c='urn:import:org.msh.tb.client.ui'
+             xmlns:ind="urn:import:org.msh.tb.client.indicators"
+             xmlns:rf="urn:import:org.msh.tb.client.reports.filters"
+             xmlns:rv="urn:import:org.msh.tb.client.reports.variables"
+        >
+
+    <ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
+
+    <g:HTMLPanel styleName="indicator-editor">
+        <div class="title">
+            <div class="pull-left">
+                <c:LabelEditor ui:field="txtTitle" />
+            </div>
+            <div class="pull-right">
+                <g:Anchor styleName="btn-close"><i class="icon-remove-circle btn-icon"></i></g:Anchor>
+            </div>
+            <div class="block"></div>
+        </div>
+
+        <div class="panel editor">
+            <rf:FiltersPanel ui:field="pnlFilters"></rf:FiltersPanel>
+            <hr/>
+            <rv:VariablesPanel ui:field="pnlVariables"></rv:VariablesPanel>
+            <hr/>
+            <div class="block">
+                <div class="pull-left">
+                    <g:Anchor ui:field="lnkChart" styleName="chart-button"></g:Anchor>
+                </div>
+                <div class="pull-left">
+                    Size: <g:ListBox ui:field="lbSize"></g:ListBox>
+                </div>
+                <div class="pull-right">
+                    <g:Anchor ui:field="lnkUpdate" styleName="btn-alt"><i class="icon-refresh"></i>Update</g:Anchor>
+                </div>
+                <div class="block"></div>
+            </div>
+        </div>
+
+        <ind:ResultView ui:field="resIndicator" />
+    </g:HTMLPanel>
+</ui:UiBinder>

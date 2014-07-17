@@ -1,7 +1,11 @@
 package org.msh.tb.webservices;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.jboss.seam.Component;
+import org.jboss.seam.security.Credentials;
+import org.jboss.seam.security.Identity;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.login.AuthenticatorBean;
+import org.msh.tb.login.UserSession;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -9,13 +13,8 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.persistence.EntityManager;
-
-import org.jboss.seam.Component;
-import org.jboss.seam.security.Credentials;
-import org.jboss.seam.security.Identity;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.login.AuthenticatorBean;
-import org.msh.tb.login.UserSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Web service to provide authentication

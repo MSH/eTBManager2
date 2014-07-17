@@ -1,13 +1,5 @@
 package org.msh.tb.indicators.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.framework.Controller;
@@ -17,12 +9,14 @@ import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.entities.enums.HIVResult;
-import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.MicroscopyResult;
+import org.msh.tb.entities.enums.*;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Base class to generate HQL queries in the TB Cases database based on the filters in the {@link IndicatorFilters} component

@@ -1,12 +1,12 @@
 package org.msh.tb.export;
 
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.msh.tb.adminunits.InfoCountryLevels;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.indicators.core.CaseHQLBase;
 import org.msh.tb.indicators.core.IndicatorFilters;
+
+import java.util.List;
 
 public class CaseExport extends CaseHQLBase implements CaseIterator {
 	private static final long serialVersionUID = -4891464275239423240L;

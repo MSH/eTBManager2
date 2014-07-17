@@ -1,4 +1,4 @@
-package org.msh.tb.client.reports.chart;
+package org.msh.tb.client.chart;
 
 import java.util.ArrayList;
 import java.util.List;

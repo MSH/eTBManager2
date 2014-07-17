@@ -1,20 +1,15 @@
 package org.msh.tb.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserPermission;
-import org.msh.tb.entities.UserProfile;
-import org.msh.tb.entities.UserRole;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 @Name("workspaceInit")
 public class WorkspaceInit {

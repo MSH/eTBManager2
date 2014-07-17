@@ -1,9 +1,9 @@
 package org.msh.tb.application.tasks;
 
-import java.util.Date;
-
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.Workspace;
+
+import java.util.Date;
 
 /**
  * Interface that all task must implement

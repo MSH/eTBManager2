@@ -1,14 +1,13 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitSelection2;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QSPUtils {
 	 

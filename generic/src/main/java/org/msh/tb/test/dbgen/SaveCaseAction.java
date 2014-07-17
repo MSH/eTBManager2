@@ -1,7 +1,5 @@
 package org.msh.tb.test.dbgen;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -10,6 +8,8 @@ import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.misc.SequenceGenerator;
+
+import javax.persistence.EntityManager;
 
 @Name("saveCase")
 public class SaveCaseAction {

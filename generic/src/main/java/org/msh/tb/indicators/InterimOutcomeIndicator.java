@@ -1,8 +1,5 @@
 package org.msh.tb.indicators;
 
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
@@ -11,6 +8,9 @@ import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorFilters;
 import org.msh.utils.date.DateUtils;
+
+import java.util.Date;
+import java.util.List;
 
 
 @Name("interimOutcomeIndicator")

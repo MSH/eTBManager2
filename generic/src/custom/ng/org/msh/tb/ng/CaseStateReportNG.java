@@ -1,28 +1,19 @@
 package org.msh.tb.ng;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.Tag.TagType;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.Tag.TagType;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.UserView;
-import org.msh.tb.entities.enums.ValidationState;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.misc.GlobalLists;
+
+import javax.persistence.EntityManager;
+import java.math.BigInteger;
+import java.util.*;
 
 @Name("caseStateReportng")
 public class CaseStateReportNG {

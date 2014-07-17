@@ -1,43 +1,19 @@
 package org.msh.tb.workspaces;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.application.tasks.DbBatchTask;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.AgeRange;
-import org.msh.tb.entities.CountryStructure;
-import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.HealthSystem;
-import org.msh.tb.entities.Laboratory;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineComponent;
-import org.msh.tb.entities.MedicineRegimen;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TransactionLog;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserPermission;
-import org.msh.tb.entities.UserProfile;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.WSObject;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.test.dbgen.TokenReaderException;
 import org.msh.tb.transactionlog.TransactionLogService;
+
+import javax.persistence.EntityManager;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * Background task that copies data from one workspace (source) to another workspace (target).

@@ -1,23 +1,19 @@
 package org.msh.tb.client.reports;
 
-import java.util.HashMap;
-
-import org.msh.tb.client.App;
-import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.shared.model.CPatient;
-import org.msh.tb.client.shared.model.CPatientList;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.*;
+import org.msh.tb.client.App;
+import org.msh.tb.client.AppResources;
+import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.shared.model.CPatient;
+import org.msh.tb.client.shared.model.CPatientList;
+
+import java.util.HashMap;
 
 /**
  * Display the list of cases in a popup window
@@ -81,7 +77,7 @@ public class CaseListPopup extends PopupPanel {
 	private void updatePageContent() {
 		table.removeAllRows();
 		pnlWait.setVisible(true);
-		ReportMain.instance().getService().getPatients(filters, page, new StandardCallback<CPatientList>() {
+        AppResources.reportServices().getPatients(filters, page, new StandardCallback<CPatientList>() {
 			@Override
 			public void onSuccess(CPatientList lst) {
 				updatePatientList(lst);

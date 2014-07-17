@@ -1,10 +1,5 @@
 package org.msh.tb.application;
 
-import javax.faces.application.ViewExpiredException;
-import javax.faces.context.FacesContext;
-import javax.persistence.OptimisticLockException;
-import javax.servlet.http.HttpServletRequest;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -13,6 +8,11 @@ import org.jboss.seam.framework.EntityNotFoundException;
 import org.jboss.seam.security.AuthorizationException;
 import org.jboss.seam.security.NotLoggedInException;
 import org.msh.tb.entities.UserLogin;
+
+import javax.faces.application.ViewExpiredException;
+import javax.faces.context.FacesContext;
+import javax.persistence.OptimisticLockException;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Exception handler of the application. All exceptions that are not locally handled

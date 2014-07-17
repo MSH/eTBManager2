@@ -1,10 +1,10 @@
 package org.msh.utils.reportgen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.msh.utils.reportgen.ReportQuery.JoinTable;
 import org.msh.utils.reportgen.ReportQuery.VarInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Constructs the SQL instruction based on the {@link ReportQuery} parameters

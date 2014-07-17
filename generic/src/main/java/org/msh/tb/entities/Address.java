@@ -1,12 +1,8 @@
 package org.msh.tb.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import org.msh.tb.entities.enums.LocalityType;
+
+import javax.persistence.*;
 
 @Embeddable
 public class Address {

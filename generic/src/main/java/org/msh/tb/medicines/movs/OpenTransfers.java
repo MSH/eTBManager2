@@ -1,10 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -12,6 +7,10 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Transfer;
 import org.msh.tb.entities.enums.TransferStatus;
 import org.msh.tb.login.UserSession;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 @Name("openTransfers")
 public class OpenTransfers {

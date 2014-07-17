@@ -1,20 +1,18 @@
 package org.msh.tb.webservices;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
+import com.rmemoria.datastream.DataInterceptor;
+import com.rmemoria.datastream.DataMarshaller;
+import com.rmemoria.datastream.DataUnmarshaller;
+import com.rmemoria.datastream.StreamContext;
 import org.jboss.seam.Component;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.utils.DataStreamUtils;
 
-import com.rmemoria.datastream.DataInterceptor;
-import com.rmemoria.datastream.DataMarshaller;
-import com.rmemoria.datastream.DataUnmarshaller;
-import com.rmemoria.datastream.StreamContext;
+import javax.persistence.EntityManager;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
  * Serialize and deserialize objects to and from XML

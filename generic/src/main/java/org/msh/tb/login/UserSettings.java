@@ -1,11 +1,5 @@
 package org.msh.tb.login;
 
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.LocaleSelector;
@@ -13,6 +7,11 @@ import org.jboss.seam.international.TimeZoneSelector;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
+
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Name("userSettings")
 public class UserSettings {

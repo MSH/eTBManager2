@@ -1,11 +1,5 @@
 package org.msh.tb.reportgen;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -23,6 +17,11 @@ import org.msh.utils.reportgen.highchart.ChartOptions;
 import org.msh.utils.reportgen.highchart.ChartType;
 import org.msh.utils.reportgen.highchart.Series;
 import org.msh.utils.reportgen.layouts.ReportTableLayout;
+
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Name("transactionStatsReport")
 public class TransactionStatsReport {

@@ -1,15 +1,14 @@
 package org.msh.utils;
 
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 
 @Name("convertHtmlText")
 @org.jboss.seam.annotations.faces.Converter(id="rmemoria.TextConverter")

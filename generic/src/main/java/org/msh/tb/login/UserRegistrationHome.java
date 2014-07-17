@@ -1,12 +1,5 @@
 package org.msh.tb.login;
 
-import java.util.Date;
-import java.util.Map;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -19,6 +12,12 @@ import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.utils.Passwords;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.Map;
 
 
 @Name("userRegistrationHome")
@@ -68,7 +67,7 @@ public class UserRegistrationHome {
 
 
 	/**
-	 * Valida a conta do usuário
+	 * Valida a conta do usuï¿½rio
 	 * @param context
 	 * @param compConta
 	 * @param value

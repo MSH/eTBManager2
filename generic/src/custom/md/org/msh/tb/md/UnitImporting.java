@@ -1,14 +1,13 @@
 package org.msh.tb.md;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.HealthSystem;
 import org.msh.tb.entities.Tbunit;
 import org.w3c.dom.Element;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class UnitImporting extends ImportingBase {
 

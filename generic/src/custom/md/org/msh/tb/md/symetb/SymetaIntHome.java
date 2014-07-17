@@ -1,25 +1,17 @@
 package org.msh.tb.md.symetb;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Begin;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.*;
 import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.tasks.AsyncTask;
 import org.msh.tb.application.tasks.TaskManager;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.HealthSystem;
-import org.msh.tb.entities.SystemParam;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.md.MoldovaServiceConfig;
 import org.msh.tb.tbunits.TBUnitSelection;
+
+import javax.persistence.EntityManager;
 
 /**
  * POJO interface between the user and the execution of the SYMETA integration

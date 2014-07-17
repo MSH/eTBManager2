@@ -1,14 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.context.FacesContext;
-import javax.persistence.NoResultException;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -28,6 +19,10 @@ import org.msh.tb.medicines.dispensing.DispensingHome;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.tbunits.TbUnitHome;
 import org.msh.utils.date.DateUtils;
+
+import javax.faces.context.FacesContext;
+import javax.persistence.NoResultException;
+import java.util.*;
 
 /**
  * Manage all actions needed to edit a medicine row in Quarterly Stock position From Upazilla

@@ -1,17 +1,16 @@
 package org.msh.tb.misc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.login.UserSession;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class for handle lists of field values for a drop down menu in a TB form

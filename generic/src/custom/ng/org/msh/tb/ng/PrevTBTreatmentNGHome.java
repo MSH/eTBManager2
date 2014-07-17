@@ -1,20 +1,11 @@
 package org.msh.tb.ng;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
+import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
 import org.msh.tb.SubstancesQuery;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.MedicineComponent;
@@ -26,6 +17,14 @@ import org.msh.tb.ng.entities.TbCaseNG;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 

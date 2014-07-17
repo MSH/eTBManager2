@@ -1,7 +1,5 @@
 package org.msh.tb.misc;
 
-import java.util.Map;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -11,6 +9,8 @@ import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.enums.TbField;
 import org.msh.tb.transactionlog.LogInfo;
+
+import java.util.Map;
 
 
 

@@ -1,11 +1,5 @@
 package org.msh.tb.cases;
 
-import java.text.MessageFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -23,10 +17,15 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.tbunits.TBUnitType;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.persistence.EntityManager;
+import java.text.MessageFormat;
+import java.util.Date;
+import java.util.List;
 
 
 /**

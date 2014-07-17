@@ -1,7 +1,5 @@
 package org.msh.tb.tbunits;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -10,6 +8,8 @@ import org.msh.tb.MedicineUnitHome;
 import org.msh.tb.RegimenUnitHome;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.login.UserSession;
+
+import javax.persistence.EntityManager;
 
 @Name("unitSetup")
 @Scope(ScopeType.CONVERSATION)

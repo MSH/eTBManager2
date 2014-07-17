@@ -1,9 +1,9 @@
 package org.msh.reports.indicator;
 
+import org.msh.reports.variables.Variable;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.msh.reports.variables.Variable;
 
 /**
  * Represent a row of the header in the indicator table. It stores the

@@ -1,8 +1,5 @@
 package org.msh.tb.reports;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -11,6 +8,9 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.login.OnlineUser;
 import org.msh.tb.login.OnlineUsersHome;
 import org.msh.tb.login.UserSettings;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Generate report of on-line users by workspace

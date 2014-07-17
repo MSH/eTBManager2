@@ -1,12 +1,12 @@
 package org.msh.tb.indicators;
 
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.indicators.core.Indicator;
 import org.msh.tb.indicators.core.IndicatorFilters;
+
+import javax.persistence.EntityManager;
 
 /**
  * Generate the prevalence indicator <br>

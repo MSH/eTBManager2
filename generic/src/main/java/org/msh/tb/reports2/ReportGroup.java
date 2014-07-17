@@ -1,14 +1,14 @@
 package org.msh.tb.reports2;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.jboss.seam.international.Messages;
 import org.msh.reports.ReportElement;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Represent a group of variables and filters of a report. A group

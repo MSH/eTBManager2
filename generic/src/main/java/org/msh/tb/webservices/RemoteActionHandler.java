@@ -1,10 +1,5 @@
 package org.msh.tb.webservices;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.xml.bind.ValidationException;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
@@ -12,6 +7,10 @@ import org.jboss.seam.security.Identity;
 import org.msh.tb.application.AppFacesMessages;
 import org.msh.tb.application.TransactionManager;
 import org.msh.tb.login.AuthenticatorBean;
+
+import javax.persistence.EntityManager;
+import javax.xml.bind.ValidationException;
+import java.util.List;
 
 
 /**

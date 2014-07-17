@@ -1,12 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
@@ -14,6 +7,12 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.indicators.core.Indicator2D;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Name("tBForm10Block8")
 public class TbForm10Block8 extends Indicator2D{

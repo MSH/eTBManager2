@@ -1,10 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
@@ -13,6 +8,10 @@ import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Map;
 
 @Name("tBForm10Block4")
 public class TBForm10Block4 extends Indicator{

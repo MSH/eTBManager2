@@ -1,9 +1,9 @@
 package org.msh.reports.datatable;
 
+import org.msh.reports.datatable.impl.RowImpl;
+
 import java.util.Comparator;
 import java.util.List;
-
-import org.msh.reports.datatable.impl.RowImpl;
 
 
 /**

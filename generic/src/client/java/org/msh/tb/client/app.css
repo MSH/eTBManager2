@@ -297,7 +297,116 @@ html {
 	background-color: #fff;
 	color:#909090;
 }
-.table-indicator .vl:hoder {
+.table-indicator .vl:hover {
 	background-color: #fff;
 }
 
+
+
+
+/** NEW STYLES AFTER REFACTORING **/
+
+.label-editor {
+    display : inline;
+}
+.label-editor .gwt-Label {
+    display: inline;
+    border:2px solid transparent;
+    padding:3px;
+    cursor: pointer;
+}
+.label-editor .gwt-Label:hover {
+    border:2px solid blue;
+}
+.label-editor .gwt-TextBox {
+    width:auto;
+}
+
+
+.report-panel {
+
+}
+
+.report-panel .label-editor {
+    font-size:20px;
+    font-weight: normal;
+}
+.report-panel .label-editor .gwt-TextBox {
+    width:600px;
+}
+
+/* Indicator result style, i.e, component containing chart and table */
+.ind-res {
+}
+/* Indicator containing a single value with a caption at the bottom */
+.ind-res-single {
+    background-color: #008422;
+    color: #fff;
+    width: 25%;
+    border-collapse: collapse;
+}
+/* Value of the indicator */
+.ind-res-single .value {
+    font-size: 16px;
+}
+/* title at the bottom of the indicator */
+.ind-res-single .title {
+    font-size: 9px;
+}
+
+/* Layout of the widget that displays the indicator (including title and other widgets) */
+.indicator-view {
+
+}
+
+.indicator-editor {
+    border:2px dashed #d0d0d0;
+    padding:10px;
+    border-radius: 8px;
+    margin-top:10px;
+    margin-bottom:20px;
+}
+
+.indicator-editor .label-editor {
+    font-size:18px;
+    font-weight: bold;
+    padding-bottom: 8px;
+}
+.report-panel .label-editor .gwt-TextBox {
+    width:600px;
+}
+
+.panel {
+    background-color:#f8f8f8;
+    border:1px solid #f0f0f0;
+    border-radius:4px;
+    padding:4px;
+}
+
+.btn-close {
+    color: #AAAAAA;
+    position:relative;
+    left: 10px;
+    top: -10px;
+    cursor: pointer;
+}
+
+.btn-close .btn-icon {
+    font-size:24px;
+}
+
+.btn-close:hover {
+    color: #303030;
+}
+
+.pull-left {
+    float:left;
+}
+
+.pull-right {
+    float:right;
+}
+
+.block {
+    clear:both;
+}

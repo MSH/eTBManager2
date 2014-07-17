@@ -1,8 +1,8 @@
 package org.msh.tb.client.shared.model;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
+
+import java.util.ArrayList;
 
 public class CFilter implements IsSerializable {
 

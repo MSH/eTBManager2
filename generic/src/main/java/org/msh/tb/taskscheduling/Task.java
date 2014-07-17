@@ -1,21 +1,16 @@
 package org.msh.tb.taskscheduling;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
 import org.jboss.seam.annotations.async.Expiration;
 import org.jboss.seam.annotations.async.IntervalCron;
 import org.jboss.seam.async.QuartzTriggerHandle;
-import org.msh.tb.entities.Tag;
-import org.msh.tb.entities.TransactionLog;
-import org.msh.tb.entities.UserLog;
-import org.msh.tb.entities.UserRole;
-import org.msh.tb.entities.WorkspaceLog;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
 
 public abstract class Task {
 	private UserLog userLog;

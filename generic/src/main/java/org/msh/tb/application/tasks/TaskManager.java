@@ -1,9 +1,5 @@
 package org.msh.tb.application.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
@@ -11,6 +7,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.Workspace;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Manage execution of backgroup tasks in the system and allow monitoring of its

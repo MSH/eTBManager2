@@ -1,7 +1,5 @@
 package org.msh.tb.importexport;
 
-import java.io.InputStream;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -10,6 +8,8 @@ import org.jboss.seam.contexts.Contexts;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.misc.DmSystemHome;
+
+import java.io.InputStream;
 
 /**
  * Execute asynchronous importing of data. This class is used by {@link ImportDataHome} to implement

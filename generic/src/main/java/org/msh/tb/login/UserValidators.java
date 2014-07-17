@@ -3,17 +3,16 @@
  */
 package org.msh.tb.login;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.international.Messages;
+import org.msh.tb.application.App;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.international.Messages;
-import org.msh.tb.application.App;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Common validators used in user registration

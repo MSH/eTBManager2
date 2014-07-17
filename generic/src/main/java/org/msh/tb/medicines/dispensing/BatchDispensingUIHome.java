@@ -1,17 +1,12 @@
 package org.msh.tb.medicines.dispensing;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.BatchMovement;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.MedicineDispensing;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.medicines.movs.StockPositionList;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Name("batchDispensingUIHome")
 public class BatchDispensingUIHome extends AbstractDispensigUIHome {

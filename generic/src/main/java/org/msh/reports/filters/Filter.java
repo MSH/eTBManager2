@@ -1,9 +1,9 @@
 package org.msh.reports.filters;
 
-import java.util.List;
-
 import org.msh.reports.ReportElement;
 import org.msh.reports.query.SQLDefs;
+
+import java.util.List;
 
 public interface Filter extends ReportElement {
 

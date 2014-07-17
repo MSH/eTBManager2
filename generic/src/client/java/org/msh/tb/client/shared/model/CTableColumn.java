@@ -1,8 +1,8 @@
 package org.msh.tb.client.shared.model;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
+
+import java.util.ArrayList;
 
 /**
  * Represents a column of the table

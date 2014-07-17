@@ -1,7 +1,5 @@
 package org.msh.tb.indicators;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -11,10 +9,12 @@ import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.indicators.core.Indicator;
 import org.msh.tb.indicators.core.IndicatorFilters;
 
+import javax.persistence.EntityManager;
+
 /**
  * Generates the TB/MDR-TB incidence indicator <br>
  * The incidence indicator considers just new cases diagnosed in the period set in the {@link IndicatorFilters} 
- * @author Ricardo Memória
+ * @author Ricardo Memï¿½ria
  *
  */
 @Name("incidenceIndicator")

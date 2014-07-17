@@ -1,8 +1,8 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.Date;
-
 import org.msh.utils.date.Period;
+
+import java.util.Date;
 
 /**
  * Abstract class that contains information about a prescription period in the patient's treatment

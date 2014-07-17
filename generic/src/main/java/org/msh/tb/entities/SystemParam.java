@@ -1,11 +1,6 @@
 package org.msh.tb.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Specify a system parameter, used in any generic configuration of the system or for a specific workspace

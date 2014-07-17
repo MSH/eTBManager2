@@ -1,11 +1,11 @@
 package org.msh.tb.bd;
 
+import org.msh.tb.bd.entities.enums.QuarterMonths;
+import org.msh.utils.date.DateUtils;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import org.msh.tb.bd.entities.enums.QuarterMonths;
-import org.msh.utils.date.DateUtils;
 
 public class Quarter {
 	

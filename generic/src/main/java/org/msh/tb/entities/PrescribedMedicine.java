@@ -1,25 +1,14 @@
 package org.msh.tb.entities;
 
- import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.validator.NotNull;
 import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Store information about a medicine prescribed to a case

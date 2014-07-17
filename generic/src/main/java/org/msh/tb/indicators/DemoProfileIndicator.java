@@ -1,13 +1,13 @@
 package org.msh.tb.indicators;
 
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.Nationality;
 import org.msh.tb.indicators.core.Indicator;
 import org.msh.tb.indicators.core.IndicatorSeries;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generate the demographic indicator

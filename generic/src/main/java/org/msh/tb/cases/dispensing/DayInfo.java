@@ -1,9 +1,9 @@
 package org.msh.tb.cases.dispensing;
 
-import java.text.DateFormatSymbols;
-
 import org.jboss.seam.core.Locale;
 import org.msh.tb.entities.enums.TreatmentDayOption;
+
+import java.text.DateFormatSymbols;
 
 /**
  * Hold temporary information during editing about a day of treatment 

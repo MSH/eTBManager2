@@ -1,8 +1,5 @@
 package org.msh.tb.medicines;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -13,6 +10,9 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.enums.MedicineCategory;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

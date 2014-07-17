@@ -1,15 +1,13 @@
 package org.msh.tb.application;
 
-import java.io.IOException;
+import com.sun.facelets.FaceletViewHandler;
+import org.jboss.seam.Component;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-
-import org.jboss.seam.Component;
-
-import com.sun.facelets.FaceletViewHandler;
+import java.io.IOException;
 
 /**
  * Overwrite the FaceletsViewHandler supporting URI redirection to specific pages written to an workspace.

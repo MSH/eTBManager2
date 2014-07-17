@@ -3,20 +3,14 @@
  */
 package org.msh.tb.client.dashboard;
 
-import org.msh.tb.client.reports.chart.ChartReport;
-import org.msh.tb.client.reports.chart.ChartType;
-import org.msh.tb.client.reports.chart.ChartView;
-import org.msh.tb.client.shared.model.CIndicator;
-import org.msh.tb.client.tableview.TableData;
-import org.msh.tb.client.tableview.TableView;
-import org.msh.tb.client.tableview.TableData.TableSelection;
-
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import org.msh.tb.client.shared.model.CIndicator;
+import org.msh.tb.client.tableview.TableView;
 
 /**
  * @author Ricardo Memoria
@@ -29,7 +23,7 @@ public class IndicatorPanel extends Composite {
 
 	@UiField TableView tblResult;
 	@UiField Label txtTitle;
-	@UiField ChartView chart;
+//	@UiField ChartView chart;
 
 
 	/**
@@ -38,12 +32,13 @@ public class IndicatorPanel extends Composite {
 	public IndicatorPanel() {
 		initWidget(binder.createAndBindUi(this));
 	}
-	
+
 	/**
 	 * Update the indicator content with the data inside the given indicator object
 	 * @param indicator instance of {@link CIndicator}
 	 */
 	public void update(CIndicator indicator) {
+/*
 		txtTitle.setText(indicator.getTitle());
 		TableData data = new TableData();
 		data.setColVariables(indicator.getColVariables());
@@ -72,5 +67,6 @@ public class IndicatorPanel extends Composite {
 		chart.setWidth("400px");
 		
 		ChartReport.update(chart, data);
+*/
 	}
 }

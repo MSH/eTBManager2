@@ -3,17 +3,13 @@
  */
 package org.msh.utils;
 
+import com.rmemoria.datastream.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-
-import com.rmemoria.datastream.DataMarshaller;
-import com.rmemoria.datastream.DataUnmarshaller;
-import com.rmemoria.datastream.StreamContext;
-import com.rmemoria.datastream.StreamContextFactory;
-import com.rmemoria.datastream.StreamFileTypeXML;
 
 /**
  * Utilities functions to make it easier to handle the Data Stream library

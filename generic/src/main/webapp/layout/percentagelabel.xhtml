@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
-                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                 xmlns:h="http://java.sun.com/jsf/html"
-                 xmlns:f="http://java.sun.com/jsf/core"
-                 xmlns:s="http://jboss.com/products/seam/taglib"
-                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+        >
 
 <h:outputText value="#{(totalValue  == 0 || absoluteValue == 0 || empty totalValue || empty absoluteValue) ? 0 : (absoluteValue / totalValue * 100)}">
 	<f:convertNumber pattern="###.##"/>

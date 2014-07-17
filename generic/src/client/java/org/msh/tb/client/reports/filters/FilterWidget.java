@@ -1,16 +1,15 @@
 package org.msh.tb.client.reports.filters;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.msh.tb.client.reports.ReportMain;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
+import org.msh.tb.client.AppResources;
 import org.msh.tb.client.shared.ReportServiceAsync;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CItem;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.ListBox;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class FilterWidget extends Composite {
 
@@ -68,7 +67,7 @@ public abstract class FilterWidget extends Composite {
 	 * @param callback {@link AsyncCallback} function that will be called when the server responds
 	 */
 	protected void loadServerOptions(String param, AsyncCallback<ArrayList<CItem>> callback) {
-		ReportServiceAsync srv = ReportMain.instance().getService();
+		ReportServiceAsync srv = AppResources.reportServices();
 		srv.getFilterOptions(filter.getId(), param, callback);
 	}
 }

@@ -1,16 +1,8 @@
 package org.msh.tb.cases;
 
-import java.util.ArrayList;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.Synchronized;
-import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
@@ -21,6 +13,9 @@ import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.misc.SequenceGenerator;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
 
 /**
  * Responsible for the validation process in the case, including pending issues and answers

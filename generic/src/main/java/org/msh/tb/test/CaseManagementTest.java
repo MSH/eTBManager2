@@ -1,15 +1,5 @@
 package org.msh.tb.test;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
-import javax.naming.InitialContext;
-import javax.persistence.EntityManager;
-import javax.sql.DataSource;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -17,6 +7,15 @@ import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.utils.date.DateUtils;
+
+import javax.naming.InitialContext;
+import javax.persistence.EntityManager;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 
 /**

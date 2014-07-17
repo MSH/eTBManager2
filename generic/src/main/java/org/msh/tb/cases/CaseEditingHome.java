@@ -1,11 +1,6 @@
 package org.msh.tb.cases;
 
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -19,20 +14,15 @@ import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
-import org.msh.tb.entities.Address;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.MedicalExamination;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.MedAppointmentType;
-import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.tbunits.TBUnitType;
+import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 
 /**

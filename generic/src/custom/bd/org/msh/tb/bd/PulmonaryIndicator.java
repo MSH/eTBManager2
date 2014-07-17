@@ -1,10 +1,5 @@
 package org.msh.tb.bd;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
@@ -15,6 +10,10 @@ import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.indicators.core.Indicator2D;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generate indicator for Pulmonary TB patients for Bangladesh

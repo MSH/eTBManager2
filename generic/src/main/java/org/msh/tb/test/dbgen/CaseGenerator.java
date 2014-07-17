@@ -1,63 +1,17 @@
 package org.msh.tb.test.dbgen;
 
-import java.math.BigInteger;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.annotations.async.Asynchronous;
-import org.msh.tb.entities.Address;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.CaseComorbidity;
-import org.msh.tb.entities.CaseSideEffect;
-import org.msh.tb.entities.ExamCulture;
-import org.msh.tb.entities.ExamDST;
-import org.msh.tb.entities.ExamDSTResult;
-import org.msh.tb.entities.ExamHIV;
-import org.msh.tb.entities.ExamMicroscopy;
-import org.msh.tb.entities.ExamXRay;
-import org.msh.tb.entities.FieldValue;
-import org.msh.tb.entities.Laboratory;
-import org.msh.tb.entities.MedicalExamination;
-import org.msh.tb.entities.MedicineComponent;
-import org.msh.tb.entities.MedicineRegimen;
-import org.msh.tb.entities.Patient;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.TbContact;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TreatmentHealthUnit;
-import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.DrugResistanceType;
-import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.HIVResult;
-import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.LocalityType;
-import org.msh.tb.entities.enums.MedAppointmentType;
-import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.entities.enums.Nationality;
-import org.msh.tb.entities.enums.NumTreatments;
-import org.msh.tb.entities.enums.RegimenPhase;
-import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.entities.enums.XRayEvolution;
-import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.*;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.persistence.EntityManager;
+import java.math.BigInteger;
+import java.util.*;
 
 
 /**

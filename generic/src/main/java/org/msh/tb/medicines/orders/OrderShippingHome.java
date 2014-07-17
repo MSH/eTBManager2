@@ -1,12 +1,5 @@
 package org.msh.tb.medicines.orders;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -14,19 +7,19 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.Movement;
-import org.msh.tb.entities.Order;
-import org.msh.tb.entities.OrderBatch;
-import org.msh.tb.entities.OrderItem;
-import org.msh.tb.entities.Source;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Name("orderShippingHome")
 @Scope(ScopeType.CONVERSATION)
@@ -108,7 +101,7 @@ public class OrderShippingHome extends Controller {
 			return "error";
 */		
 		MovementType type = MovementType.ORDERSHIPPING;
-		// gera os movimentos de saída do pedido
+		// gera os movimentos de saï¿½da do pedido
 		boolean canShip = true;
 		movementHome.initMovementRecording();
 		for (OrderItem it: order.getItems())
@@ -256,7 +249,7 @@ public class OrderShippingHome extends Controller {
 			}
 		}
 
-		// remove fontes que não possuam nenhum item aprovado
+		// remove fontes que nï¿½o possuam nenhum item aprovado
 		int i = 0;
 		while (i < orderHome.getSources().size()) {
 			if (orderHome.getSources().get(i).getItems().size() == 0)

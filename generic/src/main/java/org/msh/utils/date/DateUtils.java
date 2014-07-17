@@ -1,12 +1,12 @@
 package org.msh.utils.date;
 
+import org.jboss.seam.international.LocaleSelector;
+import org.jboss.seam.international.Messages;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
-import org.jboss.seam.international.LocaleSelector;
-import org.jboss.seam.international.Messages;
 
 public class DateUtils {
 

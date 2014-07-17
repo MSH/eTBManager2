@@ -1,13 +1,5 @@
 package org.msh.tb.cases.dispensing;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -16,6 +8,13 @@ import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.TreatmentMonitoring;
 import org.msh.tb.entities.enums.TreatmentDayOption;
+
+import javax.persistence.EntityManager;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 /**

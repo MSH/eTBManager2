@@ -1,38 +1,20 @@
 package org.msh.tb.indicators.core;
 
+import org.apache.commons.beanutils.PropertyUtils;
+import org.jboss.seam.Component;
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.*;
+import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.*;
+import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
+
+import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.faces.model.SelectItem;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.entities.AgeRange;
-import org.msh.tb.entities.HealthSystem;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.Substance;
-import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.DrugResistanceType;
-import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.HIVResult;
-import org.msh.tb.entities.enums.InfectionSite;
-import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.tbunits.TBUnitType;
-import org.msh.tb.tbunits.TBUnitSelection;
 
 @Name("indicatorFilters")
 @Scope(ScopeType.SESSION)

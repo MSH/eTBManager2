@@ -1,54 +1,28 @@
 package org.msh.tb.client.reports;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.msh.tb.client.App;
-import org.msh.tb.client.AppModule;
-import org.msh.tb.client.commons.MessagePanel;
-import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.commons.StandardEventHandler;
-import org.msh.tb.client.reports.chart.ChartReport;
-import org.msh.tb.client.reports.chart.ChartType;
-import org.msh.tb.client.reports.chart.ChartView;
-import org.msh.tb.client.shared.ReportService;
-import org.msh.tb.client.shared.ReportServiceAsync;
-import org.msh.tb.client.shared.model.CFilter;
-import org.msh.tb.client.shared.model.CGroup;
-import org.msh.tb.client.shared.model.CInitializationData;
-import org.msh.tb.client.shared.model.CReport;
-import org.msh.tb.client.shared.model.CReportRequest;
-import org.msh.tb.client.shared.model.CReportResponse;
-import org.msh.tb.client.shared.model.CTableColumn;
-import org.msh.tb.client.shared.model.CTableRow;
-import org.msh.tb.client.shared.model.CVariable;
-import org.msh.tb.client.tableview.TableData;
-import org.msh.tb.client.tableview.TableData.TableSelection;
-import org.msh.tb.client.tableview.TableView;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.*;
+import org.msh.tb.client.AppModule;
+import org.msh.tb.client.AppResources;
+import org.msh.tb.client.chart.ChartType;
+import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.commons.StandardEventHandler;
+import org.msh.tb.client.indicators.IndicatorController;
+import org.msh.tb.client.indicators.IndicatorEditor;
+import org.msh.tb.client.indicators.IndicatorView;
+import org.msh.tb.client.reports.filters.FiltersPanel;
+import org.msh.tb.client.shared.model.CIndicator;
+import org.msh.tb.client.shared.model.CReport;
+import org.msh.tb.client.shared.model.CReportUIData;
+import org.msh.tb.client.ui.LabelEditor;
+import org.msh.tb.client.ui.MessagePanel;
+
+import java.util.ArrayList;
 
 /**
  * Represents the main content of the report page. This class is the entry
@@ -57,103 +31,78 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Ricardo Memoria
  *
  */
-public class ReportMain extends Composite implements AppModule {
+public class ReportMain extends Composite implements AppModule, StandardEventHandler {
 
 	private static final Binder binder = GWT.create(Binder.class);
-	private static ReportMain singletonInstance;
 
-	interface Binder extends UiBinder<Widget, ReportMain> { }
+    interface Binder extends UiBinder<Widget, ReportMain> { }
 
-	@UiField VariablesPanel pnlRowVariables;
-	@UiField VariablesPanel pnlColVariables;
 	@UiField HTMLPanel pnlContent;
-	@UiField Button btnAddFilter;
-	@UiField FiltersPanel pnlFilters;
+	@UiField FiltersPanel pnlGlobalFilters;
 	@UiField Button btnGenerate;
-	@UiField TableView tblResult;
-	@UiField Anchor lnkChartType;
 	@UiField MessagePanel pnlMessage;
-	@UiField Label txtTitle;
 	@UiField HTMLPanel pnlReport;
 	@UiField ReportListPanel pnlReportList;
-	@UiField TextBox edtTitle;
-	@UiField ChartView chart;
-	
-	private GroupFiltersPopup filtersPopup;
-//	private GroupVariablesPopup varsPopup;
-	private CInitializationData reportUI;
-	private ChartPopup chartPopup;
-	private OptionsPopup optionsPopup;
-	private CaseListPopup patientListPopup;
+    @UiField FlowPanel pnlIndicators;
+    @UiField LabelEditor txtTitle;
+
+    private OptionsPopup popupOptions;
 
 	// as default, start with a new report
 	private CReport report;
 	
-	/**
-	 * Contains the data of the table to be rendered
-	 */
-	private TableData tableData = new TableData();
 
-	/**
-	 * RPC Report services
-	 */
-	private ReportServiceAsync service = GWT.create(ReportService.class);
-
-	public static final Resources resources = GWT.create(Resources.class);
-
-	/**
-	 * List of chart images to be displayed for chart selection
-	 */
-	public static ImageResource[] chartImgs = {resources.imgChartLine(), resources.imgChartSpline(), 
-		resources.imgChartArea(), resources.imgChartAreaSpline(), resources.imgChartColumn(),
-		resources.imgChartBar(), resources.imgChartPie() };
-
-//	private ChartView chart = new ChartView();
-	
-	
 	/**
 	 * Default constructor
 	 */
-	private ReportMain() {
+	public ReportMain() {
 		super();
-		singletonInstance = this;
+//		singletonInstance = this;
 		initWidget(binder.createAndBindUi(this));
 
-		lnkChartType.addStyleName("chart-button");
-
 		// select the first chart as default
-		selectChart(ChartType.CHART_COLUMN);
-		
+//		selectChart(ChartType.CHART_COLUMN);
+
 		btnGenerate.addStyleName("btn-alt");
 		
 		pnlReport.setVisible(false);
 		// map the title editing events
-		edtTitle.setVisible(false);
-		txtTitle.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				titleClick(event);
-			}
-		});
-		edtTitle.addBlurHandler(new BlurHandler() {
-			@Override
-			public void onBlur(BlurEvent event) {
-				changeEditTitle();
-			}
-		});
-		edtTitle.addKeyDownHandler(new KeyDownHandler() {
-			@Override
-			public void onKeyDown(KeyDownEvent event) {
-				editTitleKeyDown(event);
-			}
-		});
+        txtTitle.setEventHandler(new StandardEventHandler() {
+            @Override
+            public void handleEvent(Object eventType, Object data) {
+                changeTitle();
+            }
+        });
+
+        popupOptions = new OptionsPopup();
 	}
 
 
-	/**
+    /**
+     * Initialize the report page loading the content from the server
+     */
+    public void run() {
+        AppResources.reportServices().initialize(new StandardCallback<CReportUIData>() {
+            @Override
+            public void onSuccess(CReportUIData rep) {
+                ReportUtils.setReportUIData(rep);
+
+                if ((rep.getReports() != null) && (rep.getReports().size() > 0)) {
+                    openReportList(false);
+                } else {
+                    closeReportList();
+                    newReport();
+                }
+            }
+        });
+    }
+
+
+    /**
 	 * Called when the user press a key when editing the title
 	 * @param event
 	 */
+/*
 	protected void editTitleKeyDown(KeyDownEvent event) {
 		// user pressed the enter key ?
 		if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
@@ -166,21 +115,14 @@ public class ReportMain extends Composite implements AppModule {
 			txtTitle.setVisible(true);
 		}
 	}
+*/
 
 
 	/**
 	 */
-	protected void changeEditTitle() {
-		String s = edtTitle.getText().trim();
-		if (s.isEmpty()) {
-			edtTitle.setFocus(true);
-			return;
-		}
-		
-		report.setTitle(s);
-		txtTitle.setText(s);
-		edtTitle.setVisible(false);
-		txtTitle.setVisible(true);
+	protected void changeTitle() {
+		String s = txtTitle.getText().trim();
+        report.setTitle(s);
 	}
 
 
@@ -189,17 +131,20 @@ public class ReportMain extends Composite implements AppModule {
 	 * change its name
 	 * @param event instance of {@link ClickEvent}
 	 */
+/*
 	protected void titleClick(ClickEvent event) {
 		txtTitle.setVisible(false);
 		edtTitle.setText(txtTitle.getText());
 		edtTitle.setVisible(true);
 		edtTitle.setFocus(true);
 	}
+*/
 
 
 	/**
 	 * Called when the chart type is called
 	 */
+/*
 	@UiHandler("lnkChartType")
 	public void lnkChartTypeClick(ClickEvent event) {
 		if (chartPopup == null) {
@@ -210,21 +155,21 @@ public class ReportMain extends Composite implements AppModule {
 		Widget source = (Widget)event.getSource();
 		chartPopup.showRelativeTo(source);
 	}
+*/
 
-	
+
+    @UiHandler("lnkAddIndicator")
+    public void lnkAddIndicator(ClickEvent event) {
+        newIndicator();
+    }
+
 	/**
 	 * Called when user clicks on the options button
 	 * @param event
 	 */
 	@UiHandler("lnkMenu")
 	public void lnkMenuClick(ClickEvent event) {
-		if (optionsPopup == null) {
-			optionsPopup = new OptionsPopup();
-			pnlContent.add(optionsPopup);
-		}
-		
-		Widget source = (Widget)event.getSource();
-		optionsPopup.showRelativeTo(source);
+        popupOptions.showRelativeTo((Widget) event.getSource());
 	}
 
 	
@@ -237,6 +182,7 @@ public class ReportMain extends Composite implements AppModule {
 		openReportList(false);
 	}
 
+
 	/**
 	 * Save report
 	 * @param event contain information about the click event
@@ -244,32 +190,11 @@ public class ReportMain extends Composite implements AppModule {
 	@UiHandler("lnkSave")
 	public void lnkSaveClick(ClickEvent event) {
 		if (isNewReport()) {
-			SaveDlg.openDialog(false);
+			SaveDlg.openDialog(report, this);
 		}
 		else {
 			ReportCRUDServices.saveReport(null);
 		}
-	}
-	
-	/**
-	 * Show a pop-up window displaying the filters to be selected
-	 * @param clickEvent
-	 */
-	@UiHandler("btnAddFilter")
-	public void btnAddFilterClick(ClickEvent clickEvent) {
-		if (filtersPopup == null) {
-			StandardEventHandler listener = new StandardEventHandler() {
-				@Override
-				public void eventHandler(Object eventType, Object data) {
-					pnlFilters.addFilter((CFilter)data, null);
-				}
-			};
-			filtersPopup = new GroupFiltersPopup(listener);
-			filtersPopup.setGroups(reportUI.getGroups());
-			pnlContent.add(filtersPopup);
-		}
-		Widget source = (Widget)clickEvent.getSource();
-		filtersPopup.showPopup(source);
 	}
 
 
@@ -279,7 +204,9 @@ public class ReportMain extends Composite implements AppModule {
 	 */
 	@UiHandler("btnGenerate")
 	public void btnGenerateClick(ClickEvent clickEvent) {
-		CReportRequest data = prepareReportRequest();
+        Window.alert("Not implemented by now");
+/*
+		CIndicatorRequest data = prepareReportRequest();
 		if (data == null)
 			return;
 		
@@ -287,33 +214,35 @@ public class ReportMain extends Composite implements AppModule {
 		chart.clear();
 
 		btnGenerate.setEnabled(false);
-        service.executeReport(data, new StandardCallback<CReportResponse>() {
-			@Override
-			public void onSuccess(CReportResponse res) {
-				btnGenerate.setEnabled(true);
-				// did the server sent any data ?
-				if (res == null) {
-					showErrorMessage(App.messages.noResultFound());
-					return;
-				}
-				// there was an error message?
-				if (res.getErrorMessage() != null) {
-					showErrorMessage(res.getErrorMessage());
-				}
-				else {
-					tableData.update(res);
-					updateReportResponse();
-				}
-			}
+        pnlMessage.setVisible(false);
 
-			@Override
-			public void onFailure(Throwable except) {
-				super.onFailure(except);
-				btnGenerate.setEnabled(true);
-			}
-		});
+        service.executeIndicator(data, new StandardCallback<CIndicatorResponse>() {
+            @Override
+            public void onSuccess(CIndicatorResponse res) {
+                btnGenerate.setEnabled(true);
+                // did the server sent any data ?
+                if (res == null) {
+                    showErrorMessage(App.messages.noResultFound());
+                    return;
+                }
+                // there was an error message?
+                if (res.getErrorMessage() != null) {
+                    showErrorMessage(res.getErrorMessage());
+                } else {
+                    tableData.update(res);
+                    updateReportResponse();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable except) {
+                super.onFailure(except);
+                btnGenerate.setEnabled(true);
+            }
+        });
+*/
 	}
-	
+
 
 	/**
 	 * Display an error message in the main report page
@@ -326,26 +255,18 @@ public class ReportMain extends Composite implements AppModule {
 	
 	/**
 	 * Prepare the data of the report (variables and filters) to be sent to the server
-	 * @return instance of {@link CReportRequest} or null if there are validation errors
+	 * @return instance of {@link org.msh.tb.client.shared.model.CIndicatorRequest} or null if there are validation errors
 	 */
-	public CReportRequest prepareReportRequest() {
+/*
+	public CIndicatorRequest prepareReportRequest() {
 		tableData.setColVariables( pnlColVariables.getVariables() );
 		tableData.setRowVariables( pnlRowVariables.getVariables() );
 
 		// mount list of variables
 		ArrayList<String> rows = pnlRowVariables.getDeclaredVariables();
 		ArrayList<String> cols = pnlColVariables.getDeclaredVariables();
-		
-/*
-		if ((rows.size() == 0) || (cols.size() == 0)) {
-			showErrorMessage(App.messages.noVariableDefined());
-			return null;
-		}
-		else pnlMessage.setVisible(false);
-		 */
-        pnlMessage.setVisible(false);
-		
-		CReportRequest data = new CReportRequest();
+
+		CIndicatorRequest data = new CIndicatorRequest();
 		data.setRowVariables(rows);
 		data.setColVariables(cols);
 
@@ -359,52 +280,37 @@ public class ReportMain extends Composite implements AppModule {
 		
 		return data;
 	}
-	
+*/
+
 
 	/**
 	 * Update report data with table sent from the server
 	 */
+/*
 	protected void updateReportResponse() {
 		tblResult.update(tableData);
 		updateChart();
 	}
+*/
 
 
 
 	/**
 	 * Update the chart applying the selected type and values
 	 */
+/*
 	protected void updateChart() {
 		ChartReport.update(chart, tableData);
 	}
+*/
 
 
-	/**
-	 * Initialize the report page loading the content from the server	 
-	 */
-	public void run() {
-		service.initialize(new StandardCallback<CInitializationData>() {
-			@Override
-			public void onSuccess(CInitializationData rep) {
-				reportUI = rep;
-				
-				if ((reportUI.getReports() != null) && (reportUI.getReports().size() > 0)) {
-					openReportList(false);
-				}
-				else {
-					closeReportList();
-					newReport();
-				}
-			}
-		});
-	}
-
-	
 	/**
 	 * Show popup window with the list of patients of the clicked cell
 	 * @param c
 	 * @param r
 	 */
+/*
 	public void showPatientList(int c, int r) {
 		HashMap<String, String> filters = pnlFilters.getDeclaredFilters();
 
@@ -444,30 +350,26 @@ public class ReportMain extends Composite implements AppModule {
 		// show popup window
 		patientListPopup.showPatients(filters);
 	}
+*/
 
 	
 	/**
-	 * Return the list of groups of information
 	 * @return
 	 */
-	public List<CGroup> getGroups() {
-		return (reportUI != null? reportUI.getGroups(): null);
-	}
-	
-	/**
-	 * @return
-	 */
+/*
 	public static ReportMain instance() {
 		if (singletonInstance == null)
 			new ReportMain();
 		return singletonInstance;
 	}
-	
+*/
+
 	
 	/**
 	 * Select the chart from a number of 0 to the max number of charttypes array 
 	 * @param chartType identify the type of chart to display
 	 */
+/*
 	public void selectChart(ChartType chartType) {
 		Image img = new Image(chartImgs[chartType.ordinal()]);
 		Element el = (Element)lnkChartType.getElement();
@@ -478,51 +380,62 @@ public class ReportMain extends Composite implements AppModule {
 		chart.setSelectedChart(chartType);
 		updateChart();
 	}
+*/
 
 	
 	/**
 	 * Return the selected chart type
 	 * @return
 	 */
+/*
 	public ChartType getChartType() {
 		return chart.getSelectedChart();
 	}
+*/
 
 	/**
 	 * @param selectedCol the selectedCol to set
 	 */
+/*
 	public void setSelectedCol(int selectedCol) {
 		tableData.setSelection(TableSelection.COLUMN);
 		tableData.setSelectedCell(selectedCol);
 		updateChart();
 	}
+*/
 
 
 	/**
 	 * @param selectedRow the selectedRow to set
 	 */
+/*
 	public void setSelectedRow(int selectedRow) {
 		tableData.setSelection(TableSelection.ROW);
 		tableData.setSelectedCell(selectedRow);
 		updateChart();
 	}
+*/
 
 
 	/**
 	 * @return the service
 	 */
+/*
 	public ReportServiceAsync getService() {
 		return service;
 	}
+*/
 
-	
+
 	/**
 	 * Return information about the report sent from the server
-	 * @return instance of {@link CInitializationData} class
+	 * @return instance of {@link org.msh.tb.client.shared.model.CReportUIData} class
 	 */
-	public CInitializationData getReportUI() {
+/*
+	public CReportUIData getReportUI() {
 		return reportUI;
 	}
+*/
 
 
 	/**
@@ -531,13 +444,22 @@ public class ReportMain extends Composite implements AppModule {
 	public CReport getReport() {
 		return report;
 	}
-	
-	
+
+
+    /**
+     * Update the report title
+     */
+    public void updateTitle() {
+        txtTitle.setText(report.getTitle());
+    }
+
+
 	/**
 	 * Update the current report being displayed by the system
 	 */
 	public void updateReport() {
-		txtTitle.setText(report.getTitle());
+/*
+        updateTitle();
 		pnlColVariables.update(report.getColumnVariables());
 		pnlRowVariables.update(report.getRowVariables());
 		pnlFilters.update(report.getFilters());
@@ -551,6 +473,7 @@ public class ReportMain extends Composite implements AppModule {
 		// hide the current report being displayed
 		tblResult.setVisible(false);
 		chart.clear();
+*/
 	}
 	
 	
@@ -575,7 +498,7 @@ public class ReportMain extends Composite implements AppModule {
 	 * Show the report list
 	 */
 	public void openReportList(boolean reload) {
-		pnlReportList.show(reload);
+		pnlReportList.show(reload, this);
 		pnlReport.setVisible(false);
 	}
 	
@@ -586,11 +509,66 @@ public class ReportMain extends Composite implements AppModule {
 	public void newReport() {
 		report = new CReport();
 		report.setTitle("New report");
+        report.setIndicators(new ArrayList<CIndicator>());
 
-		updateReport();
+        updateTitle();
+        pnlIndicators.clear();
+
+        newIndicator();
+
 		closeReportList();
 	}
-	
+
+    /**
+     * Add a new indicator to the report
+     */
+    public void newIndicator() {
+        CIndicator indicator = new CIndicator();
+        report.getIndicators().add(indicator);
+
+        // create a new name to the indicator
+        int index = 1;
+        while (true) {
+            String s = "Indicator " + Integer.toString(index);
+            boolean newName = true;
+            for (CIndicator ind: report.getIndicators()) {
+                if (ind.getTitle().equals(s)) {
+                    newName = false;
+                    break;
+                }
+            }
+            if (newName) {
+                indicator.setTitle(s);
+                break;
+            }
+            index++;
+        }
+
+        indicator.setChartType(ChartType.CHART_BAR.ordinal());
+
+        // display the indicator
+        addIndicatorPanel(indicator, true);
+    }
+
+
+    /**
+     * Add a new indicator panel to the list of indicators
+     * @param indicator the indicator to be displayed in the indicator panel list
+     * @param editingMode if true, indicator will be displayed in edit mode, otherwise will be displayed in view mode
+     */
+    public void addIndicatorPanel(CIndicator indicator, boolean editingMode) {
+        IndicatorController controller = new IndicatorController(report, indicator, null);
+        if (editingMode) {
+            IndicatorEditor editor = new IndicatorEditor();
+            editor.update(controller);
+            pnlIndicators.add(editor);
+        }
+        else {
+            IndicatorView view = new IndicatorView();
+            view.update(controller);
+            pnlIndicators.add(view);
+        }
+    }
 	
 	/**
 	 * Open an existing report
@@ -598,6 +576,7 @@ public class ReportMain extends Composite implements AppModule {
 	 */
 	public void openReport(Integer id) {
 		closeReportList();
+/*
 		// hide the current report being displayed
 		tblResult.setVisible(false);
 		chart.clear();
@@ -618,6 +597,7 @@ public class ReportMain extends Composite implements AppModule {
 				btnGenerate.click();
 			}
 		});
+*/
 	}
 	
 	/**
@@ -626,49 +606,33 @@ public class ReportMain extends Composite implements AppModule {
 	public void deleteReport() {
 		
 	}
-	
-	
-	/**
-	 * Search for a variable by its ID
-	 * @param id the variable's ID
-	 * @return instance of {@link CVariable}, or null if variable is not found
-	 */
-	public CVariable findVariableById(String id) {
-		for (CGroup grp: reportUI.getGroups()) {
-			if (grp.getVariables() != null) {
-				for (CVariable var: grp.getVariables()) {
-					if (var.getId().equals(id)) {
-						return var;
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Search for a filter by its ID
-	 * @param id is the filter's ID
-	 * @return instance of {@link CVariable}, or null if variable is not found
-	 */
-	public CFilter findFilterById(String id) {
-		for (CGroup grp: reportUI.getGroups()) {
-			if (grp.getFilters() != null) {
-				for (CFilter filter: grp.getFilters()) {
-					if (filter.getId().equals(id)) {
-						return filter;
-					}
-				}
-			}
-		}
-		return null;
-	}
 
 
 	/**
 	 * @return the tableData
 	 */
+/*
 	public TableData getTableData() {
 		return tableData;
 	}
+*/
+
+    @Override
+    public void handleEvent(Object eventType, Object data) {
+        if (eventType == ReportListPanel.ReportListEvent.CLOSE) {
+            closeReportList();
+            return;
+        }
+
+        if (eventType == ReportListPanel.ReportListEvent.OPEN) {
+            openReport((Integer)data);
+            return;
+        }
+
+        if (eventType == ReportListPanel.ReportListEvent.NEW_REPORT) {
+            newReport();
+            return;
+        }
+        Window.alert("Not handled: " + eventType + " = " + data);
+    }
 }

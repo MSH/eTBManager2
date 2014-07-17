@@ -1,11 +1,5 @@
 package org.msh.tb.login;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -13,11 +7,16 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.UserLogin;
 
+import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 /**
  * @author Ricardo
  *
- *	Mantém uma lista de usuários on-line no sistema
+ *	Mantï¿½m uma lista de usuï¿½rios on-line no sistema
  */
 @Name("onlineUsers")
 @Scope(ScopeType.APPLICATION)
@@ -36,7 +35,7 @@ public class OnlineUsersHome {
 	}
 	
 	/**
-	 * Adiciona um novo usuário on-line na lista de usuários on-line
+	 * Adiciona um novo usuï¿½rio on-line na lista de usuï¿½rios on-line
 	 * @param loginUsuario
 	 * @return
 	 */
@@ -50,7 +49,7 @@ public class OnlineUsersHome {
 	}
 
 	/**
-	 * Remove um usuário da lista de usuários on-line
+	 * Remove um usuï¿½rio da lista de usuï¿½rios on-line
 	 * @param loginUsuario
 	 */
 	public void remove(UserLogin loginUsuario) {
@@ -60,7 +59,7 @@ public class OnlineUsersHome {
 	}
 
 	/**
-	 * Retorna informações do usuário on-line através do seu objeto loginUsuario
+	 * Retorna informaï¿½ï¿½es do usuï¿½rio on-line atravï¿½s do seu objeto loginUsuario
 	 * @param loginUsuario
 	 * @return
 	 */
@@ -77,7 +76,7 @@ public class OnlineUsersHome {
 	}
 	
 	/**
-	 * Atualiza as informações do usuário sobre página e data-hora do último acesso
+	 * Atualiza as informaï¿½ï¿½es do usuï¿½rio sobre pï¿½gina e data-hora do ï¿½ltimo acesso
 	 * @param loginUsuario
 	 */
 	public void update() {

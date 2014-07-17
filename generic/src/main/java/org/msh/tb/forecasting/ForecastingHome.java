@@ -1,11 +1,5 @@
 package org.msh.tb.forecasting;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
@@ -16,17 +10,14 @@ import org.jboss.seam.core.Events;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.RegimensQuery;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.entities.Forecasting;
-import org.msh.tb.entities.ForecastingBatch;
-import org.msh.tb.entities.ForecastingCasesOnTreat;
-import org.msh.tb.entities.ForecastingMedicine;
-import org.msh.tb.entities.ForecastingNewCases;
-import org.msh.tb.entities.ForecastingOrder;
-import org.msh.tb.entities.ForecastingRegimen;
-import org.msh.tb.entities.ForecastingResult;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.tbunits.TBUnitType;
+import org.msh.tb.entities.*;
 import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
+
+import javax.persistence.EntityManager;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Calculate a forecasting and save/restore its results to/from the database

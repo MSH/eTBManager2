@@ -1,10 +1,10 @@
 package org.msh.tb.na;
 
-import java.util.Map;
-
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.indicators.core.Indicator;
+
+import java.util.Map;
 
 /**
  * Generate indicator about cases with and without HIV results

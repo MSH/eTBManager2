@@ -1,9 +1,9 @@
 package org.msh.tb.client.shared.model;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.util.ArrayList;
 import java.util.Date;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Data sent from the server in order to initialize the report in the client
@@ -12,7 +12,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Ricardo Memoria
  *
  */
-public class CInitializationData implements IsSerializable {
+public class CReportUIData implements IsSerializable {
 
 	/**
 	 * List of variables and filters
@@ -28,8 +28,6 @@ public class CInitializationData implements IsSerializable {
 	 * List of available org.msh.reports
 	 */
 	private ArrayList<CReport> reports;
-
-
 
 	/**
 	 * @return the groups

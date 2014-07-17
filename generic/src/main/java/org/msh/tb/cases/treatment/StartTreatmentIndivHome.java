@@ -1,9 +1,5 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -21,6 +17,10 @@ import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.medicines.MedicineSelection;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Name("startTreatmentIndivHome")
 @Scope(ScopeType.CONVERSATION)

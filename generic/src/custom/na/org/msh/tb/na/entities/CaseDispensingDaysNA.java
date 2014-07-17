@@ -1,13 +1,9 @@
 package org.msh.tb.na.entities;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.msh.tb.na.entities.enums.Dot;
+
+import javax.persistence.*;
 
 
 /**

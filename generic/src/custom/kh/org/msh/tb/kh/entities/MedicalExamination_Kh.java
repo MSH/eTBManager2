@@ -1,10 +1,10 @@
 package org.msh.tb.kh.entities;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.enums.DotBy;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("kh")

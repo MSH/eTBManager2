@@ -1,10 +1,10 @@
 package org.msh.tb.entities;
 
+import org.jboss.seam.international.Messages;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
-import org.jboss.seam.international.Messages;
 
 @MappedSuperclass
 public class LocaleItem {
@@ -30,7 +30,7 @@ public class LocaleItem {
 	}
 	
     /**
-     * Retorna o nome de exibição da classe de acordo com a língua selecionada 
+     * Retorna o nome de exibiï¿½ï¿½o da classe de acordo com a lï¿½ngua selecionada 
      * @return
      */
     public String getDisplayName() {

@@ -1,14 +1,13 @@
 package org.msh.tb.reportgen;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.UserRole;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class RoleVariable implements Variable {
 

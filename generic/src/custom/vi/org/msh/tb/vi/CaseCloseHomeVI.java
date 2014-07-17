@@ -1,23 +1,10 @@
 package org.msh.tb.vi;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.RaiseEvent;
-import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.core.Events;
-import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.framework.Controller;
 import org.msh.tb.cases.CaseCloseHome;
-import org.msh.tb.cases.treatment.TreatmentHome;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.utils.date.Period;
 
 @Name("caseCloseHomeVI")
 public class CaseCloseHomeVI extends CaseCloseHome{

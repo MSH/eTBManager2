@@ -1,12 +1,12 @@
 package org.msh.tb.indicators;
 
-import java.util.Map;
-
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
+
+import java.util.Map;
 
 /**
  * @author vani rao

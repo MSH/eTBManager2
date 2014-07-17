@@ -1,15 +1,15 @@
 package org.msh.reports.indicator;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import org.msh.reports.datatable.Column;
 import org.msh.reports.datatable.DataTableUtils;
 import org.msh.reports.datatable.Row;
 import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.datatable.impl.RowImpl;
+
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Base implementation of the {@link DataTableIndicator} interface

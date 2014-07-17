@@ -1,18 +1,11 @@
 package org.msh.tb.na.entities;
 
-import java.util.Date;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.msh.tb.entities.ExamHIV;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Records information about an HIV result during the treatment

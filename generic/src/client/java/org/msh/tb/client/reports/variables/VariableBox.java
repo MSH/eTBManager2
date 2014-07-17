@@ -1,6 +1,4 @@
-package org.msh.tb.client.reports;
-
-import org.msh.tb.client.shared.model.CVariable;
+package org.msh.tb.client.reports.variables;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -10,13 +8,15 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import org.msh.tb.client.reports.HoverPanel;
+import org.msh.tb.client.shared.model.CVariable;
 
 /**
  * Display a variable in a rectangle border
  * @author Ricardo Memoria
  *
  */
-public class VariableBox extends HoverPanel { //implements StandardEventHandler {
+public class VariableBox extends HoverPanel {
 
 	public static final Integer VARIABLE_CHANGE = 1;
 	public static final Integer VARIABLE_DELETE = 2;
@@ -28,7 +28,8 @@ public class VariableBox extends HoverPanel { //implements StandardEventHandler 
 	
 	/**
 	 * Constructor
-	 * @param changeHandler
+	 * @param variablesPanel
+     * @param removeEnabled
 	 */
 	public VariableBox(VariablesPanel variablesPanel, boolean removeEnabled) {
 		super();
@@ -78,7 +79,6 @@ public class VariableBox extends HoverPanel { //implements StandardEventHandler 
 
 	/**
 	 * Called when user wants to remove a variable
-	 * @param event
 	 */
 	@Override
 	protected void removePanel() {
@@ -111,7 +111,7 @@ public class VariableBox extends HoverPanel { //implements StandardEventHandler 
 	}
 
 
-	/** {@inheritDoc}
+    /** {@inheritDoc}
 	 */
 /*	@Override
 	public void eventHandler(Object eventType, Object data) {

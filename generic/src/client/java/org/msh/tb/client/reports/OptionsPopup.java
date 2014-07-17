@@ -9,8 +9,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
+import org.msh.tb.client.ui.MenuPanel;
 
 /**
  * Popup menu displaying the options of the report
@@ -19,22 +19,21 @@ import com.google.gwt.user.client.ui.PopupPanel;
  */
 public class OptionsPopup extends PopupPanel {
 	private static final Binder binder = GWT.create(Binder.class);
-	interface Binder extends UiBinder<HTMLPanel, OptionsPopup> { };
+	interface Binder extends UiBinder<MenuPanel, OptionsPopup> { };
 
-	@UiField HTMLPanel pnl; 
-	
+    @UiField MenuPanel pnlMenu;
+
 	/**
 	 * Default constructor
 	 */
 	public OptionsPopup() {
 		binder.createAndBindUi(this);
 	
-		add(pnl);
 		setAutoHideEnabled(true);
-		setStyleName("");
+        add(pnlMenu);
 	}
 
-	
+
 	/**
 	 * Called when user clicks on the New report option
 	 * @param event
@@ -42,7 +41,7 @@ public class OptionsPopup extends PopupPanel {
 	@UiHandler("lnkNew")
 	protected void cmdNewReport(ClickEvent event) {
 		hide();
-		ReportMain.instance().newReport();
+//		ReportMain.instance().newReport();
 	}
 	
 	/**
@@ -61,7 +60,7 @@ public class OptionsPopup extends PopupPanel {
 	@UiHandler("lnkSettings")
 	protected void cmdSettings(ClickEvent event) {
 		hide();
-		OptionsDlg.open(ReportMain.instance().getReport());
+//		OptionsDlg.open(ReportMain.instance().getReport());
 	}
 	
 	/**
@@ -70,6 +69,6 @@ public class OptionsPopup extends PopupPanel {
 	 */
 	protected void saveReport(boolean saveAs) {
 		hide();
-		SaveDlg.openDialog(saveAs);
+//		SaveDlg.openDialog(saveAs);
 	}
 }

@@ -1,9 +1,5 @@
 package org.msh.tb.client;
 
-import org.msh.tb.client.dashboard.DashboardMain;
-import org.msh.tb.client.reports.ReportMain;
-import org.msh.tb.client.reports.resources.ReportConstants;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
@@ -11,6 +7,9 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.CssResource.NotStrict;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.msh.tb.client.dashboard.DashboardMain;
+import org.msh.tb.client.reports.ReportMain;
+import org.msh.tb.client.resources.ReportConstants;
 
 /**
  * Application class on the client side, called when the page is loaded
@@ -49,7 +48,7 @@ public class App implements EntryPoint {
 	    	mainpage = new DashboardMain();
 	    }
 	    else {
-		    mainpage = ReportMain.instance();
+		    mainpage = new ReportMain();
 	    }
 	    rootPanel.getElement().removeAllChildren();
 	    rootPanel.add(mainpage);

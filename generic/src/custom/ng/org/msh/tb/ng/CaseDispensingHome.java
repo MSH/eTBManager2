@@ -1,23 +1,20 @@
 package org.msh.tb.ng;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.ng.CaseDispensingInfo;
-import org.msh.tb.ng.WeekInfo;
 import org.msh.tb.ng.entities.CaseDispensing_Ng;
 import org.msh.tb.ng.entities.TbCaseNG;
+
+import javax.persistence.EntityManager;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 

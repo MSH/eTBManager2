@@ -1,8 +1,5 @@
 package org.msh.tb.vi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -10,6 +7,9 @@ import org.msh.tb.cases.exams.ExamDSTHome;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.vi.entities.ExamDSTVI;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Name("examDSTHomeVI")
 public class ExamDSTHomeVI{

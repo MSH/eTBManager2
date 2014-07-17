@@ -1,12 +1,12 @@
 package org.msh.tb.md;
 
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.msh.tb.adminunits.AdminUnitHome;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.CountryStructure;
 import org.w3c.dom.Element;
+
+import java.util.List;
 
 /**
  * Execute importing of a region from the SYMETB in a xml representation

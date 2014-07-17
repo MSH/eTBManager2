@@ -1,14 +1,9 @@
 package org.msh.tb.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.Messages;
+
+import javax.persistence.*;
 
 /**
  * Store e-TB Manager configuration information. Id is always = 1

@@ -1,14 +1,13 @@
 package org.msh.tb;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.WeeklyFrequency;
 import org.msh.tb.entities.Workspace;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 @Name("weeklyFrequencyHome")
 public class WeeklyFrequencyHome {

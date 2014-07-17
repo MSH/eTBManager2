@@ -3,16 +3,15 @@
  */
 package org.msh.tb.sync.actions;
 
-import java.io.PrintWriter;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.application.tasks.AsyncTask;
 import org.msh.tb.application.tasks.TaskManager;
 import org.msh.tb.entities.ClientSyncResult;
 import org.msh.tb.sync.SyncFileTask;
+
+import javax.persistence.EntityManager;
+import java.io.PrintWriter;
 
 /**
  * Generate response about the status of the processing of the

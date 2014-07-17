@@ -1,16 +1,5 @@
 package org.msh.tb.transactionlog;
 
-import java.text.DecimalFormat;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -22,6 +11,12 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.enums.MessageKey;
 import org.msh.utils.date.LocaleDateConverter;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
+import java.util.*;
 
 @Converter(id="detailHtmlConverter")
 @Name("detailHtmlConverter")

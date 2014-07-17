@@ -1,11 +1,10 @@
 package org.msh.tb.client.reports.filters;
 
-import java.util.List;
-
+import com.google.gwt.user.client.ui.ListBox;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CItem;
 
-import com.google.gwt.user.client.ui.ListBox;
+import java.util.List;
 
 /**
  * Create a filter with a selection box where user can select one option

@@ -1,11 +1,11 @@
 package org.msh.tb.application;
 
-import javax.xml.ws.handler.MessageContext;
-
 import org.jboss.seam.contexts.ServletLifecycle;
 import org.jboss.seam.web.ServletContexts;
 import org.jboss.seam.web.Session;
 import org.jboss.seam.webservice.SOAPRequestHandler;
+
+import javax.xml.ws.handler.MessageContext;
 
 /**
  * eTB Manager own implementation of SOAP Request Handler. It seems there is a bug in the

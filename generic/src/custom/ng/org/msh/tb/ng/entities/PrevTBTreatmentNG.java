@@ -1,10 +1,11 @@
 package org.msh.tb.ng.entities;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import org.msh.tb.entities.PrevTBTreatment;
 import org.msh.tb.ng.entities.enums.HealthFacility;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @DiscriminatorValue("ng")

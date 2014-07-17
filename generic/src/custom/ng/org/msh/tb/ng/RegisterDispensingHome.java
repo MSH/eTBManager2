@@ -1,13 +1,5 @@
 package org.msh.tb.ng;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -20,6 +12,9 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.ng.entities.CaseDispensing_Ng;
 import org.msh.tb.ng.entities.TbCaseNG;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 /**
  * Register the dispensing of all cases on treatment in a specific health unit

@@ -1,47 +1,25 @@
 package org.msh.tb.workspaces;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.End;
-import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Out;
+import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.CountryStructuresQuery;
 import org.msh.tb.application.ViewService;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.CountryStructure;
-import org.msh.tb.entities.HealthSystem;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserPermission;
-import org.msh.tb.entities.UserProfile;
-import org.msh.tb.entities.UserRole;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.WeeklyFrequency;
-import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.WorkspaceView;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseValidationOption;
-import org.msh.tb.entities.enums.DisplayCaseNumber;
-import org.msh.tb.entities.enums.NameComposition;
-import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.entities.enums.TreatMonitoringInput;
+import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.EntityQuery;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 

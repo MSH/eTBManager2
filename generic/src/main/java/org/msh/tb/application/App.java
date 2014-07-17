@@ -1,10 +1,10 @@
 package org.msh.tb.application;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
+
+import javax.persistence.EntityManager;
 
 /**
  * Base controller where business components can use to execute common operations dependent of containers. 

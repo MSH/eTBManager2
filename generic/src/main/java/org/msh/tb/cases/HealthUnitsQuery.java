@@ -1,12 +1,5 @@
 package org.msh.tb.cases;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -21,6 +14,12 @@ import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 import org.msh.utils.ItemSelectHelper;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Name("healthUnitsQuery")

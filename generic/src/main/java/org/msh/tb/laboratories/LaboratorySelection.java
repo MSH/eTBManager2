@@ -1,11 +1,11 @@
 package org.msh.tb.laboratories;
 
 
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.msh.tb.adminunits.AdminUnitSelector;
 import org.msh.tb.entities.Laboratory;
+
+import java.util.List;
 
 public class LaboratorySelection extends AdminUnitSelector<Laboratory> {
 

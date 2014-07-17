@@ -1,16 +1,12 @@
 package org.msh.reports.tableoperations;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.Row;
-import org.msh.reports.indicator.DataTableIndicator;
-import org.msh.reports.indicator.DataTableIndicatorImpl;
-import org.msh.reports.indicator.HeaderRow;
-import org.msh.reports.indicator.IndicatorColumn;
-import org.msh.reports.indicator.IndicatorRow;
+import org.msh.reports.indicator.*;
 import org.msh.reports.variables.Variable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Generates an indicator table from a data table and the variables

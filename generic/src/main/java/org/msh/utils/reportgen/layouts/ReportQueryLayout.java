@@ -1,12 +1,12 @@
 package org.msh.utils.reportgen.layouts;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.msh.utils.reportgen.ReportData;
 import org.msh.utils.reportgen.ReportQuery;
 import org.msh.utils.reportgen.Variable;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * Single report query layout generator displaying all values in a table. Used for testing purposes 

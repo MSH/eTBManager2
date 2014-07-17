@@ -1,10 +1,10 @@
 package org.msh.tb.application;
 
-import java.util.Calendar;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
+
+import java.util.Calendar;
 
 @Name("sysStartup")
 public class SysStartup {

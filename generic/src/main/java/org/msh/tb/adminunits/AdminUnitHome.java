@@ -1,7 +1,5 @@
 package org.msh.tb.adminunits;
 
-import java.util.List;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -15,6 +13,8 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.transactionlog.LogInfo;
+
+import java.util.List;
 
 
 

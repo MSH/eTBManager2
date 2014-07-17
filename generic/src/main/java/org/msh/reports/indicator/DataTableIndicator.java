@@ -1,8 +1,8 @@
 package org.msh.reports.indicator;
 
-import java.util.List;
-
 import org.msh.reports.datatable.DataTable;
+
+import java.util.List;
 
 /**
  * Extension of the {@link DataTable} interface that supports 

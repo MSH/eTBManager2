@@ -1,8 +1,5 @@
 package org.msh.utils.reportgen.layouts;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.Messages;
@@ -11,6 +8,9 @@ import org.msh.utils.reportgen.Variable;
 import org.msh.utils.reportgen.data.DataTableTransform;
 import org.msh.utils.reportgen.data.Row;
 import org.msh.utils.reportgen.data.TableItem;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 public class ReportTableLayout implements HTMLLayoutGenerator {
 

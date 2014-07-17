@@ -1,13 +1,13 @@
 package org.msh.tb.cases.drugogram;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.international.Messages;
 import org.msh.tb.cases.drugogram.Drugogram.MedicineColumn;
 import org.msh.tb.entities.ExamXRay;
 import org.msh.tb.entities.MedicalExamination;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class DrugogramItem {
 	private int month;

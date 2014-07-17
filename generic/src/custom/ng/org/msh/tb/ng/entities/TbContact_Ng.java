@@ -1,14 +1,10 @@
 package org.msh.tb.ng.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbContact;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
 
 
 /**

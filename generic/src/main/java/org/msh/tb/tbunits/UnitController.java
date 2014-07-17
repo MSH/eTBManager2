@@ -3,9 +3,6 @@
  */
 package org.msh.tb.tbunits;
 
-import java.util.List;
-import java.util.Map;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Begin;
 import org.jboss.seam.annotations.In;
@@ -16,6 +13,9 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.tbunits.UnitServices.StatisticItem;
 import org.msh.tb.transactionlog.TransactionLogService;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * General controller used in UI for TB unit operations

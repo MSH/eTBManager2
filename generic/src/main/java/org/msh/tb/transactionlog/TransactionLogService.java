@@ -1,28 +1,16 @@
 package org.msh.tb.transactionlog;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.entities.AdministrativeUnit;
-import org.msh.tb.entities.LocalizedNameComp;
-import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.TransactionLog;
-import org.msh.tb.entities.Transactional;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserLog;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserRole;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.WorkspaceLog;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Name("transactionLogService")
 @BypassInterceptors

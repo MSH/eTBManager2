@@ -1,9 +1,9 @@
 package org.msh.tb.adminunits;
 
+import org.msh.tb.entities.AdministrativeUnit;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.msh.tb.entities.AdministrativeUnit;
 
 /**
  * Maintain a list of objects related to an {@link AdministrativeUnit} object

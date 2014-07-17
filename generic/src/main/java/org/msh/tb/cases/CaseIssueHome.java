@@ -3,11 +3,6 @@
  */
 package org.msh.tb.cases;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
@@ -20,6 +15,10 @@ import org.msh.tb.entities.Issue;
 import org.msh.tb.entities.IssueFollowup;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.UserWorkspace;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Services to handle case issues and its follow-up

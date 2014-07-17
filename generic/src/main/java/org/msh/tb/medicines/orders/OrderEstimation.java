@@ -1,23 +1,10 @@
 package org.msh.tb.medicines.orders;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.MedicineUnitHome;
-import org.msh.tb.entities.Order;
-import org.msh.tb.entities.OrderItem;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.StockPosition;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.entities.enums.ValidationState;
@@ -25,6 +12,12 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 @Name("orderEstimation")
@@ -271,7 +264,7 @@ public class OrderEstimation {
 //		Order order = orderHome.getInstance();
 //		Tbunit unitFrom = order.getUnitFrom();
 		
-		// monta instrução HQL IN
+		// monta instruï¿½ï¿½o HQL IN
 		String hql = "from StockPosition sp join fetch sp.medicine m " +
 			"join fetch sp.source s " +
 			"where sp.tbunit.id = #{order.unitFrom.id}";

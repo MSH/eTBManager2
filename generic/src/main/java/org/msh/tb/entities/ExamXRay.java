@@ -1,20 +1,12 @@
 package org.msh.tb.entities;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.msh.tb.entities.enums.XRayBaseline;
 import org.msh.tb.entities.enums.XRayEvolution;
 import org.msh.tb.entities.enums.XRayResult;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
 
 /**
  * Stores information about an X-Ray exam of a case

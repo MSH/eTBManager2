@@ -1,12 +1,5 @@
 package org.msh.tb.bd.entities;
 
-import java.util.Date;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.bd.entities.enums.SideEffectAction;
 import org.msh.tb.bd.entities.enums.SideEffectGrading;
@@ -15,6 +8,12 @@ import org.msh.tb.bd.entities.enums.SideEffectSeriousness;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
 @DiscriminatorValue("bd")

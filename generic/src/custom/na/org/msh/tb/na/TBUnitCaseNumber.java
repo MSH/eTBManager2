@@ -1,7 +1,5 @@
 package org.msh.tb.na;
 
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
@@ -13,6 +11,8 @@ import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
 
 
 /**

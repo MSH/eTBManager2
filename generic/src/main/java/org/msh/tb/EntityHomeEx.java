@@ -1,22 +1,12 @@
 package org.msh.tb;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIParameter;
-import javax.faces.context.FacesContext;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.core.Expressions;
 import org.jboss.seam.core.Expressions.ValueExpression;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.AuthorizationException;
-import org.msh.tb.entities.User;
-import org.msh.tb.entities.UserLogin;
-import org.msh.tb.entities.UserWorkspace;
-import org.msh.tb.entities.WSObject;
-import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.transactionlog.DetailXMLWriter;
@@ -24,6 +14,12 @@ import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.EntityQuery;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
 
 
 public class EntityHomeEx<E> extends EntityHome<E> {

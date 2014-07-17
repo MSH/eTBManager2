@@ -1,10 +1,5 @@
 package org.msh.tb.medicines.movs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -14,6 +9,10 @@ import org.msh.tb.entities.enums.MovementType;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.movs.DispensingMovementDetail.DispensingPatientDetail;
 import org.msh.utils.EntityQuery;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 
 

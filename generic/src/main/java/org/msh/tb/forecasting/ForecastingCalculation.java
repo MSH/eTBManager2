@@ -1,40 +1,18 @@
 package org.msh.tb.forecasting;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.RaiseEvent;
-import org.msh.tb.entities.Forecasting;
-import org.msh.tb.entities.ForecastingBatch;
-import org.msh.tb.entities.ForecastingCasesOnTreat;
-import org.msh.tb.entities.ForecastingItem;
-import org.msh.tb.entities.ForecastingMedicine;
-import org.msh.tb.entities.ForecastingNewCases;
-import org.msh.tb.entities.ForecastingOrder;
-import org.msh.tb.entities.ForecastingPeriod;
-import org.msh.tb.entities.ForecastingRegimen;
-import org.msh.tb.entities.ForecastingRegimenResult;
-import org.msh.tb.entities.ForecastingResult;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.MedicineRegimen;
-import org.msh.tb.entities.PrescribedMedicine;
-import org.msh.tb.entities.Regimen;
-import org.msh.tb.entities.WeeklyFrequency;
+import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 
 /**

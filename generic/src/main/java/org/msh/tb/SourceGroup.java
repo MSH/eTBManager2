@@ -1,9 +1,9 @@
 package org.msh.tb;
 
+import org.msh.tb.entities.Source;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.msh.tb.entities.Source;
 
 public class SourceGroup<E> {
 

@@ -3,17 +3,8 @@ package org.msh.tb.na;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.entities.enums.DotBy;
-import org.msh.tb.entities.enums.Nationality;
-import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
-import org.msh.tb.entities.enums.TbField;
-import org.msh.tb.na.entities.enums.Dot;
-import org.msh.tb.na.entities.enums.DotOptions;
-import org.msh.tb.na.entities.enums.SideEffectAction;
-import org.msh.tb.na.entities.enums.SideEffectGrading;
-import org.msh.tb.na.entities.enums.SideEffectOutcome;
-import org.msh.tb.na.entities.enums.SideEffectSeriousness;
+import org.msh.tb.entities.enums.*;
+import org.msh.tb.na.entities.enums.*;
 
 
 /**

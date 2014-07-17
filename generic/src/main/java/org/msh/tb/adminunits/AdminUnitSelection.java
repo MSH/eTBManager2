@@ -1,10 +1,5 @@
 package org.msh.tb.adminunits;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.entities.AdministrativeUnit;
@@ -12,6 +7,10 @@ import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.UserView;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper class to allow users to select an administrative unit

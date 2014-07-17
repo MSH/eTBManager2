@@ -1,9 +1,9 @@
 package org.msh.tb.export;
 
-import java.util.List;
-
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.indicators.core.CaseHQLBase;
+
+import java.util.List;
 
 public class ExamsExport extends CaseHQLBase {
 	private static final long serialVersionUID = 3489784726746142880L;

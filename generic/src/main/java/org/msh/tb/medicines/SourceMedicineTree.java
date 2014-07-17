@@ -1,10 +1,10 @@
 package org.msh.tb.medicines;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SourceMedicineTree<E> {
 	private List<SourceNode> sources = new ArrayList<SourceNode>();

@@ -1,17 +1,16 @@
 package org.msh.tb.importexport;
 
+import org.jboss.seam.Component;
+import org.jboss.seam.transaction.UserTransaction;
+import org.msh.tb.entities.Workspace;
+import org.msh.utils.CsvReader;
+
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.jboss.seam.Component;
-import org.jboss.seam.transaction.UserTransaction;
-import org.msh.tb.entities.Workspace;
-import org.msh.utils.CsvReader;
 
 
 /**

@@ -1,11 +1,11 @@
 package org.msh.tb.export;
 
-import java.util.List;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.indicators.core.CaseHQLBase;
 import org.msh.tb.indicators.core.IndicatorFilters;
+
+import java.util.List;
 /**
  * Handle export of cases to an Excel file
  * @author Mauricio Santos

@@ -1,9 +1,5 @@
 package org.msh.tb.cases.treatment;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -12,14 +8,14 @@ import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.PatientType;
-import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Return information about cases on treatment
