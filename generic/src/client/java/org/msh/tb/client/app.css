@@ -322,8 +322,19 @@ html {
     box-shadow: 0 3px 9px #d0d0d0;
     background-clip: padding-box;
     outline: 0;
-    margin:10px 20px 20px 0;
+/*    margin:10px 20px 20px 0; */
+    box-sizing: border-box;
+    width:955px;
 }
+
+.indicator-view .ind-res {
+    width:980px;
+}
+
+.indicator-editor .ind-res {
+    width:955px;
+}
+
 .ind-res .title {
     font-size: 18px;
     color: #808080;
@@ -335,10 +346,10 @@ html {
 }
 
 .tbl50 {
-    max-width: 50% !important;
+    max-width: 470px !important;
 }
 .tbl25 {
-    max-width: 25% !important;
+    max-width: 240px !important;
 }
 
 /* Indicator containing a single value with a caption at the bottom */
@@ -369,6 +380,9 @@ html {
 
 /* Layout of the widget that displays the indicator (including title and other widgets) */
 .indicator-view {
+    display: inline-block;
+    vertical-align: top;
+    margin:10px 20px 10px 0;
 }
 
 .indicator-editor {

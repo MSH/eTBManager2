@@ -149,6 +149,7 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         resIndicator.notifyChartChange();
     }
 
+
     /**
      * Called when the user changes the view size
      */
@@ -203,18 +204,6 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         }
     }
 
-
-    public void updateChart() {
-
-    }
-
-    public void updateTable() {
-
-    }
-
-    public void updateIndicator() {
-
-    }
 
     /**
      * Update the title's content with the title in the indicator object
