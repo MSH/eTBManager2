@@ -281,28 +281,6 @@ html {
 	top: -2px;
 }
 
-.table-indicator {
-	border-collapse: collapse;
-	font-size:12px;
-	width:100%;
-}
-.table-indicator .tt-row-tot, .table-indicator .tt-row, .table-indicator .vl-tot-v {
-	background-color: #f0f0f0;
-	color:#808080;
-	border:1px solid#fff;
-}
-.table-indicator .tt-row-tot, .table-indicator .vl-tot-v {
-	font-weight:bold;
-}
-.table-indicator .vl {
-	background-color: #fff;
-	color:#909090;
-}
-.table-indicator .vl:hover {
-	background-color: #fff;
-}
-
-
 
 
 /** NEW STYLES AFTER REFACTORING **/
@@ -338,13 +316,29 @@ html {
 /* Indicator result style, i.e, component containing chart and table */
 .ind-res {
     width:100%;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    -webkit-box-shadow: 0 3px 9px #d0d0d0;
+    box-shadow: 0 3px 9px #d0d0d0;
+    background-clip: padding-box;
+    outline: 0;
+    margin:10px 20px 20px 0;
+}
+.ind-res .title {
+    font-size: 18px;
+    color: #808080;
+    padding: 8px;
+    background-color: #f8f8f8;
+}
+.ind-res .ind-table, .ind-res .ind-chart {
+    overflow-x: auto;
 }
 
 .tbl50 {
-    width: 50% !important;
+    max-width: 50% !important;
 }
 .tbl25 {
-    width: 25% !important;
+    max-width: 25% !important;
 }
 
 /* Indicator containing a single value with a caption at the bottom */
@@ -355,14 +349,14 @@ html {
     text-align: center;
     margin-right: 10px;
     border-radius: 5px;
-    min-width: 150px;
-}
-.ind-res-single td {
-    padding:10px;
+    width: 150px;
+    min-height: 100px;
 }
 /* Value of the indicator */
 .ind-res-single .ind-value {
     font-size: 32px;
+    padding:10px;
+    min-height: 30px;
 }
 /* title at the bottom of the indicator */
 .ind-res-single .ind-title {
@@ -370,13 +364,11 @@ html {
     max-width: 150px;
     line-height: 1.2;
     vertical-align: bottom;
-    height:40px;
+    padding:10px;
 }
 
 /* Layout of the widget that displays the indicator (including title and other widgets) */
 .indicator-view {
-    border:1px solid #f0f0f0;
-    padding:10px;
 }
 
 .indicator-editor {
@@ -434,3 +426,26 @@ html {
 .editor {
     margin-bottom: 10px;
 }
+
+
+.table-indicator {
+    border-collapse: collapse;
+    font-size:12px;
+    width:100%;
+}
+.table-indicator .tt-row-tot, .table-indicator .tt-row, .table-indicator .vl-tot-v {
+    background-color: #f0f0f0;
+    color:#808080;
+    border:1px solid#fff;
+}
+.table-indicator .tt-row-tot, .table-indicator .vl-tot-v {
+    font-weight:bold;
+}
+.table-indicator .vl {
+    background-color: #fff;
+    color:#909090;
+}
+.table-indicator .vl:hover {
+    background-color: #fff;
+}
+

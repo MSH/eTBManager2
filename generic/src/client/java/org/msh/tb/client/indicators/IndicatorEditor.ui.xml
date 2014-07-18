@@ -21,7 +21,7 @@
                 <c:LabelEditor ui:field="txtTitle" />
             </div>
             <div class="pull-right">
-                <g:Anchor styleName="btn-close"><i class="icon-remove-circle btn-icon"></i></g:Anchor>
+                <g:Anchor ui:field="btnClose" styleName="btn-close" title="Close editor"><i class="icon-remove-circle btn-icon"></i></g:Anchor>
             </div>
             <div class="block"></div>
         </div>

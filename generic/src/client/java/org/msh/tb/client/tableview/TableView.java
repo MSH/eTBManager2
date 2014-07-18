@@ -53,7 +53,7 @@ public class TableView extends Composite {
 			return;
 		
 		if (table.getStyleName().isEmpty()) {
-			table.setStyleName("table2");
+			table.setStyleName("table-indicator");
 		}
 
 		boolean totCol = tableData.getTable().isColTotalAvailable();

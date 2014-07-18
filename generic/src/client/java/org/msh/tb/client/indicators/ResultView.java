@@ -3,12 +3,15 @@ package org.msh.tb.client.indicators;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
 import org.msh.tb.client.chart.ChartReport;
 import org.msh.tb.client.chart.ChartView;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.tableview.TableView;
+import org.msh.tb.client.ui.DivPanel;
 import org.msh.utils.reportgen.highchart.ChartType;
 
 
@@ -20,10 +23,11 @@ public class ResultView extends Composite {
     public enum Layout {  VERTICAL, HORIZONTAL;  }
 
     private IndicatorController controller;
-    private FlexTable tblLayout;
+    private DivPanel pnlLayout;
     private ChartView chart;
     private TableView table;
     private Layout layout = Layout.VERTICAL;
+    private Label txtTitle;
 
     private boolean showChart = true;
     private boolean showTable = true;
@@ -34,8 +38,8 @@ public class ResultView extends Composite {
      * Default constructor
      */
     public ResultView() {
-        tblLayout = new FlexTable();
-        initWidget(tblLayout);
+        pnlLayout = new DivPanel();
+        initWidget(pnlLayout);
     }
 
 
@@ -67,8 +71,11 @@ public class ResultView extends Composite {
     }
 
 
+    /**
+     * Called to notify the view that the title has changed
+     */
     public void notifyTitleChange() {
-        updateSingleValue();
+        txtTitle.setText(controller.getIndicator().getTitle());
     }
 
     /**
@@ -92,7 +99,7 @@ public class ResultView extends Composite {
         if ((size != null) && (size < 100)) {
             s += " tbl" + Integer.toString(size);
         }
-        tblLayout.setStyleName(s);
+        pnlLayout.setStyleName(s);
     }
 
 
@@ -112,17 +119,14 @@ public class ResultView extends Composite {
      * Update the indicator when the value to update is a single value
      */
     protected void updateSingleValue() {
-        tblLayout.setStyleName("ind-res-single");
-        tblLayout.removeAllRows();
+        pnlLayout.setStyleName("ind-res-single");
+        pnlLayout.clear();
         Double val = controller.getResponse().getRows().get(0).getValues()[0];
         String sval = (val == null || val == 0)? "-": NumberFormat.getFormat("#,###,###").format(val);
         String title = controller.getIndicator().getTitle();
 
-        tblLayout.getCellFormatter().setStyleName(0, 0, "ind-value");
-        tblLayout.setText(0, 0, sval);
-
-        tblLayout.getCellFormatter().setStyleName(1, 0, "ind-title");
-        tblLayout.setText(1, 0, title);
+        pnlLayout.addText(sval, "ind-value");
+        txtTitle = pnlLayout.addText(title, "ind-title");
     }
 
 
@@ -131,13 +135,11 @@ public class ResultView extends Composite {
      */
     protected void updateCompositeValue() {
         updateSize();
-//        tblLayout.setStyleName("ind-res");
-        tblLayout.removeAllRows();
+        pnlLayout.clear();
 
         int row = 0;
         if (showTitle) {
-            tblLayout.getCellFormatter().setStyleName(0, 0, "title");
-            tblLayout.setText(0, 0, controller.getIndicator().getTitle());
+            txtTitle = pnlLayout.addText(controller.getIndicator().getTitle(), "title");
             row++;
         }
 
@@ -171,7 +173,7 @@ public class ResultView extends Composite {
     protected void addTable(int col, int row) {
         TableView tbl = new TableView();
         tbl.update(controller.getData());
-        tblLayout.setWidget(row, col, tbl);
+        pnlLayout.add(tbl, "ind-table");
     }
 
     /**
@@ -182,7 +184,7 @@ public class ResultView extends Composite {
     protected void addChart(int col, int row) {
         chart = new ChartView();
         chart.setSelectedChart(controller.getIndicator().getChartType());
-        tblLayout.setWidget(row, col, chart);
+        pnlLayout.add(chart, "ind-chart");
         ChartReport.update(chart, controller.getData());
     }
 

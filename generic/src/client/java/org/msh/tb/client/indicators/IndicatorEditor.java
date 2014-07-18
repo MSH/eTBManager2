@@ -30,6 +30,8 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
 
     private IndicatorController controller;
 
+    public enum EditorEvent { CLOSE };
+
     @UiField LabelEditor txtTitle;
     @UiField VariablesPanel pnlVariables;
     @UiField ListBox lbSize;
@@ -38,6 +40,8 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
     @UiField ResultView resIndicator;
 
     private ChartPopup chartPopup;
+
+    private StandardEventHandler eventHandler;
 
     /**
      * Default constructor
@@ -68,6 +72,16 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         txtTitle.setEventHandler(this);
     }
 
+    /**
+     * Called when the user clicks on the close icon at the top-right side of the editor
+     * @param event
+     */
+    @UiHandler("btnClose")
+    public void btnCloseClick(ClickEvent event) {
+        if (eventHandler != null) {
+            eventHandler.handleEvent(EditorEvent.CLOSE, this);
+        }
+    }
 
     /**
      * Set the indicator to be displayed
@@ -210,4 +224,19 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         txtTitle.setText(s);
     }
 
+    public StandardEventHandler getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(StandardEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    public IndicatorController getController() {
+        return controller;
+    }
+
+    public void setController(IndicatorController controller) {
+        this.controller = controller;
+    }
 }

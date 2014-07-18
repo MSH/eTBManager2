@@ -24,7 +24,7 @@ public class IndicatorView extends Composite {
     private IndicatorController controller;
 
 //    @UiField ResultView resultView;
-    @UiField Label txtTitle;
+    @UiField ResultView resIndicator;
 
 
     /**
@@ -41,13 +41,14 @@ public class IndicatorView extends Composite {
      */
     public void update(IndicatorController controller) {
         this.controller = controller;
+        resIndicator.update(controller);
     }
 
     /**
      * Called when the user tries to remove this indicator from the list of indicators
      * @param evt
      */
-    @UiHandler("btnRemove")
+//    @UiHandler("btnRemove")
     public void btnRemoveClick(ClickEvent evt) {
         Window.alert("Not implemented");
     }

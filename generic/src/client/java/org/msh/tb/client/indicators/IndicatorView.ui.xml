@@ -1,15 +1,9 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:ind="urn:import:org.msh.tb.client.indicators"
         >
-    <g:HTMLPanel styleName="indicator-view">
 
-        <div class="title">
-            <g:Label ui:field="txtTitle" />
-            <div class="button-bar">
-                <g:Anchor ui:field="btnRemove" title="Remove indicator"><i class="icon-remove-sign"></i></g:Anchor>
-            </div>
-            <div class="content">
-            </div>
-        </div>
+    <g:HTMLPanel styleName="indicator-view">
+        <ind:ResultView ui:field="resIndicator" />
     </g:HTMLPanel>
 </ui:UiBinder>

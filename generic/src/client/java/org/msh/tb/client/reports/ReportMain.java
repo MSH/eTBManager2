@@ -546,27 +546,28 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         indicator.setChartType(CChartType.CHART_BAR);
         report.getIndicators().add(indicator);
 
+        IndicatorController controller = new IndicatorController(report, indicator, null);
         // display the indicator
-        addIndicatorPanel(indicator, true);
+        addIndicatorPanel(controller, true, pnlIndicators.getWidgetCount());
     }
 
 
     /**
      * Add a new indicator panel to the list of indicators
-     * @param indicator the indicator to be displayed in the indicator panel list
+     * @param controller the indicator controller to be displayed in the indicator panel list
      * @param editingMode if true, indicator will be displayed in edit mode, otherwise will be displayed in view mode
      */
-    public void addIndicatorPanel(CIndicator indicator, boolean editingMode) {
-        IndicatorController controller = new IndicatorController(report, indicator, null);
+    public void addIndicatorPanel(IndicatorController controller, boolean editingMode, int index) {
         if (editingMode) {
             IndicatorEditor editor = new IndicatorEditor();
+            editor.setEventHandler(this);
+            pnlIndicators.insert(editor, index);
             editor.update(controller);
-            pnlIndicators.add(editor);
         }
         else {
             IndicatorView view = new IndicatorView();
+            pnlIndicators.insert(view, index);
             view.update(controller);
-            pnlIndicators.add(view);
         }
     }
 	
@@ -633,6 +634,21 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             newReport();
             return;
         }
+
+        if (eventType == IndicatorEditor.EditorEvent.CLOSE) {
+            closeEditor((IndicatorEditor)data);
+            return;
+        }
         Window.alert("Not handled: " + eventType + " = " + data);
+    }
+
+    /**
+     * Close the editor and displays the indicator view in its place
+     * @param editor the instance of {@link org.msh.tb.client.indicators.IndicatorEditor} to close
+     */
+    protected void closeEditor(IndicatorEditor editor) {
+        int index = pnlIndicators.getWidgetIndex(editor);
+        pnlIndicators.remove(index);
+        addIndicatorPanel(editor.getController(), false, index);
     }
 }
