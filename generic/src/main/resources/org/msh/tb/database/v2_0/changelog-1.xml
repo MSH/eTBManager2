@@ -112,5 +112,11 @@
 		WHERE NOT EXISTS(SELECT * FROM userpermission WHERE role_id=217 AND profile_id=userprofile.id)
 		</sql>
 	</changeSet>
-  
+
+    <changeSet id="10" author="msantos">
+        <update tableName="userrole">
+            <column name="code" value="045100"/>
+            <where>messageKey like 'admin.websessions'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>

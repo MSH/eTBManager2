@@ -53,7 +53,10 @@ public enum TbField {
 	SUSPECT_CRITERIA,
 	//Ukraine
 	CAUSE_OF_CHANGE,
-	MANUFACTURER;
+	MANUFACTURER,
+    //Bangladesh
+    MEDEXAM_DOTTYPE,
+    MEDEXAM_REFTOTYPE;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

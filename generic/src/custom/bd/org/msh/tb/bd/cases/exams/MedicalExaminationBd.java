@@ -1,11 +1,13 @@
 package org.msh.tb.bd.cases.exams;
 
-import org.msh.tb.bd.entities.enums.DotProvider;
-import org.msh.tb.entities.MedicalExamination;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.msh.tb.bd.entities.enums.DotProvider;
+import org.msh.tb.entities.MedicalExamination;
+import org.msh.tb.entities.FieldValue;
+import org.msh.tb.transactionlog.PropertyLog;
 
 /**
  *

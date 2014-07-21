@@ -335,5 +335,23 @@ public class FieldsQuery {
 		field = TbField.MANUFACTURER;
 		return getValues();
 	}
+
+    /**
+     * Return list of dot types
+     * @return
+     */
+    public List<FieldValue> getDotTypes() {
+        field = TbField.MEDEXAM_DOTTYPE;
+        return getValues();
+    }
+
+    /**
+     * Return list of referred to types
+     * @return
+     */
+    public List<FieldValue> getRefToTypes() {
+        field = TbField.MEDEXAM_REFTOTYPE;
+        return getValues();
+    }
 }
 

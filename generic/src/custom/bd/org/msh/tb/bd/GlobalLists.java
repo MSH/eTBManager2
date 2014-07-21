@@ -71,8 +71,10 @@ public class GlobalLists {
 		TbField.XRAYPRESENTATION,
 		TbField.PULMONARY_TYPES,
 		TbField.EXTRAPULMONARY_TYPES,
-		TbField.ADJUSTMENT
-	};
+		TbField.ADJUSTMENT,
+        TbField.MEDEXAM_DOTTYPE,
+        TbField.MEDEXAM_REFTOTYPE
+    };
 	
 	private static final SampleType sampleType[] = {
 		SampleType.SPUTUM,

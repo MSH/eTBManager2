@@ -40,14 +40,14 @@
 			<div class="content">
 		<table width="100%" style="border-collapse:collapse;">
 		<tr><td>
-			<s:decorate template="/layout/display.xhtml">
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.weight}">
 				<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
 				<h:outputText value="#{r.weight}" >
 					<f:convertNumber pattern="#,###,##0.00"/>
 				</h:outputText>#{messages['MedicalExamination.weight.unit']}
 			</s:decorate>
 		</td><td>
-			<s:decorate template="/layout/display.xhtml">
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.height}">
 				<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
 				<h:outputText value="#{r.height}" >
 					<f:convertNumber pattern="#,###,##0.00"/>
@@ -55,7 +55,7 @@
 			</s:decorate>		
 		</td></tr>
 		<tr><td>
-			<s:decorate template="/layout/display.xhtml">
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.BMI}">
 				<ui:define name="label">#{messages['MedicalExamination.BMI']}:</ui:define>
 				<h:outputText value="#{r.BMI}" >
 					<f:convertNumber pattern="#,###,##0.000"/>
@@ -63,17 +63,17 @@
 			</s:decorate>		
 		</td></tr>
 		<tr><td>
-			<s:decorate template="/layout/display.xhtml">
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.appointmentType}">
 				<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
 				#{messages[r.appointmentType.key]}
 			</s:decorate>
 		</td></tr>
 		
-		<s:fragment rendered="#{not empty r.dotType}">
+		<s:fragment rendered="#{not empty r.dotTypeFv}">
 		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.DOTProviderType']}:</ui:define>
-				#{messages[r.dotType.key]}
+				#{r.dotTypeFv.name.name1}
 				<h:outputText rendered="#{not empty r.dotProvName}">
 					<br/>
 					<b>#{messages['MedicalExamination.DOTProviderName']}:</b> #{r.dotProvName}
@@ -87,11 +87,11 @@
 		</td></tr>
 		</s:fragment>
 		
-		<s:fragment rendered="#{not empty r.patientRefTo.key}">
+		<s:fragment rendered="#{not empty r.patientRefToFv}">
 		<tr><td colspan="2">
 			<s:decorate template="/layout/display.xhtml">
 				<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
-				#{messages[r.patientRefTo.key]}
+				#{r.patientRefToFv.name.name1}
 				
 				<h:outputText rendered="#{not empty r.referredToUnitName}">
 					<br/>
@@ -117,7 +117,7 @@
 		</td></tr>
 		
 		<tr><td colspan="2">
-			<s:decorate template="/layout/display.xhtml">
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty r.responsible}">
 				<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
 				<ui:param name="labelstyle" value="width:360px" />
 				#{r.responsible}

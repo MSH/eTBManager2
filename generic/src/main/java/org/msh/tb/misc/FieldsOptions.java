@@ -198,14 +198,28 @@ public class FieldsOptions {
 		return getOptions(TbField.EDUCATIONAL_DEGREE);		
 	}
 
-	
-	/**
-	 * Return list of educational degrees
-	 * @return
-	 */
-	public List<FieldValue> getContagPlaces() {
-		return getOptions(TbField.CONTAG_PLACE);		
-	}
+
+    /**
+     * Return list of educational degrees
+     * @return
+     */
+    public List<FieldValue> getContagPlaces() {
+        return getOptions(TbField.CONTAG_PLACE);
+    }
+
+    /**
+     * Return list of dot types
+     * @return
+     */
+    public List<FieldValue> getDotTypes() { return getOptions(TbField.MEDEXAM_DOTTYPE); }
+
+    /**
+     * Return list of referred to types
+     * @return
+     */
+    public List<FieldValue> getRefToTypes() {
+        return getOptions(TbField.MEDEXAM_REFTOTYPE);
+    }
 
 	/**
 	 * Return list of ART  Regimens.

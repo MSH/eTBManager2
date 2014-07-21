@@ -178,4 +178,247 @@
 		</sql>
 	</changeSet>
 
+    <changeSet id="13.10" author="msantos">
+        <addColumn tableName="medicalexamination" >
+            <column name="DOTTYPE_ID" type="int" />
+            <column name="PATIENTREFTO_ID" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="13.11" author="MSANTOS">
+        <insert tableName="fieldvalue">
+            <column name="customId" value="GovernmentDoctors"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Government Doctors"/>
+            <column name="SHORT_NAME1" value="Government Doctors" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="01" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="FieldStaff"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Field Staff"/>
+            <column name="SHORT_NAME1" value="Field Staff" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="02" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="PrivatePractitioner"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Private Practitioner(Non-Graduate)"/>
+            <column name="SHORT_NAME1" value="Private Practitioner(Non-Graduate)" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="03" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="PrivatePractitionerG"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Private Practitioner(Graduate)"/>
+            <column name="SHORT_NAME1" value="Private Practitioner(Graduate)" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="04" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="ShastoShetaika"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Shasto Shetaika"/>
+            <column name="SHORT_NAME1" value="Shasto Shetaika" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="05" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="VillageDoctor"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Village Doctor"/>
+            <column name="SHORT_NAME1" value="Village Doctor" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="06" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="CommunityVolunteer"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Community Volunteer"/>
+            <column name="SHORT_NAME1" value="Community Volunteer" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="07" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="Teacher"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Teacher"/>
+            <column name="SHORT_NAME1" value="Teacher" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="08" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="CuredPatient"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Cured TB Patient"/>
+            <column name="SHORT_NAME1" value="Cured TB Patient" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="09" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="ReligiousPerson"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Religious Person"/>
+            <column name="SHORT_NAME1" value="Religious Person" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="10" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="FamilyMembers"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Family Members"/>
+            <column name="SHORT_NAME1" value="Family Members" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="11" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="Nurse"/>
+            <column name="field" valueNumeric="39" />
+            <column name="name1" value="Nurse"/>
+            <column name="SHORT_NAME1" value="Nurse" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="12" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="13.12" author="MSANTOS">
+        <insert tableName="fieldvalue">
+            <column name="customId" value="pGraduatePract"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Private Graduate Practitioner"/>
+            <column name="SHORT_NAME1" value="Private Graduate Practitioner" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="01" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="GovFieldStaff"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Government Field Staff"/>
+            <column name="SHORT_NAME1" value="Government Field Staff" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="02" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="NonpGraduatePract"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Non Private Graduate Practitioner"/>
+            <column name="SHORT_NAME1" value="Non Private Graduate Practitioner" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="03" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="ShasthoShebika"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Shastho Shebika"/>
+            <column name="SHORT_NAME1" value="Shastho Shebika" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="04" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="VillageDoctor"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Village Doctor"/>
+            <column name="SHORT_NAME1" value="Village Doctor" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="05" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="CommVolunteer"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Community Volunteer"/>
+            <column name="SHORT_NAME1" value="Community Volunteer" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="06" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="GovtHospital"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Govt Hospital"/>
+            <column name="SHORT_NAME1" value="Govt Hospital" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="07" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="PrivateHospital"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Private Hospital"/>
+            <column name="SHORT_NAME1" value="Private Hospital" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="08" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="TBPatient"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="TB Patient"/>
+            <column name="SHORT_NAME1" value="TB Patient" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="09" />
+        </insert>
+        <insert tableName="fieldvalue">
+            <column name="customId" value="Other"/>
+            <column name="field" valueNumeric="40" />
+            <column name="name1" value="Other"/>
+            <column name="SHORT_NAME1" value="Other" />
+            <column name="workspace_id" valueNumeric="11" />
+            <column name="other" valueBoolean="false" />
+            <column name="displayOrder" valueNumeric="10" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="13.13" author="MSANTOS">
+        <sql>
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 1) where dotType = 0;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 2) where dotType = 1;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 3) where dotType = 2;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 4) where dotType = 3;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 5) where dotType = 4;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 6) where dotType = 5;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 7) where dotType = 6;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 8) where dotType = 7;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 9) where dotType = 8;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 10) where dotType = 9;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 11) where dotType = 10;
+            update medicalexamination set DOTTYPE_ID = (select id from fieldvalue where field = 39 and displayOrder = 12) where dotType = 11;
+        </sql>
+    </changeSet>
+
+    <changeSet id="13.15" author="MSANTOS">
+        <sql>
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 1) where patientRefTo = 10;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 2) where patientRefTo = 11;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 3) where patientRefTo = 12;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 4) where patientRefTo = 13;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 5) where patientRefTo = 14;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 6) where patientRefTo = 15;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 7) where patientRefTo = 16;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 8) where patientRefTo = 17;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 9) where patientRefTo = 18;
+            update medicalexamination set PATIENTREFTO_ID = (select id from fieldvalue where field = 40 and displayOrder = 10) where patientRefTo = 19;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

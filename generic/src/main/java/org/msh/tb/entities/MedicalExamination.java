@@ -1,6 +1,16 @@
 package org.msh.tb.entities;
 
-import org.msh.tb.entities.enums.*;
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.*;
+
+import org.msh.tb.entities.enums.ClinicalEvolution;
+import org.msh.tb.entities.enums.DotBy;
+import org.msh.tb.entities.enums.MedAppointmentType;
+import org.msh.tb.entities.enums.ReferredBy;
+import org.msh.tb.entities.enums.ReferredTo;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 

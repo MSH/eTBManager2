@@ -9,7 +9,8 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.details.medexam']}" />
+<ui:param name="title" value="#{messages['cases.details.medexam']}" />
+
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
 
@@ -17,7 +18,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate template="/layout/casebody.xhtml" id="formexamdec">
 	<a:form id="formexam" styleClass="form1">
 
 	<div class="form-content">
@@ -72,13 +73,13 @@
     	<h:inputText value="#{medicalExaminationBd.responsible}" style=" width : 340px;" maxlength="100"/>
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" id="cbdotprovdec" >
     	<ui:define name="label">#{messages['MedicalExamination.DOTProviderType']}</ui:define>
-    	<h:selectOneMenu id="cbdotprov" value="#{medicalExaminationBd.dotType}" style="display:block;" >
-    		<s:selectItems value="#{dotProvTypeList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
-    		<s:convertEnum />
-    	</h:selectOneMenu>
-    	
+        <h:selectOneMenu id="cbdotprov" value="#{medicalExaminationBd.dotTypeFv}" style="margin-right:4px;" onchange="checkClick(this.selectedIndex!=0, '#dotProvName')">
+            <s:selectItems var="it" value="#{fieldsQuery.dotTypes}" noSelectionLabel="-" label="#{it}" />
+            <s:convertEntity />
+        </h:selectOneMenu>
+
    		<div id="dotProvName">
 	   	    <s:decorate template="/layout/edit.xhtml" >
 	   			<ui:define name="label">#{messages['MedicalExamination.DOTProviderName']}:</ui:define>
@@ -94,12 +95,12 @@
    			
     </s:decorate>
     
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate template="/layout/edit.xhtml" id="refToUnitdec">
 		<ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
-		<h:selectOneMenu id="cbrefto" value="#{medicalExaminationBd.patientRefTo}">
-			<s:selectItems var="s" value="#{globalLists_bd.referredtotypes}" label="#{messages[s.key]}" noSelectionLabel="-" />
-			<s:convertEnum />
-		</h:selectOneMenu>
+        <h:selectOneMenu id="cbrefto" value="#{medicalExaminationBd.patientRefToFv}" style="margin-right:4px;" onchange="checkClick(this.selectedIndex!=0, '#refToUnit')">
+            <s:selectItems var="it" value="#{fieldsQuery.refToTypes}" noSelectionLabel="-" label="#{it}" />
+            <s:convertEntity />
+        </h:selectOneMenu>
 		
     	<div id="refToUnit">
 		    <s:decorate template="/layout/edit.xhtml" >
@@ -153,19 +154,14 @@
 <rich:jQuery selector="#cbpresc" query="change(function(){checkClick(this.selectedIndex==2, '#edtreason');})" />
 <rich:jQuery selector="#cbpresc[selectedIndex!=2]" query="each(function(){jQuery('#edtreason').hide();})" />
 
-<rich:jQuery selector="#cbdotprov" query="change(function(){checkClick(this.selectedIndex!=0, '#dotProvName');})" />
-<rich:jQuery selector="#cbdotprov[selectedIndex==0]" query="each(function(){jQuery('#dotProvName').hide();})" />
-
-<rich:jQuery selector="#cbrefto" query="change(function(){checkClick(this.selectedIndex!=0, '#refToUnit');})" />
-<rich:jQuery selector="#cbrefto[selectedIndex==0]" query="each(function(){jQuery('#refToUnit').hide();})" />
-
-
-<script type="text/javascript">
+    <script type="text/javascript">
 function checkClick(ashow, divname) {
 if (ashow)
 	 jQuery(divname).show(500);
 else jQuery(divname).hide(500);
 }
+checkClick(document.getElementById('formexamdec:formexam:cbdotprovdec:cbdotprov').selectedIndex!=0, '#dotProvName');
+checkClick(document.getElementById('formexamdec:formexam:refToUnitdec:cbrefto').selectedIndex!=0, '#refToUnit');
 </script>
 
 </ui:define>
