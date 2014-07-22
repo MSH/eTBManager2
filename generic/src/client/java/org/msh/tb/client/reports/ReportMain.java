@@ -9,13 +9,15 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.msh.tb.client.AppModule;
 import org.msh.tb.client.AppResources;
-import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.commons.StandardEvent;
 import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.indicators.IndicatorController;
 import org.msh.tb.client.indicators.IndicatorEditor;
 import org.msh.tb.client.indicators.IndicatorView;
+import org.msh.tb.client.indicators.IndicatorWrapper;
 import org.msh.tb.client.reports.filters.FiltersPanel;
+import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
 import org.msh.tb.client.shared.model.CReportUIData;
@@ -98,25 +100,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
     }
 
 
-    /**
-	 * Called when the user press a key when editing the title
-	 * @param event
-	 */
-/*
-	protected void editTitleKeyDown(KeyDownEvent event) {
-		// user pressed the enter key ?
-		if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-			changeEditTitle();
-		}
-		
-		// user pressed the esc key ?
-		if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE) {
-			edtTitle.setVisible(false);
-			txtTitle.setVisible(true);
-		}
-	}
-*/
-
 
 	/**
 	 */
@@ -125,37 +108,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         report.setTitle(s);
 	}
 
-
-	/**
-	 * Called when user clicks on the title of the report, in order to
-	 * change its name
-	 * @param event instance of {@link ClickEvent}
-	 */
-/*
-	protected void titleClick(ClickEvent event) {
-		txtTitle.setVisible(false);
-		edtTitle.setText(txtTitle.getText());
-		edtTitle.setVisible(true);
-		edtTitle.setFocus(true);
-	}
-*/
-
-
-	/**
-	 * Called when the chart type is called
-	 */
-/*
-	@UiHandler("lnkChartType")
-	public void lnkChartTypeClick(ClickEvent event) {
-		if (chartPopup == null) {
-			chartPopup = new ChartPopup();
-			pnlContent.add(chartPopup);
-		}
-		
-		Widget source = (Widget)event.getSource();
-		chartPopup.showRelativeTo(source);
-	}
-*/
 
 
     @UiHandler("lnkAddIndicator")
@@ -193,7 +145,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 			SaveDlg.openDialog(report, this);
 		}
 		else {
-			ReportCRUDServices.saveReport(null);
+            saveReport();
 		}
 	}
 
@@ -204,7 +156,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 */
 	@UiHandler("btnGenerate")
 	public void btnGenerateClick(ClickEvent clickEvent) {
-        Window.alert("Not implemented by now");
+        showMessage("Not implemented yet", MessagePanel.MessageType.INFO);
 /*
 		CIndicatorRequest data = prepareReportRequest();
 		if (data == null)
@@ -244,14 +196,16 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	}
 
 
-	/**
-	 * Display an error message in the main report page
-	 * @param msg is the message to be displayed
-	 */
-	public void showErrorMessage(String msg) {
-		pnlMessage.setVisible(true);
-		pnlMessage.setText(msg);
-	}
+    /**
+     * Show a message in the report panel
+     * @param msg the message to be displayed
+     * @param type message type - ERROR, WARN or INFO
+     */
+    public void showMessage(String msg, MessagePanel.MessageType type) {
+        pnlMessage.setVisible(true);
+        pnlMessage.setText(msg);
+        pnlMessage.setType(type);
+    }
 	
 	/**
 	 * Prepare the data of the report (variables and filters) to be sent to the server
@@ -279,28 +233,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 			data.setFilters(filters);
 		
 		return data;
-	}
-*/
-
-
-	/**
-	 * Update report data with table sent from the server
-	 */
-/*
-	protected void updateReportResponse() {
-		tblResult.update(tableData);
-		updateChart();
-	}
-*/
-
-
-
-	/**
-	 * Update the chart applying the selected type and values
-	 */
-/*
-	protected void updateChart() {
-		ChartReport.update(chart, tableData);
 	}
 */
 
@@ -349,18 +281,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
 		// show popup window
 		patientListPopup.showPatients(filters);
-	}
-*/
-
-	
-	/**
-	 * @return
-	 */
-/*
-	public static ReportMain instance() {
-		if (singletonInstance == null)
-			new ReportMain();
-		return singletonInstance;
 	}
 */
 
@@ -508,7 +428,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 */
 	public void newReport() {
 		report = new CReport();
-		report.setTitle("New report");
+		report.setTitle("Report title (click here to change)");
         report.setIndicators(new ArrayList<CIndicator>());
 
         updateTitle();
@@ -558,17 +478,16 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
      * @param editingMode if true, indicator will be displayed in edit mode, otherwise will be displayed in view mode
      */
     public void addIndicatorPanel(IndicatorController controller, boolean editingMode, int index) {
+        IndicatorWrapper pnlIndicator;
         if (editingMode) {
-            IndicatorEditor editor = new IndicatorEditor();
-            editor.setEventHandler(this);
-            pnlIndicators.insert(editor, index);
-            editor.update(controller);
+            pnlIndicator = new IndicatorEditor();
         }
         else {
-            IndicatorView view = new IndicatorView();
-            pnlIndicators.insert(view, index);
-            view.update(controller);
+            pnlIndicator = new IndicatorView();
         }
+        pnlIndicator.setEventHandler(this);
+        pnlIndicators.insert(pnlIndicator, index);
+        pnlIndicator.update(controller);
     }
 	
 	/**
@@ -577,30 +496,32 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 */
 	public void openReport(Integer id) {
 		closeReportList();
-/*
-		// hide the current report being displayed
-		tblResult.setVisible(false);
-		chart.clear();
-		
-		getService().loadReport(id, new StandardCallback<CReport>() {
-			@Override
-			public void onSuccess(CReport result) {
-				report = result;
-				// set default selection of table series
-				if (report.getTblSelectedCell() != null) {
-					tableData.setSelectedCell(report.getTblSelectedCell());
-				}
-				if (report.getTblSelection() != null) {
-					tableData.setSelection( TableSelection.values()[ report.getTblSelection() ]);
-				}
-				updateReport();
-				// run the report
-				btnGenerate.click();
-			}
-		});
-*/
+
+        AppResources.reportServices().loadReport(id, new StandardCallback<CReport>() {
+            @Override
+            public void onSuccess(CReport result) {
+                report = result;
+                displayLoadedReport();
+            }
+        });
 	}
-	
+
+    /**
+     * Display the report that was just loaded from the server
+     */
+    public void displayLoadedReport() {
+        updateTitle();
+        pnlIndicators.clear();
+        if (report.getIndicators() != null) {
+            for (CIndicator ind: report.getIndicators()) {
+                addIndicatorPanel(new IndicatorController(report, ind, null), false, pnlIndicators.getWidgetCount());
+            }
+        }
+        // run the report
+        btnGenerate.click();
+    }
+
+
 	/**
 	 * Delete the current report
 	 */
@@ -635,10 +556,35 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             return;
         }
 
-        if (eventType == IndicatorEditor.EditorEvent.CLOSE) {
+        if (eventType == IndicatorWrapper.IndicatorEvent.CLOSE) {
             closeEditor((IndicatorEditor)data);
             return;
         }
+
+        if (eventType == IndicatorWrapper.IndicatorEvent.EDIT) {
+            editIndicator((IndicatorView)data);
+            return;
+        }
+
+        if (eventType == IndicatorWrapper.IndicatorEvent.REMOVE) {
+            removeIndicator((IndicatorWrapper)data);
+            return;
+        }
+
+        if (eventType == SaveDlg.SaveDlgEvent.SAVE) {
+            saveReport();
+            return;
+        }
+
+        if (eventType == SaveDlg.SaveDlgEvent.SAVEAS) {
+            saveReportAs();
+            return;
+        }
+
+        if (eventType == SaveDlg.SaveDlgEvent.CANCEL) {
+            return;
+        }
+
         Window.alert("Not handled: " + eventType + " = " + data);
     }
 
@@ -650,5 +596,45 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         int index = pnlIndicators.getWidgetIndex(editor);
         pnlIndicators.remove(index);
         addIndicatorPanel(editor.getController(), false, index);
+    }
+
+    /**
+     * Open the indicator editor of the given indicator being displayed
+     * @param view the indicator view
+     */
+    protected void editIndicator(IndicatorView view) {
+        int index = pnlIndicators.getWidgetIndex(view);
+        pnlIndicators.remove(index);
+        addIndicatorPanel(view.getController(), true, index);
+    }
+
+    /**
+     * Remove an indicator from the report passing its indicator panel as argument
+     * @param pnlInd the panel containing the indicator
+     */
+    protected void removeIndicator(IndicatorWrapper pnlInd) {
+        pnlIndicators.remove(pnlInd);
+        report.getIndicators().remove(pnlInd.getController().getIndicator());
+    }
+
+    /**
+     * Save the report
+     */
+    protected void saveReport() {
+        AppResources.reportServices().saveReport(report, new StandardCallback<Integer>() {
+            @Override
+            public void onSuccess(Integer result) {
+                showMessage("Report was successfully saved", MessagePanel.MessageType.INFO);
+            }
+        });
+    }
+
+
+    /**
+     * Clone the existing report with a different name
+     */
+    protected void saveReportAs() {
+        report.setId(null);
+        saveReport();
     }
 }

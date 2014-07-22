@@ -2,6 +2,9 @@ package org.msh.tb.client.ui;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 
 /**
@@ -14,16 +17,35 @@ public class MessagePanel extends ComplexPanel {
 
 	private final Element mainDiv = DOM.createDiv();
 	private final Element innerMessage = DOM.createDiv();
+    private final Element closeAnchor = DOM.createAnchor();
 	
 	private MessageType type = MessageType.ERROR;
 	
 	public enum MessageType { ERROR, WARNING, INFO };
-	
+
+    /**
+     * Default constructor
+     */
 	public MessagePanel() {
 		super();
 		setElement(mainDiv);
 		mainDiv.insertFirst(innerMessage);
-		setStyleName("messagePanel");
+        closeAnchor.setAttribute("class", "close-btn");
+
+        Element icon = DOM.createElement("i");
+        icon.setAttribute("class", "icon-remove");
+        closeAnchor.insertFirst(icon);
+
+        DOM.sinkEvents(closeAnchor, Event.ONCLICK);
+        DOM.setEventListener(closeAnchor, new EventListener() {
+            @Override
+            public void onBrowserEvent(Event event) {
+                setVisible(false);
+            }
+        });
+
+        mainDiv.insertFirst(closeAnchor);
+		setStyleName("msg");
 	}
 
 	public void setText(String txt) {
@@ -45,11 +67,11 @@ public class MessagePanel extends ComplexPanel {
 
 	protected void updateStyles() {
 		String s = getStyleName();
-		String suffix = "-" + type.toString().toLowerCase();
-		removeStyleName(s + suffix);
-		
-		mainDiv.setAttribute("class", s + " " + s + suffix);
-		innerMessage.setClassName(s + "-inner");
+        String[] vals = s.split(" ");
+        s = vals[0] + " " + vals[0] + "-" + type.toString().toLowerCase();
+
+		mainDiv.setAttribute("class", s);
+		innerMessage.setClassName("msg-inner");
 	}
 	
 	/**

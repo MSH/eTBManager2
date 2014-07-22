@@ -1,9 +1,17 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:ind="urn:import:org.msh.tb.client.indicators"
+             xmlns:ind="urn:import:org.msh.tb.client.indicators" xmlns:a="urn:import:com.google.gwt.user.client.ui"
         >
 
-    <g:HTMLPanel styleName="indicator-view">
-        <ind:ResultView ui:field="resIndicator" />
-    </g:HTMLPanel>
+    <g:FocusPanel styleName="indicator-view">
+        <g:HTMLPanel>
+            <div style="position:relative">
+            <g:HorizontalPanel ui:field="pnlButtons"  styleName="ind-view-bar">
+                <a:Anchor ui:field="btnEdit">Edit</a:Anchor>
+                <a:Anchor ui:field="btnRemove">Remove</a:Anchor>
+            </g:HorizontalPanel>
+            <ind:ResultView ui:field="resIndicator" />
+            </div>
+        </g:HTMLPanel>
+    </g:FocusPanel>
 </ui:UiBinder>

@@ -30,6 +30,8 @@ public class SaveDlg extends Composite {
 
     private static final String RESOURCE_KEY = "report.ui.savedlg";
 
+    public enum SaveDlgEvent { SAVE, SAVEAS, CANCEL };
+
 	interface Binder extends UiBinder<DialogBox, SaveDlg> { };
 	
 	private boolean saveAs;
@@ -69,6 +71,7 @@ public class SaveDlg extends Composite {
      * @param eventHandler event handle to be notified when it's done
      */
 	protected void open(CReport report, StandardEventHandler eventHandler) {
+        this.report = report;
 		this.saveAs = report.getId() == null;
         this.eventHandler = eventHandler;
 
@@ -91,37 +94,31 @@ public class SaveDlg extends Composite {
 			edtTitle.setFocus(true);
 			return;
 		}
-		
-		// declare callback function to be called after report is saved
-		StandardCallback callback = new StandardCallback<CReport>() {
-			@Override
-			public void onSuccess(CReport result) {
-				dialogBox.hide();
-                fireEvent(StandardEvent.OK);
-			}
-		};
-		
-		if (saveAs) {
-			ReportCRUDServices.saveReportAs(title, callback);
-		}
-		else {
-			ReportCRUDServices.saveNewReport(title, callback);
-		}
+
+        report.setTitle(title);
+
+        if (saveAs) {
+            fireEvent(SaveDlgEvent.SAVEAS);
+        }
+        else {
+            fireEvent(SaveDlgEvent.SAVE);
+        }
+    	dialogBox.hide();
 	}
 	
 	@UiHandler("btnCancel")
 	public void btnCancelClick(ClickEvent event) {
 		dialogBox.hide();
-        fireEvent(StandardEvent.CANCEL);
+        fireEvent(SaveDlgEvent.CANCEL);
 	}
 
     /**
      * Notify the event handler about dialog event
      * @param evt type of event
      */
-    private void fireEvent(StandardEvent evt) {
+    private void fireEvent(SaveDlgEvent evt) {
         if (eventHandler != null) {
-            eventHandler.handleEvent(this.getClass(), evt);
+            eventHandler.handleEvent(evt, null);
         }
     }
 

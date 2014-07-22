@@ -2,8 +2,6 @@ package org.msh.tb.client.indicators;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import org.msh.tb.client.chart.ChartReport;
 import org.msh.tb.client.chart.ChartView;
@@ -12,7 +10,6 @@ import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.tableview.TableView;
 import org.msh.tb.client.ui.DivPanel;
-import org.msh.utils.reportgen.highchart.ChartType;
 
 
 /**

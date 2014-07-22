@@ -11,10 +11,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
-import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.reports.ChartPopup;
+import org.msh.tb.client.reports.filters.FiltersPanel;
 import org.msh.tb.client.reports.variables.VariablesPanel;
+import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.ui.LabelEditor;
 
@@ -22,15 +23,11 @@ import org.msh.tb.client.ui.LabelEditor;
  * Display an editor panel to change indicator parameters (filters, variables, layout, chart, etc)
  * Created by ricardo on 10/07/14.
  */
-public class IndicatorEditor extends Composite implements StandardEventHandler {
+public class IndicatorEditor extends IndicatorWrapper implements StandardEventHandler {
     interface IndicatorEditorUiBinder extends UiBinder<HTMLPanel, IndicatorEditor> {
     }
 
     private static IndicatorEditorUiBinder ourUiBinder = GWT.create(IndicatorEditorUiBinder.class);
-
-    private IndicatorController controller;
-
-    public enum EditorEvent { CLOSE };
 
     @UiField LabelEditor txtTitle;
     @UiField VariablesPanel pnlVariables;
@@ -38,10 +35,9 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
     @UiField Anchor lnkChart;
     @UiField Anchor lnkUpdate;
     @UiField ResultView resIndicator;
+    @UiField FiltersPanel pnlFilters;
 
     private ChartPopup chartPopup;
-
-    private StandardEventHandler eventHandler;
 
     /**
      * Default constructor
@@ -53,7 +49,7 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         txtTitle.setEventHandler(new StandardEventHandler() {
             @Override
             public void handleEvent(Object eventType, Object data) {
-                controller.getIndicator().setTitle(txtTitle.getText());
+                getController().getIndicator().setTitle(txtTitle.getText());
             }
         });
 
@@ -74,21 +70,19 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
 
     /**
      * Called when the user clicks on the close icon at the top-right side of the editor
-     * @param event
+     * @param event contain information about the event
      */
-    @UiHandler("btnClose")
-    public void btnCloseClick(ClickEvent event) {
-        if (eventHandler != null) {
-            eventHandler.handleEvent(EditorEvent.CLOSE, this);
-        }
+    @UiHandler("btnRemove")
+    public void btnRemoveClick(ClickEvent event) {
+        fireIndicatorEvent(IndicatorEvent.REMOVE);
     }
 
     /**
      * Set the indicator to be displayed
-     * @param controller
      */
-    public void update(IndicatorController controller) {
-        this.controller = controller;
+    public void updateIndicator() {
+        IndicatorController controller = getController();
+
         updateTitle();
         txtTitle.setText(controller.getIndicator().getTitle());
 
@@ -122,19 +116,32 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
 
     /**
      * Called when user clicks on the update link
-     * @param event
+     * @param event contain information about the click event
      */
     @UiHandler("lnkUpdate")
     public void lnkUpdateClick(ClickEvent event) {
+        IndicatorController controller = getController();
         controller.setData(null);
+        controller.getIndicator().setFilters( pnlFilters.getFilters() );
         resIndicator.update(controller);
+    }
+
+    /**
+     * Close the editor window
+     * @param event contain information about the click event
+     */
+    @UiHandler("btnClose")
+    public void lnkClose(ClickEvent event) {
+        IndicatorController controller = getController();
+        controller.getIndicator().setFilters(pnlFilters.getFilters());
+        fireIndicatorEvent(IndicatorEvent.CLOSE);
     }
 
     /**
      * Update the indicator with the values selected in the user interface
      */
     protected void uiToIndicator() {
-        CIndicator ind = controller.getIndicator();
+        CIndicator ind = getController().getIndicator();
         ind.setColVariables( pnlVariables.getColumnVariables() );
         ind.setRowVariables(pnlVariables.getRowVariables());
     }
@@ -144,7 +151,7 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
      * @param type
      */
     protected void chartChangeListener(CChartType type) {
-        controller.getIndicator().setChartType(type);
+        getController().getIndicator().setChartType(type);
         updateChartButton();
         resIndicator.notifyChartChange();
     }
@@ -161,7 +168,7 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
             case 2: size = 25;
                 break;
         }
-        controller.getIndicator().setSize(size);
+        getController().getIndicator().setSize(size);
         resIndicator.notifySizeChange();
     }
 
@@ -175,7 +182,7 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
             el.removeChild(DOM.getFirstChild(el));
         }
 
-        CChartType type = controller.getIndicator().getChartType();
+        CChartType type = getController().getIndicator().getChartType();
         if (type == null) {
             return;
         }
@@ -199,7 +206,7 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
         }
 
         if (eventType == txtTitle) {
-            controller.getIndicator().setTitle((String)data);
+            getController().getIndicator().setTitle((String)data);
             resIndicator.notifyTitleChange();
         }
     }
@@ -209,23 +216,7 @@ public class IndicatorEditor extends Composite implements StandardEventHandler {
      * Update the title's content with the title in the indicator object
      */
     protected void updateTitle() {
-        String s = controller.getIndicator().getTitle();
+        String s = getController().getIndicator().getTitle();
         txtTitle.setText(s);
-    }
-
-    public StandardEventHandler getEventHandler() {
-        return eventHandler;
-    }
-
-    public void setEventHandler(StandardEventHandler eventHandler) {
-        this.eventHandler = eventHandler;
-    }
-
-    public IndicatorController getController() {
-        return controller;
-    }
-
-    public void setController(IndicatorController controller) {
-        this.controller = controller;
     }
 }

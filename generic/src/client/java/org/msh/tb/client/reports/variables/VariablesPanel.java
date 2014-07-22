@@ -15,7 +15,6 @@ import org.msh.tb.client.reports.ReportUtils;
 import org.msh.tb.client.shared.model.CVariable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Panel that displays variables vertically

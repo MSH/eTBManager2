@@ -21,7 +21,7 @@
                 <c:LabelEditor ui:field="txtTitle" />
             </div>
             <div class="pull-right">
-                <g:Anchor ui:field="btnClose" styleName="btn-close" title="Close editor"><i class="icon-remove-circle btn-icon"></i></g:Anchor>
+                <g:Anchor ui:field="btnClose" styleName="btn-close" title="Close editor"><i class="icon-remove btn-icon"></i></g:Anchor>
             </div>
             <div class="block"></div>
         </div>
@@ -39,6 +39,7 @@
                     Size: <g:ListBox ui:field="lbSize"></g:ListBox>
                 </div>
                 <div class="pull-right">
+                    <g:Button ui:field="btnRemove" styleName="btn">Remove indicator</g:Button>
                     <g:Anchor ui:field="lnkUpdate" styleName="btn-alt"><i class="icon-refresh"></i>Update</g:Anchor>
                 </div>
                 <div class="block"></div>

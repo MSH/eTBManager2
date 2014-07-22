@@ -9,8 +9,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.msh.tb.client.AppResources;
-import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.commons.StandardEventHandler;
+import org.msh.tb.client.shared.model.CChartType;
 
 /**
  * Display a pop-up window that displays the chart icons

@@ -29,8 +29,6 @@ public class FiltersPanel extends Composite {
 
 	@UiField VerticalPanel pnlFilters;
 
-    private HashMap<String, String> filters;
-
 	/**
 	 * Default filter
 	 */
@@ -45,10 +43,6 @@ public class FiltersPanel extends Composite {
 	 * @param filter instance of CFilter
 	 */
 	public void addFilter(CFilter filter, String value) {
-        if (filters == null) {
-            filters = new HashMap<String, String>();
-        }
-        filters.put(filter.getId(), value);
 		FilterBox box = new FilterBox(this, filter, value);
 		pnlFilters.add(box);
 	}
@@ -73,7 +67,6 @@ public class FiltersPanel extends Composite {
 	 */
 	public void removeFilterBox(FilterBox box) {
 		pnlFilters.remove(box);
-        filters.remove(box.getFilter().getId());
 	}
 	
 	/**
@@ -81,7 +74,6 @@ public class FiltersPanel extends Composite {
 	 * @param filters map of filter IDs and its value
 	 */
 	public void setFilters(HashMap<String, String> filters) {
-        this.filters = filters;
 		pnlFilters.clear();
 
         if (filters == null) {
@@ -104,6 +96,15 @@ public class FiltersPanel extends Composite {
 	 * @return map of filter IDs and its value
 	 */
 	public HashMap<String, String> getFilters() {
-		return filters;
+        HashMap<String, String> filters = new HashMap<String, String>();
+        for (int i = 0; i < pnlFilters.getWidgetCount(); i++) {
+            FilterBox fb = (FilterBox)pnlFilters.getWidget(i);
+            String val = fb.getFilterValue();
+            if (val != null) {
+                filters.put(fb.getFilter().getId(), val);
+            }
+        }
+		return filters.keySet().size() > 0? filters: null;
 	}
+
 }

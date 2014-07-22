@@ -146,18 +146,40 @@ html {
 	padding:0px;
 }
 
-.messagePanel{
+.msg{
 	border-radius:4px;
 }
-.messagePanel-error {
+.msg-error {
 	color: #b94a48;
 	background-color: #f2dede;
 	border:1px solid #eed3d7;
 }
-.messagePanel-inner {
+.msg-info {
+    color: #2F9E41;
+    background-color: #DFF3E4;
+    border:1px solid #B3DDBA;
+}
+.msg-inner {
 	padding:10px;
 	font-size:13px;
 }
+
+.msg .close-btn {
+    float:right;
+    cursor: pointer;
+}
+
+.msg-error .close-btn {
+    color: #eed3d7;
+}
+
+.msg-info .close-btn {
+    color: #b3ddba;
+}
+.msg-info .close-btn:hover {
+    color: #9BC9A2;
+}
+
 
 .toggle-button {
 	color:#d0d0d0;
@@ -385,6 +407,21 @@ html {
     margin:10px 20px 10px 0;
 }
 
+.indicator-view .ind-view-bar {
+    position:absolute;
+    right:0px;
+    padding:4px;
+}
+
+.ind-view-bar a{
+    background-color: #000;
+    color: #fff;
+    margin-right:4px;
+    padding:3px 6px;
+    border-radius: 4px;
+    font-size:11px;
+}
+
 .indicator-editor {
     border:2px dashed #d0d0d0;
     padding:10px;
@@ -399,7 +436,7 @@ html {
     padding-bottom: 8px;
 }
 .report-panel .label-editor .gwt-TextBox {
-    width:900px;
+    width:870px;
 }
 
 .panel {
@@ -407,6 +444,7 @@ html {
     border:1px solid #f0f0f0;
     border-radius:4px;
     padding:4px;
+    margin-bottom: 8px;
 }
 
 .btn-close {
@@ -418,7 +456,7 @@ html {
 }
 
 .btn-close .btn-icon {
-    font-size:24px;
+    font-size:18px;
 }
 
 .btn-close:hover {

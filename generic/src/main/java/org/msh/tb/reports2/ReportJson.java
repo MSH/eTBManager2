@@ -3,8 +3,12 @@
  */
 package org.msh.tb.reports2;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
 import org.msh.tb.entities.Report;
 
@@ -31,6 +35,7 @@ public class ReportJson {
 	public static Report convertFromClient(CReport report, Report res) {
 		// convert data to json
 		ObjectMapper mapper = new ObjectMapper();
+        mapper.addMixInAnnotations(CIndicator.class, MixInIndicator.class);
 		try {
             String jsondata = mapper.writer().writeValueAsString(report);
 			System.out.println(jsondata);
@@ -66,6 +71,7 @@ public class ReportJson {
 		// read json data
 		if ((report.getData() != null) && (!report.getData().isEmpty())) {
 			ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 			try {
                 CReport rep2 = mapper.readValue(report.getData(), CReport.class);
                 return rep2;
@@ -75,4 +81,13 @@ public class ReportJson {
 		}
 		return rep;
 	}
+
+    abstract class MixInIndicator {
+        @JsonIgnore
+        abstract int getColVariablesCount();
+
+        @JsonIgnore
+        abstract int getRowVariablesCount();
+    }
+
 }
