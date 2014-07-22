@@ -5,13 +5,16 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 /**
+ * Panel wrapper that displays the indicator and, when hovering, displays a
+ * remove and edit button over the indicator panel
  * Created by ricardo on 10/07/14.
  */
-public class IndicatorView extends IndicatorWrapper {
+public class IndicatorView extends IndicatorWrapperPanel {
     interface IndicatorViewUiBinder extends UiBinder<FocusPanel, IndicatorView> {
     }
     private static IndicatorViewUiBinder ourUiBinder = GWT.create(IndicatorViewUiBinder.class);
@@ -48,8 +51,9 @@ public class IndicatorView extends IndicatorWrapper {
     /**
      * Update the content of the indicator view with the given indicator
      */
-    public void updateIndicator() {
-        resIndicator.update(getController());
+    @Override
+    public void updateIndicator(AsyncCallback<ResultView> callback) {
+        resIndicator.update(getController(), callback);
     }
 
 
@@ -69,15 +73,19 @@ public class IndicatorView extends IndicatorWrapper {
 
     /**
      * Called when the user tries to remove this indicator from the list of indicators
-     * @param evt
+     * @param evt click event
      */
     @UiHandler("btnRemove")
     public void btnRemoveClick(ClickEvent evt) {
         fireIndicatorEvent(IndicatorEvent.REMOVE);
     }
 
+    /**
+     * Called when the user clicks on the edit like
+     * @param evt click event
+     */
     @UiHandler("btnEdit")
     public void btnEditClick(ClickEvent evt) {
-        fireIndicatorEvent(IndicatorWrapper.IndicatorEvent.EDIT);
+        fireIndicatorEvent(IndicatorWrapperPanel.IndicatorEvent.EDIT);
     }
 }

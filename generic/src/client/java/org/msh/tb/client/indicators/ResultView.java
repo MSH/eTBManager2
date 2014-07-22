@@ -1,6 +1,7 @@
 package org.msh.tb.client.indicators;
 
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import org.msh.tb.client.chart.ChartReport;
@@ -13,22 +14,19 @@ import org.msh.tb.client.ui.DivPanel;
 
 
 /**
+ * Panel that display a given indicator
  * Created by ricardo on 10/07/14.
  */
 public class ResultView extends Composite {
 
-    public enum Layout {  VERTICAL, HORIZONTAL;  }
+    public enum Layout {  VERTICAL, HORIZONTAL  }
 
     private IndicatorController controller;
     private DivPanel pnlLayout;
     private ChartView chart;
     private TableView table;
-    private Layout layout = Layout.VERTICAL;
     private Label txtTitle;
 
-    private boolean showChart = true;
-    private boolean showTable = true;
-    private boolean showTitle = true;
     private boolean singleValue;
 
     /**
@@ -43,18 +41,8 @@ public class ResultView extends Composite {
     /**
      * Update the content of the view
      */
-    public void update(IndicatorController controller) {
+    public void update(IndicatorController controller, final AsyncCallback<ResultView> callback) {
         this.controller = controller;
-        if (controller.getData() == null) {
-            // check if data is updated, otherwise, update the indicator data
-            controller.update(new StandardCallback<IndicatorController>() {
-                @Override
-                public void onSuccess(IndicatorController controller) {
-                    update(controller);
-                }
-            });
-            return;
-        }
 
         // check how to update it
         CIndicator indicator = controller.getIndicator();
@@ -65,8 +53,32 @@ public class ResultView extends Composite {
         else {
             updateCompositeValue();
         }
+
+        // if data is not updated, then call it recursively
+        if (controller.getData() == null) {
+            // check if data is updated, otherwise, update the indicator data
+            controller.update(new StandardCallback<IndicatorController>() {
+                @Override
+                public void onSuccess(IndicatorController controller) {
+                    update(controller, callback);
+                }
+            });
+        }
+        else {
+            // if indicator is properly displayed, then finish
+            if (callback != null) {
+                callback.onSuccess(this);
+            }
+        }
     }
 
+    /**
+     *
+     * @param callback
+     */
+    public void refresh(AsyncCallback<Void> callback) {
+
+    }
 
     /**
      * Called to notify the view that the title has changed
@@ -80,7 +92,7 @@ public class ResultView extends Composite {
      */
     public void notifySizeChange() {
         updateSize();
-        update(controller);
+        update(controller, null);
     }
 
     /**
@@ -118,11 +130,19 @@ public class ResultView extends Composite {
     protected void updateSingleValue() {
         pnlLayout.setStyleName("ind-res-single");
         pnlLayout.clear();
-        Double val = controller.getResponse().getRows().get(0).getValues()[0];
-        String sval = (val == null || val == 0)? "-": NumberFormat.getFormat("#,###,###").format(val);
-        String title = controller.getIndicator().getTitle();
 
-        pnlLayout.addText(sval, "ind-value");
+        // add the value
+        if (controller.getResponse() == null) {
+            addWaitIndicator();
+        }
+        else {
+            Double val = controller.getResponse().getRows().get(0).getValues()[0];
+            String sval = (val == null || val == 0)? "-": NumberFormat.getFormat("#,###,###").format(val);
+            pnlLayout.addText(sval, "ind-value");
+        }
+
+        // add the title
+        String title = controller.getIndicator().getTitle();
         txtTitle = pnlLayout.addText(title, "ind-title");
     }
 
@@ -134,51 +154,36 @@ public class ResultView extends Composite {
         updateSize();
         pnlLayout.clear();
 
-        int row = 0;
-        if (showTitle) {
-            txtTitle = pnlLayout.addText(controller.getIndicator().getTitle(), "title");
-            row++;
+        txtTitle = pnlLayout.addText(controller.getIndicator().getTitle(), "title");
+
+        if (controller.getResponse() == null) {
+            addWaitIndicator();
+            return;
         }
 
-        if (showChart && showTable) {
-            addChart(0, row);
-            if (layout == Layout.VERTICAL) {
-                addTable(0, row + 1);
-            }
-            else {
-                addTable(1, row);
-            }
-        }
-        else {
-            if (showChart) {
-                addChart(0, row);
-            }
-            else {
-                if (showTable) {
-                    addTable(0, row + 1);
-                }
-            }
-        }
+        addChart();
+
+        addTable();
     }
 
 
+    protected void addWaitIndicator() {
+        pnlLayout.addText("", "wait-icon2");
+    }
+
     /**
      * Insert a table in the layout table at the given column and row
-     * @param col
-     * @param row
      */
-    protected void addTable(int col, int row) {
-        TableView tbl = new TableView();
-        tbl.update(controller.getData());
-        pnlLayout.add(tbl, "ind-table");
+    protected void addTable() {
+        table = new TableView();
+        table.update(controller.getData());
+        pnlLayout.add(table, "ind-table");
     }
 
     /**
      * Insert a chart to the table in the given position
-     * @param col column of the layout table
-     * @param row row of the layout table
      */
-    protected void addChart(int col, int row) {
+    protected void addChart() {
         chart = new ChartView();
         chart.setSelectedChart(controller.getIndicator().getChartType());
         pnlLayout.add(chart, "ind-chart");
@@ -186,35 +191,4 @@ public class ResultView extends Composite {
     }
 
 
-    public Layout getLayout() {
-        return layout;
-    }
-
-    public void setLayout(Layout layout) {
-        this.layout = layout;
-    }
-
-    public boolean isShowChart() {
-        return showChart;
-    }
-
-    public void setShowChart(boolean showChart) {
-        this.showChart = showChart;
-    }
-
-    public boolean isShowTable() {
-        return showTable;
-    }
-
-    public void setShowTable(boolean showTable) {
-        this.showTable = showTable;
-    }
-
-    public boolean isShowTitle() {
-        return showTitle;
-    }
-
-    public void setShowTitle(boolean showTitle) {
-        this.showTitle = showTitle;
-    }
 }

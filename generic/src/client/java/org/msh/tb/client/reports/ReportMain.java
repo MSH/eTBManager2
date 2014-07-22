@@ -6,16 +6,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import org.msh.tb.client.AppModule;
 import org.msh.tb.client.AppResources;
 import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.commons.StandardEvent;
 import org.msh.tb.client.commons.StandardEventHandler;
-import org.msh.tb.client.indicators.IndicatorController;
-import org.msh.tb.client.indicators.IndicatorEditor;
-import org.msh.tb.client.indicators.IndicatorView;
-import org.msh.tb.client.indicators.IndicatorWrapper;
+import org.msh.tb.client.indicators.*;
 import org.msh.tb.client.reports.filters.FiltersPanel;
 import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
@@ -156,44 +153,31 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 */
 	@UiHandler("btnGenerate")
 	public void btnGenerateClick(ClickEvent clickEvent) {
-        showMessage("Not implemented yet", MessagePanel.MessageType.INFO);
-/*
-		CIndicatorRequest data = prepareReportRequest();
-		if (data == null)
-			return;
-		
-		tblResult.setVisible(false);
-		chart.clear();
+        updateIndicatorPanel(0);
+	}
 
-		btnGenerate.setEnabled(false);
-        pnlMessage.setVisible(false);
+    /**
+     * Update the indicator panels recursively and asynchronously
+     * @param index the index of the panel in the list of panels
+     */
+    private void updateIndicatorPanel(final int index) {
+        // index is higher than the number of panels ?
+        if (index >= pnlIndicators.getWidgetCount()) {
+            showMessage("Report was successfully updated", MessagePanel.MessageType.INFO);
+            return;
+        }
 
-        service.executeIndicator(data, new StandardCallback<CIndicatorResponse>() {
+        final IndicatorWrapperPanel pnl = (IndicatorWrapperPanel)pnlIndicators.getWidget(index);
+        // clear the response in order to force an update
+        pnl.getController().clearData();
+
+        pnl.update(pnl.getController(), new StandardCallback<ResultView>() {
             @Override
-            public void onSuccess(CIndicatorResponse res) {
-                btnGenerate.setEnabled(true);
-                // did the server sent any data ?
-                if (res == null) {
-                    showErrorMessage(App.messages.noResultFound());
-                    return;
-                }
-                // there was an error message?
-                if (res.getErrorMessage() != null) {
-                    showErrorMessage(res.getErrorMessage());
-                } else {
-                    tableData.update(res);
-                    updateReportResponse();
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable except) {
-                super.onFailure(except);
-                btnGenerate.setEnabled(true);
+            public void onSuccess(ResultView result) {
+                updateIndicatorPanel(index + 1);
             }
         });
-*/
-	}
+    }
 
 
     /**
@@ -372,29 +356,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
     public void updateTitle() {
         txtTitle.setText(report.getTitle());
     }
-
-
-	/**
-	 * Update the current report being displayed by the system
-	 */
-	public void updateReport() {
-/*
-        updateTitle();
-		pnlColVariables.update(report.getColumnVariables());
-		pnlRowVariables.update(report.getRowVariables());
-		pnlFilters.update(report.getFilters());
-
-		// update chart type
-		Integer val = report.getChartType();
-		if ((val != null) && (val >= 0) && (val < CChartType.values().length)) {
-			selectChart(CChartType.values()[val]);
-		}
-
-		// hide the current report being displayed
-		tblResult.setVisible(false);
-		chart.clear();
-*/
-	}
 	
 	
 	/**
@@ -468,7 +429,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
         IndicatorController controller = new IndicatorController(report, indicator, null);
         // display the indicator
-        addIndicatorPanel(controller, true, pnlIndicators.getWidgetCount());
+        addIndicatorPanel(controller, true, -1, null);
     }
 
 
@@ -477,8 +438,8 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
      * @param controller the indicator controller to be displayed in the indicator panel list
      * @param editingMode if true, indicator will be displayed in edit mode, otherwise will be displayed in view mode
      */
-    public void addIndicatorPanel(IndicatorController controller, boolean editingMode, int index) {
-        IndicatorWrapper pnlIndicator;
+    public void addIndicatorPanel(IndicatorController controller, boolean editingMode, int index, AsyncCallback callback) {
+        IndicatorWrapperPanel pnlIndicator;
         if (editingMode) {
             pnlIndicator = new IndicatorEditor();
         }
@@ -486,8 +447,11 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             pnlIndicator = new IndicatorView();
         }
         pnlIndicator.setEventHandler(this);
+        if (index == -1) {
+            index = pnlIndicators.getWidgetCount();
+        }
         pnlIndicators.insert(pnlIndicator, index);
-        pnlIndicator.update(controller);
+        pnlIndicator.update(controller, callback);
     }
 	
 	/**
@@ -512,13 +476,34 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
     public void displayLoadedReport() {
         updateTitle();
         pnlIndicators.clear();
-        if (report.getIndicators() != null) {
-            for (CIndicator ind: report.getIndicators()) {
-                addIndicatorPanel(new IndicatorController(report, ind, null), false, pnlIndicators.getWidgetCount());
+
+        addIndicators(0, new StandardCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                showMessage("Report successfully loaded", MessagePanel.MessageType.INFO);
             }
+        });
+    }
+
+
+    /**
+     * Add an indicator to the panel and update it recursively
+     * @param index index of the indicator
+     * @param callback callkack function to be called when it's finished
+     */
+    private void addIndicators(final int index, final AsyncCallback<Void> callback) {
+        if ((report.getIndicators() == null) || (index >= report.getIndicators().size())) {
+            callback.onSuccess(null);
+            return;
         }
-        // run the report
-        btnGenerate.click();
+
+        CIndicator indicator = report.getIndicators().get(index);
+        addIndicatorPanel(new IndicatorController(report, indicator, null), false, -1, new StandardCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                addIndicators(index + 1, callback);
+            }
+        });
     }
 
 
@@ -529,15 +514,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 		
 	}
 
-
-	/**
-	 * @return the tableData
-	 */
-/*
-	public TableData getTableData() {
-		return tableData;
-	}
-*/
 
     @Override
     public void handleEvent(Object eventType, Object data) {
@@ -556,18 +532,18 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             return;
         }
 
-        if (eventType == IndicatorWrapper.IndicatorEvent.CLOSE) {
+        if (eventType == IndicatorWrapperPanel.IndicatorEvent.CLOSE) {
             closeEditor((IndicatorEditor)data);
             return;
         }
 
-        if (eventType == IndicatorWrapper.IndicatorEvent.EDIT) {
+        if (eventType == IndicatorWrapperPanel.IndicatorEvent.EDIT) {
             editIndicator((IndicatorView)data);
             return;
         }
 
-        if (eventType == IndicatorWrapper.IndicatorEvent.REMOVE) {
-            removeIndicator((IndicatorWrapper)data);
+        if (eventType == IndicatorWrapperPanel.IndicatorEvent.REMOVE) {
+            removeIndicator((IndicatorWrapperPanel)data);
             return;
         }
 
@@ -595,7 +571,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
     protected void closeEditor(IndicatorEditor editor) {
         int index = pnlIndicators.getWidgetIndex(editor);
         pnlIndicators.remove(index);
-        addIndicatorPanel(editor.getController(), false, index);
+        addIndicatorPanel(editor.getController(), false, index, null);
     }
 
     /**
@@ -605,14 +581,14 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
     protected void editIndicator(IndicatorView view) {
         int index = pnlIndicators.getWidgetIndex(view);
         pnlIndicators.remove(index);
-        addIndicatorPanel(view.getController(), true, index);
+        addIndicatorPanel(view.getController(), true, index, null);
     }
 
     /**
      * Remove an indicator from the report passing its indicator panel as argument
      * @param pnlInd the panel containing the indicator
      */
-    protected void removeIndicator(IndicatorWrapper pnlInd) {
+    protected void removeIndicator(IndicatorWrapperPanel pnlInd) {
         pnlIndicators.remove(pnlInd);
         report.getIndicators().remove(pnlInd.getController().getIndicator());
     }

@@ -10,6 +10,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.reports.ChartPopup;
@@ -23,7 +24,7 @@ import org.msh.tb.client.ui.LabelEditor;
  * Display an editor panel to change indicator parameters (filters, variables, layout, chart, etc)
  * Created by ricardo on 10/07/14.
  */
-public class IndicatorEditor extends IndicatorWrapper implements StandardEventHandler {
+public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEventHandler {
     interface IndicatorEditorUiBinder extends UiBinder<HTMLPanel, IndicatorEditor> {
     }
 
@@ -78,20 +79,22 @@ public class IndicatorEditor extends IndicatorWrapper implements StandardEventHa
     }
 
     /**
-     * Set the indicator to be displayed
+     * Display the indicator to be displayed
      */
-    public void updateIndicator() {
-        IndicatorController controller = getController();
-
+    @Override
+    public void updateIndicator(AsyncCallback<ResultView> callback) {
         updateTitle();
-        txtTitle.setText(controller.getIndicator().getTitle());
 
-        pnlVariables.setColumnVariables(controller.getIndicator().getColVariables());
-        pnlVariables.setRowVariables(controller.getIndicator().getRowVariables());
+        CIndicator ind = getController().getIndicator();
+        txtTitle.setText(ind.getTitle());
+
+        pnlVariables.setColumnVariables(ind.getColVariables());
+        pnlVariables.setRowVariables(ind.getRowVariables());
+        pnlFilters.setFilters(ind.getFilters());
 
         updateChartButton();
 
-        resIndicator.update(controller);
+        resIndicator.update(getController(), callback);
     }
 
 
@@ -114,6 +117,7 @@ public class IndicatorEditor extends IndicatorWrapper implements StandardEventHa
         chartPopup.showRelativeTo(source);
     }
 
+
     /**
      * Called when user clicks on the update link
      * @param event contain information about the click event
@@ -121,9 +125,9 @@ public class IndicatorEditor extends IndicatorWrapper implements StandardEventHa
     @UiHandler("lnkUpdate")
     public void lnkUpdateClick(ClickEvent event) {
         IndicatorController controller = getController();
-        controller.setData(null);
+        controller.clearData();
         controller.getIndicator().setFilters( pnlFilters.getFilters() );
-        resIndicator.update(controller);
+        resIndicator.update(controller, null);
     }
 
     /**
@@ -148,7 +152,7 @@ public class IndicatorEditor extends IndicatorWrapper implements StandardEventHa
 
     /**
      * Notify when the chart is changed
-     * @param type
+     * @param type the new chart type
      */
     protected void chartChangeListener(CChartType type) {
         getController().getIndicator().setChartType(type);
@@ -195,8 +199,8 @@ public class IndicatorEditor extends IndicatorWrapper implements StandardEventHa
 
     /**
      * Called when an event happens
-     * @param eventType
-     * @param data
+     * @param eventType event type
+     * @param data data assigned to the event (optional)
      */
     @Override
     public void handleEvent(Object eventType, Object data) {

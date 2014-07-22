@@ -57,6 +57,14 @@ public class IndicatorController {
     }
 
     /**
+     * Clear the indicator data, forcing it to reload information from server next time
+     */
+    public void clearData() {
+        response = null;
+        data = null;
+    }
+
+    /**
      * Called when the response data is changed
      * @param resp
      */
