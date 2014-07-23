@@ -1,6 +1,7 @@
 package org.msh.tb.tbunits;
 
 import org.jboss.seam.Component;
+import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 
 import java.util.List;
@@ -42,22 +43,45 @@ public class TBUnitSelection2 extends TBUnitSelection {
 		filter.setType(type);
 		return ((UnitListsManager)Component.getInstance("unitListsManager")).getUnits(filter);
 	}
-	
-	@Override
-	public Integer getAdminUnitId(){
-		if(auselection.getUnitLevel5() != null){
-			return auselection.getUnitLevel5().getId();
-		}else if(auselection.getUnitLevel4() != null){
-			return auselection.getUnitLevel4().getId();
-		}else if(auselection.getUnitLevel3() != null){
-			return auselection.getUnitLevel3().getId();
-		}else if(auselection.getUnitLevel2() != null){
-			return auselection.getUnitLevel2().getId();
-		}else if(auselection.getUnitLevel1() != null){
-			return auselection.getUnitLevel1().getId();
-		}else{
-			return null;
-		}
-	}
-	
+
+    @Override
+    public Integer getAdminUnitId(){
+        if(auselection.getUnitLevel5() != null){
+            return auselection.getUnitLevel5().getId();
+        }else if(auselection.getUnitLevel4() != null){
+            return auselection.getUnitLevel4().getId();
+        }else if(auselection.getUnitLevel3() != null){
+            return auselection.getUnitLevel3().getId();
+        }else if(auselection.getUnitLevel2() != null){
+            return auselection.getUnitLevel2().getId();
+        }else if(auselection.getUnitLevel1() != null){
+            return auselection.getUnitLevel1().getId();
+        }else{
+            return null;
+        }
+    }
+
+    public AdministrativeUnit getLastLevelAdminUnitSelected(){
+        if(auselection.getUnitLevel5() != null){
+            return auselection.getUnitLevel5();
+        }else if(auselection.getUnitLevel4() != null){
+            return auselection.getUnitLevel4();
+        }else if(auselection.getUnitLevel3() != null){
+            return auselection.getUnitLevel3();
+        }else if(auselection.getUnitLevel2() != null){
+            return auselection.getUnitLevel2();
+        }else if(auselection.getUnitLevel1() != null){
+            return auselection.getUnitLevel1();
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public Tbunit getSelected(){
+       if(this.getLastLevelAdminUnitSelected() == null)
+           return null;
+
+        return super.getSelected();
+    }
 }

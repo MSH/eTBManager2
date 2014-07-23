@@ -3,6 +3,7 @@ package org.msh.tb.indicators;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.PatientType;
@@ -115,12 +116,12 @@ public class IncidenceIndicator extends Indicator {
 		s = getHQLValidationState();
 		if (s != null)
 			hql += " and " + s;
-		
-		// include filter by unit
-		Tbunit unit = filters.getTbunitselection().getSelected();
-		if (unit != null)
-			hql += " and c.notificationUnit.id = " + unit.getId().toString();
-		
+
+        // include filter by unit
+        Tbunit unit = filters.getTbunitselection().getSelected();
+        if (unit != null)
+            hql += " and c.notificationUnit.id = " + unit.getId().toString();
+
 		hql = addCondition(hql, getCaseStateCondition());
 		hql = addCondition(hql, getPeriodCondition());
 		hql = addCondition(hql, getAdminUnitCondition());

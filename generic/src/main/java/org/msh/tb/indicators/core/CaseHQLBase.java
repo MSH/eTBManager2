@@ -212,11 +212,11 @@ public class CaseHQLBase extends Controller {
 		s = getHQLValidationState();
 		if (s != null)
 			hql += " and " + s;
-		
-		// include filter by unit
-		Tbunit unit = filters.getTbunitselection().getSelected();
-		if (unit != null)
-			hql += " and c.notificationUnit.id = " + unit.getId().toString();
+
+        // include filter by unit
+        Tbunit unit = filters.getTbunitselection().getSelected();
+        if (unit != null)
+            hql += " and c.notificationUnit.id = " + unit.getId().toString();
 		
 		hql = addCondition(hql, getCaseStateCondition());
 		hql = addCondition(hql, getPeriodCondition());
@@ -622,7 +622,7 @@ public class CaseHQLBase extends Controller {
 	 */
 	protected String getAdminUnitCondition() {
 		IndicatorFilters filters = getIndicatorFilters();
-		AdministrativeUnit adminUnit = filters.getTbunitselection().getAuselection().getSelectedUnit();
+		AdministrativeUnit adminUnit = filters.getTbunitselection().getLastLevelAdminUnitSelected();
 		if (adminUnit != null) {
 			if (filters.getIndicatorSite() == IndicatorSite.PATIENTADDRESS)
 				 return "c.notifAddress.adminUnit.code like '" + adminUnit.getCode() + "%'";

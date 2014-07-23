@@ -74,8 +74,8 @@ function validate() {
 		<ui:param name="noSelUseAll" value="true" />
 	</s:decorate>
 
-	<!-- <s:decorate template="/layout/tbselection2.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}"> -->
-	<s:decorate template="/layout/tbselection.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}">
+	<s:decorate template="/layout/tbselection2.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}">
+	<!-- <s:decorate template="/layout/tbselection.xhtml" rendered="#{indicatorFilters.indicatorSite=='TREATMENTSITE'}"> -->
 		<ui:param name="tbunitselection" value="#{indicatorFilters.tbunitselection}" />
 		<ui:param name="unitlabel" value="#{messages['Tbunit.treatmentHealthUnit']}" />
 		<ui:param name="auRerender" value="pnloutput" />

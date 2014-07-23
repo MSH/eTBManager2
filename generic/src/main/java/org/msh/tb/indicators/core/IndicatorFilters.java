@@ -7,7 +7,7 @@ import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.*;
-import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitSelection2;
 import org.msh.tb.tbunits.TBUnitType;
 
 import javax.faces.model.SelectItem;
@@ -42,8 +42,8 @@ public class IndicatorFilters {
 	private boolean useRegistrationDate = true;
 	private boolean useDiagnosisDate;
 	private boolean useIniTreatmentDate;
-	
-	private TBUnitSelection tbunitselection = new TBUnitSelection("unitid", false, TBUnitType.HEALTH_UNITS);
+
+    private TBUnitSelection2 tbunitselection = new TBUnitSelection2("unitid", false, TBUnitType.HEALTH_UNITS);
 	private CaseClassification classification;
 	private PatientType patientType;
 	private InfectionSite infectionSite;
@@ -92,7 +92,7 @@ public class IndicatorFilters {
 		iniYear = null;
 		endMonth = null;
 		endYear = null;
-		tbunitselection.setSelected(null);
+        tbunitselection.setSelected(null);
 		classification = null;
 		patientType =  null;
 		infectionSite = null;
@@ -293,12 +293,12 @@ public class IndicatorFilters {
 		return outputSelection;
 	}
 
-	/**
-	 * @return the tbunitselection
-	 */
-	public TBUnitSelection getTbunitselection() {
-		return tbunitselection;
-	}
+    /**
+     * @return the tbunitselection
+     */
+    public TBUnitSelection2 getTbunitselection() {
+        return tbunitselection;
+    }
 
 	/**
 	 * @param indicatorSite the indicatorSite to set
