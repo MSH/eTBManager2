@@ -73,14 +73,6 @@ public class ResultView extends Composite {
     }
 
     /**
-     *
-     * @param callback
-     */
-    public void refresh(AsyncCallback<Void> callback) {
-
-    }
-
-    /**
      * Called to notify the view that the title has changed
      */
     public void notifyTitleChange() {

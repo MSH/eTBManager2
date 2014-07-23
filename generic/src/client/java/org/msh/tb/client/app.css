@@ -499,3 +499,11 @@ html {
     background-color: #fff;
 }
 
+.dashboard {
+    width:805px;
+}
+
+.dashboard h2 {
+    font-size:24px;
+    font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+}

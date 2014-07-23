@@ -28,7 +28,7 @@ public class ReportServiceGWT implements ReportService {
 	@Override
 	@WebRemote
 	public CReportUIData initialize() {
-		return ReportGenerator.createInitializationData();
+		return ReportGenerator.createInitializationData(false);
 	}
 
 
@@ -99,6 +99,6 @@ public class ReportServiceGWT implements ReportService {
 	@Override
 	@WebRemote
 	public ArrayList<CReport> getReportList() {
-		return ReportGenerator.getReportList();
+		return ReportGenerator.getReportList(false);
 	}
 }

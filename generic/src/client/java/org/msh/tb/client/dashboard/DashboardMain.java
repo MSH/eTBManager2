@@ -13,10 +13,12 @@ import com.google.gwt.user.client.ui.Widget;
 import org.msh.tb.client.AppModule;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.indicators.IndicatorController;
+import org.msh.tb.client.reports.ReportUtils;
 import org.msh.tb.client.shared.DashboardService;
 import org.msh.tb.client.shared.DashboardServiceAsync;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
+import org.msh.tb.client.shared.model.CReportUIData;
 
 import java.util.ArrayList;
 
@@ -50,10 +52,11 @@ public class DashboardMain extends Composite implements AppModule {
 	 */
 	@Override
 	public void run() {
-		service.initialize(new StandardCallback<ArrayList<CReport>>() {
+		service.initialize(new StandardCallback<CReportUIData>() {
 			@Override
-			public void onSuccess(ArrayList<CReport> result) {
-				updateReports(result);
+			public void onSuccess(CReportUIData result) {
+                ReportUtils.setReportUIData(result);
+				updateReports(result.getReports());
 			}
 		});
 	}

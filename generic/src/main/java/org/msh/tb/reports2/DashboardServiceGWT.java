@@ -26,8 +26,11 @@ public class DashboardServiceGWT implements DashboardService {
 	 */
 	@Override
 	@WebRemote
-	public ArrayList<CReport> initialize() {
+	public CReportUIData initialize() {
+        CReportUIData data = ReportGenerator.createInitializationData(true);
+        return data;
 		// get list of indicators
+/*
 		ReportDAO dao = (ReportDAO)Component.getInstance("reportDAO");
 		List<Report> reps = dao.getDashboardIndicators();
 		
@@ -37,6 +40,7 @@ public class DashboardServiceGWT implements DashboardService {
 			lst.add(crep);
 		}
 		return lst;
+*/
 	}
 
 }

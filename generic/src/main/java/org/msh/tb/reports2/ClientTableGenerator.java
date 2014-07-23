@@ -31,7 +31,7 @@ public class ClientTableGenerator {
 	 * Generate an instance of the {@link org.msh.tb.client.shared.model.CIndicatorResponse} class containing information about an
 	 * indicator report to be sent back to the client side
 	 *  
-	 * @param tbl instance of the {@link DataTableImpl} containing the data of the report
+	 * @param rep instance of the {@link org.msh.reports.IndicatorReport} containing the data of the report
 	 * @return instance of the {@link org.msh.tb.client.shared.model.CIndicatorResponse} containing the indicator table to be sent to the client
 	 */
 	public CIndicatorResponse execute(IndicatorReport rep) {

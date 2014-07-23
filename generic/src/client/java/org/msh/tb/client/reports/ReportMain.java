@@ -464,7 +464,9 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 */
 	public void openReport(Integer id) {
 		closeReportList();
-        newReport();
+        pnlIndicators.clear();
+        pnlGlobalFilters.setFilters(null);
+        txtTitle.setText("");
 
         AppResources.reportServices().loadReport(id, new StandardCallback<CReport>() {
             @Override
@@ -592,7 +594,13 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         }
 
         // options dialog
-        if ((eventType == OptionsDlg.Event.OK) || (eventType == OptionsDlg.Event.CANCEL)) {
+        if (eventType == OptionsDlg.Event.OK) {
+            lnkSaveClick(null);
+            return;
+        }
+
+        // options dialog
+        if (eventType == OptionsDlg.Event.CANCEL) {
             return;
         }
 

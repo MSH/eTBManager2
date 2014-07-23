@@ -40,7 +40,7 @@ public class ReportGenerator {
 	 * variables, filters and org.msh.reports available for the current user and current workspace
 	 * @return instance of {@link org.msh.tb.client.shared.model.CReportUIData}
 	 */
-	public static CReportUIData createInitializationData() {
+	public static CReportUIData createInitializationData(boolean dashboard) {
 		// get resources containing groups, filters and variables
 		ReportResources res = ReportResources.instance();
 
@@ -84,7 +84,7 @@ public class ReportGenerator {
 		CReportUIData rep = new CReportUIData();
 		rep.setGroups( lst );
 		
-		rep.setReports(getReportList());
+		rep.setReports(getReportList(dashboard));
 		
 		// send the current date in the server to the client
 		rep.setCurrentDate(DateUtils.getDate());
@@ -95,24 +95,37 @@ public class ReportGenerator {
 
 	/**
 	 * Return the list of available org.msh.reports, ready to be sent back to the client
+     * @param dashboard if true, will return the list of reports to be displayed in the dashboard
 	 * @return instance of {@link ArrayList} containing {@link CReport} data
 	 */
-	public static ArrayList<CReport> getReportList() {
+	public static ArrayList<CReport> getReportList(boolean dashboard) {
 		// get the list of available org.msh.reports
 		ReportDAO dao = (ReportDAO)App.getComponent("reportDAO");
-		List<Report> lst = dao.getReportList();
-		
+		List<Report> lst;
+        if (dashboard) {
+            lst = dao.getDashboardIndicators();
+        }
+        else {
+            lst = dao.getReportList();
+        }
+
 		// get the current user
 		User user = UserSession.getUser();
 		
 		ArrayList<CReport> reps = new ArrayList<CReport>();
 		
 		for (Report rep: lst) {
-			CReport item = new CReport();
-			item.setId(rep.getId());
-			item.setTitle(rep.getTitle());
-			item.setMyReport(rep.getOwner().getId().equals(user.getId()));
-			
+            CReport item;
+            if (dashboard) {
+                item = ReportJson.convertToClient(rep);
+            }
+            else {
+                item = new CReport();
+                item.setId(rep.getId());
+                item.setTitle(rep.getTitle());
+                item.setMyReport(rep.getOwner().getId().equals(user.getId()));
+            }
+
 			reps.add(item);
 		}
 		
