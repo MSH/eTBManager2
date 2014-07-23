@@ -8,12 +8,12 @@
 	<ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
 
     <h:MenuPanel ui:field="pnlMenu">
-        <g:Anchor ui:field="lnkNew">New report</g:Anchor>
-        <g:Anchor ui:field="lnkAddIndicator">Add indicator</g:Anchor>
-        <g:Anchor ui:field="lnkSave">Save report</g:Anchor>
-        <g:Anchor ui:field="lnkSaveAs">Save report as...</g:Anchor>
-        <g:Anchor ui:field="lnkDelete">Delete report</g:Anchor>
-        <g:Anchor ui:field="lnkSettings">Options...</g:Anchor>
+        <g:Anchor ui:field="lnkNew"><ui:text from="{msg.newReport}" /></g:Anchor>
+        <g:Anchor ui:field="lnkAddIndicator"><ui:text from="{msg.addIndicator}" /></g:Anchor>
+        <g:Anchor ui:field="lnkSave"><ui:text from="{msg.saveReport}" /></g:Anchor>
+        <g:Anchor ui:field="lnkSaveAs"><ui:text from="{msg.saveReportAs}" />...</g:Anchor>
+        <g:Anchor ui:field="lnkDelete"><ui:text from="{msg.deleteReport}" /></g:Anchor>
+        <g:Anchor ui:field="lnkSettings"><ui:text from="{msg.options}" />...</g:Anchor>
     </h:MenuPanel>
 
 </ui:UiBinder>

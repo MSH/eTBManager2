@@ -390,9 +390,11 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 * Create a new report
 	 */
 	public void newReport() {
+        pnlMessage.setVisible(false);
 		report = new CReport();
 		report.setTitle("Report title (click here to change)");
         report.setIndicators(new ArrayList<CIndicator>());
+        pnlGlobalFilters.setFilters(null);
 
         updateTitle();
         pnlIndicators.clear();
@@ -462,6 +464,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 */
 	public void openReport(Integer id) {
 		closeReportList();
+        newReport();
 
         AppResources.reportServices().loadReport(id, new StandardCallback<CReport>() {
             @Override
@@ -476,13 +479,14 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
      * Display the report that was just loaded from the server
      */
     public void displayLoadedReport() {
+        pnlGlobalFilters.setFilters(report.getFilters());
         updateTitle();
         pnlIndicators.clear();
 
         addIndicators(0, new StandardCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
-                showMessage("Report successfully loaded", MessagePanel.MessageType.INFO);
+//                showMessage("Report successfully loaded", MessagePanel.MessageType.INFO);
             }
         });
     }
@@ -587,6 +591,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             return;
         }
 
+        // options dialog
         if ((eventType == OptionsDlg.Event.OK) || (eventType == OptionsDlg.Event.CANCEL)) {
             return;
         }
@@ -630,6 +635,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         AppResources.reportServices().saveReport(report, new StandardCallback<Integer>() {
             @Override
             public void onSuccess(Integer result) {
+                report.setId(result);
                 showMessage("Report was successfully saved", MessagePanel.MessageType.INFO);
             }
         });

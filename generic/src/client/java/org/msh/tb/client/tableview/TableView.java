@@ -3,12 +3,9 @@ package org.msh.tb.client.tableview;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.*;
 import org.msh.tb.client.App;
+import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
 import org.msh.tb.client.shared.model.CVariable;
@@ -23,19 +20,23 @@ import java.util.List;
  */
 public class TableView extends Composite {
 
+    public enum Event { COL_CLICK, ROW_CLICK, CELL_CLICK };
+
 	private static final String STYLE_HEADER_TITLE = "tt-row-tot";
 	private static final String STYLE_VAL_TOTAL = "vl-tot-v";
-	
+
+    private StandardEventHandler eventHandler;
+
 	private FlexTable table;
 	private TableData data;
-	
+
 	public TableView() {
 		table = new FlexTable();
 
 		table.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Cell cell = table.getCellForEvent(event);
+				HTMLTable.Cell cell = table.getCellForEvent(event);
 				tableCellClick(cell.getCellIndex(), cell.getRowIndex());
 			}
 		});
@@ -199,13 +200,24 @@ public class TableView extends Composite {
 	}
 
 
+    /**
+     * Notify the event handler about an event that happened in the table
+     * @param event the table event
+     * @param data extra information included in the event
+     */
+    private void fireTableEvent(Event event, Object data) {
+        if (eventHandler != null) {
+            eventHandler.handleEvent(event, data);
+        }
+    }
+
+
 	/**
 	 * Generates the chart according to the cell selected
 	 * @param col
 	 * @param row
 	 */
 	protected void tableCellClick(int col, int row) {
-/*
 		int colheadersize = data.getColHeaderSize();
 		
 		int rowcount = data.getRowCount();
@@ -213,13 +225,15 @@ public class TableView extends Composite {
 		
 		// is total column cell ?
 		if ((row == 0) && (col == 2)) {
-			ReportMain.instance().setSelectedCol(TableData.CELL_TOTAL);
+            fireTableEvent(Event.COL_CLICK, TableData.CELL_TOTAL);
+//			ReportMain.instance().setSelectedCol(TableData.CELL_TOTAL);
 			return;
 		}
 
 		// is total column row ?
 		if ((col == 0) && (row == rowcount + colheadersize + 1)) {
-			ReportMain.instance().setSelectedRow(TableData.CELL_TOTAL);
+            fireTableEvent(Event.ROW_CLICK, TableData.CELL_TOTAL);
+//			ReportMain.instance().setSelectedRow(TableData.CELL_TOTAL);
 			return;
 		}
 
@@ -229,31 +243,44 @@ public class TableView extends Composite {
 
 		// is cell containing value
 		if ((row > colheadersize) && (col > 0)) {
-			ReportMain.instance().showPatientList(col - 1, row - colheadersize - 1);
+            fireTableEvent(Event.CELL_CLICK, new Cell(col -1, row - colheadersize - 1));
+//			ReportMain.instance().showPatientList(col - 1, row - colheadersize - 1);
 		}
 		
 		// row title selection is just available if data is not grouped
 		if ((!data.isRowGrouped()) && (!data.isColumnGrouped())) {
 			// clicked on the row variable title ?
 			if ((col == 0) && (row == 0)) {
-				ReportMain.instance().setSelectedRow(-1);
+                fireTableEvent(Event.ROW_CLICK, -1);
+//				ReportMain.instance().setSelectedRow(-1);
 				return;
 			}
 			
 			// clicked on the column variable title ?
 			if ((col == 1) && (row == 0)) {
-				ReportMain.instance().setSelectedCol(-1);
+                fireTableEvent(Event.COL_CLICK, -1);
+//				ReportMain.instance().setSelectedCol(-1);
 				return;
 			}
 		}
 
 		// row selected ?
-		if (row == colheadersize)
-			ReportMain.instance().setSelectedCol(col);
+		if (row == colheadersize) {
+            fireTableEvent(Event.COL_CLICK, col);
+//            ReportMain.instance().setSelectedCol(col);
+        }
 		else
-			if ((col == 0) && (row > colheadersize))
-					ReportMain.instance().setSelectedRow(row - colheadersize - 1);
-*/
+			if ((col == 0) && (row > colheadersize)) {
+                fireTableEvent(Event.ROW_CLICK, row - colheadersize - 1);
+//                ReportMain.instance().setSelectedRow(row - colheadersize - 1);
+            }
 	}
 
+    public StandardEventHandler getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(StandardEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
 }

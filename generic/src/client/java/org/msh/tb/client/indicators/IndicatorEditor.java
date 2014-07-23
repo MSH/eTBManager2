@@ -37,6 +37,7 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
     @UiField Anchor lnkUpdate;
     @UiField ResultView resIndicator;
     @UiField FiltersPanel pnlFilters;
+    @UiField HTMLPanel pnlCommands;
 
     private ChartPopup chartPopup;
 
@@ -91,8 +92,20 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
         pnlVariables.setColumnVariables(ind.getColVariables());
         pnlVariables.setRowVariables(ind.getRowVariables());
         pnlFilters.setFilters(ind.getFilters());
+        updateCommandBar();
 
         updateChartButton();
+
+        // update size indicator
+        if (ind.getSize() != null) {
+            switch (ind.getSize()) {
+                case 50: lbSize.setSelectedIndex(1);
+                    break;
+                case 25: lbSize.setSelectedIndex(2);
+                    break;
+                default: lbSize.setSelectedIndex(0);
+            }
+        }
 
         resIndicator.update(getController(), callback);
     }
@@ -127,6 +140,7 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
         IndicatorController controller = getController();
         controller.clearData();
         controller.getIndicator().setFilters( pnlFilters.getFilters() );
+        updateCommandBar();
         resIndicator.update(controller, null);
     }
 
@@ -139,6 +153,14 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
         IndicatorController controller = getController();
         controller.getIndicator().setFilters(pnlFilters.getFilters());
         fireIndicatorEvent(IndicatorEvent.CLOSE);
+    }
+
+    /**
+     * update the command bar according to the indicator
+     */
+    private void updateCommandBar() {
+        CIndicator ind = getController().getIndicator();
+        pnlCommands.setVisible(ind.getColVariablesCount() + ind.getRowVariablesCount() > 0);
     }
 
     /**

@@ -81,4 +81,34 @@ public interface ReportConstants extends Constants {
 
 	@Key("FixedPeriod.PREVIOUS_YEAR")
 	String fixedPeriodPREVIOUS_YEAR();
+
+    @Key("form.update")
+    String update();
+
+    @Key("form.save")
+    String save();
+
+    @Key("form.cancel")
+    String cancel();
+
+    @Key("form.ok")
+    String ok();
+
+    @Key("manag.reportgen.save")
+    String saveReport();
+
+    @Key("manag.reportgen.saveas")
+    String saveReportAs();
+
+    @Key("form.edit")
+    String edit();
+
+    @Key("manag.reportgen.delete")
+    String deleteReport();
+
+    @Key("manag.reportgen.addind")
+    String addIndicator();
+
+    @Key("form.close")
+    String close();
 }

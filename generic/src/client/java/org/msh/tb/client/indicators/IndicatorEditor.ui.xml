@@ -32,12 +32,14 @@
             <rv:VariablesPanel ui:field="pnlVariables"></rv:VariablesPanel>
             <hr/>
             <div class="block">
-                <div class="pull-left">
-                    <g:Anchor ui:field="lnkChart" styleName="chart-button"></g:Anchor>
-                </div>
-                <div class="pull-left">
-                    Size: <g:ListBox ui:field="lbSize"></g:ListBox>
-                </div>
+                <g:HTMLPanel ui:field="pnlCommands" styleName="pull-left">
+                    <div class="pull-left">
+                        <g:Anchor ui:field="lnkChart" styleName="chart-button"></g:Anchor>
+                    </div>
+                    <div class="pull-left">
+                        Size: <g:ListBox ui:field="lbSize"></g:ListBox>
+                    </div>
+                </g:HTMLPanel>
                 <div class="pull-right">
                     <g:Button ui:field="btnRemove" styleName="btn">Remove indicator</g:Button>
                     <g:Anchor ui:field="lnkUpdate" styleName="btn-alt"><i class="icon-refresh"></i>Update</g:Anchor>

@@ -59,29 +59,33 @@ public class ReportJson {
 	 * @return
 	 */
 	public static CReport convertToClient(Report report) {
-		CReport rep = new CReport();
+		CReport rep;
 		
-/*
-		rep.setId(report.getId());
-		rep.setTitle(report.getTitle());
-		rep.setDashboard(report.isDashboard());
-		rep.setPublished(report.isPublished());
-*/
-
 		// read json data
 		if ((report.getData() != null) && (!report.getData().isEmpty())) {
 			ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 			try {
-                CReport rep2 = mapper.readValue(report.getData(), CReport.class);
-                return rep2;
+                rep = mapper.readValue(report.getData(), CReport.class);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return rep;
+        else {
+            rep = new CReport();
+        }
+
+        rep.setId(report.getId());
+        rep.setTitle(report.getTitle());
+        rep.setDashboard(report.isDashboard());
+        rep.setPublished(report.isPublished());
+
+        return rep;
 	}
 
+    /**
+     * Mix-in class used by jackson library to configure the mapping from java to json
+     */
     abstract class MixInIndicator {
         @JsonIgnore
         abstract int getColVariablesCount();

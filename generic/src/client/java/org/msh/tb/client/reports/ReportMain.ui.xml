@@ -53,7 +53,7 @@
                         </h2>
                     </td>
                     <td align="right">
-                        <g:Anchor ui:field="lnkSave" styleName="{style.iconButton}" title="Save report"><i class="icon-save"></i></g:Anchor>
+                        <g:Anchor ui:field="lnkSave" styleName="{style.iconButton}" title="{msg.saveReport}"><i class="icon-save"></i></g:Anchor>
                         <g:Anchor ui:field="lnkMenu" styleName="{style.iconButton}" title="{msg.options}"><i class="icon-gear"></i></g:Anchor>
                     </td>
                 </tr>
@@ -61,17 +61,17 @@
 
             <div class="panel">
                 <rf:FiltersPanel ui:field="pnlGlobalFilters" />
-                <div class="pull-right">
-                    <g:Button ui:field="btnGenerate" text="{msg.generate}"/>
-                </div>
-                <div class="block"></div>
             </div>
+            <div class="pull-right">
+                <g:Button ui:field="btnGenerate" text="{msg.update}"/>
+            </div>
+            <div class="block"></div>
 
             <h:MessagePanel ui:field="pnlMessage" visible="false" />
 
             <g:FlowPanel ui:field="pnlIndicators">
             </g:FlowPanel>
-            <g:Button ui:field="lnkAddIndicator" ><i class="icon-plus-sign">Add indicator</i></g:Button>
+            <g:Button ui:field="lnkAddIndicator" ><i class="icon-plus-sign"><ui:text from="{msg.addIndicator}" /></i></g:Button>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 	
