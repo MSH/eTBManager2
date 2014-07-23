@@ -6,14 +6,17 @@ package org.msh.tb.client.dashboard;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.msh.tb.client.AppModule;
 import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.indicators.IndicatorController;
 import org.msh.tb.client.shared.DashboardService;
 import org.msh.tb.client.shared.DashboardServiceAsync;
 import org.msh.tb.client.shared.model.CIndicator;
+import org.msh.tb.client.shared.model.CReport;
 
 import java.util.ArrayList;
 
@@ -32,6 +35,7 @@ public class DashboardMain extends Composite implements AppModule {
 	public static final DashboardServiceAsync service = GWT.create(DashboardService.class);
 
     private int colindex;
+    private ArrayList<CReport> reports;
 	
 	@UiField FlowPanel pnlContent;
 	
@@ -46,64 +50,44 @@ public class DashboardMain extends Composite implements AppModule {
 	 */
 	@Override
 	public void run() {
-		service.initialize(new StandardCallback<ArrayList<Integer>>() {
+		service.initialize(new StandardCallback<ArrayList<CReport>>() {
 			@Override
-			public void onSuccess(ArrayList<Integer> result) {
-				updateIndicators(result);
+			public void onSuccess(ArrayList<CReport> result) {
+				updateReports(result);
 			}
 		});
 	}
 
 	/**
-	 * Update the list of indicators displayed
-	 * @param indicators list of indicators ID to be rendered
+	 * Update the list of reports that must be displayed in the dashboard
+	 * @param reports list of reports to be rendered
 	 */
-	protected void updateIndicators(ArrayList<Integer> indicators) {
+	protected void updateReports(ArrayList<CReport> reports) {
+        this.reports = reports;
 		pnlContent.clear();
-        colindex = 0;
-		updateIndicator(indicators, 0);
+		updateReport(0);
 	}
 
-	
-	/**
-	 * Update an indicator and call recursively the next indicator 
-	 * @param indicators list of indicators ID to be displayed
-     * @param index the indicator index to be rendered, in the list of indicators
-	 */
-	private void updateIndicator(ArrayList<Integer> indicators, int index) {
-		if (index < indicators.size()) {
-			final ArrayList<Integer> lst = indicators;
-			final int i = index + 1;
-			service.generateIndicator(indicators.get(index), new StandardCallback<CIndicator>() {
-				@Override
-				public void onSuccess(CIndicator result) {
-                    if (result != null) {
-                        addIndicator(result);
-                    }
-                    updateIndicator(lst, i);
-				}
+    /**
+     * Callback function called when the report of given index is updated
+     * @param index index of the report in the list of reports
+     */
+    protected void updateReport(final int index) {
+        if (index >= reports.size()) {
+            return;
+        }
 
-                @Override
-                public void onFailure(Throwable except) {
-                    // there is no error handling because it may be caused by a page redirect
-                    System.out.println("Error");
-                }
-            });
-		}
-	}
+        ReportPanel pnl = new ReportPanel();
+        pnlContent.add(pnl);
 
-	
-	/**
-	 * Add a new indicator
-	 * @param indicator the instance of CIndicator report to display
-	 */
-	protected void addIndicator(CIndicator indicator) {
-		IndicatorPanel pnl = new IndicatorPanel();
-		pnlContent.add(pnl);
-		if (colindex % 2 == 0) {
-			pnl.getElement().setAttribute("style", "clear:left");
-		}
-		pnl.update(indicator);
-        colindex++;
-	}
+        CReport rep = reports.get(index);
+        // update the report
+        pnl.update(rep, new StandardCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                updateReport(index + 1);
+            }
+        });
+    }
+
 }
