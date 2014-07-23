@@ -9,7 +9,7 @@
 
     <h:MenuPanel ui:field="pnlMenu">
         <g:Anchor ui:field="lnkNew">New report</g:Anchor>
-        <g:Anchor ui:field="lnkNewIndicator">Add indicator</g:Anchor>
+        <g:Anchor ui:field="lnkAddIndicator">Add indicator</g:Anchor>
         <g:Anchor ui:field="lnkSave">Save report</g:Anchor>
         <g:Anchor ui:field="lnkSaveAs">Save report as...</g:Anchor>
         <g:Anchor ui:field="lnkDelete">Delete report</g:Anchor>

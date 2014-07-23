@@ -18,6 +18,8 @@ import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.shared.model.CReport;
 
 /**
+ * Display dialog window with options about the report
+ *
  * @author Ricardo Memoria
  *
  */
@@ -25,6 +27,8 @@ public class OptionsDlg extends Composite {
 	private static final Binder binder = GWT.create(Binder.class);
 
 	interface Binder extends UiBinder<DialogBox, OptionsDlg> { };
+
+    public enum Event { OK, CANCEL};
 
 	private DialogBox dialogBox;
 	private CReport report;
@@ -72,18 +76,26 @@ public class OptionsDlg extends Composite {
 		dialogBox.center();
 		dialogBox.show();
 	}
-	
+
+    /**
+     * Called when user clicks on the save button
+     * @param evt information about the click event
+     */
 	@UiHandler("btnSave")
 	public void btnSaveClick(ClickEvent evt) {
 		report.setPublished(chkPublished.getValue());
 		report.setDashboard(chkDashboard.getValue());
 		dialogBox.hide();
-		eventHandler.handleEvent(OptionsDlg.class, StandardEvent.OK);
+		eventHandler.handleEvent(Event.OK, OptionsDlg.class);
 	}
-	
+
+    /**
+     * Called when user clicks on the cancel button
+     * @param evt information about the click event
+     */
 	@UiHandler("btnCancel")
 	public void btnCancel(ClickEvent evt) {
 		dialogBox.hide();
-        eventHandler.handleEvent(OptionsDlg.class, StandardEvent.CANCEL);
+        eventHandler.handleEvent(Event.CANCEL, OptionsDlg.class);
     }
 }

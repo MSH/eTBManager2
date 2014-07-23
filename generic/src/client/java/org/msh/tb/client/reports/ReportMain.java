@@ -74,6 +74,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         });
 
         popupOptions = new OptionsPopup();
+        popupOptions.setEventHandler(this);
 	}
 
 
@@ -153,6 +154,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 */
 	@UiHandler("btnGenerate")
 	public void btnGenerateClick(ClickEvent clickEvent) {
+        pnlMessage.setVisible(false);
         updateIndicatorPanel(0);
 	}
 
@@ -522,31 +524,55 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             return;
         }
 
+        // open a report
         if (eventType == ReportListPanel.ReportListEvent.OPEN) {
             openReport((Integer)data);
             return;
         }
 
-        if (eventType == ReportListPanel.ReportListEvent.NEW_REPORT) {
+        // new report
+        if ((eventType == ReportListPanel.ReportListEvent.NEW_REPORT) || (eventType == OptionsPopup.Event.NEWREPORT)) {
             newReport();
             return;
         }
 
+        // add a new indicator
+        if (eventType == OptionsPopup.Event.ADDINDICATOR) {
+            newIndicator();
+            return;
+        }
+
+        // close the editor panel
         if (eventType == IndicatorWrapperPanel.IndicatorEvent.CLOSE) {
             closeEditor((IndicatorEditor)data);
             return;
         }
 
+        // open the editor panel
         if (eventType == IndicatorWrapperPanel.IndicatorEvent.EDIT) {
             editIndicator((IndicatorView)data);
             return;
         }
 
+        // remove an indicator
         if (eventType == IndicatorWrapperPanel.IndicatorEvent.REMOVE) {
             removeIndicator((IndicatorWrapperPanel)data);
             return;
         }
 
+        // user request report to be saved
+        if (eventType == OptionsPopup.Event.SAVE) {
+            lnkSaveClick(null);
+            return;
+        }
+
+        // open the option dialog
+        if (eventType == OptionsPopup.Event.SETTINGS) {
+            openOptionsDlg();
+            return;
+        }
+
+        // called from the save dialog when user confirm the opeartion
         if (eventType == SaveDlg.SaveDlgEvent.SAVE) {
             saveReport();
             return;
@@ -558,6 +584,10 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         }
 
         if (eventType == SaveDlg.SaveDlgEvent.CANCEL) {
+            return;
+        }
+
+        if ((eventType == OptionsDlg.Event.OK) || (eventType == OptionsDlg.Event.CANCEL)) {
             return;
         }
 
@@ -613,4 +643,13 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         report.setId(null);
         saveReport();
     }
+
+
+    /**
+     * Open options dialog window
+     */
+    protected void openOptionsDlg() {
+        OptionsDlg.open(report, this);
+    }
+
 }
