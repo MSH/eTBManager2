@@ -2,8 +2,10 @@ package org.msh.tb.client;
 
 import com.google.gwt.core.client.GWT;
 import org.msh.tb.client.resources.ImageResources;
+import org.msh.tb.client.resources.ReportConstants;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.ReportServiceAsync;
+import org.msh.tb.reports2.ReportResources;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ public class AppResources {
     private ReportServiceAsync reportService;
     private HashMap<String, Object> resources = new HashMap<String, Object>();
     private ImageResources imageResources;
+    private ReportConstants messages;
 
     /**
      * Return the unique instance of the services
@@ -89,5 +92,16 @@ public class AppResources {
         }
 
         return singleton.imageResources;
+    }
+
+    /**
+     * Return the list of messages available in the application
+     * @return instance of ReportConstants interface
+     */
+    public static ReportConstants messages() {
+        if (singleton.messages == null) {
+            singleton.messages = GWT.create(ReportConstants.class);
+        }
+        return singleton.messages;
     }
 }

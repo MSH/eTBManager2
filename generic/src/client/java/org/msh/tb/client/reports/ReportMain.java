@@ -69,7 +69,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         txtTitle.setEventHandler(new StandardEventHandler() {
             @Override
             public void handleEvent(Object eventType, Object data) {
-                changeTitle();
+                updateTitle();
             }
         });
 
@@ -98,16 +98,10 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
     }
 
 
-
-	/**
-	 */
-	protected void changeTitle() {
-		String s = txtTitle.getText().trim();
-        report.setTitle(s);
-	}
-
-
-
+    /**
+     * Called when the user wants to include a new indicator
+     * @param event instance of the click event
+     */
     @UiHandler("lnkAddIndicator")
     public void lnkAddIndicator(ClickEvent event) {
         newIndicator();
@@ -115,7 +109,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
 	/**
 	 * Called when user clicks on the options button
-	 * @param event
+	 * @param event instance of the click event
 	 */
 	@UiHandler("lnkMenu")
 	public void lnkMenuClick(ClickEvent event) {
@@ -140,12 +134,19 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	@UiHandler("lnkSave")
 	public void lnkSaveClick(ClickEvent event) {
 		if (isNewReport()) {
-			SaveDlg.openDialog(report, this);
+			SaveDlg.openDialog(report, false, this);
 		}
 		else {
             saveReport();
 		}
 	}
+
+    /**
+     * Open the dialog to make a clone of the current report
+     */
+    public void openSaveAsDialog() {
+        SaveDlg.openDialog(report, true, this);
+    }
 
 
 	/**
@@ -467,6 +468,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         pnlIndicators.clear();
         pnlGlobalFilters.setFilters(null);
         txtTitle.setText("");
+        pnlMessage.setVisible(false);
 
         AppResources.reportServices().loadReport(id, new StandardCallback<CReport>() {
             @Override
@@ -519,7 +521,16 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	 * Delete the current report
 	 */
 	public void deleteReport() {
-		
+		if (!Window.confirm(AppResources.messages().deleteReport())) {
+            return;
+        }
+
+        AppResources.reportServices().deleteReport(report.getId(), new StandardCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                showMessage("Report was deleted", MessagePanel.MessageType.INFO);
+            }
+        });
 	}
 
 
@@ -566,9 +577,21 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             return;
         }
 
+        // user clicked on the delete option in popup menu
+        if (eventType == OptionsPopup.Event.DELETE) {
+            deleteReport();
+            return;
+        }
+
         // user request report to be saved
         if (eventType == OptionsPopup.Event.SAVE) {
             lnkSaveClick(null);
+            return;
+        }
+
+        // uer selected the save as command
+        if (eventType == OptionsPopup.Event.SAVEAS) {
+            openSaveAsDialog();
             return;
         }
 
@@ -644,6 +667,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             @Override
             public void onSuccess(Integer result) {
                 report.setId(result);
+                updateTitle();
                 showMessage("Report was successfully saved", MessagePanel.MessageType.INFO);
             }
         });

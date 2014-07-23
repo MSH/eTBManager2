@@ -83,7 +83,16 @@ public class OptionsPopup extends PopupPanel {
     protected void cmdSave(ClickEvent event) {
         fireCommandEvent(Event.SAVE);
     }
-	
+
+    /**
+     * Called when user clicks on the delete command
+     * @param event instance of {@link ClickEvent}
+     */
+    @UiHandler("lnkDelete")
+    protected void cmdDelete(ClickEvent event) {
+        fireCommandEvent(Event.DELETE);
+    }
+
 	/**
 	 * Open the save dialog to save the current report
 	 * @param saveAs indicate if it's going to save the report or save it as

@@ -54,25 +54,27 @@ public class SaveDlg extends Composite {
     /**
      * Create and open the dialog
      * @param report the instance of CReport to save
+     * @param saveAs if true, the user will save the report as...
      * @param eventHandler event handle to be notified when it's done
      */
-	public static void openDialog(CReport report, StandardEventHandler eventHandler) {
+	public static void openDialog(CReport report, boolean saveAs, StandardEventHandler eventHandler) {
         SaveDlg dlg = (SaveDlg)AppResources.instance().get(RESOURCE_KEY);
         if (dlg == null){
             dlg = new SaveDlg();
             AppResources.instance().set(RESOURCE_KEY, dlg);
         }
-        dlg.open(report, eventHandler);
+        dlg.open(report, saveAs, eventHandler);
     }
 
     /**
      * Create and open the dialog
      * @param report the instance of CReport to save
+     * @param saveAs if true, the user is saving the report as...
      * @param eventHandler event handle to be notified when it's done
      */
-	protected void open(CReport report, StandardEventHandler eventHandler) {
+	protected void open(CReport report, boolean saveAs, StandardEventHandler eventHandler) {
         this.report = report;
-		this.saveAs = report.getId() == null;
+		this.saveAs = saveAs;
         this.eventHandler = eventHandler;
 
 		edtTitle.setText( report.getTitle() );

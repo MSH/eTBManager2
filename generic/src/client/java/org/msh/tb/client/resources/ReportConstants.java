@@ -111,4 +111,7 @@ public interface ReportConstants extends Constants {
 
     @Key("form.close")
     String close();
+
+    @Key("form.confirm_remove")
+    String confirmDelete();
 }
