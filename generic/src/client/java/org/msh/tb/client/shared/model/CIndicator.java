@@ -18,7 +18,7 @@ public class CIndicator implements IsSerializable {
 
 	private String title;
 	private CChartType chartType;
-	private Integer tblSelection;
+	private CTableSelection tblSelection;
 	private Integer tblSelectedCell;
 	private ArrayList<String> colVariables;
 	private ArrayList<String> rowVariables;
@@ -100,13 +100,13 @@ public class CIndicator implements IsSerializable {
 	/**
 	 * @return the tblSelection
 	 */
-	public Integer getTblSelection() {
+	public CTableSelection getTblSelection() {
 		return tblSelection;
 	}
 	/**
 	 * @param tblSelection the tblSelection to set
 	 */
-	public void setTblSelection(Integer tblSelection) {
+	public void setTblSelection(CTableSelection tblSelection) {
 		this.tblSelection = tblSelection;
 	}
 	/**

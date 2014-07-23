@@ -1,14 +1,19 @@
 package org.msh.tb.client.indicators;
 
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import org.msh.tb.client.chart.ChartReport;
 import org.msh.tb.client.chart.ChartView;
 import org.msh.tb.client.commons.StandardCallback;
+import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
+import org.msh.tb.client.shared.model.CTableSelection;
+import org.msh.tb.client.tableview.Cell;
+import org.msh.tb.client.tableview.TableData;
 import org.msh.tb.client.tableview.TableView;
 import org.msh.tb.client.ui.DivPanel;
 
@@ -113,7 +118,7 @@ public class ResultView extends Composite {
         }
         CChartType type = controller.getIndicator().getChartType();
         chart.setSelectedChart(type);
-        ChartReport.update(chart, controller.getData());
+        updateChart();
     }
 
     /**
@@ -169,7 +174,61 @@ public class ResultView extends Composite {
     protected void addTable() {
         table = new TableView();
         table.update(controller.getData());
+        table.setEventHandler(new StandardEventHandler() {
+            @Override
+            public void handleEvent(Object eventType, Object data) {
+                tableClickHandler((TableView.Event)eventType, data);
+            }
+        });
         pnlLayout.add(table, "ind-table");
+    }
+
+
+    /**
+     * Update the chart with the indicator data
+     */
+    protected void updateChart() {
+        if (chart != null) {
+            ChartReport.update(chart, controller.getData());
+        }
+    }
+
+    /**
+     * Called when user clicks on the table
+     * @param evt the table click event type
+     * @param info information about the event
+     */
+    protected void tableClickHandler(TableView.Event evt, Object info) {
+        CIndicator ind = controller.getIndicator();
+        TableData data = controller.getData();
+        switch (evt) {
+            case ROW_CLICK:
+                data.setSelection(CTableSelection.ROW);
+                data.setSelectedCell((Integer)info);
+
+                ind.setTblSelection(CTableSelection.ROW);
+                ind.setTblSelectedCell((Integer)info);
+                updateChart();
+                break;
+            case COL_CLICK:
+                data.setSelection(CTableSelection.COLUMN);
+                data.setSelectedCell((Integer)info);
+
+                ind.setTblSelection(CTableSelection.COLUMN);
+                ind.setTblSelectedCell((Integer)info);
+                updateChart();
+                break;
+            default:
+                showPatients((Cell)info);
+        }
+    }
+
+    /**
+     * Show the patient panel
+     * @param cell the cell to display
+     */
+    protected void showPatients(Cell cell) {
+        Window.alert("Not implemented");
     }
 
     /**

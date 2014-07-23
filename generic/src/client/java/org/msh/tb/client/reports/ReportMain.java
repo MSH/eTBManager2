@@ -325,27 +325,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
 
 	/**
-	 * @return the service
-	 */
-/*
-	public ReportServiceAsync getService() {
-		return service;
-	}
-*/
-
-
-	/**
-	 * Return information about the report sent from the server
-	 * @return instance of {@link org.msh.tb.client.shared.model.CReportUIData} class
-	 */
-/*
-	public CReportUIData getReportUI() {
-		return reportUI;
-	}
-*/
-
-
-	/**
 	 * @return the report
 	 */
 	public CReport getReport() {
