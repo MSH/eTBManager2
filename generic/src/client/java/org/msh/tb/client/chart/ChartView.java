@@ -78,6 +78,7 @@ public class ChartView extends Widget {
 	public ChartView() {
 		super();
 		divElement = Document.get().createDivElement();
+        divElement.setAttribute("class", "chart");
 		setElement(divElement);
 	}
 	
@@ -244,14 +245,14 @@ public class ChartView extends Widget {
 		int height;
 		if (selectedChart == CChartType.CHART_BAR) {
 			height = (numLegends * numItems * 3) + (numItems * 20) + 100;
-			if (height < 400)
-				height = 400;
+			if (height < 360)
+				height = 360;
 		}
-		else height = 400;
+		else height = 360;
 		
 		Element elem = divElement;// DOM.getElementById("divchart");
-		elem.getStyle().setHeight(height, Unit.PX); 
-		
+		elem.getStyle().setHeight(height, Unit.PX);
+
 		// add legend
 		String floatleg = numLegends > 3? "false":"true";
 		String s = "{layout:'vertical',align:'right'," +
@@ -296,7 +297,7 @@ public class ChartView extends Widget {
 
 	/**
 	 * Create the values of the chart and its legends to a pie chart
-	 * @param xAxis
+	 * @param chart the JSON object containing chart information
 	 */
 	private void createPieChart(JSONObject chart) {
 		// get the chart standard colors

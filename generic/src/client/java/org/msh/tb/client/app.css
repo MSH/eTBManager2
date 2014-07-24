@@ -355,6 +355,10 @@ html {
     overflow-x: auto;
 }
 
+.chart {
+    width:100%;
+}
+
 .int50 {
     max-width: 48%;
 }
@@ -385,11 +389,16 @@ html {
     padding:10px;
 }
 
+.ind50 {
+    width:47% !important;
+}
+
 /* Layout of the widget that displays the indicator (including title and other widgets) */
 .indicator-view {
     display: inline-block;
     vertical-align: top;
     margin:10px 20px 10px 0;
+    width:100%;
 }
 
 .indicator-view .ind-view-bar {
