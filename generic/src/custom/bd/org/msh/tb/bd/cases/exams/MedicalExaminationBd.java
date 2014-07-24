@@ -3,12 +3,14 @@ package org.msh.tb.bd.cases.exams;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 
 import org.msh.tb.bd.entities.enums.DotProvider;
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.transactionlog.PropertyLog;
-
 /**
  *
  * Records information about a medical examination of a case in bangladesh workspace
@@ -24,6 +26,11 @@ public class MedicalExaminationBd extends MedicalExamination {
 
 	private DotProvider dotType;
 
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="DOTTYPE_ID")
+    @PropertyLog(messageKey="MedicalExamination.DOTProviderType")
+    private FieldValue dotTypeFv;
+
 	public DotProvider getDotType() {
 		return dotType;
 	}
@@ -31,8 +38,9 @@ public class MedicalExaminationBd extends MedicalExamination {
 	public void setDotType(DotProvider dotType) {
 		this.dotType = dotType;
 	}
-	
-	
-	
-	
+
+    public FieldValue getDotTypeFv() { return dotTypeFv; }
+
+    public void setDotTypeFv(FieldValue dotTypeFv) { this.dotTypeFv = dotTypeFv; }
+
 }

@@ -1,23 +1,12 @@
 package org.msh.tb.entities;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.*;
-
-import org.msh.tb.entities.enums.ClinicalEvolution;
-import org.msh.tb.entities.enums.DotBy;
-import org.msh.tb.entities.enums.MedAppointmentType;
-import org.msh.tb.entities.enums.ReferredBy;
-import org.msh.tb.entities.enums.ReferredTo;
-import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
 
 
 /**
@@ -85,6 +74,11 @@ public class MedicalExamination extends CaseData implements Serializable {
 	private Date refByDate;	
 
 	private ReferredTo patientRefTo;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="PATIENTREFTO_ID")
+    @PropertyLog(messageKey="MedicalExamination.ReferredTo")
+    private FieldValue patientRefToFv;
 	
 	@Column(length=100)
 	private String referredToUnitName;	
@@ -367,5 +361,8 @@ public class MedicalExamination extends CaseData implements Serializable {
 	public void setDotPhoneNumber(String dotPhoneNumber) {
 		this.dotPhoneNumber = dotPhoneNumber;
 	}
-	
+
+    public FieldValue getPatientRefToFv() { return patientRefToFv; }
+
+    public void setPatientRefToFv(FieldValue patientRefToFv) { this.patientRefToFv = patientRefToFv; }
 }
