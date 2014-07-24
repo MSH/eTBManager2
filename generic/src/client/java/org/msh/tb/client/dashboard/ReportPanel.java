@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.indicators.IndicatorController;
+import org.msh.tb.client.indicators.IndicatorWrapperPanel;
 import org.msh.tb.client.indicators.ResultView;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
@@ -61,10 +62,20 @@ public class ReportPanel extends Composite{
             return;
         }
 
-        ResultView view = new ResultView();
+        IndicatorPanel view = new IndicatorPanel();
         pnlIndicators.add(view);
 
+        if (index > 0) {
+            CIndicator prevInd = report.getIndicators().get(index);
+            if (prevInd.isSingleValue()) {
+                view.addStyleName("clear-left");
+            }
+        }
+
         CIndicator ind = report.getIndicators().get(index);
+        if ((ind.getSize() != null) && (ind.getSize() == 50)) {
+            view.addStyleName("ind50");
+        }
         IndicatorController controller = new IndicatorController(report, ind, null);
 
         view.update(controller, new StandardCallback<ResultView>() {

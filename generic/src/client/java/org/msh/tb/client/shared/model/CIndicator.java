@@ -49,6 +49,14 @@ public class CIndicator implements IsSerializable {
         return rowVariables != null? rowVariables.size(): 0;
     }
 
+    /**
+     * Return true if the indicator will display just one single value
+     * @return boolean value
+     */
+    public boolean isSingleValue() {
+        return getRowVariablesCount() + getRowVariablesCount() == 0;
+    }
+
 	/**
 	 * @return the title
 	 */

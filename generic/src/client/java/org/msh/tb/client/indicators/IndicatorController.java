@@ -34,7 +34,6 @@ public class IndicatorController {
         updateResponse(response);
     }
 
-
     /**
      * Update the indicator data
      * @param callback

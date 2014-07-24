@@ -92,6 +92,9 @@ public class ReportJson {
 
         @JsonIgnore
         abstract int getRowVariablesCount();
+
+        @JsonIgnore
+        abstract boolean isSingleValue();
     }
 
 }
