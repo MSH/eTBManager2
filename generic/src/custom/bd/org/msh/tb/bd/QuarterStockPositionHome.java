@@ -65,12 +65,14 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	
 	public void setParametersOnReports(){
 		//Set the parameters of the selected unit to generate the report
-		quarterStockPositionReport.getTbunitselection().setTbunit(userSession.getTbunit());
+        quarterStockPositionReport.getTbunitselection().setTbunit(userSession.getTbunit());
+        quarterStockPositionReport.getTbunitselection().getAuselection().setSelectedUnit(userSession.getTbunit().getAdminUnit());
 		quarterStockPositionReport.setSource(null);
 		quarterStockPositionReport.setSelectedQuarter(selectedQuarter);
-		
+
 		//Set the parameters of the selected unit to generate the report
 		quarterBatchExpiringReport.getTbunitselection().setTbunit(userSession.getTbunit());
+        quarterBatchExpiringReport.getTbunitselection().getAuselection().setSelectedUnit(userSession.getTbunit().getAdminUnit());
 		quarterBatchExpiringReport.setSource(null);
 		quarterBatchExpiringReport.setSelectedQuarter(selectedQuarter);
 	}
