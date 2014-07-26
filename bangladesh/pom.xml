@@ -15,12 +15,12 @@
 	<version>2.0.0</version>
 	<packaging>war</packaging>
 
+    <properties>
+        <workspace-context>BD</workspace-context>
+    </properties>
+
 	<name>eTB Manager Bangladesh version</name>
 	<url>https://www.etbmanager.org</url>
-
-	<properties>
-		<workspace-context>BD</workspace-context>
-	</properties>
 
 	<build>
 		<finalName>etbmanager-bd</finalName>
@@ -59,7 +59,6 @@
 						<configuration>
 							<sources>
 								<source>../generic/src/main/java</source>
-								<source>../generic/src/org.msh.reports/java</source>
 								<source>../generic/src/client/java</source>
 								<source>../generic/src/custom/bd</source>
 							</sources>

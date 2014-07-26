@@ -20,8 +20,7 @@
 	</properties>
 
 	<name>eTB Manager generic version ${project.version}</name>
-	<url>http://www.etbmanager.org</url>
-
+	<url>https://www.etbmanager.org</url>
 
 	<build>
 		<finalName>etbmanager</finalName>
