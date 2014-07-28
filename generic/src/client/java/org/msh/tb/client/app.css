@@ -439,6 +439,7 @@ html {
     border-radius: 8px;
     margin-top:10px;
     margin-bottom:20px;
+    float:left;
 }
 
 .indicator-editor .label-editor {

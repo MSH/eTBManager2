@@ -69,21 +69,6 @@ public class ReportPanel extends Composite{
         view.setController(new IndicatorController(report, ind, null));
 
         pnlIndicators.add(view);
-/*
-
-        if (index > 0) {
-            CIndicator prevInd = report.getIndicators().get(index);
-            if (prevInd.isSingleValue()) {
-                view.addStyleName("clear-left");
-            }
-        }
-
-        CIndicator ind = report.getIndicators().get(index);
-        if ((ind.getSize() != null) && (ind.getSize() == 50)) {
-            view.addStyleName("ind50");
-        }
-        IndicatorController controller = new IndicatorController(report, ind, null);
-*/
 
         view.update(new StandardCallback<ResultView>() {
             @Override
