@@ -34,10 +34,9 @@ public abstract class IndicatorWrapperPanel extends Composite {
 
     /**
      * Update the indicator passing its controller
-     * @param controller the indicator controller
+     * @param callback callback function called when the indicator is updated
      */
-    public void update(IndicatorController controller, AsyncCallback callback) {
-        this.controller = controller;
+    public void update(AsyncCallback callback) {
         updateIndicator(callback);
     }
 
@@ -55,6 +54,15 @@ public abstract class IndicatorWrapperPanel extends Composite {
         if (eventHandler != null) {
             eventHandler.handleEvent(event, this);
         }
+    }
+
+    /**
+     * Indicate if the panel wrapping the indicator has its own style. If it
+     * returns true, the style will not be overwritten (for example, editor panel)
+     * @return true if panel applies its own style
+     */
+    public boolean isProprietaryStyle() {
+        return false;
     }
 
     public IndicatorController getController() {

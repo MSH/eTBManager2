@@ -359,9 +359,11 @@ html {
     width:100%;
 }
 
-.int50 {
-    max-width: 48%;
+.indicators-panel {
+    width:100%;
+    display: table;
 }
+
 
 /* Indicator containing a single value with a caption at the bottom */
 .ind-res-single {
@@ -369,7 +371,6 @@ html {
     color: #fff;
     border-collapse: collapse;
     text-align: center;
-    margin-right: 10px;
     border-radius: 5px;
     width: 150px;
     min-height: 100px;
@@ -389,8 +390,23 @@ html {
     padding:10px;
 }
 
+
+/* INDICATOR SUPPORT STYLES */
+
 .ind50 {
     width:47% !important;
+}
+
+.ind100 {
+    width:100% !important;
+}
+
+.margin-right {
+    margin-right:20px;
+}
+
+.line-break {
+    clear: left;
 }
 
 /* Layout of the widget that displays the indicator (including title and other widgets) */
@@ -398,7 +414,7 @@ html {
     display: inline-block;
     vertical-align: top;
     margin:10px 20px 10px 0;
-    width:100%;
+    float: left;
 }
 
 .indicator-view .ind-view-bar {

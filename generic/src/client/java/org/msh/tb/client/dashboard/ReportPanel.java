@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Label;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.indicators.IndicatorController;
 import org.msh.tb.client.indicators.IndicatorWrapperPanel;
+import org.msh.tb.client.indicators.IndicatorsPanel;
 import org.msh.tb.client.indicators.ResultView;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
@@ -26,7 +27,7 @@ public class ReportPanel extends Composite{
     private static ReportPanelUiBinder ourUiBinder = GWT.create(ReportPanelUiBinder.class);
 
     @UiField Label txtTitle;
-    @UiField FlowPanel pnlIndicators;
+    @UiField IndicatorsPanel pnlIndicators;
 
     private CReport report;
 
@@ -63,7 +64,12 @@ public class ReportPanel extends Composite{
         }
 
         IndicatorPanel view = new IndicatorPanel();
+
+        CIndicator ind = report.getIndicators().get(index);
+        view.setController(new IndicatorController(report, ind, null));
+
         pnlIndicators.add(view);
+/*
 
         if (index > 0) {
             CIndicator prevInd = report.getIndicators().get(index);
@@ -77,8 +83,9 @@ public class ReportPanel extends Composite{
             view.addStyleName("ind50");
         }
         IndicatorController controller = new IndicatorController(report, ind, null);
+*/
 
-        view.update(controller, new StandardCallback<ResultView>() {
+        view.update(new StandardCallback<ResultView>() {
             @Override
             public void onSuccess(ResultView result) {
                 updateIndicator(index + 1, callback);

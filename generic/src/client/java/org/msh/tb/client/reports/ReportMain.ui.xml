@@ -4,6 +4,7 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:rf='urn:import:org.msh.tb.client.reports.filters'
              xmlns:h='urn:import:org.msh.tb.client.ui'
+             xmlns:ind='urn:import:org.msh.tb.client.indicators'
              xmlns:rep='urn:import:org.msh.tb.client.reports'>
 	
 	<ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
@@ -69,8 +70,8 @@
 
             <h:MessagePanel ui:field="pnlMessage" visible="false" />
 
-            <g:FlowPanel ui:field="pnlIndicators">
-            </g:FlowPanel>
+            <ind:IndicatorsPanel ui:field="pnlIndicators">
+            </ind:IndicatorsPanel>
             <g:Button ui:field="lnkAddIndicator" ><i class="icon-plus-sign"><ui:text from="{msg.addIndicator}" /></i></g:Button>
 		</g:HTMLPanel>
 	</g:HTMLPanel>

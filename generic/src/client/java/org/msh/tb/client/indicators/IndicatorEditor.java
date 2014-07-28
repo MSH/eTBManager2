@@ -79,6 +79,11 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
         fireIndicatorEvent(IndicatorEvent.REMOVE);
     }
 
+    @Override
+    public boolean isProprietaryStyle() {
+        return true;
+    }
+
     /**
      * Display the indicator to be displayed
      */

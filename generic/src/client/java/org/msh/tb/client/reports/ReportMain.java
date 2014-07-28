@@ -42,7 +42,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 	@UiField MessagePanel pnlMessage;
 	@UiField HTMLPanel pnlReport;
 	@UiField ReportListPanel pnlReportList;
-    @UiField FlowPanel pnlIndicators;
+    @UiField IndicatorsPanel pnlIndicators;
     @UiField LabelEditor txtTitle;
 
     private OptionsPopup popupOptions;
@@ -69,6 +69,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         txtTitle.setEventHandler(new StandardEventHandler() {
             @Override
             public void handleEvent(Object eventType, Object data) {
+                report.setTitle(txtTitle.getText());
                 updateTitle();
             }
         });
@@ -151,7 +152,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
 	/**
 	 * Called when the user clicks on the generate report button
-	 * @param clickEvent
+	 * @param clickEvent contain information about the click event
 	 */
 	@UiHandler("btnGenerate")
 	public void btnGenerateClick(ClickEvent clickEvent) {
@@ -165,16 +166,16 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
      */
     private void updateIndicatorPanel(final int index) {
         // index is higher than the number of panels ?
-        if (index >= pnlIndicators.getWidgetCount()) {
+        if (index >= pnlIndicators.getIndicatorsCount()) {
             showMessage("Report was successfully updated", MessagePanel.MessageType.INFO);
             return;
         }
 
-        final IndicatorWrapperPanel pnl = (IndicatorWrapperPanel)pnlIndicators.getWidget(index);
+        final IndicatorWrapperPanel pnl = pnlIndicators.getIndicatorPanel(index);
         // clear the response in order to force an update
         pnl.getController().clearData();
 
-        pnl.update(pnl.getController(), new StandardCallback<ResultView>() {
+        pnl.update(new StandardCallback<ResultView>() {
             @Override
             public void onSuccess(ResultView result) {
                 updateIndicatorPanel(index + 1);
@@ -268,58 +269,6 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
 		// show popup window
 		patientListPopup.showPatients(filters);
-	}
-*/
-
-	
-	/**
-	 * Select the chart from a number of 0 to the max number of charttypes array 
-	 * @param chartType identify the type of chart to display
-	 */
-/*
-	public void selectChart(CChartType chartType) {
-		Image img = new Image(chartImgs[chartType.ordinal()]);
-		Element el = (Element)lnkChartType.getElement();
-		if (DOM.getChildCount(el) > 0)
-			el.removeChild(DOM.getFirstChild(el));
-		DOM.insertChild(el, img.getElement(), 0);
-
-		chart.setSelectedChart(chartType);
-		updateChart();
-	}
-*/
-
-	
-	/**
-	 * Return the selected chart type
-	 * @return
-	 */
-/*
-	public CChartType getChartType() {
-		return chart.getSelectedChart();
-	}
-*/
-
-	/**
-	 * @param selectedCol the selectedCol to set
-	 */
-/*
-	public void setSelectedCol(int selectedCol) {
-		tableData.setSelection(TableSelection.COLUMN);
-		tableData.setSelectedCell(selectedCol);
-		updateChart();
-	}
-*/
-
-
-	/**
-	 * @param selectedRow the selectedRow to set
-	 */
-/*
-	public void setSelectedRow(int selectedRow) {
-		tableData.setSelection(TableSelection.ROW);
-		tableData.setSelectedCell(selectedRow);
-		updateChart();
 	}
 */
 
@@ -432,10 +381,11 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         }
         pnlIndicator.setEventHandler(this);
         if (index == -1) {
-            index = pnlIndicators.getWidgetCount();
+            index = pnlIndicators.getIndicatorsCount();
         }
+        pnlIndicator.setController(controller);
         pnlIndicators.insert(pnlIndicator, index);
-        pnlIndicator.update(controller, callback);
+        pnlIndicator.update(callback);
     }
 	
 	/**
@@ -469,6 +419,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
         addIndicators(0, new StandardCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
+//                pnlIndicators.updateIndicatorsStyles();
 //                showMessage("Report successfully loaded", MessagePanel.MessageType.INFO);
             }
         });
@@ -614,7 +565,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
      * @param editor the instance of {@link org.msh.tb.client.indicators.IndicatorEditor} to close
      */
     protected void closeEditor(IndicatorEditor editor) {
-        int index = pnlIndicators.getWidgetIndex(editor);
+        int index = pnlIndicators.getIndicatorIndex(editor);
         pnlIndicators.remove(index);
         addIndicatorPanel(editor.getController(), false, index, null);
     }
@@ -624,7 +575,7 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
      * @param view the indicator view
      */
     protected void editIndicator(IndicatorView view) {
-        int index = pnlIndicators.getWidgetIndex(view);
+        int index = pnlIndicators.getIndicatorIndex(view);
         pnlIndicators.remove(index);
         addIndicatorPanel(view.getController(), true, index, null);
     }
