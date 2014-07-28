@@ -394,7 +394,7 @@ html {
 /* INDICATOR SUPPORT STYLES */
 
 .ind50 {
-    width:47% !important;
+    width:48% !important;
 }
 
 .ind100 {
@@ -402,7 +402,7 @@ html {
 }
 
 .margin-right {
-    margin-right:20px;
+    margin-right:4%;
 }
 
 .line-break {
@@ -413,7 +413,8 @@ html {
 .indicator-view {
     display: inline-block;
     vertical-align: top;
-    margin:10px 20px 10px 0;
+    margin-top:10px;
+    margin-bottom:10px;
     float: left;
 }
 
@@ -428,7 +429,7 @@ html {
     background-color: #000;
     color: #fff;
     margin-right:4px;
-    padding:3px 6px;
+    padding: 6px;
     border-radius: 4px;
     font-size:11px;
 }
@@ -515,6 +516,7 @@ html {
 
 .dashboard {
     width:805px;
+    display: table;
 }
 
 .dashboard h2 {

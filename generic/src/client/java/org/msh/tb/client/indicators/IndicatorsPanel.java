@@ -1,5 +1,6 @@
 package org.msh.tb.client.indicators;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -82,7 +83,7 @@ public class IndicatorsPanel extends Composite {
         }
 
         boolean prevSingle = false;
-        boolean endOfLine = false;
+        boolean prev50 = false;
         if (index > 0) {
             // get information about previous indicator
             IndicatorWrapperPanel prev = getIndicatorPanel(index - 1);
@@ -90,7 +91,8 @@ public class IndicatorsPanel extends Composite {
                 prevSingle = true;
             }
             else {
-                endOfLine = !prev.getStyleName().contains("line-break");
+                String s = prev.getStyleName();
+                prev50 = s.contains("ind50") && s.contains("line-break");
             }
         }
 
@@ -100,6 +102,7 @@ public class IndicatorsPanel extends Composite {
         IndicatorController controller = pnl.getController();
         CIndicator ind = controller.getIndicator();
         if (ind.isSingleValue()) {
+            style += " margin-right";
             if (!prevSingle) {
                 style += " line-break";
             }
@@ -107,20 +110,20 @@ public class IndicatorsPanel extends Composite {
         }
         else {
             // is end of line ?
-            if ((endOfLine) || (prevSingle)) {
+            if ((!prev50) || (prevSingle)) {
                 style += " line-break";
             }
             // evaluate size
             if ((ind.getSize() == null) || (ind.getSize() == 100)) {
                 style += " ind100";
-                endOfLine = true;
+                prev50 = true;
             }
             else {
                 style += " ind50";
-                if (!endOfLine) {
+                if (!prev50) {
                     style += " margin-right";
                 }
-                endOfLine = false;
+                prev50 = !prev50;
             }
         }
         pnl.setStyleName(style);
