@@ -32,6 +32,8 @@ public class ResultView extends Composite {
     private TableView table;
     private Label txtTitle;
 
+    private StandardEventHandler eventHandler;
+
     private boolean singleValue;
 
     /**
@@ -213,17 +215,12 @@ public class ResultView extends Composite {
                 updateChart();
                 break;
             default:
-                showPatients((Cell)info);
+                if (eventHandler != null) {
+                    eventHandler.handleEvent(evt, info);
+                }
         }
     }
 
-    /**
-     * Show the patient panel
-     * @param cell the cell to display
-     */
-    protected void showPatients(Cell cell) {
-        Window.alert("Not implemented");
-    }
 
     /**
      * Insert a chart to the table in the given position
@@ -235,5 +232,11 @@ public class ResultView extends Composite {
         ChartReport.update(chart, controller.getData());
     }
 
+    public StandardEventHandler getEventHandler() {
+        return eventHandler;
+    }
 
+    public void setEventHandler(StandardEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
 }

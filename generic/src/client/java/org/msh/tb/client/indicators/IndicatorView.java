@@ -8,6 +8,16 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import org.msh.tb.client.commons.StandardEventHandler;
+import org.msh.tb.client.reports.CaseListPopup;
+import org.msh.tb.client.shared.model.CTableColumn;
+import org.msh.tb.client.shared.model.CTableRow;
+import org.msh.tb.client.shared.model.CVariable;
+import org.msh.tb.client.tableview.Cell;
+import org.msh.tb.client.tableview.TableData;
+import org.msh.tb.client.tableview.TableView;
+
+import java.util.HashMap;
 
 /**
  * Panel wrapper that displays the indicator and, when hovering, displays a
@@ -46,7 +56,70 @@ public class IndicatorView extends IndicatorWrapperPanel {
                 mouseOut();
             }
         });
+
+        // handle cell click
+        resIndicator.setEventHandler(new StandardEventHandler() {
+            @Override
+            public void handleEvent(Object eventType, Object data) {
+                handleResultTableEvent(eventType, data);
+            }
+        });
     }
+
+    /**
+     * Handle table events
+     * @param eventType the type of event
+     * @param data the data related to the event
+     */
+    private void handleResultTableEvent(Object eventType, Object data) {
+        if (eventType == TableView.Event.CELL_CLICK) {
+            showPatients((Cell)data);
+        }
+    }
+
+    /**
+     * Show the list of patients
+     * @param cell
+     */
+    private void showPatients(Cell cell) {
+        // get variables from the row
+        int index = cell.getRow();
+
+        TableData tbl = getController().getData();
+        HashMap<String, String> filters = getController().createRequest().getFilters();
+        if (filters == null) {
+            filters = new HashMap<String, String>();
+        }
+        int level = tbl.getTable().getRows().get(index).getLevel();
+
+        // get key values from rows
+        while (index >= 0) {
+            CTableRow row = tbl.getTable().getRows().get(index);
+            if (row.getLevel() == level) {
+                CVariable var = tbl.getRowVariables().get(row.getVarIndex());
+                String prevkey = filters.get(var.getId());
+                if (prevkey != null)
+                    filters.put(var.getId(), row.getKey() + ";" + prevkey);
+                else filters.put(var.getId(), row.getKey());
+                level--;
+                if (level == -1)
+                    break;
+            }
+            index--;
+        }
+
+        // get key values from columns
+        CTableColumn col = tbl.getHeaderColumns().get(cell.getColumn());
+        while (col != null) {
+            CVariable var = tbl.getColVariables().get(col.getLevel());
+            filters.put(var.getId(), col.getKey());
+            col = col.getParent();
+        }
+
+        // show popup window
+        CaseListPopup.instance().showPatients(filters);
+    }
+
 
     /**
      * Update the content of the indicator view with the given indicator

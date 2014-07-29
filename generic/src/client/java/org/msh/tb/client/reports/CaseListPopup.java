@@ -26,6 +26,8 @@ public class CaseListPopup extends PopupPanel {
 	interface Binder extends UiBinder<VerticalPanel, CaseListPopup> { }
 	private static final Binder binder = GWT.create(Binder.class);
 
+    private static final String RESOURCE_KEY = "report.ui.caseListPopup";
+
 	private VerticalPanel panel;
 	@UiField HTML txtResult;
 	@UiField FlexTable table;
@@ -172,4 +174,17 @@ public class CaseListPopup extends PopupPanel {
 	public void hide() {
 		super.hide();
 	}
+
+    /**
+     * Return the singleton instance of the class
+     * @return instance of CaseListPopup
+     */
+    public static CaseListPopup instance() {
+        CaseListPopup popup = (CaseListPopup)AppResources.instance().get(RESOURCE_KEY);
+        if (popup == null) {
+            popup = new CaseListPopup();
+            AppResources.instance().set(RESOURCE_KEY, popup);
+        }
+        return popup;
+    }
 }
