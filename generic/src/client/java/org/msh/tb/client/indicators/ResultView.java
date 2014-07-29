@@ -203,17 +203,11 @@ public class ResultView extends Composite {
         TableData data = controller.getData();
         switch (evt) {
             case ROW_CLICK:
-                data.setSelection(CTableSelection.ROW);
-                data.setSelectedCell((Integer)info);
-
                 ind.setTblSelection(CTableSelection.ROW);
                 ind.setTblSelectedCell((Integer)info);
                 updateChart();
                 break;
             case COL_CLICK:
-                data.setSelection(CTableSelection.COLUMN);
-                data.setSelectedCell((Integer)info);
-
                 ind.setTblSelection(CTableSelection.COLUMN);
                 ind.setTblSelectedCell((Integer)info);
                 updateChart();

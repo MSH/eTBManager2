@@ -4,6 +4,7 @@
 package org.msh.tb.client.chart;
 
 import org.msh.tb.client.App;
+import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CTableColumn;
 import org.msh.tb.client.shared.model.CTableRow;
 import org.msh.tb.client.shared.model.CTableSelection;
@@ -36,10 +37,13 @@ public class ChartReport {
 			title = App.messages.numberOfCases();
 		chart.setyAxisTitle(title);
 
+        CIndicator indicator = tableData.getIndicator();
+        int selectedCell = indicator.getTblSelectedCell() != null? indicator.getTblSelectedCell(): TableData.CELL_TITLE;
+
 		// is row selected ?
-		if (tableData.getSelection() == CTableSelection.ROW) {
+		if (indicator.getTblSelection() == CTableSelection.ROW) {
 			// clicked on the position of the table 0,0 ?
-			if (tableData.getSelectedCell() == TableData.CELL_TITLE) {
+			if (selectedCell == TableData.CELL_TITLE) {
                 if ((tableData.getRowVariables() != null) && (tableData.getColVariables() != null)) {
                     chart.setTitle(tableData.getRowVariables().get(0).getName() + " x " + tableData.getColVariables().get(0).getName());
                 }
@@ -56,7 +60,7 @@ public class ChartReport {
 					}
 				}
 			}
-			else if (tableData.getSelectedCell() == TableData.CELL_TOTAL) {
+			else if (selectedCell == TableData.CELL_TOTAL) {
 				chart.setTitle(tableData.getColVariables().get(0).getName());
 				chart.setSubTitle(App.messages.total());
 				ChartSeries series = chart.addSeries(App.messages.total());
@@ -67,7 +71,7 @@ public class ChartReport {
 			}
 			else {
 				// create title of the report
-				CTableRow row = tableData.getTable().getRows().get(tableData.getSelectedCell());
+				CTableRow row = tableData.getTable().getRows().get(selectedCell);
 				String colTitle = tableData.getColVariables().get(0).getName();
 				chart.setTitle(App.messages.numberOfCasesBy() + " " + colTitle);
 				chart.setSubTitle( tableData.getRowVariables().get(row.getVarIndex()).getName() + ": " + row.getTitle());
@@ -101,7 +105,7 @@ public class ChartReport {
 		}
 		else {
 			// clicked on the position of the table 0,0 ?
-			if (tableData.getSelectedCell() == TableData.CELL_TITLE) {
+			if (selectedCell == TableData.CELL_TITLE) {
 				chart.setTitle(tableData.getRowVariables().get(0).getName() + " x " + tableData.getColVariables().get(0).getName());
 				chart.setSubTitle(null);
 				
@@ -116,7 +120,7 @@ public class ChartReport {
 				}
 			}
 			else 
-			if (tableData.getSelectedCell() == TableData.CELL_TOTAL) {
+			if (selectedCell == TableData.CELL_TOTAL) {
 				chart.setTitle(tableData.getRowVariables().get(0).getName());
 				chart.setSubTitle(App.messages.total());
 				ChartSeries series = chart.addSeries(App.messages.total());
@@ -127,12 +131,12 @@ public class ChartReport {
 			}
 			else {
 				// column was selected
-				CTableColumn col = tableData.getColumn(tableData.getSelectedCell());
+				CTableColumn col = tableData.getColumn(selectedCell);
 				String s = col.getTitle();
 				
 				String colTitle = tableData.getRowVariables().get(0).getName();
 				chart.setTitle(App.messages.numberOfCasesBy() + " " + colTitle);
-				chart.setSubTitle(tableData.getColumnDisplaySelection(tableData.getSelectedCell()));
+				chart.setSubTitle(tableData.getColumnDisplaySelection(selectedCell));
 
 				// the rows are grouped ?
 				if (tableData.isRowGrouped()) {
@@ -145,14 +149,14 @@ public class ChartReport {
 							series = chart.addSeries(lbl.getGroupLabel());
 							prevName = lbl.getGroupLabel();
 						}
-						series.addValue(lbl.getItemLabel(), lbl.getRow().getValues()[tableData.getSelectedCell()]);
+						series.addValue(lbl.getItemLabel(), lbl.getRow().getValues()[selectedCell]);
 					}
 				}
 				else {
 					// just one variable selected for the row
 					ChartSeries series = chart.addSeries(s);
 					for (CTableRow row: tableData.getTable().getRows()) {
-						series.addValue(row.getTitle(), row.getValues()[tableData.getSelectedCell()]);
+						series.addValue(row.getTitle(), row.getValues()[selectedCell]);
 					}
 				}
 			}

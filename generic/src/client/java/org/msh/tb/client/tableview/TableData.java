@@ -20,6 +20,7 @@ public class TableData {
 	// selected column and row to draw the chart
 	private int selectedCell = TableData.CELL_TITLE;
 	private CTableSelection selection = CTableSelection.ROW;
+    private CIndicator indicator;
 
 	/**
 	 * Table sent from the server
@@ -141,6 +142,8 @@ public class TableData {
 	 * @param table contains data of a report
 	 */
 	public void update(CIndicator indicator, CIndicatorResponse table) {
+        this.indicator = indicator;
+
         updateVariables(indicator);
 		// initialize list of columns per row
 		List<List<CTableColumn>> columnRows = new ArrayList<List<CTableColumn>>();
@@ -470,32 +473,11 @@ public class TableData {
 		return totalColumn;
 	}
 
-	/**
-	 * @return the selectedCell
-	 */
-	public int getSelectedCell() {
-		return selectedCell;
-	}
+    public CIndicator getIndicator() {
+        return indicator;
+    }
 
-	/**
-	 * @param selectedCell the selectedCell to set
-	 */
-	public void setSelectedCell(int selectedCell) {
-		this.selectedCell = selectedCell;
-	}
-
-	/**
-	 * @return the selection
-	 */
-	public CTableSelection getSelection() {
-		return selection;
-	}
-
-	/**
-	 * @param selection the selection to set
-	 */
-	public void setSelection(CTableSelection selection) {
-		this.selection = selection;
-	}
-
+    public void setIndicator(CIndicator indicator) {
+        this.indicator = indicator;
+    }
 }

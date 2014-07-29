@@ -226,14 +226,12 @@ public class TableView extends Composite {
 		// is total column cell ?
 		if ((row == 0) && (col == 2)) {
             fireTableEvent(Event.COL_CLICK, TableData.CELL_TOTAL);
-//			ReportMain.instance().setSelectedCol(TableData.CELL_TOTAL);
 			return;
 		}
 
 		// is total column row ?
 		if ((col == 0) && (row == rowcount + colheadersize + 1)) {
             fireTableEvent(Event.ROW_CLICK, TableData.CELL_TOTAL);
-//			ReportMain.instance().setSelectedRow(TableData.CELL_TOTAL);
 			return;
 		}
 
@@ -244,7 +242,6 @@ public class TableView extends Composite {
 		// is cell containing value
 		if ((row > colheadersize) && (col > 0)) {
             fireTableEvent(Event.CELL_CLICK, new Cell(col -1, row - colheadersize - 1));
-//			ReportMain.instance().showPatientList(col - 1, row - colheadersize - 1);
 		}
 		
 		// row title selection is just available if data is not grouped
@@ -259,7 +256,6 @@ public class TableView extends Composite {
 			// clicked on the column variable title ?
 			if ((col == 1) && (row == 0)) {
                 fireTableEvent(Event.COL_CLICK, -1);
-//				ReportMain.instance().setSelectedCol(-1);
 				return;
 			}
 		}
@@ -267,12 +263,10 @@ public class TableView extends Composite {
 		// row selected ?
 		if (row == colheadersize) {
             fireTableEvent(Event.COL_CLICK, col);
-//            ReportMain.instance().setSelectedCol(col);
         }
 		else
 			if ((col == 0) && (row > colheadersize)) {
                 fireTableEvent(Event.ROW_CLICK, row - colheadersize - 1);
-//                ReportMain.instance().setSelectedRow(row - colheadersize - 1);
             }
 	}
 
