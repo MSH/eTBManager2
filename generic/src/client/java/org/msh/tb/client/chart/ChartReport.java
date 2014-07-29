@@ -106,7 +106,9 @@ public class ChartReport {
 		else {
 			// clicked on the position of the table 0,0 ?
 			if (selectedCell == TableData.CELL_TITLE) {
-				chart.setTitle(tableData.getRowVariables().get(0).getName() + " x " + tableData.getColVariables().get(0).getName());
+                if ((tableData.getRowVariables() != null) && (tableData.getColVariables() != null)) {
+                    chart.setTitle(tableData.getRowVariables().get(0).getName() + " x " + tableData.getColVariables().get(0).getName());
+                }
 				chart.setSubTitle(null);
 				
 				List<CTableRow> rows = tableData.getTable().getRows();
