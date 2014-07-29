@@ -114,4 +114,10 @@ public interface ReportConstants extends Constants {
 
     @Key("form.confirm_remove")
     String confirmDelete();
+
+    @Key("manag.reportgen.repfilters")
+    String reportFilters();
+
+    @Key("manag.reportgen.indfilters")
+    String indicatorFilters();
 }

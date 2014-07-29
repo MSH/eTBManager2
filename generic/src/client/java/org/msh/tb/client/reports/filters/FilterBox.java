@@ -93,4 +93,5 @@ public class FilterBox extends HoverPanel {
 	public void setFiltersPanel(FiltersPanel filtersPanel) {
 		this.filtersPanel = filtersPanel;
 	}
+
 }

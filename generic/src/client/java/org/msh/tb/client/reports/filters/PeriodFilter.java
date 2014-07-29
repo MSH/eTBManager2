@@ -1,5 +1,7 @@
 package org.msh.tb.client.reports.filters;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -159,6 +161,12 @@ public class PeriodFilter extends FilterWidget {
 	@SuppressWarnings("deprecation")
 	protected ListBox createMonthListbox() {
 		ListBox lb = new ListBox();
+        lb.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                notifyFilterChange();
+            }
+        });
 		lb.setVisibleItemCount(1);
 
 		String[] months = LocaleInfo.getCurrentLocale().getDateTimeConstants().shortMonths();

@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
 import org.msh.tb.client.AppResources;
+import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.shared.ReportServiceAsync;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CItem;
@@ -14,6 +15,9 @@ import java.util.List;
 public abstract class FilterWidget extends Composite {
 
 	private CFilter filter;
+    private StandardEventHandler eventHandler;
+
+    private boolean initializing;
 
 	/**
 	 * Initialize the filter
@@ -50,14 +54,20 @@ public abstract class FilterWidget extends Composite {
 	 * @param options list of {@link CItem} options
 	 */
 	protected void fillListOptions(ListBox lb, List<CItem> options, String value) {
-		lb.clear();
-		lb.addItem("-");
-		for (CItem opt: options) {
-			lb.addItem(opt.getLabel(), opt.getValue());
-			if ((value != null) && (value.equals(opt.getValue()))) {
-				lb.setSelectedIndex(lb.getItemCount() - 1);
-			}
-		}
+        setInitializing(true);
+        try {
+            lb.clear();
+            lb.addItem("-");
+            for (CItem opt: options) {
+                lb.addItem(opt.getLabel(), opt.getValue());
+                if ((value != null) && (value.equals(opt.getValue()))) {
+                    lb.setSelectedIndex(lb.getItemCount() - 1);
+                }
+            }
+        }
+        finally {
+            setInitializing(false);
+        }
 	}
 	
 	/**
@@ -70,4 +80,29 @@ public abstract class FilterWidget extends Composite {
 		ReportServiceAsync srv = AppResources.reportServices();
 		srv.getFilterOptions(filter.getId(), param, callback);
 	}
+
+    /**
+     * Called when the filter changes its content
+     */
+    protected void notifyFilterChange() {
+        if ((eventHandler != null) || (initializing)) {
+            eventHandler.handleEvent(this, null);
+        }
+    }
+
+    public StandardEventHandler getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(StandardEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    public boolean isInitializing() {
+        return initializing;
+    }
+
+    public void setInitializing(boolean initializing) {
+        this.initializing = initializing;
+    }
 }

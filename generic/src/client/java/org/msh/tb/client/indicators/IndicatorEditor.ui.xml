@@ -27,7 +27,7 @@
         </div>
 
         <div class="panel editor">
-            <rf:FiltersPanel ui:field="pnlFilters"></rf:FiltersPanel>
+            <rf:FiltersPanel ui:field="pnlFilters" title="{msg.indicatorFilters}"></rf:FiltersPanel>
             <hr/>
             <rv:VariablesPanel ui:field="pnlVariables"></rv:VariablesPanel>
             <hr/>

@@ -76,6 +76,9 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
 
         popupOptions = new OptionsPopup();
         popupOptions.setEventHandler(this);
+
+        // set filter change listener
+        pnlGlobalFilters.setEventHandler(this);
 	}
 
 
@@ -557,7 +560,20 @@ public class ReportMain extends Composite implements AppModule, StandardEventHan
             return;
         }
 
+        if (eventType == FiltersPanel.Event.FILTERS_CHANGE) {
+            filtersChangeListener();
+            return;
+        }
+
         Window.alert("Not handled: " + eventType + " = " + data);
+    }
+
+
+    /**
+     * Called when the report filters are changed
+     */
+    protected void filtersChangeListener() {
+        report.setFilters( pnlGlobalFilters.getFilters() );
     }
 
     /**

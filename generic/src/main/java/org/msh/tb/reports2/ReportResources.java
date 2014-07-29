@@ -87,7 +87,7 @@ public class ReportResources {
 	 */
 	protected ReportGroup addTreatmentVariables() {
 		ReportGroup grp = addGroup("cases.details.treatment");
-		add(grp, new TbunitVariable("treatunit", "TbCase.ownerUnit", "tbcase.owner_unit_id"));
+		add(grp, new TbunitVariable("treatunit", "FilterHealthUnit.TREATMENT_UNIT", "tbcase.owner_unit_id"));
 		add(grp, new DateFieldVariable("initreat", "TbCase.iniTreatmentDate", "tbcase.initreatmentdate", true));
 		addVariable(grp, new DateFieldVariable("initreatM", "#{messages['TbCase.iniTreatmentDate']} (#{messages['global.months']})", "tbcase.initreatmentdate", false));
 		add(grp, new DateFieldVariable("endtreat", "TbCase.endTreatmentDate", "tbcase.endtreatmentdate", true));

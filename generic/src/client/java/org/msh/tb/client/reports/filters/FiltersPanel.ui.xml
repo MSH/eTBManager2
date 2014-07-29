@@ -14,7 +14,7 @@
         <table width="100%">
             <tr>
                 <td>
-                    <h2><ui:text from="{msg.filters}" /></h2>
+                    <g:Label ui:field="txtTitle" styleName="subtitle"><ui:text from="{msg.filters}"/></g:Label>
                 </td>
                 <td align="right">
                     <g:Button ui:field="btnAddFilter" text="{msg.addFilters}"/>

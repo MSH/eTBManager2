@@ -40,6 +40,7 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
     @UiField HTMLPanel pnlCommands;
 
     private ChartPopup chartPopup;
+    private boolean initialized;
 
     /**
      * Default constructor
@@ -57,7 +58,7 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
 
         lbSize.addItem("100%");
         lbSize.addItem("50%");
-        lbSize.addItem("25%");
+//        lbSize.addItem("25%");
         lbSize.setSelectedIndex(0);
         lbSize.addChangeHandler(new ChangeHandler() {
             @Override
@@ -68,6 +69,8 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
 
         pnlVariables.setEventHandler(this);
         txtTitle.setEventHandler(this);
+
+        pnlFilters.setEventHandler(this);
     }
 
     /**
@@ -89,27 +92,29 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
      */
     @Override
     public void updateIndicator(AsyncCallback<ResultView> callback) {
-        updateTitle();
-
         CIndicator ind = getController().getIndicator();
-        txtTitle.setText(ind.getTitle());
 
-        pnlVariables.setColumnVariables(ind.getColVariables());
-        pnlVariables.setRowVariables(ind.getRowVariables());
-        pnlFilters.setFilters(ind.getFilters());
-        updateCommandBar();
+        if (!initialized) {
+            updateTitle();
 
-        updateChartButton();
+            pnlVariables.setColumnVariables(ind.getColVariables());
+            pnlVariables.setRowVariables(ind.getRowVariables());
+            pnlFilters.setFilters(ind.getFilters());
+            updateCommandBar();
 
-        // update size indicator
-        if (ind.getSize() != null) {
-            switch (ind.getSize()) {
-                case 50: lbSize.setSelectedIndex(1);
-                    break;
-                case 25: lbSize.setSelectedIndex(2);
-                    break;
-                default: lbSize.setSelectedIndex(0);
+            updateChartButton();
+
+            // update size indicator
+            if (ind.getSize() != null) {
+                switch (ind.getSize()) {
+                    case 50: lbSize.setSelectedIndex(1);
+                        break;
+                    case 25: lbSize.setSelectedIndex(2);
+                        break;
+                    default: lbSize.setSelectedIndex(0);
+                }
             }
+            initialized = true;
         }
 
         resIndicator.update(getController(), callback);
@@ -239,6 +244,11 @@ public class IndicatorEditor extends IndicatorWrapperPanel implements StandardEv
         if (eventType == txtTitle) {
             getController().getIndicator().setTitle((String)data);
             resIndicator.notifyTitleChange();
+            return;
+        }
+
+        if (eventType == FiltersPanel.Event.FILTERS_CHANGE) {
+            getController().getIndicator().setFilters(pnlFilters.getFilters());
         }
     }
 

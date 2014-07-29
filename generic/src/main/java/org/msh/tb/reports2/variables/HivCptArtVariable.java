@@ -35,7 +35,7 @@ public class HivCptArtVariable extends VariableImpl {
 	public HivCptArtVariable(ReportType type) {
 		super(type == ReportType.CPT_REPORT ? "hiv_ctp" : "hiv_art", 
 				type == ReportType.CPT_REPORT? "cases.examhiv.cpt" : "cases.examhiv.art", 
-				null, UnitType.EXAM_HIV);
+				null, null);
 		this.type = type;
 	}
 

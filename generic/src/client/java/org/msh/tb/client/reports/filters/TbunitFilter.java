@@ -31,7 +31,7 @@ public class TbunitFilter extends FilterWidget {
 	private ChangeHandler adminUnitSelHandler = new ChangeHandler() {
 		@Override
 		public void onChange(ChangeEvent event) {
-			AdminUnitChanged();
+			adminUnitChanged();
 		}
 	};
 	
@@ -98,11 +98,17 @@ public class TbunitFilter extends FilterWidget {
 	/**
 	 * Called when the selection in the list box with administrative units is changed
 	 */
-	protected void AdminUnitChanged() {
+	protected void adminUnitChanged() {
 		if (lbUnits == null) {
 			lbUnits = new ListBox();
 			lbUnits.setVisibleItemCount(1);
 			lbUnits.setWidth("300px");
+            lbUnits.addChangeHandler(new ChangeHandler() {
+                @Override
+                public void onChange(ChangeEvent event) {
+                    notifyFilterChange();
+                }
+            });
 			
 			panel.add(lbUnits);
 		}
@@ -122,6 +128,7 @@ public class TbunitFilter extends FilterWidget {
 				}
 			});
 		}
+        notifyFilterChange();
 	}
 
 	/** {@inheritDoc}

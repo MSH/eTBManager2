@@ -45,13 +45,11 @@
 		    
 		</rep:ReportListPanel>
 		<g:HTMLPanel ui:field="pnlReport" styleName="report-panel">
-            <table width="100%">
+            <table width="100%" style="margin-bottom:8px">
                 <tr>
                     <td>
-                        <h2>
-                            <g:Anchor ui:field="lnkOpen" styleName="gwt-Button {style.openReport}"><i class="icon-chevron-down"></i></g:Anchor>
-                            <h:LabelEditor ui:field="txtTitle" />
-                        </h2>
+                        <g:Anchor ui:field="lnkOpen" styleName="gwt-Button {style.openReport}"><i class="icon-chevron-down"></i></g:Anchor>
+                        <h:LabelEditor ui:field="txtTitle" />
                     </td>
                     <td align="right">
                         <g:Anchor ui:field="lnkSave" styleName="{style.iconButton}" title="{msg.saveReport}"><i class="icon-save"></i></g:Anchor>
@@ -61,7 +59,7 @@
             </table>
 
             <div class="panel">
-                <rf:FiltersPanel ui:field="pnlGlobalFilters" />
+                <rf:FiltersPanel ui:field="pnlGlobalFilters" title="{msg.reportFilters}" />
             </div>
             <div class="pull-right">
                 <g:Button ui:field="btnGenerate" text="{msg.update}"/>
