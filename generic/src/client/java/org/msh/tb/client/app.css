@@ -362,8 +362,8 @@ html {
 }
 
 .indicators-panel {
-    width:100%;
-    display: table;
+    width:980px;
+    display: block;
 }
 
 
@@ -443,6 +443,7 @@ html {
     margin-top:10px;
     margin-bottom:20px;
     float:left;
+    max-width: 950px;
 }
 
 .indicator-editor .label-editor {
@@ -518,7 +519,7 @@ html {
 
 .dashboard {
     width:805px;
-    display: table;
+    display: block;
 }
 
 .dashboard h2 {
