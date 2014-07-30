@@ -90,30 +90,42 @@ public class IndicatorView extends IndicatorWrapperPanel {
         if (filters == null) {
             filters = new HashMap<String, String>();
         }
-        int level = tbl.getTable().getRows().get(index).getLevel();
+        HashMap<String, String> tmpmap = new HashMap<String, String>();
 
-        // get key values from rows
-        while (index >= 0) {
-            CTableRow row = tbl.getTable().getRows().get(index);
-            if (row.getLevel() == level) {
-                CVariable var = tbl.getRowVariables().get(row.getVarIndex());
-                String prevkey = filters.get(var.getId());
-                if (prevkey != null)
-                    filters.put(var.getId(), row.getKey() + ";" + prevkey);
-                else filters.put(var.getId(), row.getKey());
-                level--;
-                if (level == -1)
-                    break;
+        if (tbl.getRowVariables() != null) {
+            int level = tbl.getTable().getRows().get(index).getLevel();
+
+            // get key values from rows
+            while (index >= 0) {
+                CTableRow row = tbl.getTable().getRows().get(index);
+                if (row.getLevel() == level) {
+                    CVariable var = tbl.getRowVariables().get(row.getVarIndex());
+                    String prevkey = filters.get(var.getId());
+                    if (prevkey != null)
+                        filters.put(var.getId(), row.getKey() + ";" + prevkey);
+                    else filters.put(var.getId(), row.getKey());
+                    level--;
+                    if (level == -1)
+                        break;
+                }
+                index--;
             }
-            index--;
         }
 
-        // get key values from columns
-        CTableColumn col = tbl.getHeaderColumns().get(cell.getColumn());
-        while (col != null) {
-            CVariable var = tbl.getColVariables().get(col.getLevel());
-            filters.put(var.getId(), col.getKey());
-            col = col.getParent();
+        if (tbl.getColVariables() != null) {
+            // get key values from columns
+            CTableColumn col = tbl.getHeaderColumns().get(cell.getColumn());
+            tmpmap.clear();
+            while (col != null) {
+                int level = col.getLevel();
+                int n = tbl.getTable().getColVarIndex()[level];
+                CVariable var = tbl.getColVariables().get(n);
+                if (!tmpmap.containsKey(var.getId())) {
+                    tmpmap.put(var.getId(), col.getKey());
+                }
+                col = col.getParent();
+            }
+            filters.putAll(tmpmap);
         }
 
         // show popup window

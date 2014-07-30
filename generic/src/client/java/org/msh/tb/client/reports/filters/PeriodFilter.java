@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.*;
 import org.msh.tb.client.App;
 import org.msh.tb.client.reports.ReportUtils;
 import org.msh.tb.client.shared.model.CFilter;
+import org.msh.tb.sync.actions.StandardAction;
 
 import java.util.Date;
 
@@ -32,6 +33,16 @@ public class PeriodFilter extends FilterWidget {
 	private HorizontalPanel pnlFixedPeriod;
 	
 	private ListBox iniMonth, iniYear, endMonth, endYear, cbFixedOption;
+
+    /**
+     * Default change handler for combo boxes
+     */
+    private ChangeHandler changeHandler = new ChangeHandler() {
+        @Override
+        public void onChange(ChangeEvent event) {
+            notifyFilterChange();
+        }
+    };
 	
 	/**
 	 * Default constructor
@@ -142,6 +153,7 @@ public class PeriodFilter extends FilterWidget {
 			pnlFixedPeriod = new HorizontalPanel();
 			
 			cbFixedOption = new ListBox();
+            cbFixedOption.addChangeHandler(changeHandler);
 			cbFixedOption.setVisibleItemCount(1);
 			pnlFixedPeriod.add(cbFixedOption);
 			cbFixedOption.addItem("-");
@@ -161,12 +173,7 @@ public class PeriodFilter extends FilterWidget {
 	@SuppressWarnings("deprecation")
 	protected ListBox createMonthListbox() {
 		ListBox lb = new ListBox();
-        lb.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                notifyFilterChange();
-            }
-        });
+        lb.addChangeHandler(changeHandler);
 		lb.setVisibleItemCount(1);
 
 		String[] months = LocaleInfo.getCurrentLocale().getDateTimeConstants().shortMonths();
@@ -184,12 +191,7 @@ public class PeriodFilter extends FilterWidget {
 	 */
 	protected ListBox createYearListbox() {
 		ListBox lb = new ListBox();
-        lb.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                notifyFilterChange();
-            }
-        });
+        lb.addChangeHandler(changeHandler);
 		lb.setVisibleItemCount(1);
 
 		Date dt = ReportUtils.getReportUIData().getCurrentDate();
