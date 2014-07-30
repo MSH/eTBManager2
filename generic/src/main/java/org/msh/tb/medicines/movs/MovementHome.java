@@ -535,7 +535,7 @@ public class MovementHome {
         for (BatchMovement bm: mov.getBatches()) {
             entityManager.remove(bm);
         }
-//        entityManager.flush();
+        entityManager.flush();
     }
 
 

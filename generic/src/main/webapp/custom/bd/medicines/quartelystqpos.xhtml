@@ -103,10 +103,14 @@
 						<h:outputText value="#{row.getEstimatedMonthsOfStock()}" style="color:#{row.getEstimatedMonthsOfStock() le userSession.getWorkspace().minStockOnHand ? 'red' : (row.getEstimatedMonthsOfStock() ge userSession.getWorkspace().maxStockOnHand ? 'darkgoldenrod' : 'black')}" />
 						<h:outputText value=" #{messages['global']}" style="color:#{row.getEstimatedMonthsOfStock() le userSession.getWorkspace().minStockOnHand ? 'red' : (row.getEstimatedMonthsOfStock() ge userSession.getWorkspace().maxStockOnHand ? 'darkgoldenrod' : 'black')}"/>
 					</s:fragment>
-					
-					<s:fragment rendered="#{(row.getEstimatedMonthsOfStock() != null and row.getEstimatedMonthsOfStock() le 1) or row.getEstimatedMonthsOfStock() == null}">
-						<h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}" style="color:red"/>
-					</s:fragment>
+
+                    <s:fragment rendered="#{row.closingBalance gt 0 and ((row.getEstimatedMonthsOfStock() != null and row.getEstimatedMonthsOfStock() le 1) or row.getEstimatedMonthsOfStock() == null)}">
+                        <h:outputText value="#{messages['meds.onemonthless']}" rendered="#{row.amc > 0}" style="color:red"/>
+                    </s:fragment>
+
+                    <s:fragment rendered="#{row.closingBalance le 0 and ((row.getEstimatedMonthsOfStock() != null and row.getEstimatedMonthsOfStock() le 1) or row.getEstimatedMonthsOfStock() == null)}">
+                        <h:outputText value="#{messages['quarter.outofstock']}" rendered="#{row.amc > 0}" style="color:red"/>
+                    </s:fragment>
 				</s:fragment>
 
 			</td>
