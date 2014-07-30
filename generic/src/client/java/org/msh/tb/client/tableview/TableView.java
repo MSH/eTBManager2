@@ -95,14 +95,21 @@ public class TableView extends Composite {
 		setCellStyle(0, 1, STYLE_HEADER_TITLE, 1, numCols);
 		
 		int colheadersize = tableData.getColHeaderSize();
-		
+
 		// include the total column, if necessary
 		if (totCol) {
 			// set the label of the total column
 			setHoverText(0, 2, App.messages.total());
 			setCellStyle(0, 2, STYLE_HEADER_TITLE, colheadersize + 1, 1);
 		}
-		
+
+/*
+        if (totRow) {
+            setHoverText(0, 3, "%");
+            setCellStyle(0, 3, STYLE_HEADER_TITLE, colheadersize + 1, 1);
+        }
+*/
+
 		// set row header titles
 		headerHtml = "";
 		for (CVariable var: tableData.getRowVariables()) {
@@ -155,6 +162,7 @@ public class TableView extends Composite {
 		if (totRow) {
 			setHoverText(r, 0, App.messages.total());
 			setCellStyle(r, 0, STYLE_HEADER_TITLE, 1, 1);
+
 			int c = 1;
 			double sum = 0;
 			for (double val: tableData.getTotalRow()) {
@@ -168,6 +176,13 @@ public class TableView extends Composite {
 				setCellStyle(r, c, STYLE_VAL_TOTAL, 1, 1);
 			}
 		}
+
+/*
+        if (totCol) {
+            setHoverText(r+1, 0, "%");
+            setCellStyle(r+1, 0, STYLE_HEADER_TITLE, 1, 1);
+        }
+*/
 	}
 
 

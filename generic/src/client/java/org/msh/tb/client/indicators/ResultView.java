@@ -62,7 +62,7 @@ public class ResultView extends Composite {
         }
 
         // if data is not updated, then call it recursively
-        if (controller.getData() == null) {
+        if (!controller.isUpdated()) {
             // check if data is updated, otherwise, update the indicator data
             controller.update(new StandardCallback<IndicatorController>() {
                 @Override
@@ -131,11 +131,11 @@ public class ResultView extends Composite {
         pnlLayout.clear();
 
         // add the value
-        if (controller.getResponse() == null) {
+        if (!controller.isUpdated()) {
             addWaitIndicator();
         }
         else {
-            Double val = controller.getResponse().getRows().get(0).getValues()[0];
+            Double val = controller.getResponse() != null? controller.getResponse().getRows().get(0).getValues()[0] : 0;
             String sval = (val == null || val == 0)? "-": NumberFormat.getFormat("#,###,###").format(val);
             pnlLayout.addText(sval, "ind-value");
         }
@@ -155,11 +155,15 @@ public class ResultView extends Composite {
 
         txtTitle = pnlLayout.addText(controller.getIndicator().getTitle(), "title");
 
-        if (controller.getResponse() == null) {
+        if (!controller.isUpdated()) {
             addWaitIndicator();
             return;
         }
 
+        if (controller.getResponse() == null){
+            pnlLayout.addText("No result found", "msg msg-info");
+            return;
+        }
         addChart();
 
         addTable();

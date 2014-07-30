@@ -17,9 +17,9 @@ public class TableData {
 	public static int CELL_TOTAL = -2;
 	public static int CELL_TITLE = -1;
 
-	// selected column and row to draw the chart
-	private int selectedCell = TableData.CELL_TITLE;
-	private CTableSelection selection = CTableSelection.ROW;
+    /**
+     * Indicator assigned to this table data
+     */
     private CIndicator indicator;
 
 	/**
@@ -51,6 +51,33 @@ public class TableData {
 	 * Column containing total values. It's null if there is no total column
 	 */
 	private double[] totalColumn;
+
+    /**
+     * Column with percentage values of each column in relation to the total
+     */
+    private double[] colPercentages;
+
+    /**
+     * Column with percentage values of each row in relation to the total
+     */
+    private double[] rowPercentages;
+
+    /**
+     * Sum of all values of the table
+     */
+    private double total;
+
+
+    /**
+     * Return a value of the table
+     * @param c column index
+     * @param r row index
+     * @return double value
+     */
+    public double getValue(int c, int r) {
+        CTableRow row = getTable().getRows().get(r);
+        return row.getValues()[c];
+    }
 
 	/**
 	 * Return the variable assigned to the column
@@ -203,14 +230,18 @@ public class TableData {
 	 * Update the total values displayed in the table
 	 */
 	protected void updateTotal() {
+        total = 0;
+
 		// update column total
 		if (table.isColTotalAvailable()) {
 			totalColumn = new double[table.getRows().size()];
 			int index = 0;
 			for (CTableRow row: table.getRows()) {
 				for (Double val: row.getValues()) {
-					if (val != null)
-						totalColumn[index] += val;
+					if (val != null) {
+                        totalColumn[index] += val;
+                        total += val;
+                    }
 				}
 				index++;
 			}
@@ -232,8 +263,32 @@ public class TableData {
 			}
 		}
 		else totalRow = null;
+
+        colPercentages = null;
+        rowPercentages = null;
 	}
 
+
+    /**
+     * Return the column percentages. If not calculated, calculate it on time
+     * @return array of column percentages
+     */
+    protected double[] getColumnPerc() {
+        if (!table.isColTotalAvailable()) {
+            return null;
+        }
+
+        if (colPercentages == null) {
+            colPercentages = new double[getColumnCount()];
+            if (total > 0) {
+                int index = 0;
+                for (double val: totalColumn) {
+                    colPercentages[index] = val/total;
+                }
+            }
+        }
+        return colPercentages;
+    }
 
 	/**
 	 * Update the parent link of the child columns using recursion
@@ -251,7 +306,8 @@ public class TableData {
 			updateChildColumn(aux, level + 1);
 		}
 	}
-	
+
+
 	/**
 	 * Return the number of rows that compound the column headers of the table
 	 * @return the colHeaderSize
@@ -473,11 +529,19 @@ public class TableData {
 		return totalColumn;
 	}
 
+    /**
+     * Return the indicator in use
+     * @return instance of CIndicator
+     */
     public CIndicator getIndicator() {
         return indicator;
     }
 
-    public void setIndicator(CIndicator indicator) {
-        this.indicator = indicator;
+    /**
+     * Return the sum of all values in the table
+     * @return
+     */
+    public double getTotal() {
+        return total;
     }
 }

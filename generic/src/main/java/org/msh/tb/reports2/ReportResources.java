@@ -139,7 +139,7 @@ public class ReportResources {
 	protected ReportGroup addXpertExamVariables() {
 		ReportGroup grp = addGroup("cases.examxpert");
 		add(grp, new LabResultDiagVariable("genx_diag", "manag.reportgen.var.xpertdiag", "examxpert.result", XpertResult.class, UnitType.EXAM_XPERT));
-		add(grp, new LabResultVariable("genx_res", "XpertResult", "examxpert.result", XpertResult.class, UnitType.EXAM_XPERT));
+		add(grp, new LabResultVariable("genx_res", "XpertResult", "examxpert.rifResult", XpertRifResult.class, UnitType.EXAM_XPERT));
 		addFilter(grp, new CaseItemDateVariable("xp-collect", "#{messages['manag.reportgen.xpert']} - #{messages['manag.reportgen.collect']}", "exammicroscopy.dateCollected", false));
 		return grp;
 	}

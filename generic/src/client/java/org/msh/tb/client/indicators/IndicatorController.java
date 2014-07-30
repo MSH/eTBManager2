@@ -21,6 +21,7 @@ public class IndicatorController {
     private CIndicator indicator;
     private CIndicatorResponse response;
     private TableData data;
+    private boolean updated;
 
     /**
      * Default constructor
@@ -31,7 +32,12 @@ public class IndicatorController {
     public IndicatorController(CReport report, CIndicator indicator, CIndicatorResponse response) {
         this.report = report;
         this.indicator = indicator;
-        updateResponse(response);
+        if (response != null) {
+            updateResponse(response);
+        }
+        else {
+            updated = false;
+        }
     }
 
     /**
@@ -61,14 +67,17 @@ public class IndicatorController {
     public void clearData() {
         response = null;
         data = null;
+        updated = false;
     }
 
     /**
      * Called when the response data is changed
-     * @param resp
+     * @param resp instance of CIndicatorResponse
      */
     protected void updateResponse(CIndicatorResponse resp) {
         this.response = resp;
+
+        updated = true;
 
         if (resp == null) {
             data = null;
@@ -136,5 +145,9 @@ public class IndicatorController {
 
     public void setData(TableData data) {
         this.data = data;
+    }
+
+    public boolean isUpdated() {
+        return updated;
     }
 }

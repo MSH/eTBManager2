@@ -184,6 +184,12 @@ public class PeriodFilter extends FilterWidget {
 	 */
 	protected ListBox createYearListbox() {
 		ListBox lb = new ListBox();
+        lb.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                notifyFilterChange();
+            }
+        });
 		lb.setVisibleItemCount(1);
 
 		Date dt = ReportUtils.getReportUIData().getCurrentDate();
@@ -251,7 +257,7 @@ public class PeriodFilter extends FilterWidget {
 			return;
 		}
 		String[] s = value.split(",");
-		type = "M".equals(s) ? PeriodFilterType.MONTHYEAR: PeriodFilterType.FIXED;
+		type = "M".equals(s[0]) ? PeriodFilterType.MONTHYEAR: PeriodFilterType.FIXED;
 
 		updatePeriodType();
 		if (type == PeriodFilterType.FIXED) {
