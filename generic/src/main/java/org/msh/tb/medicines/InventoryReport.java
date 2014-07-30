@@ -128,14 +128,14 @@ public class InventoryReport {
 			root.addItem(bq.getSource(), bq.getBatch().getMedicine(), bq);
 
 			// check if batch has expired
-			if (bq.getBatch().isExpired()) {
+			if (bq.getBatch().isExpired() && bq.getQuantity() > 0) {
 				MedicineNode node = root.findMedicineNode(bq.getSource(), bq.getBatch().getMedicine());
 				if ((node != null) && (node.getItem() != null))  //AK maybe null
 					((MedicineInfo)node.getItem()).setHasBatchExpired(true);
 			}
 
 			// check if batch is up to expire
-			if (isExpiringBatch(bq.getBatch())) {
+			if (isExpiringBatch(bq.getBatch()) && bq.getQuantity() > 0) {
 				MedicineNode node = root.findMedicineNode(bq.getSource(), bq.getBatch().getMedicine());
 				if ((node != null) && (node.getItem() != null))  //AK maybe null
 					((MedicineInfo)node.getItem()).setHasBatchExpiring(true);
