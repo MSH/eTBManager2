@@ -361,11 +361,14 @@ html {
     width:100%;
 }
 
-.indicators-panel {
+.dashboard .indicators-panel {
+    width:805px;
+    display: block;
+}
+.report-panel .indicators-panel {
     width:980px;
     display: block;
 }
-
 
 /* Indicator containing a single value with a caption at the bottom */
 .ind-res-single {
