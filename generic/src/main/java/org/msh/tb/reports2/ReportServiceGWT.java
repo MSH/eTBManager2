@@ -3,6 +3,7 @@ package org.msh.tb.reports2;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
 import org.jboss.seam.annotations.security.Restrict;
+import org.jboss.seam.international.LocaleSelector;
 import org.msh.reports.filters.Filter;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.model.*;
@@ -28,7 +29,8 @@ public class ReportServiceGWT implements ReportService {
 	@Override
 	@WebRemote
 	public CReportUIData initialize() {
-		return ReportGenerator.createInitializationData(false);
+		System.out.println(LocaleSelector.instance().getLocaleString());
+        return ReportGenerator.createInitializationData(false);
 	}
 
 

@@ -63,12 +63,40 @@
 <a:repeat value="#{s.medicines}" var="it">
 	<tr class="highlight">
 		<td>
-			<a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
-			<s:span styleClass="alert-icon" rendered="#{it.item.hasBatchExpiring}"/>
-			<s:span styleClass="icon-error" rendered="#{it.item.hasBatchExpired}"/>
-			<h:outputText value="#{it.medicine}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
-			<h:outputText value="#{messages['medicine.almostStockedOut']}" rendered="#{it.item.almostStockedOut()}" style="background-color:#ff8080;color:white;padding:4px;display:block;border:1px solid red;border-radius:4px;" />
-		</td>
+            <a:commandLink styleClass="plus-icon" onclick="detailsClick(this, 'med#{it.nodeId}');return false;" />
+            <h:outputText value="#{it.medicine}"/>
+
+            <!-- Expired batches message -->
+            <s:div rendered="#{it.item.hasBatchExpired}" styleClass="mederrormsg">
+                <s:span styleClass="icon-error"/>
+                <h:outputText value="#{messages['meds.inventory.expiredmsg']}" />
+            </s:div>
+
+            <!-- Batches up to expire message -->
+            <s:div rendered="#{it.item.hasBatchExpiring}" styleClass="medalertmsg">
+                <s:span styleClass="alert-icon"/>
+                <h:outputFormat value="#{messages['meds.inventory.expiringmsg']}" >
+                    <f:param value="#{userSession.getWorkspace().getMonthsToAlertExpiredMedicines()}" />
+                </h:outputFormat>
+            </s:div>
+
+            <!-- Minimum months of stock message -->
+            <s:div rendered="#{it.item.isMinOfStock()}" styleClass="mederrormsg">
+                <s:span styleClass="icon-error"/>
+                <h:outputFormat value="#{messages['meds.inventory.minmonthsmsg']}">
+                    <f:param value="#{userSession.getWorkspace().getMinStockOnHand()}" />
+                </h:outputFormat>
+            </s:div>
+
+            <!-- Maximum months of stock message -->
+            <s:div rendered="#{it.item.isMaxOfStock()}" styleClass="medalertmsg">
+                <s:span styleClass="alert-icon"/>
+                <h:outputFormat value="#{messages['meds.inventory.maxmonthsmsg']}">
+                    <f:param value="#{userSession.getWorkspace().getMaxStockOnHand()}" />
+                </h:outputFormat>
+            </s:div>
+
+        </td>
 		<td align="center">
 			<h:outputText value="#{it.item.nextBatchExpire}" converter="localeDateConverter" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}"/>
 		</td>
@@ -78,17 +106,23 @@
 			</h:outputText>
 		</td>
 		<s:fragment rendered="#{userSession.tbunit.treatmentHealthUnit}">
-		<!--	<td align="right">
-				<h:outputText value="#{it.item.stockPosition.amc}" style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
-					<f:convertNumber pattern="###,###,##0"/>
-				</h:outputText>
-			</td> -->
-			<td align="right">
-				<h:outputText value="#{it.item.stockOutDate}" converter="periodConverter" rendered="#{not it.item.almostStockedOut()}"
-					style="#{it.item.hasBatchExpired ? 'color:red' : (it.item.hasBatchExpiring ? 'color:#D7620B' : '')}">
-					<f:param name="type" value="time-length"/>
-				</h:outputText>
-			</td>
+            <td align="right">
+                <h:outputText value="#{it.item.stockPosition.amc}" >
+                    <f:convertNumber pattern="###,###,##0"/>
+                </h:outputText>
+                <h:outputText value="0" rendered="#{it.item.stockPosition.amc == null}"/>
+            </td>
+            <td align="right">
+                <s:fragment rendered="#{not it.item.getShowStockOutDate()}">
+                    <h:outputText value="#{messages['meds.onemonthless']}" rendered="#{it.item.stockPosition.amc > 0}"/>
+
+                    <h:outputText value="#{messages['meds.undefined']}" rendered="#{it.item.stockPosition.amc == 0 or it.item.stockPosition.amc == null}"/>
+                </s:fragment>
+
+                <h:outputText rendered="#{it.item.getShowStockOutDate()}" value="#{it.item.stockOutDate}" converter="periodConverter">
+                    <f:param name="type" value="time-length"/>
+                </h:outputText>
+            </td>
 		</s:fragment>
 		<s:fragment rendered="#{not userSession.tbunit.treatmentHealthUnit}">
 		<td align="right">
