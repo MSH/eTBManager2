@@ -363,7 +363,7 @@
 	</organization>
 	<scm>
 		<connection>scm:svn:https://www.etbmanager.org/svn_desktop/trunk</connection>
-		<url>https://www.etbmanager.org/svn_desktop/trunk</url>
+		<url>https://www.etbmanager.org/svn/etbmanager/trunk</url>
 	</scm>
 	<issueManagement>
 		<system>Redmine</system>

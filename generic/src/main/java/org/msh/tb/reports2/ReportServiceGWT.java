@@ -20,7 +20,6 @@ import java.util.HashMap;
  *
  */
 @Name("org.msh.tb.client.shared.ReportService")
-@Restrict("#{s:hasRole('DATA_ANALYSIS')}")
 public class ReportServiceGWT implements ReportService {
 
 	/* (non-Javadoc)
