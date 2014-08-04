@@ -216,7 +216,7 @@
 	  	
     </script> 
 
-    <s:decorate template="/layout/edit.xhtml" rendered="#{tbCase.classification=='MDRTB_DOCUMENTED'}">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.drugResistanceType}" >
     		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>

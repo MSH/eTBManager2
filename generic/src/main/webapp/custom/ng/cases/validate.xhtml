@@ -59,7 +59,7 @@
 		
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['DrugResistanceTypes']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbcase.drugResistanceType}" required="true">
+    		<h:selectOneMenu id="patType" value="#{tbcase.drugResistanceType}">
     			<s:selectItems var="it" value="#{drugresisttypes_ng}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>

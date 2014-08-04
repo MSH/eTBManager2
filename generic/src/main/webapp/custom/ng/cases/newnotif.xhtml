@@ -43,16 +43,11 @@ function checkfields() {
    		<ui:param name="patientdata" value="#{patient}" />
     </s:decorate> -->
     
-     <s:decorate id="nameSuspect" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='SUSPECT'}">
-    	<ui:define name="label">#{messages['Suspect.name']}:</ui:define>
+     <s:decorate id="nameSuspect" template="/layout/editname.xhtml" >
+    	<ui:define name="label"> #{tbcase.diagnosisType=='SUSPECT'? messages['Suspect.name']: messages['Patient.name']}:</ui:define>
    		<ui:param name="patientdata" value="#{patient}" />
     </s:decorate>
-    
-     <s:decorate id="namePatient" template="/layout/editname.xhtml" rendered = "#{tbcase.diagnosisType=='CONFIRMED'}">
-    	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
-   		<ui:param name="patientdata" value="#{patient}" />
-    </s:decorate>
-		
+
 	<h:panelGroup id="bd">
     <s:decorate id="dt" template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
@@ -84,7 +79,7 @@ function checkfields() {
 <p/>
 <h:panelGroup id="pnlpatients">
 
-<h:commandLink id="btnpac" onclick="openWaitDlg();"
+    <h:commandLink id="btnpac" onclick="openWaitDlg();"
     action="#{caseEditingHome.selectPatientData}" styleClass="button" style="display:none;width:160px;" >
      <!-- <span>#{messages['cases.newpatient']}</span> -->
      <span> #{messages['form.new']} #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}</span>
@@ -92,7 +87,7 @@ function checkfields() {
 
 <s:decorate template="/layout/naveg.xhtml">
 	<ui:param name="list" value="#{patients}" />
-	<h:panelGroup id="res" rendered="#{not empty patientsbd.patientList}">
+	<h:panelGroup id="res" rendered="#{not empty patients.patientList}">
 
 	<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
 		width="680px" columnClasses="coll,colc,colc,coll">
