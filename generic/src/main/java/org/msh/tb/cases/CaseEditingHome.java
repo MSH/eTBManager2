@@ -16,6 +16,7 @@ import org.msh.tb.cases.exams.MedicalExaminationHome;
 import org.msh.tb.cases.treatment.StartTreatmentHome;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.*;
+import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
@@ -452,12 +453,18 @@ public class CaseEditingHome {
 				iniTreatmentDate = tbcase.getTreatmentPeriod().getIniDate();
 			else if (startTreatmentHome != null && startTreatmentHome.getIniTreatmentDate() != null)
 				iniTreatmentDate = startTreatmentHome.getIniTreatmentDate();
-		
+
+            Workspace ws = UserSession.getWorkspace();
+
 			//Validates if defined
-			if ((iniTreatmentDate  != null) && (tbcase.getDiagnosisDate().after(iniTreatmentDate))) {
+			if ((!ws.isAllowDiagAfterTreatment()) && (iniTreatmentDate  != null) && (tbcase.getDiagnosisDate().after(iniTreatmentDate))) {
 				facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.treat.inidatemsg");
 				return false;
 			}
+
+            if ((!ws.isAllowRegAfterDiagnosis()) && (tbcase.getRegistrationDate().after(tbcase.getDiagnosisDate()))) {
+                facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.details.valerror1");
+            }
 		}
 		
 		return true;
@@ -534,4 +541,5 @@ public class CaseEditingHome {
 	public void setTbunitselection(TBUnitSelection tbunitselection) {
 		this.tbunitselection = tbunitselection;
 	}
+
 }

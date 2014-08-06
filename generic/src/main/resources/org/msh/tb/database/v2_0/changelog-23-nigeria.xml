@@ -6,12 +6,12 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 	<!-- Add a column to store the nationalidnumber -->
-	<changeSet id="23.1" author="rmemoria" context="NG" >
+<!--	<changeSet id="23.1" author="rmemoria" context="NG" >
         <addColumn tableName="errorlog">
             <column name="request" type="blob"></column>
         </addColumn>
 	</changeSet>
-	
+-->
 
 		
 	        	        

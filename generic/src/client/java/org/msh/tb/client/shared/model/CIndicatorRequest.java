@@ -28,6 +28,11 @@ public class CIndicatorRequest implements IsSerializable {
 	 */
 	private HashMap<String, String> filters;
 
+    /**
+     * If true, this report will be displayed in the dashboard
+     */
+    private boolean dashboard;
+
 
 	/**
 	 * @return the colVariables
@@ -71,4 +76,11 @@ public class CIndicatorRequest implements IsSerializable {
 		this.filters = filters;
 	}
 
+    public boolean isDashboard() {
+        return dashboard;
+    }
+
+    public void setDashboard(boolean dashboard) {
+        this.dashboard = dashboard;
+    }
 }

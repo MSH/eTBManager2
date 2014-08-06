@@ -14,6 +14,12 @@ import org.msh.reports.tableoperations.ConcatTables;
 import org.msh.reports.tableoperations.IndicatorTransform;
 import org.msh.reports.tableoperations.KeyConverter;
 import org.msh.reports.variables.Variable;
+import org.msh.tb.entities.AdministrativeUnit;
+import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.User;
+import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.login.UserSession;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +36,7 @@ public class IndicatorReport {
 	private List<Variable> columnVariables = new ArrayList<Variable>();
 	private List<Variable> rowVariables = new ArrayList<Variable>();
 	private Map<Filter, FilterValue> filters = new HashMap<Filter, FilterValue>();
+    private boolean limitToUserView;
 	
 	private SqlBuilder sqlBuilder;
 
@@ -111,7 +118,7 @@ public class IndicatorReport {
 	protected DataTableImpl loadData() {
 		// create SQL instruction
 		SqlBuilder sqlBuilder = getSqlBuilder();
-		
+
 		// add variables to SQL builder
 		for (Variable v: columnVariables)
 			sqlBuilder.addVariable(v);
@@ -119,6 +126,10 @@ public class IndicatorReport {
 			sqlBuilder.addVariable(v);
 		
 		sqlBuilder.setFilters(filters);
+
+        if (limitToUserView) {
+            applyUserViewRestrictions(sqlBuilder);
+        }
 
 		// create an empty table
 		DataTableImpl tbl = new DataTableImpl();
@@ -128,9 +139,37 @@ public class IndicatorReport {
 		
 		return tbl;
 	}
-	
-	
-	/**
+
+    /**
+     * Apply user view restrictions according to the user view configuration
+     * @param sqlBuilder instance of SqlBuilder that will create the query
+     */
+    private void applyUserViewRestrictions(SqlBuilder sqlBuilder) {
+        UserWorkspace user = UserSession.getUserWorkspace();
+
+        // user is limited to just an administrative unit ?
+        if (user.getView() == UserView.ADMINUNIT) {
+            AdministrativeUnit au = user.getAdminUnit();
+            if (au != null) {
+                TableJoin join = sqlBuilder.join("tbunit", "tbcase.owner_unit_id").join("administrativeunit", "tbunit.id");
+                sqlBuilder.addRestriction("administrativeunit.code like :code_1");
+                sqlBuilder.addParameter("code_1", au.getCode() + "%");
+            }
+            return;
+        }
+
+        // user view is limited to just a health facility ?
+        if (user.getView() == UserView.TBUNIT) {
+            Tbunit unit = user.getTbunit();
+            if (unit != null) {
+                sqlBuilder.addRestriction("tbcase.owner_unit_id = " + unit.getId());
+            }
+            return;
+        }
+    }
+
+
+    /**
 	 * Run recursively the sequence of iteration over the variables that have more than 1 iteration
 	 * @param target to do
 	 * @param sqlBuilder to do
@@ -448,4 +487,12 @@ public class IndicatorReport {
 	public Long getRecordCount() {
 		return recordCount;
 	}
+
+    public boolean isLimitToUserView() {
+        return limitToUserView;
+    }
+
+    public void setLimitToUserView(boolean limitToUserView) {
+        this.limitToUserView = limitToUserView;
+    }
 }

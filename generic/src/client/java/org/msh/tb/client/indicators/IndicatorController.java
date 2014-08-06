@@ -2,6 +2,7 @@ package org.msh.tb.client.indicators;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.msh.tb.client.AppResources;
+import org.msh.tb.client.dashboard.DashboardMain;
 import org.msh.tb.client.shared.ReportServiceAsync;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CIndicatorRequest;
@@ -98,6 +99,9 @@ public class IndicatorController {
         CIndicatorRequest req = new CIndicatorRequest();
         req.setColVariables(indicator.getColVariables());
         req.setRowVariables(indicator.getRowVariables());
+
+        boolean dashboard = AppResources.module().getClass() == DashboardMain.class;
+        req.setDashboard(dashboard);
 
         // create list of filters
         HashMap<String, String> filters = new HashMap<String, String>();

@@ -68,6 +68,11 @@
             <s:convertEnum/>
 		</h:selectOneMenu>
 	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+        <ui:define name="label">#{messages['global.date']}:</ui:define>
+        <ui:param name="datefield" value="#{stockPosReport.date}" />
+    </s:decorate>
 </td></tr>
 <tr><td align="right">
 	<a:commandLink styleClass="button" action="#{stockPosReport.execute}" reRender="pnlresult,pnlPrintLink"

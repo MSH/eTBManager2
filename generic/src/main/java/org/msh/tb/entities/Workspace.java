@@ -139,6 +139,16 @@ public class Workspace implements Serializable, Transactional {
 	 */
 	private TreatMonitoringInput treatMonitoringInput;
 
+    /**
+     * If true, allows diagnosis date to be informed after the treatment start
+     */
+    private boolean allowDiagAfterTreatment;
+
+    /**
+     * If true, allows registration date to be informed after the diagnosis date
+     */
+    private boolean allowRegAfterDiagnosis;
+
 	/**
 	 * Setup the adjustment type that represents expired medicine movements
 	 */
@@ -651,4 +661,19 @@ public class Workspace implements Serializable, Transactional {
 		this.treatMonitoringInput = treatMonitoringInput;
 	}
 
+    public boolean isAllowDiagAfterTreatment() {
+        return allowDiagAfterTreatment;
+    }
+
+    public void setAllowDiagAfterTreatment(boolean allowDiagAfterTreatment) {
+        this.allowDiagAfterTreatment = allowDiagAfterTreatment;
+    }
+
+    public boolean isAllowRegAfterDiagnosis() {
+        return allowRegAfterDiagnosis;
+    }
+
+    public void setAllowRegAfterDiagnosis(boolean allowRegAfterDiagnosis) {
+        this.allowRegAfterDiagnosis = allowRegAfterDiagnosis;
+    }
 }

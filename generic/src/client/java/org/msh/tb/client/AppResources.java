@@ -22,6 +22,7 @@ public class AppResources {
     private HashMap<String, Object> resources = new HashMap<String, Object>();
     private ImageResources imageResources;
     private ReportConstants messages;
+    private AppModule module;
 
     /**
      * Return the unique instance of the services
@@ -31,6 +32,21 @@ public class AppResources {
         return singleton;
     }
 
+    /**
+     * Return the main module being executed
+     * @return instance of {@link org.msh.tb.client.AppModule}
+     */
+    public static AppModule module() {
+        return instance().module;
+    }
+
+    /**
+     * Change the main module under execution
+     * @param module instance of {@link org.msh.tb.client.AppModule}
+     */
+    public void setModule(AppModule module) {
+        this.module = module;
+    }
 
     /**
      * Return the object with exposed services to the report

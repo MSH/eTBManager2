@@ -94,6 +94,16 @@
 						</resource>
 					</webResources>
 					<packagingExcludes>WEB-INF/deploy/**</packagingExcludes>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Built-Date>${buildDate}</Built-Date>
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                            <Country-Code>${workspace-context}</Country-Code>
+                            <Build-Number>${buildNumber}</Build-Number>
+                        </manifestEntries>
+                    </archive>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -28,7 +28,6 @@ public class ReportServiceGWT implements ReportService {
 	@Override
 	@WebRemote
 	public CReportUIData initialize() {
-		System.out.println(LocaleSelector.instance().getLocaleString());
         return ReportGenerator.createInitializationData(false);
 	}
 

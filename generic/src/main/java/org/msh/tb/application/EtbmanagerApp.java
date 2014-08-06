@@ -49,9 +49,14 @@ public class EtbmanagerApp {
 	private String implementationVendor;
 	
 	/**
-	 * e-TB Manager version build date and time
+	 * e-TB Manager version build date and time (format yyyy-mm-dd_hh:mm)
 	 */
 	private String buildDate;
+
+    /**
+     * e-TB Manager build number (ex.: 342)
+     */
+    private String buildNumber;
 	
 	/**
 	 * Java version and build used to generate this version of e-TB Manager
@@ -62,11 +67,6 @@ public class EtbmanagerApp {
 	 * Name of the user that built this version of e-TB Manager
 	 */
 	private String builtBy;
-	
-	/**
-	 * Ant version that create this version of e-TB Manager
-	 */
-	private String antVersion;
 	
 	/**
 	 * If it's a specific version for a country, it stores the country code, otherwise, it's empty
@@ -156,10 +156,10 @@ public class EtbmanagerApp {
 		implementationTitle = (String)prop.get("Implementation-Title"); 
 		implementationVendor = (String)prop.get("Implementation-Vendor"); 
 		builtBy = (String)prop.get("Built-By");
-		antVersion = (String)prop.get("Ant-Version");
 		javaBuildVersion = (String)prop.get("Build-Jdk");
 		buildDate = (String)prop.get("Built-Date");
 		countryCode = (String)prop.get("Country-Code");
+        buildNumber = (String)prop.get("Build-Number");
 	}
 
 	
@@ -202,11 +202,6 @@ public class EtbmanagerApp {
 
 
 
-	public String getAntVersion() {
-		return antVersion;
-	}
-
-
 	public String getCountryCode() {
 		return countryCode;
 	}
@@ -221,6 +216,13 @@ public class EtbmanagerApp {
 		return implementationVendor;
 	}
 
+    /**
+     * Return the system build number
+     * @return String value
+     */
+    public String getBuildNumber() {
+        return buildNumber;
+    }
 
 	/**
 	 * @return the developmentMode

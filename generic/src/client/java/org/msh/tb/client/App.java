@@ -52,7 +52,9 @@ public class App implements EntryPoint {
 	    }
 	    rootPanel.getElement().removeAllChildren();
 	    rootPanel.add(mainpage);
-	    ((AppModule)mainpage).run();
+        AppModule module = (AppModule)mainpage;
+        AppResources.instance().setModule(module);
+	    module.run();
 	}
 
 	

@@ -165,6 +165,7 @@ public class ReportGenerator {
 
         // create indicator report
 		IndicatorReport rep = IndicatorReportFactory.instance().createCaseIndicator();
+        rep.setLimitToUserView(reportData.isDashboard());
 
 		List<Variable> variables = new ArrayList<Variable>();
 		

@@ -63,7 +63,7 @@
     </s:decorate>
     
     <s:decorate template="/layout/edit.xhtml" >
-    	<h:selectBooleanCheckbox value="#{workspace.ulaActive}" /> #{messages['workspace.ulaActive']}
+    	<h:selectBooleanCheckbox value="#{workspace.ulaActive}" /> #{messages['Workspace.ulaActive']}
     </s:decorate>
 
     </div>
@@ -92,6 +92,21 @@
            	<s:convertEnum />
       	</h:selectOneMenu>
     </s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <label>
+                <h:selectBooleanCheckbox value="#{workspace.allowDiagAfterTreatment}" />
+                #{messages['Workspace.allowDiagAfterTreatment']}
+            </label>
+        </s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <label>
+                <h:selectBooleanCheckbox value="#{workspace.allowRegAfterDiagnosis}" />
+                #{messages['Workspace.allowRegAfterDiagnosis']}
+            </label>
+        </s:decorate>
+
 
     <h2>
     	#{messages['DisplayCaseNumber']}
