@@ -64,4 +64,21 @@
         </insert>
     </changeSet>
 
+    <changeSet id="v2.1cs2" author="rmemoria">
+        <delete tableName="userrole">
+            <where>id=199</where>
+        </delete>
+
+        <!-- Insert the permission to all administrator profiles -->
+        <sql>
+            INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
+            select false, true, true, prof.id, role.id
+            from userprofile prof
+            inner join userrole role on role.id in (220,221,222,223,224)
+            where prof.name like 'Administr%';
+
+            update userrole set messageKey='labs' where id=220;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

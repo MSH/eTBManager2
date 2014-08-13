@@ -20,6 +20,7 @@
 </ui:define>
 
 <ui:define name="left">
+    <s:fragment rendered="#{userWorkspace.laboratory != null}">
 	<h:form>
 
 	<s:link view="/labs/newpac.xhtml" styleClass="button-alt" onclick="if (!disableButton(this)) return false;" >
@@ -27,113 +28,132 @@
 	</s:link>
 
 	</h:form>
+    </s:fragment>
 </ui:define>
 
 <ui:define name="content">
 <h1>#{title}</h1>
-<span class="icon-lab-big"/><h2>#{userLaboratory.name}</h2>
-<div class="text-small"> #{userLaboratory.adminUnit.fullDisplayName}</div>
-<div class="spacer" />
-<h:form>
-	<h:outputText value="#{messages['Patient']}:"/>
-	
-	<h:inputText id="patname" value="#{sampleFilters.patient}" style="width:150px;margin:4px" />
 
-	<a:commandLink id="btnsearchpat" action="search" styleClass="button-alt" onclick="if (!disableButton(this)) return false;" >
-		<a:actionparam assignTo="#{sampleFilters.searchCriteria}" value="#{'PATIENT'}"/>
-		<span>#{messages['form.search']}</span>
-	</a:commandLink>
-	<div class="hint">#{messages['labs.searchhint']}</div>
+    <s:fragment rendered="#{userWorkspace.laboratory == null}">
+        <div style="margin-top:30px">
+            <div style="float:left">
+                <i class="icon-building" style="color:#e0e0e0;font-size:64px;margin-right:12px"></i>
+            </div>
+            <div style="float:left">
+                <div style="font-size:30px;margin-bottom:14px;margin-top:8px">#{messages['labs.nolab']}</div>
+                <div style="font-size:14px">
+                    #{messages['labs.nolabmsg']}.
+                </div>
+            </div>
+        </div>
+    </s:fragment>
 
-	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
-	<rich:hotKey selector="#patname" key="return" handler="disableButton(#{rich:element('btnsearchpat')});execSearch();" /> 
-	<a:jsFunction name="execSearch" action="search" reRender="messages">
-		<a:actionparam name="param1" assignTo="#{sampleFilters.searchCriteria}" value="#{'PATIENT'}"/>
-	</a:jsFunction>
 
-	<div class="spacer" />
+    <s:fragment rendered="#{userWorkspace.laboratory != null}">
+        <span class="icon-lab-big"/><h2>#{userLaboratory.name}</h2>
+        <div class="text-small"> #{userLaboratory.adminUnit.fullDisplayName}</div>
+        <div class="spacer" />
+        <h:form>
+            <h:outputText value="#{messages['Patient']}:"/>
 
-	<h:panelGroup id="sampleReport">	
-	<s:fragment rendered="#{not empty sampleHomeReport.items}">
-	<table width="100%" class="table1">
-	<tr>
-		<th rowspan="2">
-			#{messages['cases.details.exams']}
-		</th>
-		<th rowspan="2">
-			#{messages['ExamStatus.REQUESTED']}
-		</th>
-		<th rowspan="2">
-			#{messages['ExamStatus.ONGOING']}
-		</th>
-		<th>
-			<h:inputHidden value="#{sampleHomeReport.month}" />
-			<h:inputHidden value="#{sampleHomeReport.year}" />
-			<a:commandLink title="Previous month" action="#{sampleHomeReport.previousMonth}" reRender="sampleReport">
-				<span class="naveg-prev" style="float:none;"/>
-			</a:commandLink>
-			<h:outputText value="#{sampleHomeReport.month}" converter="monthYearConverter">
-				<f:param name="year" value="#{sampleHomeReport.year}" />
-			</h:outputText>
-			<a:commandLink title="Next month" action="#{sampleHomeReport.nextMonth}" reRender="sampleReport">
-				<span class="naveg-next" style="float:none;"/>
-			</a:commandLink>
-		</th>
-	</tr>
-	<tr>
-		<th>
-			#{messages['ExamStatus.PERFORMED']}
-		</th>		
-	</tr>
-	<a:repeat value="#{sampleHomeReport.items}" var="it">
-	<tr>
-		<th>
-			#{messages[it.type.key]}
-		</th>
-		<td align="center">
-			<s:link view="/labs/searchresult.xhtml" rendered="#{it.getQuantity('REQUESTED') != null}" style="width:100%;text-align:center;display:block">
-				<f:param name="m" value="#{sampleHomeReport.month}" />
-				<f:param name="y" value="#{sampleHomeReport.year}" />
-				<f:param name="r" value="REQUESTED" />
-				<f:param name="t" value="#{it.type}" />
-				<f:param name="sc" value="TABLE" />
-				<h:outputText value="#{it.getQuantity('REQUESTED')}">
-					<f:convertNumber pattern="#,###,###"/>
-				</h:outputText>
-			</s:link>
-		</td>
-		<td align="center">
-			<s:link view="/labs/searchresult.xhtml" rendered="#{it.getQuantity('ONGOING') != null}" style="width:100%;text-align:center;display:block">
-				<f:param name="m" value="#{sampleHomeReport.month}" />
-				<f:param name="y" value="#{sampleHomeReport.year}" />
-				<f:param name="r" value="ONGOING" />
-				<f:param name="t" value="#{it.type}" />
-				<f:param name="sc" value="TABLE" />
-				<h:outputText value="#{it.getQuantity('ONGOING')}">
-					<f:convertNumber pattern="#,###,###"/>
-				</h:outputText>
-			</s:link>
-		</td>
-		<td align="center">
-			<s:link view="/labs/searchresult.xhtml" rendered="#{it.getQuantity('PERFORMED') != null}" style="width:100%;text-align:center;display:block">
-				<f:param name="m" value="#{sampleHomeReport.month}" />
-				<f:param name="y" value="#{sampleHomeReport.year}" />
-				<f:param name="r" value="PERFORMED" />
-				<f:param name="t" value="#{it.type}" />
-				<f:param name="sc" value="TABLE" />
-				<h:outputText value="#{it.getQuantity('PERFORMED')}">
-					<f:convertNumber pattern="#,###,###"/>
-				</h:outputText>
-			</s:link>
-		</td>
-	</tr>
-	</a:repeat>
-	</table>
+            <h:inputText id="patname" value="#{sampleFilters.patient}" style="width:150px;margin:4px" />
 
-	</s:fragment>
-	</h:panelGroup>
+            <a:commandLink id="btnsearchpat" action="search" styleClass="button-alt" onclick="if (!disableButton(this)) return false;" >
+                <a:actionparam assignTo="#{sampleFilters.searchCriteria}" value="#{'PATIENT'}"/>
+                <span>#{messages['form.search']}</span>
+            </a:commandLink>
+            <div class="hint">#{messages['labs.searchhint']}</div>
 
-</h:form>
+            <rich:jQuery timming="onload" selector="#patname" query="focus()" />
+            <rich:hotKey selector="#patname" key="return" handler="disableButton(#{rich:element('btnsearchpat')});execSearch();" />
+            <a:jsFunction name="execSearch" action="search" reRender="messages">
+                <a:actionparam name="param1" assignTo="#{sampleFilters.searchCriteria}" value="#{'PATIENT'}"/>
+            </a:jsFunction>
+
+            <div class="spacer" />
+
+            <h:panelGroup id="sampleReport">
+                <s:fragment rendered="#{not empty sampleHomeReport.items}">
+                    <table width="100%" class="table1">
+                        <tr>
+                            <th rowspan="2">
+                                #{messages['cases.details.exams']}
+                            </th>
+                            <th rowspan="2">
+                                #{messages['ExamStatus.REQUESTED']}
+                            </th>
+                            <th rowspan="2">
+                                #{messages['ExamStatus.ONGOING']}
+                            </th>
+                            <th>
+                                <h:inputHidden value="#{sampleHomeReport.month}" />
+                                <h:inputHidden value="#{sampleHomeReport.year}" />
+                                <a:commandLink title="Previous month" action="#{sampleHomeReport.previousMonth}" reRender="sampleReport">
+                                    <span class="naveg-prev" style="float:none;"/>
+                                </a:commandLink>
+                                <h:outputText value="#{sampleHomeReport.month}" converter="monthYearConverter">
+                                    <f:param name="year" value="#{sampleHomeReport.year}" />
+                                </h:outputText>
+                                <a:commandLink title="Next month" action="#{sampleHomeReport.nextMonth}" reRender="sampleReport">
+                                    <span class="naveg-next" style="float:none;"/>
+                                </a:commandLink>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                #{messages['ExamStatus.PERFORMED']}
+                            </th>
+                        </tr>
+                        <a:repeat value="#{sampleHomeReport.items}" var="it">
+                            <tr>
+                                <th>
+                                    #{messages[it.type.key]}
+                                </th>
+                                <td align="center">
+                                    <s:link view="/labs/searchresult.xhtml" rendered="#{it.getQuantity('REQUESTED') != null}" style="width:100%;text-align:center;display:block">
+                                        <f:param name="m" value="#{sampleHomeReport.month}" />
+                                        <f:param name="y" value="#{sampleHomeReport.year}" />
+                                        <f:param name="r" value="REQUESTED" />
+                                        <f:param name="t" value="#{it.type}" />
+                                        <f:param name="sc" value="TABLE" />
+                                        <h:outputText value="#{it.getQuantity('REQUESTED')}">
+                                            <f:convertNumber pattern="#,###,###"/>
+                                        </h:outputText>
+                                    </s:link>
+                                </td>
+                                <td align="center">
+                                    <s:link view="/labs/searchresult.xhtml" rendered="#{it.getQuantity('ONGOING') != null}" style="width:100%;text-align:center;display:block">
+                                        <f:param name="m" value="#{sampleHomeReport.month}" />
+                                        <f:param name="y" value="#{sampleHomeReport.year}" />
+                                        <f:param name="r" value="ONGOING" />
+                                        <f:param name="t" value="#{it.type}" />
+                                        <f:param name="sc" value="TABLE" />
+                                        <h:outputText value="#{it.getQuantity('ONGOING')}">
+                                            <f:convertNumber pattern="#,###,###"/>
+                                        </h:outputText>
+                                    </s:link>
+                                </td>
+                                <td align="center">
+                                    <s:link view="/labs/searchresult.xhtml" rendered="#{it.getQuantity('PERFORMED') != null}" style="width:100%;text-align:center;display:block">
+                                        <f:param name="m" value="#{sampleHomeReport.month}" />
+                                        <f:param name="y" value="#{sampleHomeReport.year}" />
+                                        <f:param name="r" value="PERFORMED" />
+                                        <f:param name="t" value="#{it.type}" />
+                                        <f:param name="sc" value="TABLE" />
+                                        <h:outputText value="#{it.getQuantity('PERFORMED')}">
+                                            <f:convertNumber pattern="#,###,###"/>
+                                        </h:outputText>
+                                    </s:link>
+                                </td>
+                            </tr>
+                        </a:repeat>
+                    </table>
+
+                </s:fragment>
+            </h:panelGroup>
+
+        </h:form>
+    </s:fragment>
 </ui:define>
 
 
