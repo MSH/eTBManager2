@@ -96,8 +96,15 @@
         <h:selectBooleanCheckbox value="#{userHome.userWorkspace.playOtherUnits}" /> #{messages['User.playOtherUnits']}  
     </s:decorate>
 
-	<hr/>
-	
+       <hr/>
+
+       <s:decorate template="/layout/labselection.xhtml">
+           <ui:param name="labselection" value="#{userHome.labselection}" />
+           <div class="hint">#{messages['labs.user.labinfo']}</div>
+       </s:decorate>
+
+       <hr/>
+
     <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['UserProfile']}:</ui:define>
         <h:selectOneMenu value="#{userHome.userWorkspace.profile}" required="true">

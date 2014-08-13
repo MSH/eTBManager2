@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['labs.sampledata']}" />
+<ui:param name="topmenu" value="4" />
+<ui:param name="labelstyle" value="width:140px" />
+
+<ui:param name="tbcase" value="#{sampleHome.instance.tbcase}" />
+<ui:param name="sample" value="#{sampleHome.instance}" />
+
+
+
+<ui:define name="naveg">
+	<s:link value="#{messages['labs']}" view="/labs/index.xhtml" />
+	<s:link value="#{messages['labs.searchresult']}" view="/labs/searchresult.xhtml" />
+	<div class="item selected">
+		<s:link value="#{title}" />
+	</div>
+</ui:define>
+
+<ui:define name="left">
+	<h:form>
+
+
+	</h:form>
+</ui:define>
+
+<ui:define name="content">
+<h:form styleClass="form1">
+<h1>#{title}</h1>
+
+<s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+
+
+	<s:decorate template="/labs/sampledisplay.xhtml" />
+
+</s:decorate>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

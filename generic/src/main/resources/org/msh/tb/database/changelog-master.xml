@@ -35,4 +35,7 @@
   <include file="org/msh/tb/database/v2_0/changelog-21-cambodia.xml"/> 
   <include file="org/msh/tb/database/v2_0/changelog-22-vietnam.xml"/>
   <include file="org/msh/tb/database/v2_0/changelog-23-nigeria.xml"/>
+
+    <!-- Starting version 2.1 -->
+    <include file="org/msh/tb/database/v2_1/changelog-1.xml" />
 </databaseChangeLog>

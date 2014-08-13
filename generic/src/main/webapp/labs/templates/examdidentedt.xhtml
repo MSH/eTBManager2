@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:b="http://www.etbmanager.org"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formexam" styleClass="form1">
+    
+    <div class="form-content">
+    <table width="100%">
+    <tr><td>
+
+	<s:decorate template="/labs/edtsample.xhtml">
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="edtid" value="edtMBreleasedate" /> 
+    	<ui:param name="datefield" value="#{examIdentification.dateRelease}" /> 
+    </s:decorate>
+
+	<h:panelGroup id="paneldata">
+	<a:region>
+		<ui:param name="reRender" value="paneldata" />
+
+		<b:domainEditor entity="#{examIdentification}" field="sampleType" />
+
+		<b:domainEditor entity="#{examIdentification}" field="method" />
+	
+		<b:domainEditor entity="#{examIdentification}" field="methodGroup" />
+
+		<b:domainEditor entity="#{examIdentification}" field="intermediateResult" />
+
+		<b:domainEditor entity="#{examIdentification}" field="method2" />
+	
+		<b:domainEditor entity="#{examIdentification}" field="methodGroup2" />
+
+		<b:domainEditor entity="#{examIdentification}" field="intermediateResult2" />
+
+		<b:domainEditor entity="#{examIdentification}" field="method3" />
+	
+		<b:domainEditor entity="#{examIdentification}" field="methodGroup3" />
+
+		<b:domainEditor entity="#{examIdentification}" field="intermediateResult3" />
+
+		<hr/>
+
+		<b:domainEditor entity="#{examIdentification}" field="result" />
+
+		<b:domainEditor entity="#{examIdentification}" field="mycobacterium" />
+	</a:region>
+	</h:panelGroup>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{examIdentification.comments}" style="width:450px;height:80px"/>
+    </s:decorate>
+
+	</td></tr>
+    </table>
+
+	</div>
+	
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+        <a:commandLink action="#{examIdentificationHome.postResults()}" styleClass="button" reRender="formexam" 
+        	onclick="if (!disableButton(this)) return false;" >
+        	<span>#{messages['form.save']}</span>
+        </a:commandLink>
+        
+        <s:link view="/labs/sampledata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+        	<f:param name="id" value="#{sampleHome.id}"/>
+        	<span>#{messages['form.cancel']}</span>
+        </s:link>
+	</div>
+    
+	</a:form>
+</s:decorate>
+
+
+<p/>
+
+
+</ui:composition>  

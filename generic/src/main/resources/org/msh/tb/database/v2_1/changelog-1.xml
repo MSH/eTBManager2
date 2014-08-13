@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="v2.1cs1" author="rmemoria">
+        <sql>
+            update userrole
+            set code = concat('0', code + 10000)
+            where code >= '020000'
+        </sql>
+
+        <insert tableName="userrole">
+            <column name="id" valueNumeric="220"/>
+            <column name="changeable" valueBoolean="false" />
+            <column name="code" value="020000"/>
+            <column name="role_name" value="LAB_MODULE" />
+            <column name="internalUse" valueBoolean="false" />
+            <column name="byCaseClassification" valueBoolean="false" />
+            <column name="messageKey" value="userrole.LAB_MODULE" />
+        </insert>
+
+        <insert tableName="userrole">
+            <column name="id" valueNumeric="221"/>
+            <column name="changeable" valueBoolean="false" />
+            <column name="code" value="020100"/>
+            <column name="role_name" value="LAB_NEWREQUEST" />
+            <column name="internalUse" valueBoolean="false" />
+            <column name="byCaseClassification" valueBoolean="false" />
+            <column name="messageKey" value="labs.newreq" />
+        </insert>
+
+        <insert tableName="userrole">
+            <column name="id" valueNumeric="222"/>
+            <column name="changeable" valueBoolean="false" />
+            <column name="code" value="020200"/>
+            <column name="role_name" value="LAB_POSTRESULT" />
+            <column name="internalUse" valueBoolean="false" />
+            <column name="byCaseClassification" valueBoolean="false" />
+            <column name="messageKey" value="userrole.LAB_POSTRESULT" />
+        </insert>
+
+        <insert tableName="userrole">
+            <column name="id" valueNumeric="223"/>
+            <column name="changeable" valueBoolean="false" />
+            <column name="code" value="020300"/>
+            <column name="role_name" value="LAB_EDTREQ" />
+            <column name="internalUse" valueBoolean="false" />
+            <column name="byCaseClassification" valueBoolean="false" />
+            <column name="messageKey" value="userrole.LAB_EDTREQ" />
+        </insert>
+
+        <insert tableName="userrole">
+            <column name="id" valueNumeric="224"/>
+            <column name="changeable" valueBoolean="false" />
+            <column name="code" value="020400"/>
+            <column name="role_name" value="LAB_REMREQ" />
+            <column name="internalUse" valueBoolean="false" />
+            <column name="byCaseClassification" valueBoolean="false" />
+            <column name="messageKey" value="userrole.LAB_REMREQ" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

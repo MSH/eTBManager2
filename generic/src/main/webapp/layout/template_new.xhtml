@@ -79,6 +79,13 @@
 				</s:link>
 			</div>
 		</s:fragment>
+        <s:fragment rendered="#{s:hasRole('LAB_MODULE')}">
+            <div class="item #{topmenu=='4'?'selected':'unselected'}">
+                <s:link view="/labs/index.xhtml" propagation="none">
+                    <span>#{messages['labs']}</span>
+                </s:link>
+            </div>
+        </s:fragment>
 		<s:fragment rendered="#{s:hasRole('MEDMAN')}">
 			<div class="item #{topmenu=='1'?'selected':'unselected'}">
 				<s:link view="/medicines/index.xhtml"  propagation="none">

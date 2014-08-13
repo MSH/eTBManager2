@@ -10,6 +10,7 @@ import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.laboratories.LaboratorySelection;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.transactionlog.LogInfo;
@@ -45,6 +46,7 @@ public class UserHome extends EntityHomeEx<User> {
 	private String selectedView;
 	
 	private TBUnitSelection tbunitselection;
+    private LaboratorySelection labselection;
 
 	@Factory("user")
 	public User getUserInstance() {
@@ -69,7 +71,12 @@ public class UserHome extends EntityHomeEx<User> {
 
 		// get user view
 		convertView();
-	
+
+        // set user's laboratory
+        if (labselection != null) {
+            uw.setLaboratory( labselection.getLaboratory() );
+        }
+
 		// is a new user ?
 		if (!isManaged()) {
 			
@@ -372,11 +379,21 @@ public class UserHome extends EntityHomeEx<User> {
 
 
 	/**
-	 * @param healthSystem the healthSystem to set
 	 */
 	public void refreshHealthSystem() {
 		tbunitselection = null;
 	}
-	
 
+
+    /**
+     * Return the object for laboratory selection
+     * @return instance of LaboratorySelection
+     */
+    public LaboratorySelection getLabselection() {
+        if (labselection == null) {
+            labselection = new LaboratorySelection("labid");
+            labselection.setLaboratory(getUserWorkspace().getLaboratory());
+        }
+        return labselection;
+    }
 }

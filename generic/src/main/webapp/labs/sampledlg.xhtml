@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+<rich:modalPanel id="sampledlg" width="600" zindex="2000" top="100" autosized="true">
+	<f:facet name="header">#{messages['labs.newreq.addsample']}</f:facet>
+	<a:form id="formsample">
+
+	<h2>#{messages['PatientSample.identification']}</h2>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{examRequestHome.sampleRequest.sample.dateCollected}" /> 
+    </s:decorate>
+
+	<div id="divsample">
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
+    	<h:inputText value="#{examRequestHome.sampleRequest.sample.sampleNumber}" maxlength="50" style="width:200px;"/>
+    </s:decorate>
+    </div>
+    <hr/>
+    <h2>#{messages['labs.newreq.exams']}</h2>
+    <h:messages globalOnly="true" styleClass="error" layout="table" style="clear:both;display:block"/>
+    
+    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamMicroscopy}" /> #{messages['cases.exammicroscopy']}
+	<br/>
+    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamCulture}" /> #{messages['cases.examculture']}
+	<br/>
+    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamIdentification}" /> #{messages['cases.examident']}
+	<br/>
+    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamDST}" /> #{messages['cases.examdst']}
+
+	<div class="spacer" />
+
+	<div class="button-bar">
+		<a:commandLink action="#{examRequestHome.postSampleRequest}" styleClass="button" reRender="formsample"
+			data="#{examRequestHome.validated}" 
+			onclick="if (!disableButton(this)) return false;"
+			oncomplete="if (data) {Richfaces.hideModalPanel('sampledlg');updateSamples();}">
+			<span>#{messages['form.ok']}</span>
+		</a:commandLink>
+
+		<s:link styleClass="button-alt" onclick="Richfaces.hideModalPanel('sampledlg');return false;">
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+
+	</a:form>
+	
+</rich:modalPanel>
+
+</ui:composition>
