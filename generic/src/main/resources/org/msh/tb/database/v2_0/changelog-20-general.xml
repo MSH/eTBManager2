@@ -74,4 +74,9 @@
             <column name="allowDiagAfterTreatment" valueBoolean="true"></column>
         </update>
     </changeSet>
+
+    <!-- Update batch and medicine inventory quantities -->
+    <changeSet id="20.7" author="rmemoria">
+        <sqlFile path="org/msh/tb/database/v2_0/update_movements.sql" />
+    </changeSet>
 </databaseChangeLog>

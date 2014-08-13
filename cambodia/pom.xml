@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>org.msh</groupId>
 		<artifactId>etbmanager</artifactId>
-		<version>2.0.0</version>
+		<version>2.1.0</version>
 	</parent>
 
 	<groupId>org.msh</groupId>
 	<artifactId>cambodia</artifactId>
-	<version>2.0.0</version>
+	<version>2.1.0</version>
 	<packaging>war</packaging>
 
 	<name>eTB Manager Cambodia version</name>
