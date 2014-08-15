@@ -706,5 +706,4 @@ public class UserSession {
 		getEntityManager().flush();
 		return "ulaaccepted";
 	}
-	
 }

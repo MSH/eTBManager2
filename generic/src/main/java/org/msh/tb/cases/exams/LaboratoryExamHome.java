@@ -6,7 +6,7 @@ import org.jboss.seam.security.AuthorizationException;
 import org.msh.tb.application.ViewService;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Laboratory;
-import org.msh.tb.entities.LaboratoryExamResult;
+import org.msh.tb.entities.LaboratoryExam;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.laboratories.LaboratorySelection;
 
@@ -26,8 +26,8 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	
 	private LaboratorySelection labselection;
 	
-	public LaboratoryExamResult getExamResult() {
-		return (LaboratoryExamResult)getInstance();
+	public LaboratoryExam getExamResult() {
+		return (LaboratoryExam)getInstance();
 	}
 
 	
@@ -61,7 +61,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 			return "error";
 		}
 
-		LaboratoryExamResult exam = getLaboratoryExam();
+		LaboratoryExam exam = getLaboratoryExam();
 		if (exam.getTbcase() == null) {
 			exam.setTbcase(caseHome.getInstance());
 		}
@@ -85,7 +85,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	 * @return
 	 */
 	public boolean validateDates() {
-		LaboratoryExamResult res = getLaboratoryExam();
+		LaboratoryExam res = getLaboratoryExam();
 		Date dtRelease = res.getDateRelease();
 		Date dtCollected = res.getDateCollected();
 		
@@ -105,7 +105,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	 */
 	public Integer findExamBySampleId(TbCase tbcase, String sampleId) {
 		List lst = getEntityManager()
-			.createQuery("select id from " + getEntityClass().getSimpleName() + " where sampleNumber = :id  and tbcase.id = :caseid")
+			.createQuery("select id from " + getEntityClass().getSimpleName() + " where sample.sampleNumber = :id  and tbcase.id = :caseid")
 			.setParameter("id", sampleId)
 			.setParameter("caseid", tbcase.getId())
 			.getResultList();
@@ -115,7 +115,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 
 		Integer examId = (Integer)lst.get(0);
 		return examId;
-	} 
+	}
 	
 
 	/* (non-Javadoc)
@@ -129,13 +129,13 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 				" where exam.tbcase.id = #{tbcase.id}";
 	
 		if (isLastResult())
-			hql = hql.concat(" and s.dateCollected = (select max(aux.dateCollected) " +
+			hql = hql.concat(" and s.patientSample.dateCollected = (select max(aux.sample.dateCollected) " +
 			"from " + entityClass + " aux where aux.tbcase = s.tbcase) ");
 		
 		if(super.isOrderByDateDec())
-			return hql.concat(" order by exam.dateCollected desc");
+			return hql.concat(" order by exam.sample.dateCollected desc");
 		else
-			return hql.concat(" order by exam.dateCollected");
+			return hql.concat(" order by exam.sample.dateCollected");
 	}
 
 	
@@ -149,10 +149,10 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 
 	/**
 	 * Return an instance of the exam object being handled
-	 * @return instance of {@link LaboratoryExamResult}
+	 * @return instance of {@link org.msh.tb.entities.LaboratoryExam}
 	 */
-	public LaboratoryExamResult getLaboratoryExam() {
-		return (LaboratoryExamResult)getInstance();
+	public LaboratoryExam getLaboratoryExam() {
+		return (LaboratoryExam)getInstance();
 	}
 
 

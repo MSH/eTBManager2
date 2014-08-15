@@ -29,7 +29,7 @@ public class TBForm10Block2 extends Indicator{
 		
 		String cond = " c.id = e.tbcase.id group by c.id ";
 		setCondition(cond);
-		setOrderByFields("e.tbcase.id, e.dateCollected");
+		setOrderByFields("e.tbcase.id, e.sample.dateCollected");
 		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntAgeRange1M = 0,cntAgeRange1F = 0, cntAgeRange2M = 0,cntAgeRange2F = 0, cntAgeRange3M = 0, cntAgeRange3F = 0;
@@ -165,7 +165,7 @@ public class TBForm10Block2 extends Indicator{
 	@Override
 	public String getHQLSelect() {
 		String strSel = "";
-		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.sample.dateCollected, e.result ";
 		return strSel;
 	}
 	

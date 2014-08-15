@@ -38,7 +38,7 @@ public class PulmonaryIndicator extends Indicator2D {
 		//String cond = " c.patientType = 0 and c.state > 2 and  c.id = e.tbcase.id group by c.id";
 		String cond = " c.patientType = 0 and  c.id = e.tbcase.id group by c.id";
 		setCondition(cond);
-		setOrderByFields("e.tbcase.id, e.dateCollected");
+		setOrderByFields("e.tbcase.id, e.sample.dateCollected");
 		List<Object[]> lst = createQuery().getResultList();
 		
 		float cntSmearPosM = 0, cntSmearPosF = 0, cntSmearNegM = 0, cntSmearNegF = 0, cntEPM = 0, cntEPF = 0;
@@ -290,7 +290,7 @@ for(Object[] val:lst){
 	@Override
 	public String getHQLSelect() {
 		String strSel = "";
-		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
+		strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.sample.dateCollected, e.result ";
 		return strSel;
 	}
 	

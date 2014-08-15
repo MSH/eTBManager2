@@ -5,7 +5,8 @@ import org.msh.reports.FilterValue;
 
 
 /**
- * Generic SQL definitions used by report instances of {@link Filter} and {@link Variable} to 
+ * Generic SQL definitions used by report instances of {@link org.msh.reports.filters.Filter} and
+ * {@link org.msh.reports.variables.Variable} to
  * construct the SQL query to be sent to the database
  * @author Ricardo Memoria
  *

@@ -11,7 +11,7 @@ import org.msh.reports.query.SQLDefs;
  *
  */
 public class LabResultDiagVariable extends LabResultVariable {
-	
+
 	public LabResultDiagVariable(String id, String keylabel, String fieldName,
 			Class<? extends Enum> enumClass, UnitType unitType) {
 		super(id, keylabel, fieldName, enumClass, unitType);
@@ -26,9 +26,13 @@ public class LabResultDiagVariable extends LabResultVariable {
 
 		String s[] = getFieldName().split("\\.");
 		String tbl = s[0];
-		def.addRestriction(tbl + ".dateCollected = (select min(aux.dateCollected) from " +
-				s[0] + " aux where aux.case_id = tbcase.id " +
-						"and aux.dateCollected <= tbcase.diagnosisDate)");
+
+        def.join("patientsample.id", tbl + ".sample_id");
+
+		def.addRestriction("patientsample.dateCollected = (select min(a2.dateCollected) from " +
+				s[0] + " aux inner join patientsample a2 on a2.id=aux.sample_id where aux.case_id = tbcase.id " +
+						"and a2.dateCollected <= tbcase.diagnosisDate)");
+
 	}
 
 }

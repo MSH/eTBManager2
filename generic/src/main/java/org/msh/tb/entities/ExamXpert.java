@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="examxpert")
-public class ExamXpert extends LaboratoryExamResult implements Serializable{
+public class ExamXpert extends LaboratoryExam implements Serializable{
 	private static final long serialVersionUID = 7672681749376963359L;
 	
 	@PropertyLog(operations={Operation.ALL})

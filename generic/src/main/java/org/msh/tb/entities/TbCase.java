@@ -228,7 +228,10 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	private List<ExamDST> examsDST = new ArrayList<ExamDST>();
-	
+
+    @OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
+    private List<ExamXpert> examsXpert = new ArrayList<ExamXpert>();
+
 	private int issueCounter;
 	
 	@Transient
@@ -1340,4 +1343,12 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	public void setTreatmentMonitoring(List<TreatmentMonitoring> treatmentMonitoring) {
 		this.treatmentMonitoring = treatmentMonitoring;
 	}
+
+    public List<ExamXpert> getExamsXpert() {
+        return examsXpert;
+    }
+
+    public void setExamsXpert(List<ExamXpert> examsXpert) {
+        this.examsXpert = examsXpert;
+    }
 }

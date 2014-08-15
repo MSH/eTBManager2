@@ -2,6 +2,7 @@ package org.msh.tb.entities;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
+import org.msh.tb.entities.enums.ExamStatus;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
@@ -19,13 +20,14 @@ import java.util.Locale;
  *
  */
 @MappedSuperclass
-public abstract class LaboratoryExamResult implements Serializable, Transactional, SyncKey {
+public abstract class LaboratoryExam implements Serializable, Transactional, SyncKey {
 	private static final long serialVersionUID = 3229952267481224824L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
+/*
 	@Temporal(TemporalType.DATE)
 	@NotNull
 	@PropertyLog(messageKey="PatientSample.dateCollected", operations={Operation.NEW, Operation.DELETE})
@@ -34,7 +36,13 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	@Column(length=50)
 	@PropertyLog(messageKey="PatientSample.sampleNumber", operations={Operation.NEW, Operation.DELETE})
 	private String sampleNumber;
-	
+*/
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @PropertyLog(logEntityFields = true)
+    @JoinColumn(name="sample_id")
+    private PatientSample sample;
+
 	@Column(length=250)
 	@PropertyLog(messageKey="global.comments")
 	private String comments;
@@ -70,6 +78,8 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
 	// map an XML node to a property in the model
 	private Integer clientId;
+
+    private ExamStatus status;
 	
 	/**
 	 * @return
@@ -108,6 +118,54 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 		return wsservice.getExamControl().getMonthDisplay(tbcase, getDateCollected());
 	}
 
+    /**
+     * Return the date of sample collection
+     * @return date value
+     */
+    public Date getDateCollected() {
+        return sample != null? sample.getDateCollected(): null;
+    }
+
+
+    /**
+     * Set date collected
+     * @param dt
+     */
+    public void setDateCollected(Date dt) {
+        if ((dt == null) && (sample == null)) {
+            return;
+        }
+
+        if (sample == null) {
+            sample = new PatientSample();
+        }
+
+        sample.setDateCollected(dt);
+    }
+
+    /**
+     * Return the patient sample number
+     * @return
+     */
+    public String getSampleNumber() {
+        return sample != null? sample.getSampleNumber(): null;
+    }
+
+    /**
+     * Change the patient sample number
+     * @param spnumber the sample number
+     */
+    public void setSampleNumber(String spnumber) {
+        if ((spnumber == null) && (sample == null)) {
+            return;
+        }
+
+        if (sample != null) {
+            sample = new PatientSample();
+        }
+
+        sample.setSampleNumber(spnumber);
+    }
 
 	/**
 	 * @return the id
@@ -198,6 +256,7 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 		this.tbcase = tbcase;
 	}
 
+/*
 	public Date getDateCollected() {
 		return dateCollected;
 	}
@@ -213,6 +272,7 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	public void setSampleNumber(String sampleNumber) {
 		this.sampleNumber = sampleNumber;
 	}
+*/
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.entities.Transactional#getLastTransaction()
@@ -229,4 +289,20 @@ public abstract class LaboratoryExamResult implements Serializable, Transactiona
 	public void setLastTransaction(TransactionLog transactionLog) {
 		this.lastTransaction = transactionLog;
 	}
+
+    public PatientSample getSample() {
+        return sample;
+    }
+
+    public void setPatientSample(PatientSample patientSample) {
+        this.sample = patientSample;
+    }
+
+    public ExamStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ExamStatus status) {
+        this.status = status;
+    }
 }

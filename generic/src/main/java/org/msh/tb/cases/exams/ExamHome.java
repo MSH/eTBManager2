@@ -62,8 +62,6 @@ public class ExamHome<E> extends WsEntityHome<E> {
 	
 	/**
 	 * Generates the HQL expression to retrieve the results
-	 * @param lastRes
-	 * @param orderByDateDec - determines if the result will be ordered by desc date if true or
 	 * ordered by if false
 	 * @return
 	 */

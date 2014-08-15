@@ -467,7 +467,7 @@ public class PulmonaryTBRetreatIndicator extends Indicator2D{
 	public String getHQLSelect() {
 		String strSel = "";
 		if(flagSelectQuery == 2)
-			strSel = "select e.result, e.dateCollected";
+			strSel = "select e.result, e.sample.dateCollected";
 		return strSel;
 	}
 	
@@ -496,10 +496,10 @@ public class PulmonaryTBRetreatIndicator extends Indicator2D{
 				 st = addMonthsToDate(dtIniTreat, 2);
 				 end = addMonthsToDate(dtIniTreat, 3);
 			 							 
-					String hql = " select e.result, e.dateCollected from ExamMicroscopy e inner join e.tbcase c where " +
+					String hql = " select e.result, e.sample.dateCollected from ExamMicroscopy e inner join e.tbcase c where " +
 					" c.validationState = #{indicatorFilters.validationState} and c.treatmentPeriod.iniDate between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate} " +
 					" and  e.tbcase.id = " +tbcaseid +
-					" and e.dateCollected between :dt1 and :dt2 ";
+					" and e.sample.dateCollected between :dt1 and :dt2 ";
 		
 			List<Object[]> lst = new ArrayList<Object[]>();
 				

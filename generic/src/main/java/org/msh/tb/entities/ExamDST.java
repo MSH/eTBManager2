@@ -12,7 +12,7 @@ import java.util.List;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("gen")
-public class ExamDST extends LaboratoryExamResult implements Serializable {
+public class ExamDST extends LaboratoryExam implements Serializable {
 	private static final long serialVersionUID = -1911463378908689952L;
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="exam")

@@ -35,7 +35,7 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 		flagSelectQuery = 1;
 		String cond3 = " c.id = e.tbcase.id and c.patientType = 0 group by c.id";
 		setCondition(cond3);
-		setOrderByFields("e.tbcase.id, e.dateCollected");
+		setOrderByFields("e.tbcase.id, e.sample.dateCollected");
 		List<Object[]> lst3 = createQuery().getResultList();
 		flagSelectQuery = 0;
 		
@@ -289,9 +289,9 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 	public String getHQLSelect() {
 		String strSel = "";
 		if(flagSelectQuery == 1)
-			strSel = "select c.id, c.treatmentPeriod.iniDate, c.patient.gender, e.dateCollected, e.result, c.state, c.outcomeDate";
+			strSel = "select c.id, c.treatmentPeriod.iniDate, c.patient.gender, e.sample.dateCollected, e.result, c.state, c.outcomeDate";
 		if(flagSelectQuery == 2)
-			strSel = "select e.result, e.dateCollected";
+			strSel = "select e.result, e.sample.dateCollected";
 		return strSel;
 	}
 	
@@ -319,10 +319,10 @@ public class PulmonaryTBNewIndicator extends Indicator2D{
 				 st = addMonthsToDate(dtIniTreat, 2);
 				 end = addMonthsToDate(dtIniTreat, 3);
 			 							 
-					String hql = " select e.result, e.dateCollected from ExamMicroscopy e inner join e.tbcase c where " +
+					String hql = " select e.result, e.sample.dateCollected from ExamMicroscopy e inner join e.tbcase c where " +
 					" c.validationState = #{indicatorFilters.validationState} and c.treatmentPeriod.iniDate between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate} " +
 					" and  e.tbcase.id = " +tbcaseid +
-					" and e.dateCollected between :dt1 and :dt2 ";
+					" and e.sample.dateCollected between :dt1 and :dt2 ";
 		
 			List<Object[]> lst = new ArrayList<Object[]>();
 	

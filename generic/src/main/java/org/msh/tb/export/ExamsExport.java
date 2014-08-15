@@ -101,8 +101,8 @@ public class ExamsExport extends CaseHQLBase {
 	protected void addCultureData(TbCase tbcase) {
 		if (cultureList == null) {
 			hqlFrom = "from ExamCulture exam join exam.tbcase c";
-			hqlSelect = "select c.id, exam.dateCollected, exam.result";
-			setOrderByFields("exam.tbcase.id, exam.dateCollected");
+			hqlSelect = "select c.id, exam.sample.dateCollected, exam.result";
+			setOrderByFields("exam.tbcase.id, exam.sample.dateCollected");
 			cultureList = createQuery().getResultList();			
 		}
 		excel.addArrayValues(tbcase, cultureList, "culture");
@@ -111,8 +111,8 @@ public class ExamsExport extends CaseHQLBase {
 	protected void addMicroscopyData(TbCase tbcase) {
 		if (microscopyList == null) {
 			hqlFrom = "from ExamMicroscopy exam join exam.tbcase c";
-			hqlSelect = "select c.id, exam.dateCollected, exam.result";
-			setOrderByFields("exam.tbcase.id, exam.dateCollected");
+			hqlSelect = "select c.id, exam.sample.dateCollected, exam.result";
+			setOrderByFields("exam.tbcase.id, exam.sample.dateCollected");
 			microscopyList = createQuery().getResultList();			
 		}
 		excel.addArrayValues(tbcase, microscopyList, "microscopy");

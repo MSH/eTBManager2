@@ -81,4 +81,104 @@
         </sql>
     </changeSet>
 
+    <!-- Start changing the model for the laboratory module -->
+    <changeSet id="v2.1cs3" author="rmemoria">
+        <!-- Create the patient sample table -->
+        <createTable tableName="patientsample">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="dateCollected" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="sampleNumber" type="varchar(50)"></column>
+            <column name="comments" type="text"></column>
+            <column name="sampleType" type="int"></column>
+            <column name="case_id" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="request_id" type="int"></column>
+        </createTable>
+
+        <createTable tableName="examrequest">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="requestDate" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="unit_id" type="int"></column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="FK_samplecase" baseTableName="patientsample" baseColumnNames="case_id"
+                                 referencedTableName="tbcase" referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="FK_samplerequest" baseTableName="patientsample" baseColumnNames="request_id"
+                                 referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+
+        <!-- Link the patient sample to the exams -->
+        <addColumn tableName="examdst">
+            <column name="sample_id" type="int"></column>
+        </addColumn>
+
+        <addColumn tableName="exammicroscopy">
+            <column name="sample_id" type="int"></column>
+        </addColumn>
+
+        <addColumn tableName="examculture">
+            <column name="sample_id" type="int"></column>
+        </addColumn>
+
+        <addColumn tableName="examxpert">
+            <column name="sample_id" type="int"></column>
+        </addColumn>
+
+        <addForeignKeyConstraint constraintName="FK_micsample" baseTableName="exammicroscopy" baseColumnNames="sample_id"
+                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="FK_cultsample" baseTableName="examculture" baseColumnNames="sample_id"
+                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="FK_xpertsample" baseTableName="examxpert" baseColumnNames="sample_id"
+                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="FK_dstsample" baseTableName="examdst" baseColumnNames="sample_id"
+                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+    </changeSet>
+
+
+    <changeSet id="v2.1_cs4" author="">
+        <sqlFile path="org/msh/tb/database/v2_1/update_schema_patientsample.sql" />
+
+        <dropColumn tableName="exammicroscopy" columnName="sampleNumber" />
+        <dropColumn tableName="exammicroscopy" columnName="dateCollected" />
+
+        <dropColumn tableName="examculture" columnName="sampleNumber" />
+        <dropColumn tableName="examculture" columnName="dateCollected" />
+
+        <dropColumn tableName="examdst" columnName="sampleNumber" />
+        <dropColumn tableName="examdst" columnName="dateCollected" />
+
+        <dropColumn tableName="examxpert" columnName="sampleNumber" />
+        <dropColumn tableName="examxpert" columnName="dateCollected" />
+    </changeSet>
+
+    <!-- Add status column to the exams -->
+    <changeSet id="v2.1.cs4" author="rmemoria">
+        <addColumn tableName="examculture">
+            <column name="status" type="int"></column>
+        </addColumn>
+        <addColumn tableName="exammicroscopy">
+            <column name="status" type="int"></column>
+        </addColumn>
+        <addColumn tableName="examdst">
+            <column name="status" type="int"></column>
+        </addColumn>
+        <addColumn tableName="examxpert">
+            <column name="status" type="int"></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

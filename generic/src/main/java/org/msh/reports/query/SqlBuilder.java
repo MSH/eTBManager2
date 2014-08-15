@@ -532,7 +532,7 @@ public class SqlBuilder implements SQLDefs {
 
 	/**
 	 * Set the builder to generate a detailed or consolidated query
-	 * @param boolean value
+	 * @param detailed boolean value
 	 */
 	public void setDetailed(boolean detailed) {
 		this.detailed = detailed;

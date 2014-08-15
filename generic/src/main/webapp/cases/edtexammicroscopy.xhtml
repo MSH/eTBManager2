@@ -9,7 +9,8 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.exammicroscopy']}" /><ui:param name="left" value="0" />
+<ui:param name="title" value="#{messages['cases.exammicroscopy']}" />
+<ui:param name="left" value="0" />
 
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px;" />
@@ -17,14 +18,8 @@
 
 
 <ui:define name="content">
-<h1>#{title}</h1>
-<s:decorate template="/layout/casebody.xhtml">
-	<a:form id="formexam" styleClass="form1" >
-	<div class="form-content">
- 	<s:decorate template="/layout/edtsample.xhtml">
-	</s:decorate>
 
-	<h2>#{messages['cases.exams.results']}</h2>
+    <s:decorate template="/layout/editlabexam.xhtml">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     	<ui:param name="required" value="false" /> 
@@ -53,29 +48,7 @@
     </s:decorate>
 	</div>
 	</div>
-	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputTextarea value="#{examMicroscopy.comments}" style="width:500px;height:80px"/>
-    </s:decorate>
 
-	</div>
-	<div class="form-footer">
-		<div style="float:right;">
-			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
-		</div>
-            <a:commandLink action="#{examMicroscopyHome.persist}" styleClass="button" reRender="formexam,messages" 
-            	onclick="if (!disableButton(this)) return false;"  
-            	>
-            	<span>#{messages['form.save']}</span>
-            </a:commandLink>
-            <a:commandLink action="canceled" styleClass="button-alt" ajaxSingle="true"
-            	onclick="if (!disableButton(this)) return false;">
-            	<span>#{messages['form.cancel']}</span>
-            </a:commandLink>
-	</div>    
-	</a:form>
-</s:decorate>
 
 <script type="text/javascript">
 <!--
@@ -88,6 +61,7 @@ function examResultChanged(cb, immediate) {
 -->
 </script>
 
+    </s:decorate>
 </ui:define>
 
 </ui:composition>  

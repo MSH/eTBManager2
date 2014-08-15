@@ -3,9 +3,11 @@ package org.msh.tb.medicines.movs;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.*;
+import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
@@ -119,7 +121,7 @@ public class MovementHome {
      * Save prepared movements in database and update stock position of medicines. Before saving the prepared movements,
      * the system checks if there are movements to be removed, and execute it making an adjustment in the stock quantity
      */
-    @Transactional
+    @Transactional(TransactionPropagationType.REQUIRED)
     public void savePreparedMovements() {
         if ((movementsToBeRemoved == null) && (preparedMovements == null))
             return;
@@ -276,13 +278,17 @@ public class MovementHome {
         if ((batches == null) || (batches.size() == 0))
             throw new MovementException("No batches were specified for movement of " + medicine.toString());
 
-
         // initialize some variables
         date = DateUtils.getDatePart(date);
         int oper = type.getOper();
         float totalPrice = 0;
         int qtd = 0;
         for (Batch b: batches.keySet()) {
+            // check if batch medicine is the same used in movement
+            if (!b.getMedicine().getId().equals(medicine.getId())) {
+                throw new MovementException("Batch doesn't belong to medicine: batch = " + b.getBatchNumber() + " and medicine = " + medicine.toString());
+            }
+
             int qtdaux = batches.get(b);
             qtd += qtdaux;
             totalPrice += b.getUnitPrice() * qtdaux;
@@ -394,8 +400,6 @@ public class MovementHome {
         Integer minQuantity = (Integer)entityManager.createNativeQuery(sql)
                 .setParameter("dt", date)
                 .getSingleResult();
-
-        System.out.println(minQuantity);
 
         return minQuantity;
     }
@@ -550,7 +554,8 @@ public class MovementHome {
         for (BatchMovement bm: mov.getBatches()) {
             entityManager.persist(bm);
         }
-//        entityManager.flush();
+
+        entityManager.flush();
     }
 
 
@@ -567,6 +572,7 @@ public class MovementHome {
 
         int quantity = signal * mov.getQuantity();
 
+        System.out.println("Update Mov: medicine=(" + mov.getMedicine().getId() + ") " + mov.getMedicine().toString() + " += " + quantity);
         entityManager.createQuery("update Movement set availableQuantity = availableQuantity + :qtd, " +
                 "totalPriceInventory = totalPriceInventory + :price " +
                 "where tbunit.id = :unitid and source.id = :sourceid and medicine.id = :medid " +
@@ -585,7 +591,8 @@ public class MovementHome {
         // update batches
         for (BatchMovement bm: mov.getBatches()) {
             int batchQuantity = signal * bm.getQuantity();
-            entityManager.remove(bm);
+//            entityManager.remove(bm);
+            System.out.println("   # batch=(" + bm.getBatch().getId() + ") " + bm.getBatch().getBatchNumber() + " += " + batchQuantity);
             entityManager.createQuery("update BatchMovement set availableQuantity = availableQuantity + :qtd " +
                     "where movement.id in (select id from Movement where tbunit.id = :unitid and source.id = :sourceid " +
                     "and medicine.id = :medid and date > :dt or (date = :dt and recordDate > :recordDate)) " +
@@ -614,34 +621,49 @@ public class MovementHome {
     private void updateMedicineQuantity(Tbunit unit, Source source, Medicine med, int quantity, float price, Date movDate) {
         System.out.println(quantity);
         // find the entity about quantity available
-        List<StockPosition> lst = entityManager.createQuery("from StockPosition where tbunit.id = :unitid " +
+        Number count = (Number)entityManager.createQuery("select count(id) from StockPosition where tbunit.id = :unitid " +
                 "and source.id = :sourceid and medicine.id = :medid")
                 .setParameter("unitid", unit.getId())
                 .setParameter("sourceid", source.getId())
                 .setParameter("medid", med.getId())
-                .getResultList();
+                .getSingleResult();
 
-        StockPosition sp = lst.size() > 0? lst.get(0): null;
+        boolean existStockPos = count.intValue() > 0;
+//        StockPosition sp = lst.size() > 0? lst.get(0): null;
 
         // no stock position information?
-        if (sp == null) {
+        if (!existStockPos) {
             // so create one
-            sp = new StockPosition();
+            StockPosition sp = new StockPosition();
             sp.setTbunit(unit);
             sp.setSource(source);
             sp.setMedicine(med);
             sp.setQuantity(quantity);
             sp.setTotalPrice(price);
             sp.setLastMovement(movDate);
+            entityManager.persist(sp);
         }
         else {
+            // update stock position record
+            entityManager.createQuery("update StockPosition set quantity = quantity + :qtd, " +
+                    "totalPrice = totalPrice + :price, " +
+                    "lastMovement = :movdate " +
+                    "where tbunit.id=:unitid and source.id=:sourceid and medicine.id=:medid")
+                    .setParameter("qtd", quantity)
+                    .setParameter("movdate", movDate)
+                    .setParameter("price", price)
+                    .setParameter("unitid", unit.getId())
+                    .setParameter("sourceid", source.getId())
+                    .setParameter("medid", med.getId())
+                    .executeUpdate();
+/*
             sp.setQuantity( sp.getQuantity() + quantity );
             sp.setTotalPrice( sp.getTotalPrice() + price );
             if (sp.getLastMovement().before(movDate)) {
                 sp.setLastMovement(movDate);
             }
+*/
         }
-        entityManager.persist(sp);
     }
 
     /**
@@ -652,6 +674,35 @@ public class MovementHome {
      * @param quantity the quantity to be increased (or decreased, if a negative number)
      */
     private void updateBatchQuantity(Tbunit unit, Source source, Batch batch, int quantity) {
+        Number count = (Number)entityManager.createQuery("select count(id) from BatchQuantity where batch.id = :batchid " +
+                "and tbunit.id = :unitid and source.id = :sourceid")
+                .setParameter("batchid", batch.getId())
+                .setParameter("sourceid", source.getId())
+                .setParameter("unitid", unit.getId())
+                .getSingleResult();
+
+        boolean recordExists = count.intValue() > 0;
+
+        if (!recordExists) {
+            BatchQuantity bq = new BatchQuantity();
+            bq.setTbunit(unit);
+            bq.setSource(source);
+            bq.setBatch(batch);
+            bq.setQuantity(quantity);
+            entityManager.persist(bq);
+        }
+        else {
+            // update batch quantity value
+            entityManager.createQuery("update BatchQuantity set quantity = quantity + :qtd " +
+                    "where batch.id = :batchid " +
+                    "and tbunit.id = :unitid and source.id = :sourceid")
+                    .setParameter("qtd", quantity)
+                    .setParameter("batchid", batch.getId())
+                    .setParameter("sourceid", source.getId())
+                    .setParameter("unitid", unit.getId())
+                    .executeUpdate();
+        }
+/*
         List<BatchQuantity> lst = entityManager.createQuery("from BatchQuantity where batch.id = :batchid " +
                 "and tbunit.id = :unitid and source.id = :sourceid")
                 .setParameter("batchid", batch.getId())
@@ -666,11 +717,19 @@ public class MovementHome {
             bq.setSource(source);
             bq.setBatch(batch);
             bq.setQuantity(quantity);
+            entityManager.persist(bq);
         }
         else {
             bq.setQuantity( bq.getQuantity() + quantity );
+
+            if (bq.getQuantity() == 0) {
+                entityManager.remove(bq);
+            }
+            else {
+                entityManager.persist(bq);
+            }
         }
-        entityManager.persist(bq);
+*/
     }
 
     /**

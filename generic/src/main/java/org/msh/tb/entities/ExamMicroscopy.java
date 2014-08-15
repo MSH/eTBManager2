@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="DISCRIMINATOR", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("gen")
-public class ExamMicroscopy extends LaboratoryExamResult implements Serializable {
+public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 	private static final long serialVersionUID = 1514632458011926044L;
 
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})

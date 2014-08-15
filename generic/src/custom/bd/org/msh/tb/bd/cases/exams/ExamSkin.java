@@ -1,7 +1,7 @@
 package org.msh.tb.bd.cases.exams;
 
 import org.msh.tb.bd.entities.enums.SkinTestResult;
-import org.msh.tb.entities.LaboratoryExamResult;
+import org.msh.tb.entities.LaboratoryExam;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="examskin")
-public class ExamSkin extends LaboratoryExamResult implements Serializable {
+public class ExamSkin extends LaboratoryExam implements Serializable {
 
 	/**
 	 * 

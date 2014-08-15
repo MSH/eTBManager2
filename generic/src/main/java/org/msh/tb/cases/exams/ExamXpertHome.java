@@ -23,8 +23,8 @@ public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 		XpertResult.ERROR,
 		XpertResult.NO_RESULT,
 		XpertResult.TB_NOT_DETECTED,
-		XpertResult.TB_DETECTED,
-		XpertResult.ONGOING
+		XpertResult.TB_DETECTED
+//		XpertResult.ONGOING
 	};
 	
 	@Factory("examGenexpert")

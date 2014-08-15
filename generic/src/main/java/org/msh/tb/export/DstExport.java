@@ -55,8 +55,8 @@ public class DstExport extends CaseHQLBase {
 	 */
 	protected void loadData() {
 		hqlFrom = "from ExamDSTResult res join res.exam exam join exam.tbcase c";
-		hqlSelect = "select c.id, exam.dateCollected, res.result, res.substance.abbrevName.name1, exam.id";
-		setOrderByFields("exam.tbcase.id, exam.dateCollected");
+		hqlSelect = "select c.id, exam.sample.dateCollected, res.result, res.substance.abbrevName.name1, exam.id";
+		setOrderByFields("exam.tbcase.id, exam.sample.dateCollected");
 		dstList = createQuery().getResultList();			
 	}
 

@@ -232,7 +232,7 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 														"from ExamDSTResult a " +
 														"where a.exam.tbcase.id = :tbcaseId " +
 														"and a.result = :resistant " +
-														"and a.exam.dateCollected <= :dateIniTreat");
+														"and a.exam.sample.dateCollected <= :dateIniTreat");
 		
 		query.setParameter("tbcaseId", caseHome.getTbCase().getId());
 		Date iniDate;
@@ -253,7 +253,7 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 													"from ExamDSTResult a " +
 													"where a.exam.tbcase.id = :tbcaseId " +
 													"and a.result = :resistant " +
-													"and a.exam.dateCollected = (select min(b.dateCollected) " +
+													"and a.exam.sample.dateCollected = (select min(b.sample.dateCollected) " +
 																					"from ExamDST b " +
 																					"where b.tbcase.id = a.exam.tbcase.id)");
 			

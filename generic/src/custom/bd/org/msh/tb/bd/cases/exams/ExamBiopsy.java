@@ -1,7 +1,7 @@
 package org.msh.tb.bd.cases.exams;
 
 import org.msh.tb.bd.entities.enums.BiopsyResult;
-import org.msh.tb.entities.LaboratoryExamResult;
+import org.msh.tb.entities.LaboratoryExam;
 import org.msh.tb.entities.enums.SampleType;
 
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="exambiopsy")
-public class ExamBiopsy extends LaboratoryExamResult implements Serializable {
+public class ExamBiopsy extends LaboratoryExam implements Serializable {
 
 	/**
 	 * 

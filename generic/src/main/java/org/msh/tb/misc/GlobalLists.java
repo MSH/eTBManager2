@@ -111,7 +111,7 @@ public class GlobalLists {
 	};
 	
 	private static final CultureResult cultureOptionsNotif[] = {
-		CultureResult.NOTDONE,
+//		CultureResult.NOTDONE,
 		CultureResult.NEGATIVE,
 		CultureResult.POSITIVE,
 		CultureResult.PLUS,
@@ -160,6 +160,12 @@ public class GlobalLists {
 		ShippedReceivedDiffTypes.SHIPPED_BT_RECEIVED,
 		ShippedReceivedDiffTypes.RECEIVED_BT_SHIPPED		
 	};
+
+    private static final ExamStatus examStatusOptions[] = {
+            ExamStatus.REQUESTED,
+            ExamStatus.ONGOING,
+            ExamStatus.PERFORMED
+    };
 	
 	/**
 	 * Get component according to the workspace in use
@@ -504,7 +510,12 @@ public class GlobalLists {
 	public DrugResistanceType[] getDrugResistanceTypes() {
 		return getComponentValueWorkspace("drugResistanceTypes", DrugResistanceType[].class, drugResistanceTypes);
 	}
-	
+
+    @Factory("examStatusOptions")
+    public ExamStatus[] getExamStatusOptions() {
+        return examStatusOptions;
+    }
+
 	public ShippedReceivedDiffTypes[] getShippedReceivedDiffType() {
 		return shippedReceivedDiffType;
 	}
