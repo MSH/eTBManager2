@@ -9,10 +9,13 @@ import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.enums.MovementType;
+import org.msh.tb.login.UserSession;
 
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Control the report execution between batch and medicine display
@@ -25,6 +28,8 @@ public class MovementFilters {
 
 	@In(create=true) MovementsQuery movements;
 	@In(create=true) BatchMovementsQuery batchMovements;
+    @In(create=true) EntityManager entityManager;
+    @In(create=true) UserSession userSession;
 	
 	private boolean showAllUnits;
 	private boolean executing;
@@ -38,6 +43,7 @@ public class MovementFilters {
 	private FieldValueComponent adjustmentInfo = new FieldValueComponent();
     private Medicine medicine;
     private Batch batch;
+    private List<Batch> batchList;
     private Source source;
 
     /**
@@ -273,5 +279,25 @@ public class MovementFilters {
 
     public void setSource(Source source) {
         this.source = source;
+    }
+
+    public List<Batch> getBatchList() {
+        batchList = null;
+        if(getMedicine() != null)
+            updateBatchList(getMedicine().getId());
+        return batchList;
+    }
+
+    public void setBatchList(List<Batch> batchList) {
+        this.batchList = batchList;
+    }
+
+    private void updateBatchList(Integer medicineId){
+        batchList = (List<Batch>) entityManager.createQuery("select b from BatchMovement bm join bm.batch b " +
+                                                            "where b.medicine.id = :medicineId and bm.movement.tbunit.id = :unitId " +
+                                                            "group by bm.batch")
+                .setParameter("medicineId", medicineId)
+                .setParameter("unitId", userSession.getWorkingTbunit().getId())
+                .getResultList();
     }
 }

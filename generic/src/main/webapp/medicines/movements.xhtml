@@ -45,13 +45,24 @@
 		<a:actionparam name="param1" assignTo="#{movementFilters.selectedMovement}" converter="javax.faces.Integer" />
 	</a:jsFunction>
 
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Medicine']}:</ui:define>
-		<h:selectOneMenu value="#{movementFilters.medicine}">
-  		<s:selectItems value="#{medicines.resultList}" var="r" label="#{r}" noSelectionLabel="#{messages['form.noselection']}" />
-  		<s:convertEntity />
-		</h:selectOneMenu>
-	</s:decorate>
+    <s:decorate template="/layout/edit.xhtml">
+        <ui:define name="label">#{messages['Medicine']}:</ui:define>
+        <h:selectOneMenu id="medicine" value="#{movementFilters.medicine}">
+            <s:selectItems value="#{medicines.resultList}" var="r" label="#{r}" noSelectionLabel="#{messages['form.noselection']}" />
+            <s:convertEntity />
+            <a:support process="medicine" reRender="batch" event="onchange"/>
+        </h:selectOneMenu>
+    </s:decorate>
+
+    <s:div id="batch">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{not empty movementFilters.medicine}">
+        <ui:define name="label">#{messages['Batch']}:</ui:define>
+        <h:selectOneMenu value="#{movementFilters.batch}">
+            <s:selectItems value="#{movementFilters.batchList}" var="r" label="#{r.manufacturer} #{(not empty r.manufacturer ? ' - ' : '')} #{r.batchNumber}" noSelectionLabel="#{messages['form.noselection']}" />
+            <s:convertEntity />
+        </h:selectOneMenu>
+    </s:decorate>
+    </s:div>
 
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Source']}:</ui:define>

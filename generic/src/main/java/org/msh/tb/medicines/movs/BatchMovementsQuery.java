@@ -25,7 +25,8 @@ public class BatchMovementsQuery extends EntityQuery<MovementItem> implements Ro
 			"m.tbunit.id = #{userSession.tbunit.id}",
 			"m.medicine.id = #{movementFilters.medicine.id}",
 			"m.source.id = #{movementFilters.source.id}",
-			"m.type = #{movementFilters.type}"};
+			"m.type = #{movementFilters.type}",
+            "bm.batch.id = #{movementFilters.batch.id}"};
 
 	private List<RowGroupingItem> rows;
 	private Date date;
