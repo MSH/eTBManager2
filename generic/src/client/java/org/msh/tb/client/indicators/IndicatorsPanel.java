@@ -1,8 +1,6 @@
 package org.msh.tb.client.indicators;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.msh.tb.client.shared.model.CIndicator;
 

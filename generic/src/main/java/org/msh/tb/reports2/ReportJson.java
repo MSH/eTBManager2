@@ -4,19 +4,11 @@
 package org.msh.tb.reports2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
 import org.msh.tb.entities.Report;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * Convert report data from and to JSON data

@@ -16,7 +16,6 @@ import org.msh.reports.tableoperations.KeyConverter;
 import org.msh.reports.variables.Variable;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;

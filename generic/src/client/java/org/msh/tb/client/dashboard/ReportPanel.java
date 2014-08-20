@@ -1,17 +1,14 @@
 package org.msh.tb.client.dashboard;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import org.msh.tb.client.commons.StandardCallback;
 import org.msh.tb.client.indicators.IndicatorController;
-import org.msh.tb.client.indicators.IndicatorWrapperPanel;
 import org.msh.tb.client.indicators.IndicatorsPanel;
 import org.msh.tb.client.indicators.ResultView;
 import org.msh.tb.client.shared.model.CIndicator;

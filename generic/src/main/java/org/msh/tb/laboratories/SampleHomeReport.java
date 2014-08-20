@@ -1,13 +1,5 @@
 package org.msh.tb.laboratories;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
@@ -15,6 +7,13 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.ExamStatus;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Component that generates a home report of the total quantities of samples 

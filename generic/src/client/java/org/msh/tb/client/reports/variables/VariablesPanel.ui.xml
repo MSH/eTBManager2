@@ -1,6 +1,5 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:c='urn:import:org.msh.tb.client.ui'
         >
 
     <ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>

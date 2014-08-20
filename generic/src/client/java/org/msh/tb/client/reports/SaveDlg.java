@@ -15,8 +15,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.TextBox;
 import org.msh.tb.client.AppResources;
-import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.commons.StandardEvent;
 import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.shared.model.CReport;
 

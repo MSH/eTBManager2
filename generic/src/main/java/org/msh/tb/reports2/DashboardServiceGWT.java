@@ -3,16 +3,10 @@
  */
 package org.msh.tb.reports2;
 
-import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
-import org.msh.reports.variables.Variable;
 import org.msh.tb.client.shared.DashboardService;
-import org.msh.tb.client.shared.model.*;
-import org.msh.tb.entities.Report;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.msh.tb.client.shared.model.CReportUIData;
 
 /**
  * Implement the services exposed to the GWT client application

@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.*;
 import org.msh.tb.client.App;
 import org.msh.tb.client.reports.ReportUtils;
 import org.msh.tb.client.shared.model.CFilter;
-import org.msh.tb.sync.actions.StandardAction;
 
 import java.util.Date;
 

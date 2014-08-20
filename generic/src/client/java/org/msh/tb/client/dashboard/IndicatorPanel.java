@@ -3,15 +3,10 @@
  */
 package org.msh.tb.client.dashboard;
 
-import com.google.gwt.core.shared.GWT;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.FlowPanel;
 import org.msh.tb.client.indicators.IndicatorWrapperPanel;
 import org.msh.tb.client.indicators.ResultView;
-import org.msh.tb.client.shared.model.CIndicator;
-import org.msh.tb.client.tableview.TableView;
 
 /**
  * Simple wrapper for the indicator

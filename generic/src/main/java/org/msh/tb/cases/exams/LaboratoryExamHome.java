@@ -12,7 +12,6 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.laboratories.ExamRequestHome;
 import org.msh.tb.laboratories.LaboratorySelection;
 
-import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 

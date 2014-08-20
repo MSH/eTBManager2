@@ -1,7 +1,6 @@
 package org.msh.tb.client.indicators;
 
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -12,7 +11,6 @@ import org.msh.tb.client.commons.StandardEventHandler;
 import org.msh.tb.client.shared.model.CChartType;
 import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CTableSelection;
-import org.msh.tb.client.tableview.Cell;
 import org.msh.tb.client.tableview.TableData;
 import org.msh.tb.client.tableview.TableView;
 import org.msh.tb.client.ui.DivPanel;

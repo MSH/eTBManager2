@@ -2,10 +2,7 @@ package org.msh.tb.laboratories;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ExamRequest;
-import org.msh.tb.entities.Workspace;
-import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.ExamStatus;
-import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 
 /**

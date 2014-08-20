@@ -1,21 +1,15 @@
 package org.msh.tb.laboratories;
 
-import java.beans.Transient;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.*;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.adminunits.AdminUnitSelection;
-import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.PatientHome;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
@@ -24,6 +18,11 @@ import org.msh.tb.entities.enums.ValidationState;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.date.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Base class for requesting of new exams for a patient

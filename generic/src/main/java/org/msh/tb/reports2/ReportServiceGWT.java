@@ -2,8 +2,6 @@ package org.msh.tb.reports2;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.remoting.WebRemote;
-import org.jboss.seam.annotations.security.Restrict;
-import org.jboss.seam.international.LocaleSelector;
 import org.msh.reports.filters.Filter;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.model.*;

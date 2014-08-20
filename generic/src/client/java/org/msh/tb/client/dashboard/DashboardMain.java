@@ -6,17 +6,14 @@ package org.msh.tb.client.dashboard;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.msh.tb.client.AppModule;
 import org.msh.tb.client.commons.StandardCallback;
-import org.msh.tb.client.indicators.IndicatorController;
 import org.msh.tb.client.reports.ReportUtils;
 import org.msh.tb.client.shared.DashboardService;
 import org.msh.tb.client.shared.DashboardServiceAsync;
-import org.msh.tb.client.shared.model.CIndicator;
 import org.msh.tb.client.shared.model.CReport;
 import org.msh.tb.client.shared.model.CReportUIData;
 

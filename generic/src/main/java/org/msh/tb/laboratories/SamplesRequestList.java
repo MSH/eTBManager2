@@ -1,13 +1,12 @@
 package org.msh.tb.laboratories;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.*;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 @Name("samplesRequestList")
 public class SamplesRequestList {

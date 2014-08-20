@@ -2,7 +2,6 @@ package org.msh.tb.client.indicators;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import org.apache.axis.client.async.AsyncCall;
 import org.msh.tb.client.commons.StandardEventHandler;
 
 /**

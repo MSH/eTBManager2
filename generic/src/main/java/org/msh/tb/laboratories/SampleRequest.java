@@ -1,7 +1,10 @@
 package org.msh.tb.laboratories;
 
 
-import org.msh.tb.entities.*;
+import org.msh.tb.entities.ExamCulture;
+import org.msh.tb.entities.ExamDST;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.ExamXpert;
 import org.msh.utils.date.LocaleDateConverter;
 
 import java.util.ArrayList;

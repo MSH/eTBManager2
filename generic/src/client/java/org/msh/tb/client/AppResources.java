@@ -5,7 +5,6 @@ import org.msh.tb.client.resources.ImageResources;
 import org.msh.tb.client.resources.ReportConstants;
 import org.msh.tb.client.shared.ReportService;
 import org.msh.tb.client.shared.ReportServiceAsync;
-import org.msh.tb.reports2.ReportResources;
 
 import java.util.ArrayList;
 import java.util.HashMap;

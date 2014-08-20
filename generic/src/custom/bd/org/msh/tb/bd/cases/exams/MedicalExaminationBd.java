@@ -1,16 +1,11 @@
 package org.msh.tb.bd.cases.exams;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.ManyToOne;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-
 import org.msh.tb.bd.entities.enums.DotProvider;
-import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.transactionlog.PropertyLog;
+
+import javax.persistence.*;
 /**
  *
  * Records information about a medical examination of a case in bangladesh workspace
