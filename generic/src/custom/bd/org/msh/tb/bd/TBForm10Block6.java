@@ -189,7 +189,7 @@ public String getMicroscopyResult(int tbcaseid) {
 		
 		flag = 2;
 		String strMicroscopyResult = "";		
-		String condition = "e.sample.dateCollected in (select min(m.sample.dateCollected) from ExamMicroscopy m where m.tbcase.id = " +tbcaseid + ")" ;
+		String condition = "e.dateCollected in (select min(m.dateCollected) from ExamMicroscopy m where m.tbcase.id = " +tbcaseid + ")" ;
 		setCondition(condition);
 		
 		List<Object> lst = new ArrayList<Object>();

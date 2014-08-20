@@ -26,7 +26,7 @@
     	<ui:define name="label">#{messages['PatientSample.requestDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examRequestHome.requestDate}" /> 
+    	<ui:param name="datefield" value="#{examRequestController.requestDate}" />
     </s:decorate>
 	
 	<h2>#{messages['cases.patientdata']}</h2>
@@ -92,7 +92,7 @@
 
 	<tr><td>
 		<s:decorate template="/layout/auselection.xhtml">
-			<ui:param name="auselection" value="#{examRequestHome.auselection}" />
+			<ui:param name="auselection" value="#{examRequestController.auselection}" />
 			<ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
 		</s:decorate>
     </td></tr>
@@ -125,9 +125,9 @@
     		</h:selectOneMenu>
     	</s:decorate>
 
-    	<s:decorate template="/layout/tbselection3.xhtml">
+    	<s:decorate template="/layout/tbselection2.xhtml">
     		<ui:define name="label">#{messages['FilterHealthUnit.NOTIFICATION_UNIT']}:</ui:define>
-    		<ui:param name="tbunitselection" value="#{examRequestHome.unitselection}" />
+    		<ui:param name="tbunitselection" value="#{examRequestController.unitselection}" />
     	</s:decorate>
     	
     	</s:fragment>
@@ -156,7 +156,7 @@
 	<h2>#{messages['labs.newreq.samples']}</h2>
 	</th>
 	<th align="right">
-		<a:commandLink styleClass="button" action="#{examRequestHome.initAddSample}"
+		<a:commandLink styleClass="button" action="#{examRequestController.initAddSample}"
 			ajaxSingle="true"
 			onclick="if (!disableButton(this)) return false;"
 			reRender="formsample" 
@@ -167,7 +167,7 @@
 </tr>
 <tr><td colspan="2">
 <h:panelGroup id="samples">	
-	<h:dataTable value="#{examRequestHome.samples}" var="it" styleClass="table1" rendered="#{not empty examRequestHome.samples}">
+	<h:dataTable value="#{examRequestController.samples}" var="it" styleClass="table1" rendered="#{not empty examRequestController.samples}">
 		<h:column>
 			<f:facet name="header"><h:outputText value="#{messages['cases.prevtreat.num']}" styleClass="collh" /></f:facet>
 			#{it.index}
@@ -175,12 +175,12 @@
 
 		<h:column>
 			<f:facet name="header"><h:outputText value="#{messages['PatientSample.dateCollected']}" styleClass="collh" /></f:facet>
-			<h:outputText value="#{it.sample.dateCollected}" converter="localeDateConverter" />
+			<h:outputText value="#{it.dateCollected}" converter="localeDateConverter" />
 		</h:column>
 
 		<h:column>
 			<f:facet name="header"><h:outputText value="#{messages['PatientSample.sampleNumber']}" styleClass="collh" /></f:facet>
-			<h:outputText value="#{it.sample.sampleNumber}" />
+			<h:outputText value="#{it.sampleNumber}" />
 		</h:column>
 
 		<h:column>
@@ -192,7 +192,7 @@
 				<span class="checked-icon" />#{messages['cases.examculture']}
 			</s:div>
 			<s:div rendered="#{it.addExamIdentification}">
-				<span class="checked-icon" />#{messages['cases.examident']}
+				<span class="checked-icon" />#{messages['cases.examxpert']}
 			</s:div>
 			<s:div rendered="#{it.addExamDST}">
 				<span class="checked-icon" />#{messages['cases.examdst']}
@@ -201,14 +201,14 @@
 		
 		<h:column>
 			<div>
-			<a:commandLink action="#{examRequestHome.initEditSample(it)}" reRender="formsample" 
+			<a:commandLink action="#{examRequestController.initEditSample(it)}" reRender="formsample"
 				oncomplete="showModalAutoTop('sampledlg');return false;" 
 				ajaxSingle="true">
 				<span><span class="edit-icon" />#{messages['form.edit']}</span>
 			</a:commandLink>
 			</div>
 			<div>
-			<a:commandLink action="#{examRequestHome.deleteSampleRequest(it)}" reRender="samples"
+			<a:commandLink action="#{examRequestController.deleteSampleRequest(it)}" reRender="samples"
 				onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;" 
 				ajaxSingle="true">
 				<span><span class="delete-icon"/>#{messages['form.remove']}</span>
@@ -226,14 +226,14 @@
 	<div class="form-footer">
 		<a:commandLink id="btnsearch" styleClass="button"
 			focus="name" onclick="if (!disableButton(this)) return false;" 
-			action="#{examRequestHome.persist}" reRender="main">
+			action="#{examRequestController.persist}" reRender="main">
 			<span>#{messages['form.ok']}</span>
 		</a:commandLink>
 		<s:link view="/labs/index.xhtml" styleClass="button-alt" propagation="end" >
 			<span>#{messages['form.cancel']}</span>
 		</s:link>
 
-	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
+	<rich:jQuery timing="onload" selector="#main input[type='text']:first" query="focus()" />
 	<rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
 	</div>
 

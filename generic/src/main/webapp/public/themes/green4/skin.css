@@ -362,7 +362,7 @@ a.workspace-data {
 
 
 
-/* Formulários */
+/* Formulï¿½rios */
 
 .form1 {
 	margin-top:10px;
@@ -461,7 +461,7 @@ a.workspace-data {
 }
 
 
-/* Botões */
+/* Botï¿½es */
 
 .button-small a{
 	background-color:#ffe66c;
@@ -798,7 +798,7 @@ table {
 	padding:4px;
 	display:table;
 	width:100%;
-	background-color#afcfc1;
+	background-color: #afcfc1;
 }
 .region3 .content {
 	margin-top:2px;
@@ -1320,3 +1320,57 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	min-width:120px;
 }
 
+.widget {
+    background-color:#f2f2f2;
+    border-radius: 4px;
+    padding:4px;
+    margin-top:8px;
+    margin-bottom: 8px;
+}
+
+.widget .title {
+    font-size:14px;
+    font-weight: bold;
+    color:#2A6D28;
+    padding:4px;
+}
+
+.pull-right {
+    float: right;
+}
+
+.badge {
+    padding:2px 8px;
+    border-radius: 8px;
+}
+
+.color-warning {
+    background-color: #f0ad4e;
+    border-color: #eea236;
+    color:#fff;
+}
+
+.color-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.color-danger {
+    background-color: #953b39;
+    border-color: #ac2925;
+    color: #fff;
+}
+
+.btn-bar {
+    margin-top:2px;
+}
+.btn-flat {
+    border:1px solid #c4c4c4;
+    background-color: #e0e0e0;
+    color: #505050;
+    padding:2px 4px;
+    margin-right: 4px;
+    border-radius: 2px;
+    min-width: 80px;
+}

@@ -37,5 +37,8 @@ public class ExamBiopsy extends LaboratoryExam implements Serializable {
 		this.sampleType = sampleType;
 	}
 
-
+    @Override
+    public ExamResult getExamResult() {
+        return null;
+    }
 }

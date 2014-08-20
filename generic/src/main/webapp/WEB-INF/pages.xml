@@ -56,6 +56,14 @@
   		</navigation>
 		<restrict>#{s:hasRole('MANAGEMENT')}</restrict>
 	</page>
+    <page view-id="/labs/*" login-required="true" >
+        <navigation>
+            <rule if="#{userWorkspace.workspace.ulaActive and not userWorkspace.user.ulaAccepted}" >
+                <redirect view-id="/global/userLicenseAgreement.xhtml" />
+            </rule>
+        </navigation>
+        <restrict>#{s:hasRole('MANAGEMENT')}</restrict>
+    </page>
 
  	<page view-id="/custom/*" login-required="true" >
 	</page>

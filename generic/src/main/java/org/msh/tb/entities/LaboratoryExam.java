@@ -23,11 +23,13 @@ import java.util.Locale;
 public abstract class LaboratoryExam implements Serializable, Transactional, SyncKey {
 	private static final long serialVersionUID = 3229952267481224824L;
 
+    public enum ExamResult { UNDEFINED, POSITIVE, NEGATIVE };
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
-/*
+
 	@Temporal(TemporalType.DATE)
 	@NotNull
 	@PropertyLog(messageKey="PatientSample.dateCollected", operations={Operation.NEW, Operation.DELETE})
@@ -36,12 +38,18 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	@Column(length=50)
 	@PropertyLog(messageKey="PatientSample.sampleNumber", operations={Operation.NEW, Operation.DELETE})
 	private String sampleNumber;
-*/
 
+
+/*
     @ManyToOne(fetch = FetchType.LAZY)
     @PropertyLog(logEntityFields = true)
     @JoinColumn(name="sample_id")
     private PatientSample sample;
+*/
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="request_id")
+    private ExamRequest request;
 
 	@Column(length=250)
 	@PropertyLog(messageKey="global.comments")
@@ -80,7 +88,14 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	private Integer clientId;
 
     private ExamStatus status;
-	
+
+
+    /**
+     * Return a common way if the result is positive, negative or not informed
+     * @return
+     */
+    public abstract ExamResult getExamResult();
+
 	/**
 	 * @return
 	 */
@@ -94,6 +109,36 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	public void setClientId(Integer clientId) {
 		this.clientId = clientId;
 	}
+
+
+    /**
+     * Check if the given date collected and sample number are the same as in the
+     * exam data
+     * @param dateCollected the date sample was collected
+     * @param sampleNumber the given number of the sample collected
+     * @return true if its the same as in the exam
+     */
+    public boolean isSameSample(Date dateCollected, String sampleNumber) {
+        if (this.dateCollected != dateCollected) {
+            if ((this.dateCollected == null) || (dateCollected == null)) {
+                return false;
+            }
+
+            if (!this.dateCollected.equals(dateCollected)) {
+                return false;
+            }
+        }
+
+        if (this.sampleNumber == sampleNumber) {
+            return true;
+        }
+
+        if ((this.sampleNumber == null) || (sampleNumber == null)) {
+            return false;
+        }
+
+        return this.sampleNumber.equals(sampleNumber);
+    }
 
 
 	/**
@@ -123,7 +168,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
      * @return date value
      */
     public Date getDateCollected() {
-        return sample != null? sample.getDateCollected(): null;
+        return dateCollected;
     }
 
 
@@ -132,15 +177,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
      * @param dt
      */
     public void setDateCollected(Date dt) {
-        if ((dt == null) && (sample == null)) {
-            return;
-        }
-
-        if (sample == null) {
-            sample = new PatientSample();
-        }
-
-        sample.setDateCollected(dt);
+        this.dateCollected = dt;
     }
 
     /**
@@ -148,7 +185,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
      * @return
      */
     public String getSampleNumber() {
-        return sample != null? sample.getSampleNumber(): null;
+        return sampleNumber;
     }
 
     /**
@@ -156,15 +193,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
      * @param spnumber the sample number
      */
     public void setSampleNumber(String spnumber) {
-        if ((spnumber == null) && (sample == null)) {
-            return;
-        }
-
-        if (sample != null) {
-            sample = new PatientSample();
-        }
-
-        sample.setSampleNumber(spnumber);
+        this.sampleNumber = spnumber;
     }
 
 	/**
@@ -290,19 +319,19 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 		this.lastTransaction = transactionLog;
 	}
 
-    public PatientSample getSample() {
-        return sample;
-    }
-
-    public void setPatientSample(PatientSample patientSample) {
-        this.sample = patientSample;
-    }
-
     public ExamStatus getStatus() {
         return status;
     }
 
     public void setStatus(ExamStatus status) {
         this.status = status;
+    }
+
+    public ExamRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(ExamRequest request) {
+        this.request = request;
     }
 }

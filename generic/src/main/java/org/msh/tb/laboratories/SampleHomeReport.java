@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.ExamStatus;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
@@ -30,6 +31,7 @@ public class SampleHomeReport {
 	
 	private Date iniDate;
 	private Date endDate;
+    private UserWorkspace userWorkspace;
 	
 	@In EntityManager entityManager;
 	
@@ -81,6 +83,10 @@ public class SampleHomeReport {
 	 * @param type
 	 */
 	protected void addExamData(ExamType type) {
+        if (userWorkspace == null) {
+            userWorkspace = UserSession.getUserWorkspace();
+        }
+
 		String tableName;
 
 		switch (type) {
@@ -93,16 +99,16 @@ public class SampleHomeReport {
 		case DST: 
 			tableName = "examdst";
 			break;
-		case IDENTIFICATION: 
-			tableName = "examidentification";
+		case XPERT:
+			tableName = "examxpert";
 			break;
 		default: throw new IllegalArgumentException("Exam type is null or not supported");
 		}
 
 		String sql = "select a.status, count(*) " + 
 				"from " + tableName + " a " + 
-				"inner join patientsample b on b.id = a.sample_id " + 
-				"where ((a.status <> :val1) or (a.status = :val2 and b.sample.datecollected between :dt1 and :dt2)) and a.laboratory_id = :labid " +
+				"inner join examrequest b on b.id = a.request_id " +
+				"where ((a.status <> :val1) or (a.status = :val2 and a.datecollected between :dt1 and :dt2)) and a.laboratory_id = :labid " +
 				"group by a.status";
 		
 
@@ -111,7 +117,7 @@ public class SampleHomeReport {
 			.setParameter("dt2", endDate)
 			.setParameter("val1", ExamStatus.PERFORMED.ordinal())
 			.setParameter("val2", ExamStatus.PERFORMED.ordinal())
-			.setParameter("labid", LaboratorySession.instance().getLaboratoryId())
+			.setParameter("labid", userWorkspace.getLaboratory().getId())
 			.getResultList();
 		
 		Item item = new Item(type);

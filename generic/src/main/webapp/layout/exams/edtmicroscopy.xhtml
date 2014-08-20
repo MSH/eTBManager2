@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="examHome" value="#{examMicroscopyHome}" />
+
+    <s:decorate template="#{examTemplateWrapper}">
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+            <h:selectOneMenu id="cbres" value="#{examMicroscopy.result}" required="true" onchange="examResultChanged(this, false);">
+                <s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+        </s:decorate>
+
+        <s:decorate template="/layout/dateedit.xhtml" >
+            <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+            <ui:param name="required" value="false" />
+            <ui:param name="future" value="true" />
+            <ui:param name="datefield" value="#{examMicroscopy.dateRelease}" />
+        </s:decorate>
+
+        <rich:jQuery selector="#cbres" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
+
+        <div style="display:block;width:600px;">
+            <div id="pnlrespositive">
+                <s:decorate template="/layout/edit.xhtml" >
+                    <ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
+                    <h:selectOneMenu value="#{examMicroscopy.numberOfAFB}" >
+                        <f:selectItems value="#{globalLists.numberOfAFBs}" />
+                    </h:selectOneMenu>
+                </s:decorate>
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+            <!--
+            function examResultChanged(cb, immediate) {
+                var s = cb.options[cb.selectedIndex].value;
+                if (s=='POSITIVE')
+                    jQuery('#pnlrespositive').show(immediate?0:500)
+                else jQuery('#pnlrespositive').hide(immediate?0:500);
+            }
+            -->
+        </script>
+
+    </s:decorate>
+
+</ui:composition>

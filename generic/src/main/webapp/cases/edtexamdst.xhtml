@@ -9,123 +9,18 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.examdst']}" />
-<ui:param name="left" value="0" />
+    <ui:param name="title" value="#{messages['cases.examdst']}" />
+    <ui:param name="left" value="0" />
 
-<ui:param name="topmenu" value="0" />
-<ui:param name="examHome" value="#{examDSTHome}" />
-<ui:param name="labelstyle" value="width:200px;" />
-
-
-<ui:define name="content">
-<s:decorate template="/layout/editlabexam.xhtml">
-
-    <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-    	<ui:param name="required" value="false" /> 
-    	<ui:param name="future" value="false" /> 
-    	<ui:param name="datefield" value="#{examDST.dateRelease}" /> 
-    </s:decorate>
-
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-    	<h:selectOneMenu value="#{examDST.method}" required="false">
-    		<s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
-    		<s:convertEntity />
-    	</h:selectOneMenu>
-    </s:decorate>
-
-	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+    <ui:param name="topmenu" value="0" />
+    <ui:param name="labelstyle" value="width:200px;" />
+    <ui:param name="examTemplateWrapper" value="/cases/editlabexam-template.xhtml" />
 
 
-<script type="text/javascript">
-<!--
-window.caseClassification="${caseHome.instance.classification}";
-window.diagtype="#{caseHome.instance.diagnosisType}";
-window.msg1="${messages['DSTExam.msg05']}";
-window.msg2="${messages['DSTExam.msg4']}";
+    <ui:define name="content">
 
-function dstResultChange(cb) {
-	var val=cb.options[cb.selectedIndex].value;
-	var elem = jQuery(cb).prev();
-	var s = '';
-	if (val == 'RESISTANT')
-		s = 'dst-resistant';
-	else
-	if (val == 'SUSCEPTIBLE')
-		s = 'dst-susceptible';
-	else
-	if (val == 'CONTAMINATED')
-		s = 'dst-contaminated';
-	elem.removeClass('dst-resistant dst-susceptible dst-contaminated').addClass(s);	
-}
+        <ui:decorate template="/layout/exams/edtdst.xhtml" />
 
-function updateResultIcons(){
-	jQuery("#resulttable select").each(function(){ dstResultChange(this) });
-}
-
-function validateResults() {
-	var numResistants = 0;
-	jQuery("#resulttable select").each(function() {
-		var s = jQuery(this).val();
-		if ("RESISTANT" == s)
-			numResistants++;
-	});
-
-	var res=true;
-	if (((window.diagtype=="SUSPECT")||(window.caseClassification != "DRTB")) && (numResistants > 0))
-		res=window.confirm(window.msg1);
-	if ((window.diagtype=="CONFIRMED") && (window.caseClassification == "DRTB") && (numResistants == 0))
-		res=window.confirm(window.msg2);
-	return res;
-}
-
-function canSave(btn) {
-	if (!disableButton(btn))
-		return false;
-	if (!validateResults()) {
-		enableButton();
-		return false;
-	}
-	return true;
-}
-
-updateResultIcons();
--->
-</script>
-<rich:jQuery selector="#divicon select" query="each(function(){dstResultChange(this);})" />
-
-</s:decorate>
-
-
-
-</ui:define>
-
-    <ui:define name="aftercomments">
-        <div id="resulttable">
-            <h:dataTable value="#{examDSTHome.items}" var="it" styleClass="table2" columnClasses="coll,colr" rowClasses="lin1,lin2">
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
-                    </f:facet>
-                    #{it.substance.name} (#{it.substance.abbrevName})
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
-                    </f:facet>
-			<span style="width:250px;float:left">
-			<div id="divicon" />
-			<h:selectOneMenu id="res" value="#{it.result}" required="true" onchange="dstResultChange(this);">
-                <s:selectItems value="#{dstResults}" var="ss" label="#{messages[ss.key]}" />
-                <s:convertEnum />
-            </h:selectOneMenu>
-			</span>
-                    <h:message for="res" styleClass="error" style="float:left" />
-                </h:column>
-            </h:dataTable>
-        </div>
     </ui:define>
 
-</ui:composition>  
+</ui:composition>

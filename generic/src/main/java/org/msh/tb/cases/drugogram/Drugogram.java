@@ -134,7 +134,7 @@ public class Drugogram {
 	 * Fill the drugogram with DST results
 	 */
 	protected void createDSTResults() {
-		List<Object[]> lst = entityManager.createQuery("select res.result, res.substance, exam.sample.dateCollected " +
+		List<Object[]> lst = entityManager.createQuery("select res.result, res.substance, exam.dateCollected " +
 				"from ExamDSTResult res " +
 				"join res.exam exam " +
 				"where exam.tbcase.id = :id")

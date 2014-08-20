@@ -13,7 +13,6 @@ import java.util.List;
 public class ExamHome<E> extends WsEntityHome<E> {
 	private static final long serialVersionUID = -3507272066511042267L;
 	
-	private boolean lastResult = true;
 	private boolean orderByDateDec = true;
 	private List<E> results;
 	private CaseHome caseHome;
@@ -68,10 +67,6 @@ public class ExamHome<E> extends WsEntityHome<E> {
 	public String getResultsHQL() {
 		String hql = "from " + getEntityClass().getSimpleName() + " exam where exam.tbcase.id = #{tbcase.id}";
 		
-		if (lastResult)
-			hql = hql.concat(" and exam.date = (select max(aux.date) " +
-			"from " + getEntityClass().getSimpleName() + " aux where aux.tbcase = exam.tbcase) ");
-		
 		if(orderByDateDec)
 			return hql.concat(" order by exam.date desc");
 		else
@@ -106,7 +101,6 @@ public class ExamHome<E> extends WsEntityHome<E> {
 	
 	/**
 	 * Creates the list of exam results
-	 * @param lastRes
 	 * @return
 	 */
 	protected List<E> createResults() {
@@ -128,17 +122,6 @@ public class ExamHome<E> extends WsEntityHome<E> {
 		return results;
 	}
 
-	public boolean isLastResult() {
-		return lastResult;
-	}
-
-	public void setLastResult(boolean alastResult) {
-		if (lastResult == alastResult)
-			return;
-		lastResult = alastResult;
-		results = null;
-	}
-
 	/**
 	 * Returns all exams results ordered chronologically reversed
 	 * @return
@@ -148,7 +131,6 @@ public class ExamHome<E> extends WsEntityHome<E> {
 			results = null;
 		
 		setOrderByDateDec(true);
-		setLastResult(false);
 		return getResults();
 	}
 	
@@ -161,15 +143,9 @@ public class ExamHome<E> extends WsEntityHome<E> {
 			results = null;
 		
 		setOrderByDateDec(false);
-		setLastResult(false);
 		return getResults();
 	}
-	
-	public List<E> getLastResultList() {
-		setLastResult(true);
-		return getResults();
-	}
-	
+
 	/**
 	 * @return the orderByDateDec
 	 */

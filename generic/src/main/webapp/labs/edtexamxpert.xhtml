@@ -9,16 +9,13 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.examident']}" /><ui:param name="topmenu" value="4" />
-
-<ui:param name="examHome" value="#{examIdentificationHome}" />
-<ui:param name="tbcase" value="#{sampleHome.instance.tbcase}" />
-
+<ui:param name="title" value="#{messages['cases.examxpert']}" />
+<ui:param name="topmenu" value="4" />
+<ui:param name="examTemplateWrapper" value="/labs/templates/edtlabexam.xhtml" />
 
 <ui:define name="content">
-<h1>#{title}</h1>
 
-	<ui:include src="/labs/templates/examdidentedt.xhtml" />	
+	<ui:include src="/layout/exams/edtxpert.xhtml" />
 
 </ui:define>
 

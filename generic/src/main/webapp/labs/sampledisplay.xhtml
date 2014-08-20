@@ -7,11 +7,13 @@
       xmlns:s="http://jboss.com/products/seam/taglib"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      xmlns:b="http://www.etbmanager.org"
       xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
-	<div class="region3">
-	<div class="content">
+	<div>
+	<div>
+        <div style="float:right">
+            <b>#{messages['PatientSample.sampleNumber']}:</b> #{sample.sampleNumber}
+        </div>
 	<h2>
 	<h:outputFormat value="#{messages['labs.sampletitle']}" >
 		<f:param value="#{sample.displayDateCollected}" />
@@ -19,264 +21,114 @@
 	</h2>
 	</div></div>
 
-	<s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
-		#{sample.sampleNumber}
-	</s:decorate>
+    <a:repeat value="#{sample.examsMicroscopy}" var="exam">
+        <s:decorate template="/labs/templates/examdisplay.xhtml">
+            <ui:param name="examTitle" value="#{messages['cases.exammicroscopy']}" />
+            <ui:param name="examView" value="/labs/edtexammicroscopy.xhtml" />
 
-	<s:fragment rendered="#{not empty sample.microscopyExams}">
-		<div class="text-medium">#{messages['cases.exammicroscopy']}<hr/></div>
-		<div>		
-		<a:repeat value="#{sample.microscopyExams}" var="exam">
-			<s:fragment rendered="#{exam.status!='PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexammicroscopy.xhtml" onclick="disableButton(this)">
-						<f:param name="sampid" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.submitresult']}</span>
-					</s:link>
-				</div>
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+                <h:outputText value="#{messages[exam.result.key]}" styleClass="badge #{exam.examResult == 'POSITIVE'? 'color-danger':'color-success'}"/>
+            </s:decorate>
 
-				<s:decorate template="/layout/display.xhtml">
-					<ui:define name="label">#{messages['ExamStatus']}:</ui:define>
-					<div class="status-label-field">
-						#{messages[exam.status.key]}
-					</div>
-				</s:decorate>
-			</s:fragment>
-			<s:fragment rendered="#{exam.status=='PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexammicroscopy.xhtml" onclick="disableButton(this)">
-						<f:param name="id" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.edit']}</span>
-					</s:link>
-				</div>
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.dateRelease}">
+                <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+                <h:outputText value="#{exam.dateRelease}" converter="localeDateConverter" />
+            </s:decorate>
 
-				<b:domainDisplay value="#{exam.sampleType}" domain="microscopySampleType" />	
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.comments}">
+                <ui:define name="label">#{messages['global.comments']}:</ui:define>
+                <h:outputText value="#{exam.comments}" converter="rmemoria.TextConverter" escape="false" />
+            </s:decorate>
 
-				<b:domainDisplay value="#{exam.sampleQuality}" domain="microscopySampleQuality" />	
+        </s:decorate>
+    </a:repeat>
 
-				<b:domainDisplay value="#{exam.smearType}" domain="microscopySmearType" />	
+    <a:repeat value="#{sample.examsXpert}" var="exam">
+        <s:decorate template="/labs/templates/examdisplay.xhtml">
+            <ui:param name="examTitle" value="#{messages['cases.examxpert']}" />
+            <ui:param name="examView" value="/labs/edtexamxpert.xhtml" />
 
-				<b:domainDisplay value="#{exam.method}" domain="microscopyMethod" />	
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+                <h:outputText value="#{messages[exam.result.key]}" styleClass="badge #{exam.examResult == 'POSITIVE'? 'color-danger':'color-success'}"/>
+            </s:decorate>
 
-				<b:domainDisplay value="#{exam.result}" domain="microscopyResult" />	
+            <s:decorate template="/layout/display.xhtml" rendered="#{exam.result == 'TB_DETECTED'}">
+                <ui:define name="label">#{messages['XpertResult']}:</ui:define>
+                <h:outputText value="#{messages[exam.rifResult.key]}" styleClass="badge #{exam.rifResult=='RIF_DETECTED'? 'color-danger': 'color-success'}" />
+            </s:decorate>
 
-				<b:domainDisplay value="#{exam.numberOfAFB}" domain="microscopyAFB" />
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.dateRelease}">
+                <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+                <h:outputText value="#{exam.dateRelease}" converter="localeDateConverter" />
+            </s:decorate>
 
-				<s:decorate template="/layout/display.xhtml">
-					<ui:define name="label">#{messages['global.comments']}:</ui:define>
-					<h:outputText value="#{exam.comments}" converter="rmemoria.TextConverter" escape="false" />
-				</s:decorate>
-			</s:fragment>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['PatientSample.requestDate']}:</ui:define>
-				<h:outputText value="#{exam.requestDate}" converter="localeDateConverter" />
-			</s:decorate>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['Laboratory']}:</ui:define>
-				#{exam.laboratory.name}
-				<div class="text-small">#{exam.laboratory.adminUnit.fullDisplayName}</div>
-			</s:decorate>
-		</a:repeat>
-		</div>
-	</s:fragment>
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.comments}">
+                <ui:define name="label">#{messages['global.comments']}:</ui:define>
+                <h:outputText value="#{exam.comments}" converter="rmemoria.TextConverter" escape="false" />
+            </s:decorate>
 
+        </s:decorate>
+    </a:repeat>
 
+    <a:repeat value="#{sample.examsCulture}" var="exam">
+        <s:decorate template="/labs/templates/examdisplay.xhtml">
+            <ui:param name="examTitle" value="#{messages['cases.examculture']}" />
+            <ui:param name="examView" value="/labs/edtexamculture.xhtml" />
 
-	<s:fragment rendered="#{not empty sample.cultureExams}">
-		<div class="text-medium">#{messages['cases.examculture']}<hr/></div>
-		<a:repeat value="#{sample.cultureExams}" var="exam">
-			<s:fragment rendered="#{exam.status!='PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexamculture.xhtml"  onclick="disableButton(this)">
-						<f:param name="id" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.submitresult']}</span>
-					</s:link>
-				</div>
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+                <h:outputText value="#{messages[exam.result.key]}" styleClass="badge #{exam.examResult == 'POSITIVE'? 'color-danger':'color-success'}"/>
+            </s:decorate>
 
-				<s:decorate template="/layout/display.xhtml">
-					<ui:define name="label">#{messages['ExamStatus']}:</ui:define>
-					<div class="status-label-field">
-						#{messages[exam.status.key]}
-					</div>
-				</s:decorate>
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.dateRelease}">
+                <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+                <h:outputText value="#{exam.dateRelease}" converter="localeDateConverter" />
+            </s:decorate>
 
-			</s:fragment>
-			<s:fragment rendered="#{exam.status=='PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexamculture.xhtml"  onclick="disableButton(this)">
-						<f:param name="id" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.edit']}</span>
-					</s:link>
-				</div>
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.comments}">
+                <ui:define name="label">#{messages['global.comments']}:</ui:define>
+                <h:outputText value="#{exam.comments}" converter="rmemoria.TextConverter" escape="false" />
+            </s:decorate>
 
-				<b:domainDisplay value="#{exam.sampleType}" domain="cultureSampleType" />
+        </s:decorate>
+    </a:repeat>
 
-				<b:domainDisplay value="#{exam.sampleQuality}" domain="cultureSampleQuality" />
+    <a:repeat value="#{sample.examsDST}" var="exam">
+        <s:decorate template="/labs/templates/examdisplay.xhtml">
+            <ui:param name="examTitle" value="#{messages['cases.examdst']}" />
+            <ui:param name="examView" value="/labs/edtexamdst.xhtml" />
 
-				<b:domainDisplay value="#{exam.decontamination}" domain="cultureDecontamination" />
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.dateRelease}">
+                <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+                <h:outputText value="#{exam.dateRelease}" converter="localeDateConverter" />
+            </s:decorate>
 
-				<b:domainDisplay value="#{exam.method}" domain="cultureMethod" />
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.comments}">
+                <ui:define name="label">#{messages['global.comments']}:</ui:define>
+                <h:outputText value="#{exam.comments}" converter="rmemoria.TextConverter" escape="false" />
+            </s:decorate>
 
-				<b:domainDisplay value="#{exam.media}" domain="cultureMedia" />
+            <h:dataTable value="#{exam.results}" var="res" styleClass="table2" columnClasses="coll,coll" rowClasses="lin1,lin2" style="width:400px;margin-left:50px;">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
+                    </f:facet>
+                    #{res.substance.name} (#{res.substance.abbrevName})
+                </h:column>
 
-				<b:domainDisplay value="#{exam.result}" domain="cultureResult" />
-
-			</s:fragment>
-					<s:decorate template="/layout/display.xhtml">
-						<ui:define name="label">#{messages['PatientSample.requestDate']}:</ui:define>
-						<h:outputText value="#{exam.requestDate}" converter="localeDateConverter" />
-					</s:decorate>
-					<s:decorate template="/layout/display.xhtml">
-						<ui:define name="label">#{messages['Laboratory']}:</ui:define>
-						#{exam.laboratory.name}
-						<div class="text-small">#{exam.laboratory.adminUnit.fullDisplayName}</div>
-					</s:decorate>
-		</a:repeat>
-	</s:fragment>
-
-
-	<s:fragment rendered="#{not empty sample.identificationExams}">
-		<div class="text-medium">#{messages['cases.examident']}<hr/></div>
-		<a:repeat value="#{sample.identificationExams}" var="exam">
-			<s:fragment rendered="#{exam.status!='PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexamident.xhtml"  onclick="disableButton(this)">
-						<f:param name="id" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.submitresult']}</span>
-					</s:link>
-				</div>
-
-				<s:decorate template="/layout/display.xhtml">
-					<ui:define name="label">#{messages['ExamStatus']}:</ui:define>
-					<div class="status-label-field">
-						#{messages[exam.status.key]}
-					</div>
-				</s:decorate>
-
-			</s:fragment>
-			<s:fragment rendered="#{exam.status=='PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexamident.xhtml"  onclick="disableButton(this)">
-						<f:param name="id" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.edit']}</span>
-					</s:link>
-				</div>
-
-			<b:domainDisplay value="#{exam.method}" domain="identMethod" />
-
-			<b:domainDisplay value="#{exam.methodGroup}" domain="identMethodGroup" />
-
-			<b:domainDisplay value="#{exam.intermediateResult}" domain="identIntermediateResult" />
-
-			<b:domainDisplay value="#{exam.result}" domain="identResult" />
-
-			<b:domainDisplay value="#{exam.mycobacterium}" domain="identMycobacterium" />
-
-			<b:domainDisplay value="#{exam.sampleType}" domain="identSampleType" />
-
-    		<s:decorate template="/layout/display.xhtml" >
-		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    			<h:outputText value="#{exam.comments}" converter="rmemoria.TextConverter" />
-		    </s:decorate>
-			</s:fragment>
-		
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['PatientSample.requestDate']}:</ui:define>
-				<h:outputText value="#{exam.requestDate}" converter="localeDateConverter" />
-			</s:decorate>
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['Laboratory']}:</ui:define>
-				#{exam.laboratory.name}
-				<div class="text-small">#{exam.laboratory.adminUnit.fullDisplayName}</div>
-			</s:decorate>
-		</a:repeat>
-	</s:fragment>
-
-
-	<s:fragment rendered="#{not empty sample.dstExams}">
-		<div class="text-medium">#{messages['cases.examdst']}<hr/></div>
-		<div style="padding-left:40px">
-		<a:repeat value="#{sample.dstExams}" var="exam">
-			<s:fragment rendered="#{exam.status != 'PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexamdst.xhtml"  onclick="disableButton(this)">
-						<f:param name="id" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.submitresult']}</span>
-					</s:link>
-				</div>
-				<s:decorate template="/layout/display.xhtml">
-					<ui:define name="label">#{messages['DstResult']}:</ui:define>
-					<span style="color:#E47911;font-weight:bold;font-size:1.1em">#{messages['MicroscopyResult.ONGOING']}</span>
-				</s:decorate>
-			</s:fragment>
-			<s:fragment rendered="#{exam.status=='PERFORMED'}">
-				<div style="float:right;height:1px;">
-					<s:link styleClass="button-alt" view="/labs/edtexamdst.xhtml"  onclick="disableButton(this)">
-						<f:param name="id" value="#{exam.sample.id}" />
-						<f:param name="examid" value="#{exam.id}" />
-						<span>#{messages['form.edit']}</span>
-					</s:link>
-				</div>
-
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['PatientSample.requestDate']}:</ui:define>
-				<h:outputText value="#{exam.requestDate}" converter="localeDateConverter" />
-			</s:decorate>
-
-			<s:decorate template="/layout/display.xhtml">
-				<ui:define name="label">#{messages['PatientSample.requestDate']}:</ui:define>
-				<h:outputText value="#{exam.dateRelease}" converter="localeDateConverter" />
-			</s:decorate>
-
-			<s:decorate template="/layout/domaindisplay.xhtml">
-				<ui:param name="field" value="#{exam.sampleType}" />
-				<ui:param name="domain" value="sampleType" />
-			</s:decorate>
-
-			<s:decorate template="/layout/domaindisplay.xhtml">
-				<ui:param name="field" value="#{exam.methodType}" />
-				<ui:param name="domain" value="dstMethodType" />
-			</s:decorate>
-
-			<s:decorate template="/layout/domaindisplay.xhtml">
-				<ui:param name="field" value="#{exam.method}" />
-				<ui:param name="domain" value="dstMethod" />
-			</s:decorate>
-
-			<s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.comments}">
-				<ui:define name="label">#{messages['global.comments']}:</ui:define>
-				<h:outputText value="#{exam.comments}" converter="rmemoria.TextConverter" escape="false"/>
-			</s:decorate>
-			
-			<h:dataTable value="#{exam.results}" var="res" styleClass="table2" columnClasses="coll,coll" rowClasses="lin1,lin2" style="width:400px;margin-left:50px;">
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="#{messages['Medicine']}" styleClass="collh"/>
-					</f:facet>
-					#{res.substance.name} (#{res.substance.abbrevName})
-				</h:column>
-
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
-					</f:facet>
-					<s:decorate template="/layout/dstresult.xhtml" style="float:left">
-						<ui:param name="result" value="#{res.result}" />
-					</s:decorate>
-					#{messages[res.result]}
-				</h:column>
-			</h:dataTable>
-			</s:fragment>
-		</a:repeat>
-		</div>
-	</s:fragment>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
+                    </f:facet>
+                    <s:decorate template="/layout/dstresult.xhtml" style="float:left">
+                        <ui:param name="result" value="#{res.result}" />
+                    </s:decorate>
+                    #{messages[res.result]}
+                </h:column>
+            </h:dataTable>
+        </s:decorate>
+    </a:repeat>
 
 </ui:composition>  

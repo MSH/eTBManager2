@@ -110,7 +110,7 @@ public class ReportResources {
 		addVariable(grp, new LabResultVariable("cult_res", "CultureResult", "examculture.result", CultureResult.class, UnitType.EXAM_CULTURE));
 		addVariable(grp, new LabExamDateVariable("cultcount", "manag.reportgen.var.culturemonth", "examculture.dateCollected", false, UnitType.EXAM_CULTURE));
 		addVariable(grp, new LabExamDateVariable("cultcount_y", "manag.reportgen.var.cultureyear", "examculture.dateCollected", true, UnitType.EXAM_CULTURE));
-		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['manag.reportgen.culture']} - #{messages['manag.reportgen.collect']}", "patientsample.dateCollected", false));
+		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['manag.reportgen.culture']} - #{messages['manag.reportgen.collect']}", "examculture.dateCollected", false));
 		add(grp, new NegativationMonthVariable("cultneg", true));
 		add(grp, new LabMethodVariable("cultmethod", "TbField.CULTURE_METHOD", "examculture.method_id", TbField.CULTURE_METHOD, UnitType.EXAM_CULTURE));
 		return grp;

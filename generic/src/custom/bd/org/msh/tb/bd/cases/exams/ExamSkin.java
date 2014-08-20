@@ -26,4 +26,8 @@ public class ExamSkin extends LaboratoryExam implements Serializable {
 	}
 
 
+    @Override
+    public ExamResult getExamResult() {
+        return null;
+    }
 }

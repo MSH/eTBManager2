@@ -17,9 +17,9 @@ import java.util.List;
 public class InterimOutcomeIndicator extends Indicator2D {
 	private static final long serialVersionUID = 3070089202436585662L;
 
-	private static final String culture = "(select min(e.sample.dateCollected) from ExamCulture e " +
+	private static final String culture = "(select min(e.dateCollected) from ExamCulture e " +
 			"where e.tbcase.id = c.id and e.result = :res1)";
-	private static final String microscopy = "(select min(e.sample.dateCollected) from ExamMicroscopy e " +
+	private static final String microscopy = "(select min(e.dateCollected) from ExamMicroscopy e " +
 			"where e.tbcase.id = c.id and e.result = :res2)";
 
 	private int numcases;

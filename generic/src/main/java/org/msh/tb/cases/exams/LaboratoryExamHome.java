@@ -3,13 +3,16 @@ package org.msh.tb.cases.exams;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.AuthorizationException;
+import org.msh.tb.application.App;
 import org.msh.tb.application.ViewService;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Laboratory;
 import org.msh.tb.entities.LaboratoryExam;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.laboratories.ExamRequestHome;
 import org.msh.tb.laboratories.LaboratorySelection;
 
+import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +33,22 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 		return (LaboratoryExam)getInstance();
 	}
 
-	
+    /**
+     * Initialize the exam form from the laboratory module, where the
+     * exam request is required, or initialized if the exam is managed
+     */
+    public void initializeLabForm() {
+        ExamRequestHome home = (ExamRequestHome)App.getComponent("examRequestHome");
+
+        if (!home.isManaged()) {
+            if (!isManaged()) {
+                throw new RuntimeException("Exam request was not found");
+            }
+            home.setId(getLaboratoryExam().getRequest().getId());
+        }
+        initializeForm();
+    }
+
 	/**
 	 * Initialize the form. This method is called just once, when the form
 	 * is displayed, i.e, when a GET method is requested.
@@ -38,6 +56,10 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	 * It also checks if the user has permission to use this form
 	 */
 	public void initializeForm() {
+        if ((!caseHome.isManaged()) && (isManaged())) {
+            caseHome.setId(getLaboratoryExam().getTbcase().getId());
+        }
+
 		// check permission
 		if (!caseHome.isCanEditExams())
 			throw new AuthorizationException("Permission denied");
@@ -46,8 +68,10 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 		if (ViewService.instance().isFormPost())
 			return;
 
-		Laboratory lab = getLaboratoryExam().getLaboratory();
-		getLabselection().setSelected(lab);
+        LaboratoryExam exam = getLaboratoryExam();
+
+		Laboratory lab = exam.getLaboratory();
+        getLabselection().setSelected(lab);
 	}
 	
 	
@@ -67,18 +91,60 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 		}
 		
 		// set laboratory
-		try {
-			if (labselection != null) {
-				getLaboratoryExam().setLaboratory(labselection.getSelected());
-			}
-		} catch (Exception e) {
-			e.fillInStackTrace();
+		if (labselection != null) {
+			getLaboratoryExam().setLaboratory(labselection.getSelected());
 		}
-		
+
+        persistSample();
+
 		// save data
 		return super.persist();
 	}
-	
+
+
+    /**
+     * Update the sample record based on the value of the sample
+     */
+    protected void persistSample() {
+/*
+        // sample was not initialized, so do nothing
+        if (sample == null) {
+            return;
+        }
+
+        LaboratoryExam exam = getLaboratoryExam();
+
+        if (sample.isSampleInfoEmpty()) {
+            // if sample entered by user is empty and there is no sample in
+            // the original exam, so do nothig
+            if (exam.getSample() == null) {
+                return;
+            }
+        }
+*/
+    }
+
+    /**
+     * Return the number of records that this sample is related to
+     * @param sample the instance of PatientSample
+     * @return number of exams that refers to this sample
+     */
+/*
+    protected int calcSampleReferenceCount(PatientSample sample) {
+        String[] tables = {"examculture", "exammicroscopy", "examxpert", "examdst"};
+
+        EntityManager em = App.getEntityManager();
+        int count = 0;
+        for (String tbl: tables) {
+            Number val = (Number)em.createNativeQuery("select count(*) from " + tbl + " where sample_id = :id")
+                    .setParameter("id", sample.getId())
+                    .getSingleResult();
+            count += val.intValue();
+        }
+
+        return count;
+    }
+*/
 
 	/**
 	 * Check if date of release is before the date sample was collected
@@ -105,7 +171,8 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	 */
 	public Integer findExamBySampleId(TbCase tbcase, String sampleId) {
 		List lst = getEntityManager()
-			.createQuery("select id from " + getEntityClass().getSimpleName() + " where sample.sampleNumber = :id  and tbcase.id = :caseid")
+			.createQuery("select id from " + getEntityClass().getSimpleName() +
+                    " where sampleNumber = :id  and tbcase.id = :caseid")
 			.setParameter("id", sampleId)
 			.setParameter("caseid", tbcase.getId())
 			.getResultList();
@@ -128,14 +195,10 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 				getJoinFetchHQL() +
 				" where exam.tbcase.id = #{tbcase.id}";
 	
-		if (isLastResult())
-			hql = hql.concat(" and s.patientSample.dateCollected = (select max(aux.sample.dateCollected) " +
-			"from " + entityClass + " aux where aux.tbcase = s.tbcase) ");
-		
 		if(super.isOrderByDateDec())
-			return hql.concat(" order by exam.sample.dateCollected desc");
+			return hql.concat(" order by exam.dateCollected desc");
 		else
-			return hql.concat(" order by exam.sample.dateCollected");
+			return hql.concat(" order by exam.dateCollected");
 	}
 
 	

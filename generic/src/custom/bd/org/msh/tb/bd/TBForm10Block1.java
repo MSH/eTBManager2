@@ -39,7 +39,7 @@ public class TBForm10Block1 extends Indicator{
 
 		String cond = " c.id = e.tbcase.id group by c.id ";
 		setCondition(cond);
-		setOrderByFields("e.tbcase.id, e.sample.dateCollected");
+		setOrderByFields("e.tbcase.id, e.dateCollected");
 		flag = 1;
 		List<Object[]> lst = createQuery().getResultList();
 		flag = 0;
@@ -157,7 +157,7 @@ public class TBForm10Block1 extends Indicator{
 	public String getHQLSelect() {
 		String strSel = "";
 		if(flag==1)
-			strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.sample.dateCollected, e.result ";
+			strSel = "select c.id, c.patient.gender, c.state, c.outcomeDate, e.dateCollected, e.result ";
 		if(flag==2)
 			strSel = "select c.id, c.patientType, c.patient.gender, c.infectionSite";
 		return strSel;

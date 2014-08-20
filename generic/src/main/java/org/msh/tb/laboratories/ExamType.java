@@ -9,7 +9,7 @@ public enum ExamType {
 
 	MICROSCOPY ("cases.exammicroscopy"), 
 	CULTURE ("cases.examculture"), 
-	IDENTIFICATION ("cases.examident"),
+	XPERT("cases.examxpert"),
 	DST ("cases.examdst"); 
 	
 	private String key;

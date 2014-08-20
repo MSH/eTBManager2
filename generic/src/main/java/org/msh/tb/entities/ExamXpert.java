@@ -13,11 +13,20 @@ import java.io.Serializable;
 @Table(name="examxpert")
 public class ExamXpert extends LaboratoryExam implements Serializable{
 	private static final long serialVersionUID = 7672681749376963359L;
-	
-	@PropertyLog(operations={Operation.ALL})
+
+    @PropertyLog(operations={Operation.ALL})
 	private XpertResult result;
 	
 	private XpertRifResult rifResult;
+
+    @Override
+    public ExamResult getExamResult() {
+        if (result == null) {
+            return ExamResult.UNDEFINED;
+        }
+
+        return result == XpertResult.TB_DETECTED? ExamResult.POSITIVE: ExamResult.NEGATIVE;
+    }
 
 	public XpertResult getResult() {
 		return result;

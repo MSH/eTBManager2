@@ -18,32 +18,32 @@
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="future" value="true" /> 
-    	<ui:param name="datefield" value="#{examRequestHome.sampleRequest.sample.dateCollected}" /> 
+    	<ui:param name="datefield" value="#{examRequestController.sampleRequest.dateCollected}" />
     </s:decorate>
 
 	<div id="divsample">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
-    	<h:inputText value="#{examRequestHome.sampleRequest.sample.sampleNumber}" maxlength="50" style="width:200px;"/>
+    	<h:inputText value="#{examRequestController.sampleRequest.sampleNumber}" maxlength="50" style="width:200px;"/>
     </s:decorate>
     </div>
     <hr/>
     <h2>#{messages['labs.newreq.exams']}</h2>
     <h:messages globalOnly="true" styleClass="error" layout="table" style="clear:both;display:block"/>
     
-    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamMicroscopy}" /> #{messages['cases.exammicroscopy']}
+    <h:selectBooleanCheckbox value="#{examRequestController.sampleRequest.addExamMicroscopy}" /> #{messages['cases.exammicroscopy']}
 	<br/>
-    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamCulture}" /> #{messages['cases.examculture']}
+    <h:selectBooleanCheckbox value="#{examRequestController.sampleRequest.addExamCulture}" /> #{messages['cases.examculture']}
 	<br/>
-    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamIdentification}" /> #{messages['cases.examident']}
+    <h:selectBooleanCheckbox value="#{examRequestController.sampleRequest.addExamIdentification}" /> #{messages['cases.examxpert']}
 	<br/>
-    <h:selectBooleanCheckbox value="#{examRequestHome.sampleRequest.addExamDST}" /> #{messages['cases.examdst']}
+    <h:selectBooleanCheckbox value="#{examRequestController.sampleRequest.addExamDST}" /> #{messages['cases.examdst']}
 
 	<div class="spacer" />
 
 	<div class="button-bar">
-		<a:commandLink action="#{examRequestHome.postSampleRequest}" styleClass="button" reRender="formsample"
-			data="#{examRequestHome.validated}" 
+		<a:commandLink action="#{examRequestController.postSampleRequest}" styleClass="button" reRender="formsample"
+			data="#{examRequestController.validated}"
 			onclick="if (!disableButton(this)) return false;"
 			oncomplete="if (data) {Richfaces.hideModalPanel('sampledlg');updateSamples();}">
 			<span>#{messages['form.ok']}</span>

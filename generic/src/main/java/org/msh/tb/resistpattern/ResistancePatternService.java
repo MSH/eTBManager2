@@ -43,7 +43,7 @@ public class ResistancePatternService {
 			.executeUpdate();
 
 		// get resistances from DST 
-		List<Object[]> lst = entityManager.createQuery("select r.substance.id, min(r.exam.sample.dateCollected) " +
+		List<Object[]> lst = entityManager.createQuery("select r.substance.id, min(r.exam.dateCollected) " +
 				"from ExamDSTResult r where r.exam.tbcase.id = :id and result = :res " +
 				"group by r.substance.id")
 				.setParameter("res", DstResult.RESISTANT)
@@ -51,7 +51,7 @@ public class ResistancePatternService {
 				.getResultList();
 
 		// get Rifampicin resistances from xpert tests
-		List<Date> lstxpert = entityManager.createQuery("select r.sample.dateCollected " +
+		List<Date> lstxpert = entityManager.createQuery("select r.dateCollected " +
 				"from ExamXpert r where r.tbcase.id = :id and r.result = :res and r.rifResult = :res2")
 				.setParameter("id", tbcase.getId())
 				.setParameter("res", XpertResult.TB_DETECTED)

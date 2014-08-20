@@ -9,15 +9,15 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.exammicroscopy']}" /><ui:param name="left" value="0" />
+<ui:param name="title" value="#{messages['cases.exammicroscopy']}" />
+<ui:param name="left" value="0" />
 <ui:param name="topmenu" value="4" />
+<ui:param name="examTemplateWrapper" value="/labs/templates/edtlabexam.xhtml" />
 
 
 <ui:define name="content">
 
-	<h1>#{title}</h1>
-
-	<ui:include src="/labs/templates/exammicroscopyedt.xhtml" />
+	<ui:include src="/layout/exams/edtmicroscopy.xhtml" />
 
 </ui:define>
 

@@ -73,7 +73,7 @@ public class SamplesQuery extends EntityQuery<SamplesQuery.Item> {
 			break;
 		case DST: table = "ExamDST";
 			break;
-		case IDENTIFICATION: table = "ExamIdentification";
+		case XPERT: table = "ExamIdentification";
 			break;
 		default: throw new IllegalArgumentException("Exam type cannot be null or is not supported");
 		}

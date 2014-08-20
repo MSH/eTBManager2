@@ -25,8 +25,24 @@ public class ExamCulture extends LaboratoryExam implements Serializable {
 
 	private SampleType sampleType;
 
+    @Override
+    public ExamResult getExamResult() {
+        if (result == null) {
+            return ExamResult.UNDEFINED;
+        }
 
-	public CultureResult getResult() {
+        if (result.isNegative()) {
+            return ExamResult.NEGATIVE;
+        }
+
+        if (result.isPositive()) {
+            return ExamResult.POSITIVE;
+        }
+
+        return ExamResult.UNDEFINED;
+    }
+
+    public CultureResult getResult() {
 		return result;
 	}
 

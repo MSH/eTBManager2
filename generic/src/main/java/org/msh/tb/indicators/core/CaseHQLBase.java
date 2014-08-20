@@ -260,7 +260,7 @@ public class CaseHQLBase extends Controller {
 		String cond = getHQLMicroscopyResultCondition(filters.getMicroscopyResult());
 
 		return "exists(select ex.id from ExamMicroscopy ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
-		" and ex.sample.dateCollected = (select min(sp.sample.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))";
+		" and ex.dateCollected = (select min(sp.dateCollected) from ExamMicroscopy sp where sp.tbcase.id = c.id))";
 	}
 
 
@@ -307,7 +307,7 @@ public class CaseHQLBase extends Controller {
 		String cond = getHQLCultureResultCondition(filters.getCultureResult());
 
 		return "exists(select ex.id from ExamCulture ex where ex.result " + cond + " and ex.tbcase.id = c.id" +
-		" and ex.sample.dateCollected = (select min(sp.sample.dateCollected) from ExamCulture sp where sp.tbcase.id = c.id))";
+		" and ex.dateCollected = (select min(sp.dateCollected) from ExamCulture sp where sp.tbcase.id = c.id))";
 	}
 
 

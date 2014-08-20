@@ -136,12 +136,12 @@ public class CaseDataExport {
 		}
 		
 		if(exportExamMicroscopy){
-			q = "select e.tbcase.id, e.sample.dateCollected, e.result from ExamMicroscopy e where e.tbcase.id in " + caseIds;
+			q = "select e.tbcase.id, e.dateCollected, e.result from ExamMicroscopy e where e.tbcase.id in " + caseIds;
 			examsMicroscopy = executeQuery(q, null);
 		}
 		
 		if(exportExamCulture){
-			q = "select e.tbcase.id, e.sample.dateCollected, e.result from ExamCulture e where e.tbcase.id in " + caseIds;
+			q = "select e.tbcase.id, e.dateCollected, e.result from ExamCulture e where e.tbcase.id in " + caseIds;
 			examsCulture = executeQuery(q, null);
 		}
 
@@ -152,7 +152,7 @@ public class CaseDataExport {
 			substances = executeQuery(q, parameters);
 			parameters.clear();
 			
-			q = "select c.id, exam.sample.dateCollected, res.result, res.substance.id"
+			q = "select c.id, exam.dateCollected, res.result, res.substance.id"
 					+ " from ExamDSTResult res join res.exam exam join exam.tbcase c"
 					+ " where c.id in " + caseIds;
 			examsDST = executeQuery(q, null);

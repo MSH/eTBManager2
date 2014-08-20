@@ -23,8 +23,23 @@ public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 
 
 	private SampleType sampleType;
-	
-	public MicroscopyResult getResult() {
+
+    @Override
+    public ExamResult getExamResult() {
+        if (result == null) {
+            return ExamResult.UNDEFINED;
+        }
+        if (result.isPositive()) {
+            return ExamResult.POSITIVE;
+        }
+
+        if (result.isNegative()) {
+            return ExamResult.NEGATIVE;
+        }
+        return ExamResult.UNDEFINED;
+    }
+
+    public MicroscopyResult getResult() {
 		return result;
 	}
 

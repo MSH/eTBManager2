@@ -35,6 +35,9 @@ public class SampleFilters {
 	 * @param patient the patient to set
 	 */
 	public void setPatient(String patient) {
+        if (patient != null) {
+            patient = patient.trim();
+        }
 		this.patient = patient;
 	}
 	/**

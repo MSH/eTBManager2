@@ -84,6 +84,7 @@
     <!-- Start changing the model for the laboratory module -->
     <changeSet id="v2.1cs3" author="rmemoria">
         <!-- Create the patient sample table -->
+<!--
         <createTable tableName="patientsample">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" />
@@ -99,6 +100,7 @@
             </column>
             <column name="request_id" type="int"></column>
         </createTable>
+-->
 
         <createTable tableName="examrequest">
             <column name="id" type="int" autoIncrement="true">
@@ -111,45 +113,51 @@
             <column name="user_id" type="int">
                 <constraints nullable="false" />
             </column>
+            <column name="case_id" type="int"></column>
+            <column name="laboratory_id" type="int"></column>
         </createTable>
 
-        <addForeignKeyConstraint constraintName="FK_samplecase" baseTableName="patientsample" baseColumnNames="case_id"
+        <addForeignKeyConstraint constraintName="FK_reqcase" baseTableName="examrequest" baseColumnNames="case_id"
                                  referencedTableName="tbcase" referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
 
-        <addForeignKeyConstraint constraintName="FK_samplerequest" baseTableName="patientsample" baseColumnNames="request_id"
-                                 referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint constraintName="FK_requnit" baseTableName="examrequest" baseColumnNames="unit_id"
+                                 referencedTableName="tbunit" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
 
-        <!-- Link the patient sample to the exams -->
+        <addForeignKeyConstraint constraintName="FK_reqlab" baseTableName="examrequest" baseColumnNames="unit_id"
+                                 referencedTableName="laboratory" referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+
+        <!-- Link the exam request to the exams -->
         <addColumn tableName="examdst">
-            <column name="sample_id" type="int"></column>
+            <column name="request_id" type="int"></column>
         </addColumn>
 
         <addColumn tableName="exammicroscopy">
-            <column name="sample_id" type="int"></column>
+            <column name="request_id" type="int"></column>
         </addColumn>
 
         <addColumn tableName="examculture">
-            <column name="sample_id" type="int"></column>
+            <column name="request_id" type="int"></column>
         </addColumn>
 
         <addColumn tableName="examxpert">
-            <column name="sample_id" type="int"></column>
+            <column name="request_id" type="int"></column>
         </addColumn>
 
-        <addForeignKeyConstraint constraintName="FK_micsample" baseTableName="exammicroscopy" baseColumnNames="sample_id"
-                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint constraintName="FK_micreq" baseTableName="exammicroscopy" baseColumnNames="request_id"
+                                 referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
 
-        <addForeignKeyConstraint constraintName="FK_cultsample" baseTableName="examculture" baseColumnNames="sample_id"
-                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint constraintName="FK_cultsample" baseTableName="examculture" baseColumnNames="request_id"
+                                 referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
 
-        <addForeignKeyConstraint constraintName="FK_xpertsample" baseTableName="examxpert" baseColumnNames="sample_id"
-                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint constraintName="FK_xpertsample" baseTableName="examxpert" baseColumnNames="request_id"
+                                 referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
 
-        <addForeignKeyConstraint constraintName="FK_dstsample" baseTableName="examdst" baseColumnNames="sample_id"
-                                 referencedTableName="patientsample" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint constraintName="FK_dstsample" baseTableName="examdst" baseColumnNames="request_id"
+                                 referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
     </changeSet>
 
 
+<!--
     <changeSet id="v2.1_cs4" author="">
         <sqlFile path="org/msh/tb/database/v2_1/update_schema_patientsample.sql" />
 
@@ -165,6 +173,7 @@
         <dropColumn tableName="examxpert" columnName="sampleNumber" />
         <dropColumn tableName="examxpert" columnName="dateCollected" />
     </changeSet>
+-->
 
     <!-- Add status column to the exams -->
     <changeSet id="v2.1.cs4" author="rmemoria">
@@ -180,5 +189,9 @@
         <addColumn tableName="examxpert">
             <column name="status" type="int"></column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="v2.1.cs5" author="rmemoria">
+        <sql>ALTER TABLE examxpert CHANGE COLUMN `result` `result` INT(11) NULL</sql>
     </changeSet>
 </databaseChangeLog>

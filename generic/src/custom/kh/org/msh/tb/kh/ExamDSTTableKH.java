@@ -61,18 +61,12 @@ public class ExamDSTTableKH {
 	 * @return List of objects of class ResultItem carrying information about the DST
 	 */
 	public List<ResultItem> getAllResults() {
-		if (examDSTKHHome.isLastResult()) {
-			examDSTKHHome.setLastResult(false);
-			results = null;
-		}
-
 		return getResults();
 	}
 	
 	protected List<ResultItem> createResultTable() {
 		List<ExamDST_Kh> res;
 
-		examDSTKHHome.setLastResult(false);
 		res = examDSTKHHome.getResults();
 
 		substances = new ArrayList<Substance>();
@@ -121,12 +115,4 @@ public class ExamDSTTableKH {
 		return DstResult.NOTDONE;
 	}
 	
-	public void setLastResult(boolean lastres) {
-		examDSTKHHome.setLastResult(lastres);
-		results = null;
-	}
-	
-	public boolean isLastResult() {
-		return examDSTKHHome.isLastResult();
-	}
 }

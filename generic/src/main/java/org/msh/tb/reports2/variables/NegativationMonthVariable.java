@@ -42,9 +42,9 @@ public class NegativationMonthVariable extends VariableImpl {
 			 tbl = "examculture";
 		else tbl = "exammicroscopy";
 
-		def.select("timestampdiff(month, tbcase.initreatmentdate, patientsample.dateCollected)");
+		def.select("timestampdiff(month, tbcase.initreatmentdate, " + tbl + ".dateCollected)");
 
-		def.table("tbcase").join("id", tbl + ".case_id").join("sample_id", "patientsample.id");
+		def.table("tbcase").join("id", tbl + ".case_id");
 		def.addRestriction("tbcase.initreatmentdate is not null");
 	}
 
@@ -90,10 +90,10 @@ public class NegativationMonthVariable extends VariableImpl {
 		if (culture)
 			 tbl = "examculture";
 		else tbl = "exammicroscopy";
-		def.table("tbcase").join("id", tbl + ".case_id").join("sample_id", "patientsample.id");
+		def.table("tbcase").join("id", tbl + ".case_id");
 		def.addRestriction("tbcase.initreatmentdate is not null");
 		
-		String s = "timestampdiff(month, tbcase.initreatmentdate, patientsample.dateCollected) ";
+		String s = "timestampdiff(month, tbcase.initreatmentdate, " + tbl + ".dateCollected) ";
 		
 		if (value == null) {
 			s += " < 0";

@@ -187,7 +187,7 @@ public class DSTPolyResistIndicator extends Indicator2D {
 				") and res.result = " + DstResult.RESISTANT.ordinal() + 
 				" and exam.numResistant = " + pattern.getSubstances().size() + 
 				" and c.patientType = " + PatientType.NEW.ordinal() +
-				" and exam.sample.dateCollected = (select min(aux.sample.dateCollected) from ExamDST aux " +
+				" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
 				"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();
 		else
 		// rule: check if the first DST exam of the case and check if it's according to the resistance pattern 
@@ -198,7 +198,7 @@ public class DSTPolyResistIndicator extends Indicator2D {
 				" and exam.numResistant = " + pattern.getSubstances().size() + 
 				" and c.patientType != " + PatientType.NEW.ordinal() +
 				" and c.patientType != " + PatientType.TRANSFER_IN.ordinal() +
-				" and exam.sample.dateCollected = (select min(aux.sample.dateCollected) from ExamDST aux " +
+				" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
 				"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();		
 		setCondition(cond);
 		Long val = (Long)createQuery().getSingleResult();

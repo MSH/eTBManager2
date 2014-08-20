@@ -3,7 +3,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
-		<action execute="#{examRequestHome.init}"/>
+		<action execute="#{examRequestController.init}"/>
 		<param name="pacid" value="#{patientHome.id}" converterId="javax.faces.Integer"/>
 		<begin-conversation join="true"/>
 

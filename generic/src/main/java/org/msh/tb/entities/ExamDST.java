@@ -1,5 +1,6 @@
 package org.msh.tb.entities;
 
+import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
@@ -27,7 +28,22 @@ public class ExamDST extends LaboratoryExam implements Serializable {
 	@PropertyLog(ignore=true)
 	private int numContaminated;
 
-	/**
+    @Override
+    public ExamResult getExamResult() {
+        if ((results == null) || (results.size() == 0)) {
+            return ExamResult.UNDEFINED;
+        }
+
+        for (ExamDSTResult res: results) {
+            if (res.getResult() == DstResult.RESISTANT) {
+                return ExamResult.POSITIVE;
+            }
+        }
+
+        return ExamResult.NEGATIVE;
+    }
+
+    /**
 	 * Search for a result by the substance 
 	 * @param sub - Substance to be used to search result
 	 * @return - Susceptibility result

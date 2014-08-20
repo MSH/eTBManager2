@@ -207,7 +207,7 @@ protected List<TbCase> addResistancePattern(ResistancePattern pattern) {
 	"where exam.tbcase.id = c.id and res.substance.id in (" + s +
 	") and res.result = " + DstResult.RESISTANT.ordinal() + 
 	" and exam.numResistant = " + pattern.getSubstances().size() + 
-	" and exam.sample.dateCollected = (select min(aux.sample.dateCollected) from ExamDST aux " +
+	" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
 	"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();
 	
 	setCondition(cond);
@@ -218,7 +218,7 @@ protected List<TbCase> addResistancePattern(ResistancePattern pattern) {
 
 /**
  * Mounts resistance pattern of a set of medicines
- * @param pattern
+ * @param substances
  */
 protected List<TbCase> addResistancePatternForAny(ResistancePattern pattern) {
 	if (pattern.getSubstances().size() == 0){
@@ -237,7 +237,7 @@ protected List<TbCase> addResistancePatternForAny(ResistancePattern pattern) {
 	"join res.exam exam " +
 	"where exam.tbcase.id = c.id and res.substance.id in (" + s +
 	") and res.result = " + DstResult.RESISTANT.ordinal() + 
-	" and exam.sample.dateCollected = (select min(aux.sample.dateCollected) from ExamDST aux " +
+	" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
 	"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();
 	
 	setCondition(cond);

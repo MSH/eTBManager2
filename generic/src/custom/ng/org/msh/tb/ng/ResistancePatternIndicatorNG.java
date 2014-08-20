@@ -96,7 +96,7 @@ public class ResistancePatternIndicatorNG extends Indicator2D {
 				+ s
 				+ ") and res.result = "
 				+ DstResult.RESISTANT.ordinal()
-				+ " and exam.sample.dateCollected = (select min(aux.sample.dateCollected) from ExamDST aux "
+				+ " and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux "
 				+ "where aux.tbcase.id = c.id)) = "
 				+ pattern.getSubstances().size();
 

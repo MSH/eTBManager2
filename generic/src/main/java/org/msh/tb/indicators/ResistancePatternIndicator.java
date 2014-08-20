@@ -64,7 +64,7 @@ public class ResistancePatternIndicator extends Indicator {
 				"where exam.tbcase.id = c.id and res.substance.id in (" + s +
 				") and res.result = " + DstResult.RESISTANT.ordinal() + 
 				" and exam.numResistant = " + pattern.getSubstances().size() + 
-				" and exam.sample.dateCollected = (select min(aux.sample.dateCollected) from ExamDST aux " +
+				" and exam.dateCollected = (select min(aux.dateCollected) from ExamDST aux " +
 				"where aux.tbcase.id = c.id)) = " + pattern.getSubstances().size();
 		
 		setCondition(cond);

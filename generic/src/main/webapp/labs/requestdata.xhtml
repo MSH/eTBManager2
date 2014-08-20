@@ -14,14 +14,11 @@
 <ui:param name="topmenu" value="4" />
 <ui:param name="labelstyle" value="width:140px" />
 
-<ui:param name="tbcase" value="#{sampleHome.instance.tbcase}" />
-<ui:param name="sample" value="#{sampleHome.instance}" />
-
+<ui:param name="tbcase" value="#{examRequestHome.instance.tbcase}" />
 
 
 <ui:define name="naveg">
 	<s:link value="#{messages['labs']}" view="/labs/index.xhtml" />
-	<s:link value="#{messages['labs.searchresult']}" view="/labs/searchresult.xhtml" />
 	<div class="item selected">
 		<s:link value="#{title}" />
 	</div>
@@ -40,8 +37,10 @@
 
 <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
 
-
-	<s:decorate template="/labs/sampledisplay.xhtml" />
+    <a:repeat value="#{samplesRequestList.samples}" var="sample">
+        <s:decorate template="/labs/sampledisplay.xhtml">
+        </s:decorate>
+    </a:repeat>
 
 </s:decorate>
 
