@@ -1,5 +1,6 @@
 package org.msh.tb.laboratories;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,11 +10,10 @@ import javax.persistence.EntityManager;
 import org.apache.commons.beanutils.BeanUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.*;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.PatientHome;
@@ -109,6 +109,7 @@ public class ExamRequestController {
 	 * Generate exams request
 	 * @return
 	 */
+    @Transactional
 	public String persist() {
 		if (tbcase == null)
 			return "error";
@@ -188,9 +189,11 @@ public class ExamRequestController {
 				entityManager.persist(exam);
 			}
 		}
-		
-		CaseHome caseHome = (CaseHome)Component.getInstance("caseHome", true);
-		caseHome.setId(tbcase.getId());
+
+        entityManager.flush();
+
+//		CaseHome caseHome = (CaseHome)Component.getInstance("caseHome", true);
+//		caseHome.setId(tbcase.getId());
 		
 		return "persisted";
 	}
@@ -208,7 +211,7 @@ public class ExamRequestController {
         exam.setRequest(request);
 //		exam.setRequestDate(requestDate);
 //		exam.setPatientSample(sample);
-		exam.setStatus(ExamStatus.ONGOING);
+		exam.setStatus(ExamStatus.REQUESTED);
 	}
 	
 	/**
