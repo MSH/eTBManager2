@@ -17,6 +17,7 @@ import org.msh.tb.medicines.InventoryReport;
 import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 
@@ -40,7 +41,8 @@ public class StockAdjustmentHome extends Controller {
 	private Date movementDate;
 	private FieldValueComponent adjustmentInfo = new FieldValueComponent();
 	private BatchSelection batchSelection;
-	
+
+    @In(create=true) EntityManager entityManager;
 	@In(create=true) MovementHome movementHome;
 	@In(create=true) UserSession userSession;
 	@In(create=true) InventoryReport inventoryReport;
@@ -232,6 +234,7 @@ public class StockAdjustmentHome extends Controller {
 	 * Save a new batch
 	 * @return
 	 */
+    @Transactional
 	public String saveNewBatch() {
 		if (batchQuantity == null)
 			return "error";
@@ -268,7 +271,7 @@ public class StockAdjustmentHome extends Controller {
 		actionExecuted = true;
 		
 		this.items = null;
-		
+		entityManager.clear();
 		return "new-batch-saved";
 	}
 	
@@ -372,6 +375,7 @@ public class StockAdjustmentHome extends Controller {
 	 * Remove a batch from a unit
 	 * @return
 	 */
+    @Transactional
 	public String deleteBatch() {
 		if ((batchQuantity == null) || (adjustmentInfo == null) || (movementDate == null))
 			return "error";
@@ -386,7 +390,8 @@ public class StockAdjustmentHome extends Controller {
 		saveLog(RoleAction.DELETE, batches);
 		
 		actionExecuted = true;
-		
+
+        entityManager.clear();
 		return "batch-deleted";
 	}
 

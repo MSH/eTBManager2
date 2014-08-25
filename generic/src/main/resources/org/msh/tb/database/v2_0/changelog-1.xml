@@ -119,4 +119,13 @@
             <where>messageKey like 'admin.websessions'</where>
         </update>
     </changeSet>
+
+    <changeSet id="11" author="MSANTOS">
+        <delete tableName="stockposition" >
+            <where>quantity = 0</where>
+        </delete>
+        <delete tableName="batchquantity" >
+            <where>quantity = 0</where>
+        </delete>
+    </changeSet>
 </databaseChangeLog>
