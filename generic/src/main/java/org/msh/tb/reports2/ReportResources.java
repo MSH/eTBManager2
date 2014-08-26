@@ -113,6 +113,7 @@ public class ReportResources {
 		addFilter(grp, new CaseItemDateVariable("cultcollect", "#{messages['manag.reportgen.culture']} - #{messages['manag.reportgen.collect']}", "examculture.dateCollected", false));
 		add(grp, new NegativationMonthVariable("cultneg", true));
 		add(grp, new LabMethodVariable("cultmethod", "TbField.CULTURE_METHOD", "examculture.method_id", TbField.CULTURE_METHOD, UnitType.EXAM_CULTURE));
+        add(grp, new CultureResultGroupVariable());
 		return grp;
 	}
 	

@@ -49,7 +49,7 @@ public class SqlBuilder implements SQLDefs {
 		super();
 	}
 
-	
+
 	/**
 	 * Clear the data to generate a new SQL from scratch
 	 */

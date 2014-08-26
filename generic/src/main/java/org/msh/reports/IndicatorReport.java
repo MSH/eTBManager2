@@ -116,6 +116,7 @@ public class IndicatorReport {
 	 */
 	protected DataTableImpl loadData() {
 		// create SQL instruction
+
 		SqlBuilder sqlBuilder = getSqlBuilder();
 
 		// add variables to SQL builder
@@ -138,6 +139,30 @@ public class IndicatorReport {
 		
 		return tbl;
 	}
+
+    /**
+     * Create object that will generate the SQL
+     * @return
+     */
+/*
+    protected SqlBuilder createSqlBuilder() {
+        // create SQL instruction
+        SqlBuilder sqlBuilder = new SqlBuilder();
+
+        // add variables to SQL builder
+        for (Variable v: columnVariables)
+            sqlBuilder.addVariable(v);
+        for (Variable v: rowVariables)
+            sqlBuilder.addVariable(v);
+
+        sqlBuilder.setFilters(filters);
+
+        if (limitToUserView) {
+            applyUserViewRestrictions(sqlBuilder);
+        }
+        return sqlBuilder;
+    }
+*/
 
     /**
      * Apply user view restrictions according to the user view configuration
@@ -223,7 +248,7 @@ public class IndicatorReport {
 	}
 
 	
-	protected SqlBuilder getSqlBuilder() {
+	private SqlBuilder getSqlBuilder() {
 		if (sqlBuilder == null)
 			sqlBuilder = createSqlBuilder();
 		return sqlBuilder;
@@ -304,7 +329,7 @@ public class IndicatorReport {
 	protected SqlBuilder createSqlBuilder() {
 		return new SqlBuilder();
 	}
-	
+
 
 	/**
 	 * Create a new data table already converted to the variable key

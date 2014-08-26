@@ -68,7 +68,7 @@ public class InterimOutcomeIndicator extends Indicator2D {
 			.getResultList();
 		
 		for (Object[] vals: lst) {
-			addValue((Date)vals[0], (CaseState)vals[1], (Date)vals[2], (Date)vals[3]);
+			addValue((Date)vals[0], (CaseState)vals[1], (Date)vals[2], (Date)vals[3], (Date)vals[4]);
 		}
 	}
 
@@ -80,27 +80,37 @@ public class InterimOutcomeIndicator extends Indicator2D {
 	 * @param dtCult
 	 * @param dtMicro
 	 */
-	protected void addValue(Date dtIniTreat, CaseState state, Date dtCult, Date dtMicro) {	
+	protected void addValue(Date dtIniTreat, CaseState state, Date dtCult, Date dtMicro, Date dtEndTreatment) {
 		IndicatorFilters filters = getIndicatorFilters();
 		int intrMonths = filters.getInterimMonths();
+        int treatMonths = DateUtils.monthsBetween(dtIniTreat, dtEndTreatment);
+
 		String row = Integer.toString(numcases);
 
 		if (state == CaseState.DIED) {
-			addValue(diedCol, row, 1F);
-			return;
+            if (treatMonths <= intrMonths) {
+                addValue(diedCol, row, 1F);
+                return;
+            }
 		}
 		
 		if (state == CaseState.DEFAULTED) {
-			addValue(defCol, row, 1F);
+            if (treatMonths <= intrMonths) {
+                addValue(defCol, row, 1F);
+                return;
+            }
 		}
+
+        if (state == CaseState.TRANSFERRED_OUT) {
+            if (treatMonths <= intrMonths) {
+                addValue(transCol, row, 1F);
+                return;
+            }
+        }
 		
 		// is unknown ?
 		if ((dtCult == null) && (dtMicro == null)) {
 			addValue(unkCol, row, 1F);
-		}
-		if (state == CaseState.TRANSFERRED_OUT) {
-			addValue(transCol, row, 1F);
-			return;
 		}
 		else {
 			boolean negative = false;
@@ -127,7 +137,7 @@ public class InterimOutcomeIndicator extends Indicator2D {
 		if (numcases == 0)
 			return super.getHQLSelect();
 		
-		return "select c.treatmentPeriod.iniDate, c.state, " + culture + ", " + microscopy;
+		return "select c.treatmentPeriod.iniDate, c.state, " + culture + ", " + microscopy + ", c.treatmentPeriod.endDate";
 	}
 
 

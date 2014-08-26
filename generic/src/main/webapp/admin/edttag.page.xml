@@ -4,6 +4,7 @@
 
 	<restrict>#{s:hasRole('TAGS_EDT')}</restrict>
 	<param name="id" value="#{tagHome.idWithLog}" converterId="javax.faces.Integer" />
+
 	<navigation>
 		<rule if-outcome="persisted">
 			<redirect view-id="/admin/tags.xhtml" />

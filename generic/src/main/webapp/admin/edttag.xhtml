@@ -57,6 +57,10 @@
     	<ui:define name="label">#{messages['Tag.sqlCondition']}:</ui:define>
     	<h:inputTextarea id="edtsql" value="#{tagHome.instance.sqlCondition}" style="width:550px;height:100px;"/>
     </s:decorate>
+
+        <s:div rendered="#{not empty tagHome.sqlError}" styleClass="error">
+            #{tagHome.sqlError}
+        </s:div>
     </div>
     </div>
 

@@ -59,6 +59,8 @@ input, select {
 	padding:1px;
 	margin:1px;
 	font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;
+    background-color: #fff;
+    padding:3px;
 }
 input {font-size:1em; }
 select {font-size:1em; }
