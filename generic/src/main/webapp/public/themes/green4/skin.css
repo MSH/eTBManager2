@@ -176,7 +176,7 @@ a.user-data:hover, .page-header-right .rich-ddmenu-label-select {
 	display:block;
 	float:left;
 	padding-top:13px;
-	margin-left:20px;
+	margin-left:10px;
 }
 .top-menu .item {
 	display:inline;
@@ -199,7 +199,7 @@ a.user-data:hover, .page-header-right .rich-ddmenu-label-select {
 	text-decoration:none;
 	text-align:center;
 	padding:5px 10px 4px 10px;
-	min-width:80px;
+	min-width:70px;
 	font-weight:bold;
 	height:18px;
 	text-transform:uppercase;
