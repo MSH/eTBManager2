@@ -194,4 +194,19 @@
     <changeSet id="v2.1.cs5" author="rmemoria">
         <sql>ALTER TABLE examxpert CHANGE COLUMN `result` `result` INT(11) NULL</sql>
     </changeSet>
+
+    <changeSet id="v2.1.cs6" author="msantos">
+        <addColumn tableName="exambiopsy">
+            <column name="request_id" type="int"></column>
+        </addColumn>
+        <addColumn tableName="examskin">
+            <column name="request_id" type="int"></column>
+        </addColumn>
+        <addColumn tableName="exambiopsy">
+            <column name="status" type="int"></column>
+        </addColumn>
+        <addColumn tableName="examskin">
+            <column name="status" type="int"></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
