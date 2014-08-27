@@ -4,10 +4,7 @@ import org.msh.reports.FilterValue;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Create a SQL declaration to be used in indicator org.msh.reports
@@ -31,6 +28,8 @@ public class SqlBuilder implements SQLDefs {
 	private boolean detailed;
 	private String orderBy;
 	private Map<Filter, FilterValue> filters;
+    // true if in the loop to create the SQL
+    private boolean creatingSql;
 
 	/**
 	 * Constructor using a root table name as argument
@@ -41,13 +40,52 @@ public class SqlBuilder implements SQLDefs {
 		masterTable = new TableJoinImpl(this, tableName, null, null, null);
 	}
 
-	
 	/**
 	 * Default constructor
 	 */
 	public SqlBuilder() {
 		super();
 	}
+
+    /**
+     * Create a clone of this object
+     * @return instance of SqlBuilder
+     */
+/*
+    public SqlBuilder cloneIt() {
+        SqlBuilder builder = new SqlBuilder(masterTable.getTableName());
+        builder.masterTable = masterTable.cloneIt(builder, null);
+
+        if (variables != null) {
+            for (Variable var: variables) {
+                builder.addVariable(var);
+            }
+        }
+
+        for (Field field: fields) {
+            Field fld = new Field();
+            fld.setName(field.getName());
+            fld.setVariable(field.getVariable());
+            fld.setTable(findTable(field.getTable().getTableName()));
+            builder.fields.add(fld);
+        }
+
+        for (String restriction: restrictions) {
+            builder.addRestriction(restriction);
+        }
+
+        for (String var: varRestrictions) {
+            builder.varRestrictions.add(var);
+        }
+
+        builder.parameters.putAll(parameters);
+        builder.varIteration.putAll(varIteration);
+
+        builder.detailed = this.detailed;
+        builder.orderBy = this.orderBy;
+        return builder;
+    }
+*/
 
 
 	/**
@@ -102,51 +140,59 @@ public class SqlBuilder implements SQLDefs {
 		fieldList = null;
 		varRestrictions.clear();
 		varJoins.clear();
-//		masterTable.removeAllJoins();
 
-		// include filters in the SQL
-		if (filters != null) {
-			for (Filter filter: filters.keySet()) {
-				FilterValue fvalue = filters.get(filter);
-				filter.prepareFilterQuery(this, fvalue.getComparator(), fvalue.getValue());
-			}
-		}
+        creatingSql = true;
+        try {
+            // include filters in the SQL
+            if (filters != null) {
+                for (Filter filter: filters.keySet()) {
+                    FilterValue fvalue = filters.get(filter);
+                    filter.prepareFilterQuery(this, fvalue.getComparator(), fvalue.getValue());
+                }
+            }
 
-		if (variables.size() > 0) {
-			fields.clear();
-			try{
-				for (Variable var: variables) {
-					currentVariable = var;
-					// get the current variable iteration
-					Integer iteration = varIteration.get(var);
-					if (iteration == null)
-						iteration = 0;
-					// prepare the variable
-					var.prepareVariableQuery(this, iteration);
-				}
-			}
-			finally {
-				currentVariable = null;
-			}
-		}
-		
-		createSQLSelect(sql);
+            if (variables.size() > 0) {
+                fields.clear();
+                try{
+                    for (Variable var: variables) {
+                        currentVariable = var;
+                        // get the current variable iteration
+                        Integer iteration = varIteration.get(var);
+                        if (iteration == null)
+                            iteration = 0;
+                        // prepare the variable
+                        var.prepareVariableQuery(this, iteration);
+                    }
+                }
+                finally {
+                    currentVariable = null;
+                }
+            }
 
-		createSQLFrom(sql);
+            createSQLSelect(sql);
 
-		createSQLJoins(sql);
-		
-		createSQLWhere(sql);
-		
-		createSQLGroupBy(sql);
-		
-		createSQLOrderBy(sql);
-		
-		// clear joins added by variables during construction
-		for (TableJoinImpl join: varJoins)
-			if (join.getParentJoin() != null)
-				join.getParentJoin().removeJoin(join);
-		
+            createSQLFrom(sql);
+
+            createSQLJoins(sql);
+
+            createSQLWhere(sql);
+
+            createSQLGroupBy(sql);
+
+            createSQLOrderBy(sql);
+
+            // clear joins added by variables during construction
+            for (TableJoinImpl join: varJoins)
+                if (join.getParentJoin() != null)
+                    join.getParentJoin().removeJoin(join);
+
+            // remove all joins that were declared during the creation of the SQL
+            masterTable.removeIterationContextJoins();
+        }
+        finally {
+            creatingSql = false;
+        }
+
 		return sql.toString();
 	}
 
@@ -606,7 +652,10 @@ public class SqlBuilder implements SQLDefs {
 	@Override
 	public TableJoin join(String newTable, String parentTable) {
 		String[] s = parentTable.split("\\.");
-		TableJoin tbl = findTable(s[0]);
+		TableJoinImpl tbl = findTable(s[0]);
+        if (tbl == null) {
+            throw new RuntimeException("Parent table of the join was not found: " + parentTable);
+        }
 		
 		return tbl.join(s[1], newTable);
 	}
@@ -619,5 +668,13 @@ public class SqlBuilder implements SQLDefs {
 		
 		return tbl.join(parentField, newTable, newField);
 	}
-	
+
+
+    /**
+     * Return true if the object is creating the SQL declaration
+     * @return boolean value
+     */
+    public boolean isCreatingSql() {
+        return creatingSql;
+    }
 }

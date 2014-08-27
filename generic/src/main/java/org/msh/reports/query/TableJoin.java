@@ -17,7 +17,7 @@ public interface TableJoin {
 	/**
 	 * Add a join to the current table
 	 * @param field is the field of the table to be joined with
-	 * @param tableField is the table.field definition of the new table to join with
+	 * @param targetTable is the table to join with
 	 * @return instance of the new {@link TableJoin} implementation
 	 */
 	TableJoin join(String field, String targetTable);

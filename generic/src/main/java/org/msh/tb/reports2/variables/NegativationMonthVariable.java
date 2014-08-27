@@ -46,6 +46,17 @@ public class NegativationMonthVariable extends VariableImpl {
 
 		def.table("tbcase").join("id", tbl + ".case_id");
 		def.addRestriction("tbcase.initreatmentdate is not null");
+
+        if (culture) {
+            def.addRestriction("examculture.dateCollected = (select min(exam.dateCollected) " +
+                    "from examculture exam where exam.case_id = tbcase.id " +
+                    "and result=0)");
+        }
+        else {
+            def.addRestriction("examculture.dateCollected = (select min(exam.dateCollected) " +
+                    "from exammicroscopy exam where exam.case_id = tbcase.id " +
+                    "and result=0)");
+        }
 	}
 
 

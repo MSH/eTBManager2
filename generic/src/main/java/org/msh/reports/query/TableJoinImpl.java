@@ -3,6 +3,7 @@
  */
 package org.msh.reports.query;
 
+import javax.persistence.JoinTable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,10 @@ public class TableJoinImpl implements TableJoin {
 	private boolean leftJoin;
 	private String alias;
 	private SqlBuilder builder;
+    // means that the property was declared inside an iteration
+    private boolean iterationContext;
 
-	/**
+    /**
 	 * Default constructor
 	 * @param tableName the name of the main table in the join
 	 * @param tableField the name of the main field in the join
@@ -39,7 +42,45 @@ public class TableJoinImpl implements TableJoin {
 		generateAliasCounter();
 	}
 
-	
+
+    /**
+     * Clone the table join object
+     * @param builder
+     * @param parentJoin
+     * @return
+     */
+/*
+    public TableJoinImpl cloneIt(SqlBuilder builder, TableJoinImpl parentJoin) {
+        TableJoinImpl it = new TableJoinImpl(builder, tableName, tableField, parentJoin, parentField);
+        if (joins != null) {
+            for (TableJoinImpl join: joins) {
+                TableJoinImpl newjoin = join.cloneIt(builder, it);
+                it.addJoin(newjoin);
+            }
+        }
+        return it;
+    }
+*/
+
+    /**
+     * Remove all joins that were declared during iteration context
+     */
+    public void removeIterationContextJoins() {
+        if (joins != null) {
+            int index = 0;
+            while (index < joins.size()) {
+                TableJoinImpl join = joins.get(index);
+                if (join.isIterationContext()) {
+                    joins.remove(join);
+                }
+                else {
+                    join.removeIterationContextJoins();
+                    index++;
+                }
+            }
+        }
+    }
+
 	@Override
 	public TableJoinImpl join(String field, String targetfield) {
 		String[] s = targetfield.split("\\.");
@@ -76,6 +117,7 @@ public class TableJoinImpl implements TableJoin {
 			}
 		}
 		TableJoinImpl join = new TableJoinImpl(builder, newTable, newField, this, field);
+        join.setIterationContext(builder.isCreatingSql());
 		addJoin(join);
 		return join;
 	}
@@ -322,4 +364,13 @@ public class TableJoinImpl implements TableJoin {
 		this.alias = tableAlias;
 	}
 
+
+    public boolean isIterationContext() {
+
+        return iterationContext;
+    }
+
+    public void setIterationContext(boolean iterationContext) {
+        this.iterationContext = iterationContext;
+    }
 }

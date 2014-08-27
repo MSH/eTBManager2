@@ -200,8 +200,8 @@ public class IndicatorReport {
 	 * @param varindex to do
 	 */
 	protected void runVariableIteration(DataTable target, SqlBuilder sqlBuilder, int varindex) {
-		Variable var = sqlBuilder.getVariables().get(varindex);
-		int num = var.getIteractionCount();
+        Variable var = sqlBuilder.getVariables().get(varindex);
+        int num = var.getIteractionCount();
 
 		// consider at least 1 iteration for each variable
 		if (num == 0)

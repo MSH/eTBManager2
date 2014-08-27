@@ -210,7 +210,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="v2.1.cs6.2" author="msantos">
+    <changeSet id="v2.1.cs6.2" author="msantos" context="BD">
         <addForeignKeyConstraint constraintName="FK_bioreq" baseTableName="exambiopsy" baseColumnNames="request_id"
                                  referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
 
