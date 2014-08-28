@@ -253,7 +253,7 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 													"from ExamDSTResult a " +
 													"where a.exam.tbcase.id = :tbcaseId " +
 													"and a.result = :resistant " +
-													"and a.exam.sample.dateCollected = (select min(b.sample.dateCollected) " +
+													"and a.exam.dateCollected = (select min(b.dateCollected) " +
 																					"from ExamDST b " +
 																					"where b.tbcase.id = a.exam.tbcase.id)");
 			

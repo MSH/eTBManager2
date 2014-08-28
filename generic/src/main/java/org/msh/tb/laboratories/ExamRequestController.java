@@ -185,7 +185,7 @@ public class ExamRequestController {
 			}
 			
 			// add molecular biology exam requested
-			if (request.isAddExamIdentification()) {
+			if (request.isAddExamXpert()) {
 				ExamXpert exam = new ExamXpert();
 				prepareExam(exam, examRequest, request);
 				tbcase.getExamsXpert().add(exam);
@@ -256,7 +256,8 @@ public class ExamRequestController {
 	 * @return
 	 */
 	public String postSampleRequest() {
-		if ((!sampleRequest.isAddExamCulture()) && (!sampleRequest.isAddExamMicroscopy()) && (!sampleRequest.isAddExamDST())) {
+		if ((!sampleRequest.isAddExamCulture()) && (!sampleRequest.isAddExamMicroscopy()) &&
+                (!sampleRequest.isAddExamDST()) && (!sampleRequest.isAddExamXpert())) {
 			FacesMessages.instance().addFromResourceBundle("labs.newreq.noexam");
 			return "error";
 		}

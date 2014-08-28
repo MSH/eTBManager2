@@ -125,7 +125,7 @@
     		</h:selectOneMenu>
     	</s:decorate>
 
-    	<s:decorate template="/layout/tbselection2.xhtml">
+    	<s:decorate template="/layout/tbselection3.xhtml">
     		<ui:define name="label">#{messages['FilterHealthUnit.NOTIFICATION_UNIT']}:</ui:define>
     		<ui:param name="tbunitselection" value="#{examRequestController.unitselection}" />
     	</s:decorate>
@@ -191,7 +191,7 @@
 			<s:div rendered="#{it.addExamCulture}">
 				<span class="checked-icon" />#{messages['cases.examculture']}
 			</s:div>
-			<s:div rendered="#{it.addExamIdentification}">
+			<s:div rendered="#{it.addExamXpert}">
 				<span class="checked-icon" />#{messages['cases.examxpert']}
 			</s:div>
 			<s:div rendered="#{it.addExamDST}">

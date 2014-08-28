@@ -27,7 +27,7 @@ public class SampleRequest {
 	private boolean addExamCulture;
 	private boolean addExamMicroscopy;
 	private boolean addExamDST;
-	private boolean addExamIdentification;
+	private boolean addExamXpert;
 
     /**
      * Store list of laboratory exams used in the {@link SamplesRequestList}
@@ -103,20 +103,6 @@ public class SampleRequest {
 		this.index = index;
 	}
 
-	/**
-	 * @return the addExamIdentification
-	 */
-	public boolean isAddExamIdentification() {
-		return addExamIdentification;
-	}
-
-	/**
-	 * @param addExamIdentification the addExamIdentification to set
-	 */
-	public void setAddExamIdentification(boolean addExamIdentification) {
-		this.addExamIdentification = addExamIdentification;
-	}
-
     public String getSampleNumber() {
         return sampleNumber;
     }
@@ -175,5 +161,13 @@ public class SampleRequest {
 
     public void setExamsXpert(List<ExamXpert> examsXpert) {
         this.examsXpert = examsXpert;
+    }
+
+    public boolean isAddExamXpert() {
+        return addExamXpert;
+    }
+
+    public void setAddExamXpert(boolean addExamXpert) {
+        this.addExamXpert = addExamXpert;
     }
 }
