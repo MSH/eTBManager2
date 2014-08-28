@@ -45,18 +45,7 @@ public class NegativationMonthVariable extends VariableImpl {
 		def.select("timestampdiff(month, tbcase.initreatmentdate, " + tbl + ".dateCollected)");
 
 		def.table("tbcase").join("id", tbl + ".case_id");
-		def.addRestriction("tbcase.initreatmentdate is not null");
-
-        if (culture) {
-            def.addRestriction("examculture.dateCollected = (select min(exam.dateCollected) " +
-                    "from examculture exam where exam.case_id = tbcase.id " +
-                    "and result=0)");
-        }
-        else {
-            def.addRestriction("examculture.dateCollected = (select min(exam.dateCollected) " +
-                    "from exammicroscopy exam where exam.case_id = tbcase.id " +
-                    "and result=0)");
-        }
+        addCommonRestrictions(def);
 	}
 
 
@@ -117,7 +106,28 @@ public class NegativationMonthVariable extends VariableImpl {
 			else s += " >= " + Integer.toString(num - 1);
 		}
 		def.addRestriction(s);
+        addCommonRestrictions(def);
 	}
+
+
+    /**
+     * Add common restrictions to both filter and variable selection
+     * @param def the {@link org.msh.reports.query.SQLDefs} implementation
+     */
+    public void addCommonRestrictions(SQLDefs def) {
+        def.addRestriction("tbcase.initreatmentdate is not null");
+
+        if (culture) {
+            def.addRestriction("examculture.dateCollected = (select min(exam.dateCollected) " +
+                    "from examculture exam where exam.case_id = tbcase.id " +
+                    "and result=0)");
+        }
+        else {
+            def.addRestriction("examculture.dateCollected = (select min(exam.dateCollected) " +
+                    "from exammicroscopy exam where exam.case_id = tbcase.id " +
+                    "and result=0)");
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)

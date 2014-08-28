@@ -123,7 +123,7 @@
         <addForeignKeyConstraint constraintName="FK_requnit" baseTableName="examrequest" baseColumnNames="unit_id"
                                  referencedTableName="tbunit" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
 
-        <addForeignKeyConstraint constraintName="FK_reqlab" baseTableName="examrequest" baseColumnNames="unit_id"
+        <addForeignKeyConstraint constraintName="FK_reqlab" baseTableName="examrequest" baseColumnNames="laboratory_id"
                                  referencedTableName="laboratory" referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
 
         <!-- Link the exam request to the exams -->
