@@ -13,7 +13,9 @@ public enum PrevTBTreatmentOutcome {
 	ONGOING,
 	DIAGNOSTIC_CHANGED,
 	NO_OUTCOME_YET,
-	OTHER;
+	OTHER,
+    /*Bangladesh*/DELAYED_CONVERTER;
+
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

@@ -1,10 +1,8 @@
 package org.msh.tb.reports;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.annotations.Factory;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.RaiseEvent;
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.*;
 import org.jboss.seam.framework.EntityQuery;
 import org.jboss.seam.security.management.action.RoleAction;
 import org.msh.tb.adminunits.AdminUnitSelection;
@@ -22,8 +20,11 @@ import java.util.List;
 
 
 @Name("reportSelection")
+@Scope(ScopeType.SESSION)
 public class ReportSelection {
 
+    private Date initialDt;
+    private Date finalDt;
 	private Integer iniMonth;
 	private Integer iniYear;
 	private Integer endMonth;
@@ -37,7 +38,9 @@ public class ReportSelection {
 	
 	private String pageToPrint;
 	private UserWorkspace userWorkspace;
-	
+    private List<User> usersList;
+    private User user;
+
 	@In(create=true) EntityQuery sources;
 	@In(create=true) EntityManager entityManager;
 	
@@ -62,6 +65,7 @@ public class ReportSelection {
 		
 		UserLogin userLogin = (UserLogin)Component.getInstance("userLogin");
 		userWorkspace = userLogin.getUser().getDefaultWorkspace();
+        updateUserList();
 	}
 
 
@@ -91,6 +95,18 @@ public class ReportSelection {
 			 source = null;
 		else source = entityManager.find(Source.class, id);
 	}
+
+    public void updateUserList(){
+        String hql;
+
+        if(userWorkspace == null || userWorkspace.getWorkspace() == null) {
+            hql = "select uw.user from UserWorkspace uw group by uw.user.id order by uw.user.name";
+        }else{
+            hql = "select uw.user from UserWorkspace uw where uw.workspace.id = " + userWorkspace.getWorkspace().getId() + " order by uw.user.name";
+        }
+
+       usersList = entityManager.createQuery(hql).getResultList();
+    }
 	
 	public void setRegionId(Integer regionId) {
 		getAuselection().setSelectedUnitId(regionId);
@@ -363,4 +379,36 @@ public class ReportSelection {
 	public void setMedicineLine(MedicineLine medicineLine) {
 		this.medicineLine = medicineLine;
 	}
+
+    public List<User> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<User> usersList) {
+        this.usersList = usersList;
+    }
+
+    public Date getInitialDt() {
+        return initialDt;
+    }
+
+    public void setInitialDt(Date initialDt) {
+        this.initialDt = initialDt;
+    }
+
+    public Date getFinalDt() {
+        return finalDt;
+    }
+
+    public void setFinalDt(Date finalDt) {
+        this.finalDt = finalDt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

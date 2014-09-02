@@ -133,7 +133,19 @@ public class GlobalLists {
 		SideEffectOutcome.SEQUEALE,
 		SideEffectOutcome.NOT_RESOLVED,
 		SideEffectOutcome.DEATH,
-	};	
+	};
+
+    private static final PrevTBTreatmentOutcome prevTBTreatmentOutcomes[] = {
+            PrevTBTreatmentOutcome.CURED,
+            PrevTBTreatmentOutcome.COMPLETED,
+            PrevTBTreatmentOutcome.FAILURE,
+            PrevTBTreatmentOutcome.DEFAULTED,
+            PrevTBTreatmentOutcome.SCHEME_CHANGED,
+            PrevTBTreatmentOutcome.TRANSFERRED_OUT,
+            PrevTBTreatmentOutcome.UNKNOWN,
+            PrevTBTreatmentOutcome.DELAYED_CONVERTER,
+            PrevTBTreatmentOutcome.OTHER
+    };
 	
 	public TbField[] getTbFields() {
 		return tbfields;
@@ -193,8 +205,12 @@ public class GlobalLists {
 	public static SideEffectAction[] getSideEffectActions(){
 		return sideEffectActions;
 	}
-	
-	public static SideEffectOutcome[] getSideEffectOutcomes(){
-		return sideEffectOutcomes;
-	}
+
+    public static SideEffectOutcome[] getSideEffectOutcomes(){
+        return sideEffectOutcomes;
+    }
+
+    public static PrevTBTreatmentOutcome[] getPrevTBTreatmentOutcomes(){
+        return prevTBTreatmentOutcomes;
+    }
 }

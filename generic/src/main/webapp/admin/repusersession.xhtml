@@ -10,40 +10,57 @@
       template="admintemplate.xhtml">
 
 <ui:param name="title" value="#{messages['admin.reports.usersession']}" />
-<ui:param name="submenu" value="1" />
+<ui:param name="submenu" value="1" />
+
 
 <ui:define name="content">
 <h1><i class="icon-table" />#{title}</h1>
 
 <h:form id="main" styleClass="form1">
-	<div class="form-content">
+<div class="form-content">
 	<h2>#{messages['global.filters']}</h2>
 
-	<div style="display:table">	
-	<div style="float:left;margin-right:10px;">
-	<a:jsFunction name="updateReport" reRender="reportPanel" />
-	<rich:calendar value="#{userSessionReport.date}" popup="false" timezone="#{timezones.default}" 
-		onchanged="if (event.rich.date) {updateReport();}">
-	</rich:calendar>
-	</div>
-	
-	<div style="float:right;">
-	<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
+    <s:decorate template="/layout/dateedit.xhtml" >
+        <ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+        <ui:param name="required" value="true" />
+        <ui:param name="datefield" value="#{reportSelection.initialDt}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+        <ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+        <ui:param name="required" value="true" />
+        <ui:param name="datefield" value="#{reportSelection.finalDt}" />
+    </s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
 		<ui:define name="label">#{messages['Workspace']}:</ui:define>
 		<h:selectOneMenu value="#{reportSelection.userWorkspace}" >
-    		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="-" />
+    		<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="#{messages['form.noselection']}" />
         	<s:convertEntity/>
-        	<a:support event="onchange" reRender="reportPanel"/>
+        	<!--<a:support event="onchange" reRender="reportPanel"/>-->
+            <a:support event="onchange" reRender="userList" action="#{reportSelection.updateUserList()}"/>
 		</h:selectOneMenu>
 	</s:decorate>
-	
-	</div>
-	</div>
-	</div>
-	
+
+    <s:div id="userList">
+    <s:decorate template="/layout/edit.xhtml">
+        <ui:define name="label">#{messages['User']}:</ui:define>
+        <h:selectOneMenu value="#{reportSelection.user}">
+            <s:selectItems value="#{reportSelection.usersList}" var="r" label="#{r.name}" noSelectionLabel="#{messages['form.noselection']}" />
+            <s:convertEntity />
+        </h:selectOneMenu>
+    </s:decorate>
+    </s:div>
+
+    <a:commandLink styleClass="button-alt" reRender="main">
+        <span>#{messages['form.update']}</span>
+    </a:commandLink>
+    <span style="color:red;clear:both;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</div>
+
 
 <h:panelGroup id="reportPanel">
-<h2><h:outputText value="#{userSessionReport.date}" converter="localeDateConverter" /></h2>
+<h2><h:outputText value="#{reportSelection.initialDt}" converter="localeDateConverter" />-<h:outputText value="#{reportSelection.finalDt}" converter="localeDateConverter" /></h2>
 <s:fragment rendered="#{not empty userSessionReport.items}">
 <b>#{userSessionReport.items.size}</b> #{messages['form.resultlist']}.<p/>
 </s:fragment>
@@ -69,7 +86,7 @@
 			<h:outputText value="#{messages['UserLogin.loginDate']}" />
 		</f:facet>
 		<h:outputText value="#{it.dateLogin}" >
-			<f:convertDateTime timeZone="#{timezones.default}" type="time"/>
+			<f:convertDateTime timeZone="#{timezones.default}" type="both"/>
 		</h:outputText>
 	</h:column>
 
@@ -78,7 +95,7 @@
 			<h:outputText value="#{messages['UserLogin.logoutDate']}" />
 		</f:facet>
 		<h:outputText value="#{it.dateLogout}" >
-			<f:convertDateTime timeZone="#{timezones.default}" type="time"/>
+			<f:convertDateTime timeZone="#{timezones.default}" type="both"/>
 		</h:outputText>
 	</h:column>
 

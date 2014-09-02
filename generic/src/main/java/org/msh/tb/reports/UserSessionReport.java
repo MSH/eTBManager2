@@ -1,8 +1,10 @@
 package org.msh.tb.reports;
 
+import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
+import org.jboss.seam.annotations.Scope;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.utils.date.DateUtils;
@@ -26,35 +28,34 @@ public class UserSessionReport {
 	
 	private UserLogin userLogin;
 	private List<Item> items;
-	private Date date;
 
-	
 	/**
 	 * Generate the report
 	 */
 	protected void createReport() {
-		if (date == null)
+		if (reportSelection.getInitialDt() == null || reportSelection.getFinalDt() == null)
 			return;
 		
 		String hql = "select log.id, u.login, u.name, log.loginDate, log.logoutDate, " +
 				"log.IpAddress, w.name.name1 " + 
 				"from UserLogin log join log.user u join log.workspace w " +
-				"where log.loginDate >= :dtini and log.loginDate < :dtend";
+				"where log.loginDate >= :dtini and log.loginDate <= :dtend";
 
 		UserWorkspace userWorkspace = (reportSelection != null? reportSelection.getUserWorkspace(): null);
 		
 		if (userWorkspace != null)
 			 hql += " and w.id = #{reportSelection.userWorkspace.workspace.id}";
 		else hql += " and w.id in (select aux.workspace.id from UserWorkspace aux " +
-					"where aux.user.id = #{userLogin.user.id})";
-		
+					"where aux.user.id = #{userLogin.user.id}) ";
+
+        if(reportSelection.getUser() != null)
+            hql += " and u.id = " + reportSelection.getUser().getId();
+
 		hql += " order by log.id";
-		
-		Date dtEnd = DateUtils.incDays(date, 1);
-		
+
 		List<Object[]> lst = entityManager.createQuery(hql)
-				.setParameter("dtini", date)
-				.setParameter("dtend", dtEnd)
+				.setParameter("dtini", reportSelection.getInitialDt())
+				.setParameter("dtend", reportSelection.getFinalDt())
 				.getResultList();
 		
 		items = new ArrayList<Item>();
@@ -78,8 +79,11 @@ public class UserSessionReport {
 	 * Initialize report parameters
 	 */
 	public void initialize() {
-		if (date == null)
-			date = DateUtils.getDate();
+        if (reportSelection.getInitialDt() == null)
+            reportSelection.setInitialDt(DateUtils.getDate());
+
+        if (reportSelection.getFinalDt() == null)
+            reportSelection.setFinalDt(DateUtils.getDate());
 
 		reportSelection.initializeWorkspace();
 	}
@@ -104,25 +108,6 @@ public class UserSessionReport {
 		return items;
 	}
 
-	
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(Date date) {
-		if ((date != null) && (!date.equals(this.date)))
-			items = null;
-		this.date = date;
-	}
-
-
-	/**
-	 * @return the date
-	 */
-	public Date getDate() {
-		return date;
-	}
-
-	
 	public void setUserLoginId(Integer id) {
 		userLogin = entityManager.find(UserLogin.class, id);
 	}
