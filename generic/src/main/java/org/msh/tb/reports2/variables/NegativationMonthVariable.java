@@ -123,7 +123,7 @@ public class NegativationMonthVariable extends VariableImpl {
                     "and result=0)");
         }
         else {
-            def.addRestriction("examculture.dateCollected = (select min(exam.dateCollected) " +
+            def.addRestriction("exammicroscopy.dateCollected = (select min(exam.dateCollected) " +
                     "from exammicroscopy exam where exam.case_id = tbcase.id " +
                     "and result=0)");
         }

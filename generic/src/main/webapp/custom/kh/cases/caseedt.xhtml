@@ -8,7 +8,7 @@
                 xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbCase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="left" value="0" />
 <ui:param name="waitdlg" value="1" />
@@ -18,7 +18,7 @@
 <h1>#{title}</h1>
 <h:form id="main" styleClass="form1">
 
- <div class="form-content">
+ <div>
 <!-- <table width="100%"><tr><td> -->
 
 	<ui:include src="/custom/kh/cases/casedataedt.xhtml" />

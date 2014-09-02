@@ -98,8 +98,7 @@ public class GlobalLists {
 		PatientType.NEW,
 		PatientType.RAD,
 		PatientType.RELAPSE,
-		PatientType.FAILURE_CATI,
-		PatientType.FAILURE_CATII,
+		PatientType.FAILURE,
 		PatientType.TRANSFER_IN,
 		PatientType.PREV_MDRTB,
 		PatientType.MDRTB_CONTACT,
@@ -172,7 +171,7 @@ public class GlobalLists {
 
 	@Factory("patientTypes_kh")
 	public static PatientType[] getPatienttypes() {
-		return patientTypes;
+        return patientTypes;
 	}
 
 	@Factory("sampleTypes_kh")

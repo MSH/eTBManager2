@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="kh1" author="rmemoria">
+        <sql>
+            update tbcase set patienttype=17
+            where patient_id in (select id from patient where workspace_id=27)
+            and patientType in (6,7)
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>
