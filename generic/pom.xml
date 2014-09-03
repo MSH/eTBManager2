@@ -117,11 +117,11 @@
 				    <hostName>localhost</hostName>
 				    <port>8080</port>
 				    <fileNames>
-				        <fileName>${basedir}/target/${war.filename}</fileName>
+				        <fileName>${basedir}/target/${war.filename}.war</fileName>
 				    </fileNames>
 					<jbossHome>${env.JBOSS_HOME}</jbossHome>
 					<serverName>default</serverName>
-					<fileName>target/${war.filename}</fileName>
+					<fileName>target/${war.filename}.war</fileName>
 				</configuration>
 			</plugin>
 						
