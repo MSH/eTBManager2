@@ -7,8 +7,10 @@
 
     <!-- Suported locales -->
     <extend-property name="locale" values="en"/>
+<!--
     <extend-property name="locale" values="pt_BR"/>
     <extend-property name="locale" values="en_NG"/>
+-->
 
     <!-- Specify the app entry point class.                         -->
     <entry-point class='org.msh.tb.client.App'/>

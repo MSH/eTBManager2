@@ -20,7 +20,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH:mm</maven.build.timestamp.format>
         <buildDate>${maven.build.timestamp}</buildDate>
-	</properties>
+        <workspace-context></workspace-context>
+        <war.filename>etbmanager</war.filename>
+    </properties>
 
 	<developers>
 		<developer>
@@ -41,14 +43,22 @@
 			<id>development</id>
 			<properties>
 				<app.development>true</app.development>
+                <app.datasource>mdrtbDatasource</app.datasource>
 			</properties>
 		</profile>
 		<profile>
 			<id>production</id>
 			<properties>
 				<app.development>false</app.development>
+                <app.datasource>mdrtbDatasource</app.datasource>
 			</properties>
 		</profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <app.datasource>mdrtbDatasource-test${workspace-context}</app.datasource>
+            </properties>
+        </profile>
 	</profiles>
 
 
@@ -376,7 +386,25 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-		</plugins>
+
+            <!-- JBOSS automatic deploy -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jboss-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <hostName>localhost</hostName>
+                    <port>8080</port>
+                    <fileNames>
+                        <fileName>${basedir}/target/${war.filename}.war</fileName>
+                    </fileNames>
+                    <jbossHome>${env.JBOSS_HOME}</jbossHome>
+                    <serverName>default</serverName>
+                    <fileName>target/${war.filename}.war</fileName>
+                </configuration>
+            </plugin>
+
+        </plugins>
 
 	</build>
 	<url>https://www.etbmanager.org</url>

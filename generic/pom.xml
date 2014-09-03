@@ -15,14 +15,10 @@
 	<version>2.1.0</version>
 	<packaging>war</packaging>
 	
-	<properties>
-		<workspace-context></workspace-context>
-	</properties>
-
 	<name>eTB Manager generic version ${project.version}</name>
 
 	<build>
-		<finalName>etbmanager</finalName>
+		<finalName>${war.filename}</finalName>
 
 		<resources>
 			<!-- will filter just the persistence.xml -->
@@ -121,11 +117,11 @@
 				    <hostName>localhost</hostName>
 				    <port>8080</port>
 				    <fileNames>
-				        <fileName>${basedir}/target/etbmanager.war</fileName>
+				        <fileName>${basedir}/target/${war.filename}</fileName>
 				    </fileNames>
 					<jbossHome>${env.JBOSS_HOME}</jbossHome>
 					<serverName>default</serverName>
-					<fileName>target/etbmanager.war</fileName>
+					<fileName>target/${war.filename}</fileName>
 				</configuration>
 			</plugin>
 						
@@ -135,16 +131,16 @@
 	<reporting>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-project-info-reports-plugin</artifactId>
-		        <version>2.6</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
 			</plugin>
 
 			<!-- Generate org.msh.reports about testing results -->
  			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 	 	       	<artifactId>maven-surefire-plugin</artifactId>
-	 	    	<version>2.13</version>
+	 	    	<version>2.17</version>
       		</plugin>
 
 			<!-- Generate javadoc for the project -->

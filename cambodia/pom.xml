@@ -20,10 +20,11 @@
 
 	<properties>
 		<workspace-context>KH</workspace-context>
+        <war.filename>etbmanager-kh</war.filename>
 	</properties>
 
 	<build>
-		<finalName>etbmanager-kh</finalName>
+		<finalName>${war.filename}</finalName>
 
 		<resources>
 			<!-- will filter just the persistence.xml -->
@@ -107,6 +108,7 @@
                     </archive>
 				</configuration>
 			</plugin>
-		</plugins>
+
+        </plugins>
 	</build>
 </project>

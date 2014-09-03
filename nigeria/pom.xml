@@ -20,10 +20,13 @@
 
 	<properties>
 		<workspace-context>NG</workspace-context>
-	</properties>
+        <war.filename>etbmanager-ng</war.filename>
+    </properties>
+
+
 
 	<build>
-		<finalName>etbmanager-ng</finalName>
+		<finalName>${war.filename}</finalName>
 
 		<resources>
 			<!-- will filter just the persistence.xml -->

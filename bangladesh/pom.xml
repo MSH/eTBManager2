@@ -17,6 +17,7 @@
 
     <properties>
         <workspace-context>BD</workspace-context>
+        <war.filename>etbmanager-bd</war.filename>
     </properties>
 
 	<name>eTB Manager Bangladesh version</name>
