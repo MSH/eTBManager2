@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="Test page" />
+
+<ui:define name="menu_lateral">
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+	<h:form >
+
+		<h2>This page just contains information to be used in an automated tests (jmeter)</h2>
+
+        <div>userId = ${automatedTestInfo.userId}</div>
+        <div>caseId = ${automatedTestInfo.caseId}</div>
+        <div>unitId = ${automatedTestInfo.unitId}</div>
+        <div>adminUnitId = ${automatedTestInfo.adminUnitId}</div>
+
+        <input type="hidden" id="userId" value="#{automatedTestInfo.userId}" />
+        <input type="hidden" id="caseId" value="#{automatedTestInfo.caseId}" />
+        <input type="hidden" id="unitId" value="#{automatedTestInfo.unitId}" />
+        <input type="hidden" id="adminUnitId" value="#{automatedTestInfo.adminUnitId}" />
+
+	</h:form>
+</ui:define>
+
+</ui:composition>  
