@@ -142,8 +142,8 @@ public class GlobalLists {
             PrevTBTreatmentOutcome.DEFAULTED,
             PrevTBTreatmentOutcome.SCHEME_CHANGED,
             PrevTBTreatmentOutcome.TRANSFERRED_OUT,
-            PrevTBTreatmentOutcome.UNKNOWN,
             PrevTBTreatmentOutcome.DELAYED_CONVERTER,
+            PrevTBTreatmentOutcome.UNKNOWN,
             PrevTBTreatmentOutcome.OTHER
     };
 	
