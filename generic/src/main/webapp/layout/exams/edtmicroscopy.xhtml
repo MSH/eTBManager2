@@ -11,19 +11,19 @@
 <ui:param name="examHome" value="#{examMicroscopyHome}" />
 
     <s:decorate template="#{examTemplateWrapper}">
+        <s:decorate template="/layout/dateedit.xhtml" >
+            <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+            <ui:param name="required" value="false" />
+            <ui:param name="future" value="true" />
+            <ui:param name="datefield" value="#{examMicroscopy.dateRelease}" />
+        </s:decorate>
+
         <s:decorate template="/layout/edit.xhtml" >
             <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
             <h:selectOneMenu id="cbres2" value="#{examMicroscopy.result}" required="true" onchange="examResultChanged(this, false);">
                 <s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
                 <s:convertEnum />
             </h:selectOneMenu>
-        </s:decorate>
-
-        <s:decorate template="/layout/dateedit.xhtml" >
-            <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-            <ui:param name="required" value="false" />
-            <ui:param name="future" value="true" />
-            <ui:param name="datefield" value="#{examMicroscopy.dateRelease}" />
         </s:decorate>
 
         <div style="display:block;width:600px;" >
