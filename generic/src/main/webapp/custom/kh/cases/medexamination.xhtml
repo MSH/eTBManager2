@@ -30,7 +30,7 @@
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
 				 <h:commandLink value="#{messages['form.remove']}" 
-					onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id}, #{medicalExaminationKHHome.lastResult});return false;" 
+					onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id});return false;"
 				      rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink> 			
 			</div>

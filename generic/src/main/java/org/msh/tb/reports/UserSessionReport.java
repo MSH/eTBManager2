@@ -55,7 +55,7 @@ public class UserSessionReport {
 
 		List<Object[]> lst = entityManager.createQuery(hql)
 				.setParameter("dtini", reportSelection.getInitialDt())
-				.setParameter("dtend", reportSelection.getFinalDt())
+				.setParameter("dtend", DateUtils.incDays(reportSelection.getFinalDt(), 1))
 				.getResultList();
 		
 		items = new ArrayList<Item>();

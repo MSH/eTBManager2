@@ -20,6 +20,15 @@ public class AutomatedTestInfo {
     private Integer unitId;
     private Integer adminUnitId;
 
+    private static final String[] restrictions = {
+            "exists(select id from ExamMicroscopy where tbcase.id=a.id)",
+            "exists(select id from ExamCulture where tbcase.id=a.id)",
+            "exists(select id from ExamDST where tbcase.id=a.id)",
+            "exists(select id from MedicalExamination where tbcase.id=a.id)",
+            "exists(select id from ExamHIV where tbcase.id=a.id)",
+            "exists(select id from ExamXRay where tbcase.id=a.id)"
+    };
+
 
     @Create
     public void initialize() {
@@ -32,21 +41,41 @@ public class AutomatedTestInfo {
 
         EntityManager em = App.getEntityManager();
 
+        int count = restrictions.length;
+
+        Number id = null;
+        while ((count >= 0) && (id == null)) {
+            String sql = "select max(a.id) from TbCase a where a.patient.workspace.id = :wsid ";
+            for (int i = 0; i < count; i++) {
+                String restr = restrictions[i];
+                sql += " and " + restr;
+            }
+            id = (Number)em.createQuery(sql)
+                    .setParameter("wsid", uw.getWorkspace().getId())
+                    .getSingleResult();
+            count--;
+        }
+
         // search for the case
         // first, search for a case with culture and microscopy exam
+/*
         Number id = (Number)em.createQuery("select max(a.id) from TbCase a where exists (select id from ExamCulture where tbcase.id = a.id)" +
-                " and exists(select id from ExamMicroscopy where tbcase.id = a.id)" +
+                " and exists(select id from ExamMicroscopy where tbcase.id = a.id) " +
+                " and exists(select id from ExamD" +
                 "and a.patient.workspace.id = :wsid")
                 .setParameter("wsid", uw.getWorkspace().getId())
                 .getSingleResult();
+*/
 
         // case was found ?
+/*
         if (id == null) {
             // so search for any case
             id = (Number)em.createQuery("select max(a.id) from TbCase a where a.patient.workspace.id = :wsid")
                     .setParameter("wsid", uw.getWorkspace().getId())
                     .getSingleResult();
         }
+*/
 
         caseId = id != null? id.intValue(): null;
     }

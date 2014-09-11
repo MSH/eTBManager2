@@ -441,7 +441,7 @@
 			</h:column>
 
 			<h:column>
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamXRay(#{r.id}, #{examXRayHome.lastResult});return false;" style="font-size:9px;">
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remExamXRay(#{r.id});return false;" style="font-size:9px;">
 				</h:commandLink>
 			</h:column>			
 		</h:dataTable>
@@ -453,7 +453,6 @@
 
 <a:jsFunction name="remExamXRay" action="#{examXRayHome.remove}" reRender="pnlXRay" >
 	<a:actionparam name="param1" assignTo="#{examXRayHome.id}" converter="javax.faces.Integer"/>
-	<a:actionparam name="param2" assignTo="#{examXRayHome.lastResult}" converter="javax.faces.Boolean"/>
 </a:jsFunction>
 
 	<s:decorate template="/cases/comments.xhtml">
