@@ -22,7 +22,7 @@
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
 		<h:dataTable value="#{examHIVHome.allResults}" var="r" rendered="#{not empty examHIVHome.allResults}" 
-			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
+			width="100%" styleClass="table1" columnClasses="colb,colcb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="#{messages['global.month']}" styleClass="colch"/>
@@ -32,6 +32,7 @@
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
 			</h:column>
 			
 			<h:column>
@@ -92,11 +93,14 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}" >
+
+				<s:link view="/cases/edtexammicroscopy.xhtml" propagation="none" rendered="#{caseHome.canEditExams}" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
+
 				<div style="display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
@@ -163,11 +167,12 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/cases/edtexamgenexpert.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/cases/edtexamgenexpert.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
 				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
@@ -233,11 +238,12 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/cases/edtexamculture.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
 				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
@@ -307,11 +313,12 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/custom/bd/cases/edtexambiopsy.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/custom/bd/cases/edtexambiopsy.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
 				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
@@ -399,11 +406,12 @@
 		<a:repeat value="#{examDSTTable.allResults}" var="r">
 		<tr>
 			<td>
-				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/cases/edtexamdst.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 					#{r.examResult.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.examResult.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
 				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.examResult.dateCollected}" converter="localeDateConverter" />
 				<br/>
@@ -464,11 +472,12 @@
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
-				<s:link view="/cases/edtexamxray.xhtml" propagation="none" >
+				<s:link view="/cases/edtexamxray.xhtml" propagation="none" rendered="#{caseHome.canEditExams}" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
 				<br/>
 				<h:outputText value="#{r.date}" converter="localeDateConverter"/>
 			</h:column>
@@ -527,11 +536,12 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/custom/bd/cases/edtexamskin.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/custom/bd/cases/edtexamskin.xhtml" propagation="none" rendered="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					#{r.monthDisplay}
 				</s:link>
+                <h:outputText value="#{r.monthDisplay}" rendered="#{!caseHome.canEditExams}"/>
 				<div style="margin-left:20px;display:block;">
 				<h:outputText value="#{r.dateCollected}" converter="localeDateConverter" />
 				<br/>
