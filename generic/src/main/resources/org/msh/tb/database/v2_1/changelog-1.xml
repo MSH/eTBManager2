@@ -215,4 +215,10 @@
         <addForeignKeyConstraint constraintName="FK_skinreq" baseTableName="examskin" baseColumnNames="request_id"
                                  referencedTableName="examrequest" referencedColumnNames="id" onDelete="SET NULL" onUpdate="CASCADE"/>
     </changeSet>
+    
+    <changeSet id="v2.1.cs7" author="rmemoria">
+        <addColumn tableName="systemconfig">
+            <column name="otherlinks" type="text"></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

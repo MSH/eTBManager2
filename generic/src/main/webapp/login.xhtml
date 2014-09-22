@@ -23,11 +23,11 @@
 <style type="text/css">
 body {
 	padding-top:15px;
-	padding-bottom:20px;
-	background-color:#ffff;
+	background-color:#ffffff;
 }
 .login-container h2{
 	margin-top:2px;
+    margin-bottom:0px;
 	font-weight:bold;
 }
 .copyright {
@@ -58,8 +58,8 @@ color:#a0a0a0;
 @media screen and (min-width:550px) {
 	body {
 		padding-top:15px;
-		padding-bottom:20px;
-		background-color:#f0f0f0;
+		padding-bottom:0px;
+		background-color:#698899;
 	}
 	.login-container {
 		max-width:500px;
@@ -74,9 +74,30 @@ color:#a0a0a0;
            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
                 box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	}
-	
+
 }
 
+#footer {
+    margin-top:30px;
+    position: relative;
+    width: 100%;
+    background-color: #f8f8f8;
+    color: #cf0;
+    min-height: 300px;
+    padding-top:10px;
+    border-top:1px solid #c8c8c8;
+}
+#footer h4 {
+    color:#909090;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+#footer ul {
+    padding-left:0px;
+}
+#footer li {
+    display: block;
+}
 </style>
 </head>
     
@@ -93,21 +114,21 @@ color:#a0a0a0;
 
 	<hr/>
 	<h4>#{messages['login.msg1']}</h4>
-	<h:form id="main" role="form" class="form-horizontal">
+	<h:form id="main" role="form" styleClass="form-horizontal">
 	<h:panelGroup id="msg">
 	<s:div rendered="#{not empty facesMessages.currentMessages}" styleClass="alert alert-danger">
 	<h:messages layout="list" />
 	</s:div>
 	</h:panelGroup>
 	<div class="form-group">
-	    <label for="inputEmail" class="col-sm-4 control-label">#{messages['login.user_login']}:</label>
+	    <label for="user" class="col-sm-4 control-label">#{messages['login.user_login']}:</label>
     	<div class="input-group col-sm-5">
        		<span class="input-group-addon"><i class="icon-user" /></span>
 		    <h:inputText id="user" value="#{credentials.username}" styleClass="form-control" />
    		</div>
   	</div>
 	<div class="form-group">
-    	<label class="col-sm-4 control-label" for="inputPassword">#{messages['User.password']}:</label>
+    	<label class="col-sm-4 control-label" for="pwd">#{messages['User.password']}:</label>
     		<div class="col-sm-5">
     	<div class="input-group">
        		<span class="input-group-addon"><i class="icon-key" /></span>
@@ -128,7 +149,7 @@ color:#a0a0a0;
 		<div class="col-sm-offset-4">
     	<div class="input-group col-sm-5">
 	       	<a:commandButton id="btnOk" styleClass="btn btn-primary" onclick="callLogin(); return false;" value="#{messages['login.enter']}" />
-			<rich:jQuery timming="onload" selector="#nome" query="focus()" />
+			<rich:jQuery timing="onload" selector="#nome" query="focus()" />
 			<rich:hotKey selector="input" key="return" handler="callLogin();" />
 			<a:jsFunction id="login" name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="main:msg" /> 
   		</div>
@@ -142,13 +163,6 @@ color:#a0a0a0;
 			<h4>#{messages['login.newuser']}</h4>
 			<s:link view="/newuser.xhtml" value="#{messages['login.click_here']}" />
 		</s:fragment>
-	<hr/>
-	<h:graphicImage value="/public/images/usaid_siaps_440x67.png" styleClass="img-responsive"/>
-	<div class="copyright">
-    e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
-    <br/>
-    #{messages['login.copyright']}
-    </div>
 
 	<hr/>
 	
@@ -168,6 +182,40 @@ color:#a0a0a0;
 </div>
 
 
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h:graphicImage value="/public/images/usaid.png" styleClass="img-responsive"/>
+                </div>
+                <div class="col-sm-4">
+                    <s:fragment rendered="#{not empty otherLinks.links}">
+                        <h4>#{messages['SystemConfig.otherLinks']}</h4>
+                        <ul>
+                            <a:repeat value="#{otherLinks.links}" var="it">
+                                <li>
+                                    <a target="_blank" href="#{it.value}">#{it.label}</a>
+                                </li>
+                            </a:repeat>
+                        </ul>
+                    </s:fragment>
+                </div>
+                <div class="col-sm-4">
+                    <h:graphicImage value="/public/images/siaps.png" styleClass="img-responsive"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <hr/>
+                    <div class="copyright">
+                        e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
+                        <br/>
+                        #{messages['login.copyright']}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 <ui:include src="/layout/waitdlg.xhtml" />

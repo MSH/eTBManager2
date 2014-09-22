@@ -18,57 +18,63 @@
 <h:form id="main" styleClass="form1" >
 
 	<div class="form-content">
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['SystemConfig.systemURL']}: 	</ui:define>
-    	<h:inputText value="#{systemConfigHome.systemConfig.systemURL}" size="100" style=" width : 300px;" required="true" />
-    </s:decorate>
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.systemURL']}: 	</ui:define>
+            <h:inputText value="#{systemConfigHome.systemConfig.systemURL}" size="100" style=" width : 300px;" required="true" />
+        </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['SystemConfig.pageRootURL']}: 	</ui:define>
-    	<h:inputText value="#{systemConfigHome.systemConfig.pageRootURL}" size="200" style=" width : 300px;" required="true" />
-    </s:decorate>
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.pageRootURL']}: 	</ui:define>
+            <h:inputText value="#{systemConfigHome.systemConfig.pageRootURL}" size="200" style=" width : 300px;" required="true" />
+        </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['SystemConfig.systemMail']}: 	</ui:define>
-    	<h:inputText value="#{systemConfigHome.systemConfig.systemMail}" size="100" style=" width : 300px;" required="true" />
-    </s:decorate>
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.systemMail']}: 	</ui:define>
+            <h:inputText value="#{systemConfigHome.systemConfig.systemMail}" size="100" style=" width : 300px;" required="true" />
+        </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['SystemConfig.adminMail']}: 	</ui:define>
-    	<h:inputText value="#{systemConfigHome.systemConfig.adminMail}" size="100" style=" width : 300px;" />
-    </s:decorate>
-	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label"></ui:define>
-    	<h:selectBooleanCheckbox value="#{systemConfigHome.systemConfig.allowRegPage}" />#{messages['SystemConfig.allowRegPage']}
-    </s:decorate>
-	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Workspace']}:</ui:define>
-		<h:selectOneMenu value="#{systemConfigHome.workspace}" required="true">
-           	<s:selectItems value="#{workspaces}" var="it" label="#{it.name}" noSelectionLabel="-"/>
-			<s:convertEntity />
-			<a:support event="onchange" reRender="pnlws" ajaxSingle="true"/>
-       	</h:selectOneMenu>
-    </s:decorate>
-	
-	<h:panelGroup id="pnlws">
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
-		<h:selectOneMenu value="#{systemConfigHome.systemConfig.tbunit}" required="true">
-           	<s:selectItems value="#{systemConfigHome.units}" var="it" label="#{it.name}" noSelectionLabel="-"/>
-			<s:convertEntity />
-       	</h:selectOneMenu>
-    </s:decorate>
-		
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['UserProfile']}:</ui:define>
-		<h:selectOneMenu value="#{systemConfigHome.systemConfig.userProfile}" required="true">
-           	<s:selectItems value="#{systemConfigHome.profiles}" var="it" label="#{it.name}" noSelectionLabel="-"/>
-			<s:convertEntity />
-       	</h:selectOneMenu>
-    </s:decorate>
-    </h:panelGroup>
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.adminMail']}: 	</ui:define>
+            <h:inputText value="#{systemConfigHome.systemConfig.adminMail}" size="100" style=" width : 300px;" />
+        </s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label"></ui:define>
+            <h:selectBooleanCheckbox value="#{systemConfigHome.systemConfig.allowRegPage}" />#{messages['SystemConfig.allowRegPage']}
+        </s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['Workspace']}:</ui:define>
+            <h:selectOneMenu value="#{systemConfigHome.workspace}" required="true">
+                <s:selectItems value="#{workspaces}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+                <s:convertEntity />
+                <a:support event="onchange" reRender="pnlws" ajaxSingle="true"/>
+            </h:selectOneMenu>
+        </s:decorate>
+
+        <h:panelGroup id="pnlws">
+            <s:decorate template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages['Tbunit']}:</ui:define>
+                <h:selectOneMenu value="#{systemConfigHome.systemConfig.tbunit}" required="true">
+                    <s:selectItems value="#{systemConfigHome.units}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+                    <s:convertEntity />
+                </h:selectOneMenu>
+            </s:decorate>
+
+            <s:decorate template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages['UserProfile']}:</ui:define>
+                <h:selectOneMenu value="#{systemConfigHome.systemConfig.userProfile}" required="true">
+                    <s:selectItems value="#{systemConfigHome.profiles}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+                    <s:convertEntity />
+                </h:selectOneMenu>
+            </s:decorate>
+        </h:panelGroup>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.otherLinks']}:</ui:define>
+            <h:inputTextarea value="#{systemConfigHome.systemConfig.otherLinks}" style="width:400px;height:100px"></h:inputTextarea>
+            <div class="hint">#{messages['SystemConfig.otherLinks.hint']}</div>
+        </s:decorate>
     </div>
 	
 	<div class="form-footer">

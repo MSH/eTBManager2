@@ -15,7 +15,7 @@
 	<version>2.1.0</version>
 	<packaging>war</packaging>
 	
-	<name>eTB Manager generic version ${project.version}</name>
+	<name>eTB Manager Generic version ${project.version}</name>
 
 	<build>
 		<finalName>${war.filename}</finalName>

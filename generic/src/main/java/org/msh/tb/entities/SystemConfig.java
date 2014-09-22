@@ -50,6 +50,9 @@ public class SystemConfig {
 	
 	private Integer buildNumber;
 
+    @Lob
+    private String otherLinks;
+
 
 	/**
 	 * @return the id
@@ -209,4 +212,12 @@ public class SystemConfig {
 	public void setPageRootURL(String pageRootURL) {
 		this.pageRootURL = pageRootURL;
 	}
+
+    public String getOtherLinks() {
+        return otherLinks;
+    }
+
+    public void setOtherLinks(String otherLinks) {
+        this.otherLinks = otherLinks;
+    }
 }
