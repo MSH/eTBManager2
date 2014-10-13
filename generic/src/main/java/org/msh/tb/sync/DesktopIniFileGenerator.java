@@ -229,6 +229,8 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 			processEntityVersion(hql);
 		}
 
+        System.out.println("Executing ... " + hql);
+
 		list = em.createQuery(hql)
 				.setFirstResult(firstResult)
 				.setMaxResults(MAX_RESULTS)

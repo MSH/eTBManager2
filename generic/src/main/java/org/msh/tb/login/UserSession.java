@@ -13,6 +13,7 @@ import org.jboss.seam.web.ServletContexts;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.UserView;
+import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.utils.Passwords;
 import org.msh.utils.date.DateUtils;
 
@@ -39,7 +40,7 @@ public class UserSession {
 	
 	private String sessionId;
 	
-//	private TBUnitSelection tbunitselection;
+	private TBUnitSelection tbunitselection;
 	
 	/**
 	 * Static method to return an instance of the {@link Workspace} in the current session
@@ -680,21 +681,20 @@ public class UserSession {
 		return sessionId;
 	}
 	
-/*	public TBUnitSelection getTbunitselection() {
-		tbunitselection = (TBUnitSelection)Component.getInstance("tbunitselection");
+	public TBUnitSelection getTbunitselection() {
 		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection();
+			tbunitselection = new TBUnitSelection("unitid");
 		}
 		return tbunitselection;
 	}
-*/	
-/*	public String getAdminUnitCodeLike() {
+
+	public String getAdminUnitCodeLike() {
 		AdministrativeUnit adm = tbunitselection.getAdminUnit();
 		if (adm == null)
 			 return null;
 		else return adm.getCode() + "%";
 	}
-*/	
+
 	public String acceptULA(){
 		UserLogin userLogin = getUserLogin();
 		User user = userLogin.getUser();

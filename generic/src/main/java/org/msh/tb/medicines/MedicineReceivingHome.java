@@ -35,9 +35,10 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 	
 	private Batch batch;
 	private List<Movement> remMovs = new ArrayList<Movement>();
+    private List<Movement> newMovs = new ArrayList<Movement>();
 	private List<Batch> remBatches = new ArrayList<Batch>();
 	private Medicine medicine;
-	
+
 
 	@Factory("medicineReceiving")
 	public MedicineReceiving getMedicineReceiving() {
@@ -126,7 +127,9 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 
 		// save all movements and update stock position
 		movementHome.savePreparedMovements();
-		
+
+        rec.setMovements(newMovs);
+
 		for (Batch batch: remBatches) {
 			getEntityManager().remove(batch);
 		}
@@ -172,6 +175,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		
 		SourceNode node = getRoot();
 		rec.getMovements().clear();
+        newMovs.clear();
 
 		// update current movements
 		for (Object obj: node.getMedicines()) {
@@ -205,7 +209,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 			}
 
 			// link the new movement to the item
-			rec.getMovements().add(mov);
+			newMovs.add(mov);
 		}
 
 		return true;
@@ -215,7 +219,7 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 
 	/**
 	 * Start editing of a new batch for a specific medicine in the receiving
-	 * @param item
+	 * @param med the medicine to add new batch
 	 */
 	public void startNewBatch(Medicine med) {
 		batch = new Batch();

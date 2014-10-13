@@ -37,7 +37,7 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	/**
 	 * Constructor with default arguments
 	 * @param applyUserRestrictions
-	 * @param filter
+	 * @param type the type of unit to be displayed
 	 */
 	public TBUnitSelection(String clientId, boolean applyUserRestrictions, TBUnitType type) {
 		super(clientId);

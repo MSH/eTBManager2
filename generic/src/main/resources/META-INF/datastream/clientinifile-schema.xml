@@ -246,6 +246,7 @@
             <property name="examsCulture" use="IGNORE" />
             <property name="examsMicroscopy" use="IGNORE" />
             <property name="examsDST" use="IGNORE" />
+            <property name="examsXpert" use="IGNORE" />
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="tags" use="IGNORE" />
         </objectGraph>
