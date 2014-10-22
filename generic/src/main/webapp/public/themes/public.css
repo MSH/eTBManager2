@@ -1,0 +1,124 @@
+body {
+    padding-top:90px;
+    background-color:#ffffff;
+}
+
+.app-header {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.header-logo {
+    min-width: 280px;
+    color: #000000;
+    padding:15px 5px !important;
+}
+
+.header-logo .title {
+    font-size: 24px;
+    color: #000000;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+.header-logo .subtitle {
+    font-size:14px;
+    color: #909090;
+}
+
+.img-logo {
+    float: left;
+    padding-right: 4px;
+    width:32px;
+    height:auto;
+}
+
+.copyright {
+    max-width:430px;
+    text-align:center;
+    font-size:0.8em;
+    color:#a0a0a0;
+}
+.waitpnl {
+    background-color:#ffffff;
+    position:absolute;
+    left:4px;top:4px;
+    display:none;
+    font-size:0.9em;
+    font-weight: normal;
+    color:#3C7B1F;
+    padding:4px;
+    border:1px solid black;
+}
+
+.wait-icon {
+    background:transparent url('green4/images/loading.gif') no-repeat;
+    width:15px;
+    height:15px;
+    margin-right:2px;
+    display:inline-block;
+}
+
+@media screen and (min-width:550px) {
+    body {
+        padding-top:120px;
+        padding-bottom:0px;
+        background-color:#ffffff;
+    }
+    .login-container {
+        max-width:500px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+    }
+
+    .header-logo {
+        min-width: 350px;
+        color: #000000;
+        padding:15px 5px !important;
+    }
+    .img-logo {
+        float: left;
+        padding-right: 4px;
+        width: 64px;
+        height: auto;
+    }
+    .header-logo .title {
+        font-size: 30px;
+        color: #000000;
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 4px;
+    }
+
+    .header-logo .subtitle {
+        font-size:14px;
+        color: #909090;
+    }
+}
+
+#content {
+    min-height: 500px;
+}
+
+#footer {
+    margin-top:80px;
+    position: relative;
+    width: 100%;
+    background-color: #f0f0f0;
+    color: #cf0;
+    min-height: 300px;
+    padding-top:10px;
+    border-top:1px solid #c8c8c8;
+}
+#footer h4 {
+    color:#909090;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+#footer ul {
+    padding-left:0px;
+}
+#footer li {
+    display: block;
+}

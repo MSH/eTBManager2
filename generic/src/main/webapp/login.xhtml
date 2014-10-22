@@ -1,118 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-  	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      xmlns:s="http://jboss.com/products/seam/taglib"
-      xmlns:h="http://java.sun.com/jsf/html" >
-<head>
-<title>#{messages['mdrtb_system']}</title>
-<meta http-equiv="pragma" content="no-cache" />
-<meta http-equiv="cache-control" content="no-cache" />
-<meta http-equiv="expires" content="0" />
-<meta http-equiv="keywords" content="e-TB Manager,TB,Tuberculosis,DRTB,MSH" />
-<meta http-equiv="description" content="eTB Manager" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<a:loadStyle src="/public/bootstrap3/css/bootstrap.min.css" rel="stylesheet" media="screen" />
-<a:loadStyle src="/public/font-awesome/css/font-awesome.min.css" />
-<a:loadScript src="/public/js/commons.js" />
-<link rel="shortcut icon" href="#{request.contextPath}/public/images/favicon.ico" />
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/templatepub.xhtml">
 
-<style type="text/css">
-body {
-	padding-top:15px;
-	background-color:#ffffff;
-}
-.login-container h2{
-	margin-top:2px;
-    margin-bottom:0px;
-	font-weight:bold;
-}
-.copyright {
-max-width:430px;
-text-align:center;
-font-size:0.8em;
-color:#a0a0a0;
-}
-.waitpnl {
-	background-color:#ffffff;
-	position:absolute;
-	left:4px;top:4px;
-	display:none;
-	font-size:0.9em;
-	font-weight: normal;
-	color:#3C7B1F;
-	padding:4px;
-	border:1px solid black;
-}
+<ui:param name="title" value="#{messages['mdrtb_system']}"/>
 
-.wait-icon {
-	background:transparent url('public/themes/green3/images/loading.gif') no-repeat;
-	width:15px;
-	height:15px;
-	margin-right:2px;
-	display:inline-block;
-}
-@media screen and (min-width:550px) {
-	body {
-		padding-top:15px;
-		padding-bottom:0px;
-		background-color:#698899;
-	}
-	.login-container {
-		max-width:500px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
-        background-color: #fff;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	}
+<ui:define name="content">
 
-}
-
-#footer {
-    margin-top:30px;
-    position: relative;
-    width: 100%;
-    background-color: #f8f8f8;
-    color: #cf0;
-    min-height: 300px;
-    padding-top:10px;
-    border-top:1px solid #c8c8c8;
-}
-#footer h4 {
-    color:#909090;
-    font-size: 14px;
-    text-transform: uppercase;
-}
-#footer ul {
-    padding-left:0px;
-}
-#footer li {
-    display: block;
-}
-</style>
-</head>
-    
-<body>
-
-<f:view>
 <s:decorate template="/layout/wrong_browser.xhtml" rendered="#{not browserInfo.validBrowser}" />
 <s:fragment rendered="#{browserInfo.validBrowser}">
 <h:panelGroup id="loginpanel" >
 <div class="container login-container">
-	<h:graphicImage value="/public/images/logo_64x64.png" style="float:left;padding-right:10px;"/>
-	<h2 style="margin-bottom:2px;">#{messages['mdrtb_system']}</h2>
-	<small>#{messages['mdrtbsys']}</small>
-
-	<hr/>
 	<h4>#{messages['login.msg1']}</h4>
 	<h:form id="main" role="form" styleClass="form-horizontal">
 	<h:panelGroup id="msg">
@@ -147,8 +51,8 @@ color:#a0a0a0;
   	</div>
 	<div class="form-group">
 		<div class="col-sm-offset-4">
-    	<div class="input-group col-sm-5">
-	       	<a:commandButton id="btnOk" styleClass="btn btn-primary" onclick="callLogin(); return false;" value="#{messages['login.enter']}" />
+    	<div class="input-group col-sm-7 col-xs-12">
+	       	<a:commandButton id="btnOk" styleClass="btn btn-primary btn-block" onclick="callLogin(); return false;" value="#{messages['login.enter']}" />
 			<rich:jQuery timing="onload" selector="#nome" query="focus()" />
 			<rich:hotKey selector="input" key="return" handler="callLogin();" />
 			<a:jsFunction id="login" name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="main:msg" /> 
@@ -164,58 +68,8 @@ color:#a0a0a0;
 			<s:link view="/newuser.xhtml" value="#{messages['login.click_here']}" />
 		</s:fragment>
 
-	<hr/>
-	
-	<h:form styleClass="form-horizontal">
-	<div class="control-group">
-    	<label class="control-label" for="inputPassword">Language:</label>
-    	<div class="controls">
-       		<div class="input-prepend">
-            <h:selectOneMenu value="#{localeSelector.localeString}" styleClass="form-control"> 
-          		<f:selectItems value="#{localeSelector.supportedLocales}" />
-          		<a:support event="onchange" action="#{localeSelector.select}" oncomplete="document.location.reload(true);"/>
-          	</h:selectOneMenu>
-   			</div>
-  		</div>
-	</div>	
-	</h:form>
 </div>
 
-
-    <div id="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <h:graphicImage value="/public/images/usaid.png" styleClass="img-responsive"/>
-                </div>
-                <div class="col-sm-4">
-                    <s:fragment rendered="#{not empty otherLinks.links}">
-                        <h4>#{messages['SystemConfig.otherLinks']}</h4>
-                        <ul>
-                            <a:repeat value="#{otherLinks.links}" var="it">
-                                <li>
-                                    <a target="_blank" href="#{it.value}">#{it.label}</a>
-                                </li>
-                            </a:repeat>
-                        </ul>
-                    </s:fragment>
-                </div>
-                <div class="col-sm-4">
-                    <h:graphicImage value="/public/images/siaps.png" styleClass="img-responsive"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <hr/>
-                    <div class="copyright">
-                        e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
-                        <br/>
-                        #{messages['login.copyright']}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 <ui:include src="/layout/waitdlg.xhtml" />
@@ -228,7 +82,7 @@ color:#a0a0a0;
  
 </h:panelGroup>
 </s:fragment>
-</f:view>
 
-</body>
-</html>
+</ui:define>
+
+</ui:composition>

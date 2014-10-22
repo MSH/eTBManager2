@@ -1,97 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      xmlns:s="http://jboss.com/products/seam/taglib"
-      xmlns:h="http://java.sun.com/jsf/html" >
-<head>
-    <title>#{messages['mdrtbsys']}</title>
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="keywords" content="RMEMORIA,rproj,projetos,acompanhamento" />
-    <meta http-equiv="description" content="TB Management Information System" />
-    <a:loadStyle src="/public/themes/green3/skin.css" />
-    <a:loadStyle src="/public/bootstrap3/css/bootstrap.min.css" rel="stylesheet" media="screen" />
-    <a:loadStyle src="/public/font-awesome/css/font-awesome.min.css" />
-    <a:loadScript src="resource://org/richfaces/renderkit/html/scripts/jquery/jquery.js"/>
-    <link rel="shortcut icon" href="#{request.contextPath}/public/images/favicon.ico" />
-    <style type="text/css">
-        body {
-            padding-top:15px;
-            padding-bottom:20px;
-            background-color:#ffff;
-        }
-        .login-container h2{
-            margin-top:2px;
-            font-weight:bold;
-        }
-        .copyright {
-            max-width:430px;
-            text-align:center;
-            font-size:0.8em;
-            color:#a0a0a0;
-        }
-        .waitpnl {
-            background-color:#ffffff;
-            position:absolute;
-            left:4px;top:4px;
-            display:none;
-            font-size:0.9em;
-            font-weight: normal;
-            color:#3C7B1F;
-            padding:4px;
-            border:1px solid black;
-        }
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/templatepub.xhtml">
 
-        .wait-icon {
-            background:transparent url('public/themes/green3/images/loading2.gif') no-repeat;
-            width:15px;
-            height:15px;
-            margin-right:2px;
-            display:inline-block;
-        }
-        @media screen and (min-width:550px) {
-            body {
-                padding-top:15px;
-                padding-bottom:20px;
-                background-color:#f0f0f0;
-            }
-            .login-container {
-                max-width:500px;
-                padding: 19px 29px 29px;
-                margin: 0 auto 20px;
-                background-color: #fff;
-                border: 1px solid #e5e5e5;
-                -webkit-border-radius: 5px;
-                -moz-border-radius: 5px;
-                border-radius: 5px;
-                -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-            }
+    <ui:param name="title" value="#{messages['mdrtb_system']}"/>
 
-        }
-    </style>
-</head>
+    <ui:define name="content">
 
-<body>
-
-<f:view>
     <s:decorate template="/layout/wrong_browser.xhtml" rendered="#{not browserInfo.validBrowser}" />
     <s:fragment rendered="#{browserInfo.validBrowser}">
         <h:panelGroup id="loginpanel" >
             <div class="container login-container">
-                <h:graphicImage value="/public/images/logo_64x64.png" style="float:left;padding-right:10px;"/>
-                <h2 style="margin-bottom:2px;">#{messages['mdrtb_system']}</h2>
-                <small>#{messages['mdrtbsys']}</small>
-
-                <hr/>
                 <h5>#{messages['login.regpage.msg1']}</h5>
-                <h:form id="main" role="form" class="form-horizontal" style="margin-bottom:60px">
+                <h:form id="main" role="form" styleClass="form-horizontal" style="margin-bottom:60px">
                     <h:panelGroup id="msg">
                         <s:div rendered="#{not empty facesMessages.currentMessages}" styleClass="alert alert-danger">
                             <h:messages layout="list" />
@@ -100,7 +27,7 @@
                     <div class="form-group">
                         <div id="username" class="input-group col-sm-10">
                             <span class="input-group-addon">#{messages['User.name']}</span>
-                            <h:inputText value="#{userRegistrationHome.user.name}" styleClass="form-control" required="true" maxlength="100"/>
+                            <h:inputText id="name" value="#{userRegistrationHome.user.name}" styleClass="form-control" required="true" maxlength="100"/>
                             <h:messages styleClass="error" layout="table" globalOnly="true"/>
                         </div>
                     </div>
@@ -130,41 +57,17 @@
 
                     <div class="form-group">
                         <div class="input-group col-sm-12 btn-toolbar">
-                            <a:commandLink action="#{userRegistrationHome.register}" id="btnOk"  oncomplete="enableButton()" value="#{messages['form.ok']}"
+                            <a:commandLink action="#{userRegistrationHome.register}" id="btnOk" style="width:120px" oncomplete="enableButton()" value="#{messages['form.ok']}"
                                            styleClass="btn btn-primary" reRender="formnewuser" onclick="if (!disableButton(this)) return false;" />
 
                             <s:link view="/login.xhtml" styleClass="btn btn-default" >#{messages['form.cancel']}</s:link>
-                            <rich:jQuery timming="onload" selector="#nome" query="focus()" />
+                            <rich:jQuery timing="onload" selector="#name" query="focus()" />
                             <rich:hotKey selector="input" key="return" handler="callLogin();" />
                             <a:jsFunction id="login" name="callLogin" ajaxSingle="false" action="#{identity.login}" reRender="main:msg" />
                         </div>
                     </div>
                 </h:form>
-                <hr/>
-                <h:graphicImage value="/public/images/usaid_siaps_440x67.png" styleClass="img-responsive"/>
-                <div class="copyright">
-                    e-TB Manager version <s:link value=" #{etbmanagerApp.implementationVersion}" view="/about.xhtml" style="color:#909090;font-weight:normal;"/>
-                    <br/>
-                    #{messages['login.copyright']}
-                </div>
-
-                <hr/>
-
-                <h:form styleClass="form-horizontal">
-                    <div class="control-group">
-                        <label class="control-label" for="inputPassword">Language:</label>
-                        <div class="controls">
-                            <div class="input-prepend">
-                                <h:selectOneMenu value="#{localeSelector.localeString}" styleClass="form-control">
-                                    <f:selectItems value="#{localeSelector.supportedLocales}" />
-                                    <a:support event="onchange" action="#{localeSelector.select}" oncomplete="document.location.reload(true);"/>
-                                </h:selectOneMenu>
-                            </div>
-                        </div>
-                    </div>
-                </h:form>
             </div>
-
 
 
 
@@ -178,34 +81,6 @@
 
         </h:panelGroup>
     </s:fragment>
-</f:view>
+</ui:define>
+    </ui:composition>
 
-
-<div id="corpo" style="text-align:center;padding-top:80px"><f:view>
-    <div style="text-align:center;margin:0 auto;width:750px;">
-        <div style="margin-top:40px;"></div>
-    </div>
-
-    <ui:include src="/layout/waitdlg.xhtml" />
-
-    <script type="text/javascript">
-        <!--
-        jQuery(document).ready(function() {
-            jQuery("#emailid input").focus();
-        });
-
-        function disableButton(button) {
-            if (jQuery(button).is(".disabled"))	return false;
-            var el=jQuery(button);
-            el.addClass("disabled");
-            var s=el.text();
-            el.html('<div class="wait-icon"/>' + s);
-            return true;
-        }
-        function enableButton() { jQuery('.button').removeClass("disabled"); }
-        -->
-    </script>
-
-</f:view></div>
-</body>
-</html>
