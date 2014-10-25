@@ -103,6 +103,8 @@ public class OrderShippingHome extends Controller {
 		MovementType type = MovementType.ORDERSHIPPING;
 		// gera os movimentos de sa�da do pedido
 		boolean canShip = true;
+        Map<OrderItem, Movement> items = new HashMap<OrderItem, Movement>();
+
 		movementHome.initMovementRecording();
 		for (OrderItem it: order.getItems())
 			if ((it.getShippedQuantity() != null) && (it.getShippedQuantity() > 0))
@@ -124,13 +126,22 @@ public class OrderShippingHome extends Controller {
 					canShip = false;
 					it.setData(true);
 				}
-				it.setMovementOut(mov);
+                items.put(it, mov);
+//				it.setMovementOut(mov);
 			}
 		
-		if (!canShip)
-			return "error";
+		if (!canShip) {
+            return "error";
+        }
+
 		movementHome.savePreparedMovements();
-		
+
+        // update the movements
+        for (OrderItem item: items.keySet()) {
+            Movement mov = items.get(item);
+            item.setMovementOut(mov);
+        }
+
 		entityManager.persist(order);
 		orderHome.saveComment();
 		
