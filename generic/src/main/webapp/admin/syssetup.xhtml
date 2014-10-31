@@ -38,6 +38,7 @@
             <h:inputText value="#{systemConfigHome.systemConfig.adminMail}" size="100" style=" width : 300px;" />
         </s:decorate>
 
+        <hr/>
         <s:decorate template="/layout/edit.xhtml" >
             <ui:define name="label"></ui:define>
             <h:selectBooleanCheckbox value="#{systemConfigHome.systemConfig.allowRegPage}" />#{messages['SystemConfig.allowRegPage']}
@@ -70,11 +71,27 @@
             </s:decorate>
         </h:panelGroup>
 
+        <hr/>
         <s:decorate template="/layout/edit.xhtml" >
             <ui:define name="label">#{messages['SystemConfig.otherLinks']}:</ui:define>
             <h:inputTextarea value="#{systemConfigHome.systemConfig.otherLinks}" style="width:400px;height:100px"></h:inputTextarea>
             <div class="hint">#{messages['SystemConfig.otherLinks.hint']}</div>
         </s:decorate>
+
+        <hr/>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.updateSite']}:</ui:define>
+            <h:inputText value="#{systemConfigHome.systemConfig.updateSite}" style="width:500px"></h:inputText>
+        </s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.jbossPath']}:</ui:define>
+            <h:inputText value="#{systemConfigHome.systemConfig.jbossPath}" style="width:500px"></h:inputText>
+            <div class="hint">#{messages['SystemConfig.jbossPath.hint']}</div>
+        </s:decorate>
+
+
     </div>
 	
 	<div class="form-footer">

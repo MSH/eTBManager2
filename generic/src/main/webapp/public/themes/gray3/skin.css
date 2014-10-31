@@ -355,7 +355,7 @@ a.workspace-data {
 
 
 
-/* Formulários */
+/* Formulï¿½rios */
 
 .form1 {
 	margin-top:10px;
@@ -455,7 +455,7 @@ a.workspace-data {
 }
 
 
-/* Botões */
+/* Botï¿½es */
 
 .button-small a{
 	background-color:#ffe66c;
@@ -793,7 +793,7 @@ table {
 	padding:4px;
 	display:table;
 	width:100%;
-	background-color#c5cbce;
+	background-color: #c5cbce;
 }
 .region3 .content {
 	margin-top:2px;
@@ -1311,4 +1311,20 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
 	font-size:36px;
 	font-weight:bold;
 	min-width:120px;
+}
+.message {
+    padding:8px;
+    border-radius:6px;
+}
+
+.message-info {
+    border:1px solid #3da5f0;
+    background-color:#87bfff;
+    color:white;
+}
+
+.message-error {
+    border:1px solid #f0303c;
+    background-color: #ffb3ba;
+    color: #000000;
 }

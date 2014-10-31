@@ -879,12 +879,13 @@ table {
 	font-size:13px;
 }
 .global-messages {
-	width:100%;
-	padding:4px;
-	font-size:1em;
-	margin-bottom:4px;
-	color: #000000;
-	background-color:#d5b14f;
+    width: 100%;
+    padding: 6px;
+    font-size: 1em;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    color: #136720;
+    background-color: #C2E4D7;
 }
 .entity-inactive {
 	color:red;
@@ -1375,4 +1376,21 @@ div.label { position: relative; float: left; margin-right: 3px; display:inline;}
     margin-right: 4px;
     border-radius: 2px;
     min-width: 80px;
+}
+
+.message {
+    padding:8px;
+    border-radius:6px;
+}
+
+.message-info {
+    border:1px solid #3da5f0;
+    background-color:#87bfff;
+    color:white;
+}
+
+.message-error {
+    border:1px solid #f0303c;
+    background-color: #ffb3ba;
+    color: #000000;
 }

@@ -53,6 +53,11 @@ public class SystemConfig {
     @Lob
     private String otherLinks;
 
+    @Column(length = 250)
+    private String updateSite;
+
+    @Column(length = 250)
+    private String jbossPath;
 
 	/**
 	 * @return the id
@@ -219,5 +224,21 @@ public class SystemConfig {
 
     public void setOtherLinks(String otherLinks) {
         this.otherLinks = otherLinks;
+    }
+
+    public String getUpdateSite() {
+        return updateSite;
+    }
+
+    public void setUpdateSite(String updateSite) {
+        this.updateSite = updateSite;
+    }
+
+    public String getJbossPath() {
+        return jbossPath;
+    }
+
+    public void setJbossPath(String jbossPath) {
+        this.jbossPath = jbossPath;
     }
 }

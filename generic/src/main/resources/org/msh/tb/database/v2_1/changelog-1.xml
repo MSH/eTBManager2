@@ -221,4 +221,46 @@
             <column name="otherlinks" type="text"></column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="v2.1.8" author="rmemoria">
+        <addColumn tableName="systemconfig">
+            <column name="jbossPath" type="varchar(250)"></column>
+        </addColumn>
+        <addColumn tableName="systemconfig">
+            <column name="updateSite" type="varchar(250)"></column>
+        </addColumn>
+        <sql>
+            ALTER TABLE systemconfig DROP FOREIGN KEY `FKF2035631B3B1717`;
+
+            ALTER TABLE systemconfig CHANGE COLUMN `WORKSPACE_ID` `WORKSPACE_ID` INT(11) NULL ;
+
+            ALTER TABLE systemconfig ADD CONSTRAINT `FKF2035631B3B1717`
+            FOREIGN KEY (`WORKSPACE_ID`) REFERENCES `workspace` (`id`)
+            ON DELETE SET NULL ON UPDATE CASCADE;
+        </sql>
+        <update tableName="systemconfig">
+            <column name="updateSite" value="https://www.etbmanager.org/public/bin"></column>
+            <where>id=1</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="v2.1.9" author="rmemoria">
+        <insert tableName="userrole">
+            <column name="id" value="230" />
+            <column name="changeable" valueBoolean="false" />
+            <column name="code" value="055300" />
+            <column name="role_name" value="CHECKUPDATE" />
+            <column name="internalUse" valueBoolean="false"/>
+            <column name="byCaseClassification" valueBoolean="false" />
+        </insert>
+
+        <!-- Insert the permission to all administrator profiles -->
+        <sql>
+            INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
+            select false, true, true, prof.id, role.id
+            from userprofile prof
+            inner join userrole role on role.id in (230)
+            where prof.name like 'Administr%';
+        </sql>
+    </changeSet>
 </databaseChangeLog>

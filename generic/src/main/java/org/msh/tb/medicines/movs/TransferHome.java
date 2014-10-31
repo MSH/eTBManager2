@@ -183,7 +183,9 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		
 		Date dt = transfer.getReceivingDate();
 		Tbunit unit = transfer.getUnitTo();
-		
+
+
+        Map<TransferItem, Movement> items = new HashMap<TransferItem, Movement>();
 		movementHome.initMovementRecording();
 		for (TransferItem it: transfer.getItems()) {
 			String comment = transfer.getUnitFrom().getName().getDefaultName();
@@ -197,13 +199,18 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 			// create receiving movement
 			Movement movIn = movementHome.prepareNewMovement(dt, unit, it.getSource(), it.getMedicine(), MovementType.TRANSFERIN, 
 					batches, comment);
-			
-			it.setMovementIn(movIn);
+
+            items.put(it, movIn);
+//			it.setMovementIn(movIn);
 		}
 		movementHome.savePreparedMovements();
 		
 		transfer.setStatus(TransferStatus.DONE);
 		transfer.setUserTo(getUser());
+
+        for (TransferItem item: items.keySet()) {
+            item.setMovementIn(items.get(item));
+        }
 		
 		getEntityManager().persist(transfer);
 		getEntityManager().flush();

@@ -115,6 +115,9 @@
     	<s:link view="/admin/workspaces.xhtml" propagation="none" rendered="#{s:hasRole('WORKSPACES')}">
     		<i class="icon-globe" />#{messages['admin.workspaces']}
     	</s:link>
+        <s:link view="/admin/checkupdate.xhtml" propagation="none" rendered="#{s:hasRole('CHECKUPDATE')}">
+            <i class="icon-refresh" />#{messages['admin.checkupdate']}
+        </s:link>
 	</s:fragment>
 	</div>
 </ui:define>
