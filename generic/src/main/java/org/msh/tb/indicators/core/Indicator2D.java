@@ -17,17 +17,27 @@ public abstract class Indicator2D extends Indicator {
 	private IndicatorTable table;
 
 
-	/**
-	 * Add a value to the table
-	 * @param columnTitle title of the column
-	 * @param rowTitle title of the row
-	 * @param value value to be set
-	 * @return {@link TableCell} instance containing the cell data
-	 */
-	public TableCell addValue(String columnTitle, String rowTitle, Float value) {
-		return table.addValue(columnTitle, rowTitle, value);
-	}
+    /**
+     * Add a value to the table
+     * @param columnTitle title of the column
+     * @param rowTitle title of the row
+     * @param value value to be set
+     * @return {@link TableCell} instance containing the cell data
+     */
+    public TableCell addValue(String columnTitle, String rowTitle, Float value) {
+        return table.addValue(columnTitle, rowTitle, value);
+    }
 
+    /**
+     * Add a value to the table without checking if the column already exists, a new cell will always be created.
+     * @param columnTitle title of the column
+     * @param rowTitle title of the row
+     * @param value value to be set
+     * @return {@link TableCell} instance containing the cell data
+     */
+    public TableCell addValue(String columnTitle, String columnTitleDisplay, String rowTitle, Float value) {
+        return table.addValue(columnTitle, columnTitleDisplay, rowTitle, value);
+    }
 
 	public TableCell addIdValue(Object columnId, Object rowId, Float val) {
 		TableCell cell = table.addIdValue(columnId, rowId, val);

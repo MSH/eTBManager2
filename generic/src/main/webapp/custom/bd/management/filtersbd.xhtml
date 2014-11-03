@@ -120,7 +120,7 @@ function handleContextClick(comp) {
 		<ui:define name="label">
 			#{messages['PatientType']}:
 		</ui:define>
-		<h:selectOneMenu value="#{indicatorFilters.patientType}">
+		<h:selectOneMenu value="#{indicatorFilters.patientType}" disabled="#{empty disablePatientType ? false : disablePatientType}">
 			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
 		</h:selectOneMenu>
 	</s:decorate>
@@ -170,7 +170,7 @@ function handleContextClick(comp) {
 		<ui:define name="label">
 			#{messages['InfectionSite']}:
 		</ui:define>
-		<h:selectOneMenu value="#{indicatorFilters.infectionSite}">
+		<h:selectOneMenu value="#{indicatorFilters.infectionSite}" disabled="#{empty disableInfectionSite ? false : disableInfectionSite}">
 			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
 		</h:selectOneMenu>
 	</s:decorate>

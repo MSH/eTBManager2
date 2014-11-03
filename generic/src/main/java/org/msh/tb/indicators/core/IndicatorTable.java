@@ -18,12 +18,21 @@ public class IndicatorTable {
 	 *
 	 */
 	public class TableColumn {
-		public TableColumn(IndicatorTable table, String title, Object id) {
-			super();
-			this.title = title;
-			this.table = table;
-			this.id = id;
-		}
+        public TableColumn(IndicatorTable table, String title, Object id) {
+            super();
+            this.title = title;
+            this.table = table;
+            this.id = id;
+            this.titleDisplay = title;
+        }
+
+        public TableColumn(IndicatorTable table, String title, Object id, String titleDisplay) {
+            super();
+            this.title = title;
+            this.table = table;
+            this.id = id;
+            this.titleDisplay = titleDisplay;
+        }
 
 		private IndicatorTable table;
 		private String title;
@@ -31,13 +40,19 @@ public class IndicatorTable {
 		private boolean highlight;
 		private String numberPattern = "#,###,##0";
 		private boolean rowTotal = true;
+        private String titleDisplay;
 
-		/**
-		 * @return the title
-		 */
-		public String getTitle() {
-			return title;
-		}
+        /**
+         * @return the title
+         */
+        public String getTitle() {
+            return title;
+        }
+
+        /**
+         * @return the title
+         */
+        public String getTitleDisplay() { return titleDisplay;}
 
 		/**
 		 * @param title the title to set
@@ -386,35 +401,63 @@ public class IndicatorTable {
 		Float val = getValue(columnId, rowId);
 		return (val == null? 0: val);
 	}
-	
-	/**
-	 * Set the value of a cell
-	 * @param columnTitle column title, if no column is found with the title, a new one is created
-	 * @param rowTitle row title, if no row is found with the title, a new one is created
-	 * @param value value of the cell
-	 * @return instance of {@link TableCell} class
-	 */
-	public TableCell addValue(String columnTitle, String rowTitle, Float value) {
-		TableColumn col = findColumnByTitle(columnTitle);
-		if (col == null) {
-			col = new TableColumn(this, columnTitle, null);
-			columns.add(col);
-		}
-		
-		TableRow row = findRowByTitle(rowTitle);
-		if (row == null) {
-			row = new TableRow(this, rowTitle, null);
-			rows.add(row);
-		}
-		
-		TableCell cell = row.findCell(col);
-		if (cell == null)
-			 cell = row.newValue(col, value);
-		else cell.addValue(value);
-		
-		return cell;
-	}
-	
+
+    /**
+     * Set the value of a cell
+     * @param columnTitle column title, if no column is found with the title, a new one is created
+     * @param rowTitle row title, if no row is found with the title, a new one is created
+     * @param value value of the cell
+     * @return instance of {@link TableCell} class
+     */
+    public TableCell addValue(String columnTitle, String rowTitle, Float value) {
+        TableColumn col = findColumnByTitle(columnTitle);
+        if (col == null) {
+            col = new TableColumn(this, columnTitle, null);
+            columns.add(col);
+        }
+
+        TableRow row = findRowByTitle(rowTitle);
+        if (row == null) {
+            row = new TableRow(this, rowTitle, null);
+            rows.add(row);
+        }
+
+        TableCell cell = row.findCell(col);
+        if (cell == null)
+            cell = row.newValue(col, value);
+        else cell.addValue(value);
+
+        return cell;
+    }
+
+    /**
+     * Set the value of a cell
+     * @param columnTitle column title, if no column is found with the title, a new one is created
+     * @param columnTitleDisplay this is an aux string used to show a diferent title on column than columntitle
+     * @param rowTitle row title, if no row is found with the title, a new one is created
+     * @param value value of the cell
+     * @return instance of {@link TableCell} class
+     */
+    public TableCell addValue(String columnTitle, String columnTitleDisplay, String rowTitle, Float value) {
+        TableColumn col = findColumnByTitle(columnTitle);
+        if (col == null) {
+            col = new TableColumn(this, columnTitle, null, columnTitleDisplay);
+            columns.add(col);
+        }
+
+        TableRow row = findRowByTitle(rowTitle);
+        if (row == null) {
+            row = new TableRow(this, rowTitle, null);
+            rows.add(row);
+        }
+
+        TableCell cell = row.findCell(col);
+        if (cell == null)
+            cell = row.newValue(col, value);
+        else cell.addValue(value);
+
+        return cell;
+    }
 
 	/**
 	 * Set the value of a cell
