@@ -62,13 +62,13 @@ body {
 
 @media screen and (min-width:550px) {
     body {
-        padding-top:120px;
+        padding-top:100px;
         padding-bottom:0px;
         background-color:#ffffff;
     }
     .login-container {
         max-width:500px;
-        padding: 19px 29px 29px;
+        padding: 10px 20px 10px;
         margin: 0 auto 20px;
     }
 
@@ -98,11 +98,11 @@ body {
 }
 
 #content {
-    min-height: 500px;
+    min-height: 400px;
 }
 
 #footer {
-    margin-top:80px;
+    margin-top:20px;
     position: relative;
     width: 100%;
     background-color: #f0f0f0;
