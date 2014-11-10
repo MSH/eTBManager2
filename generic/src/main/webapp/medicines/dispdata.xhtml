@@ -1,140 +1,61 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:s="http://jboss.com/products/seam/taglib"
-                template="/layout/template_new.xhtml">
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/templatemed.xhtml">
 
-<ui:param name="title" value="#{messages['meds.dispensing.details']}" />
+    <ui:param name="title" value="#{messages['meds.dispensing.details']}" />
 
-<ui:param name="topmenu" value="1" />
-<ui:param name="waitdlg" value="1" />
-<ui:param name="labelstyle" value="width:180px;" />
+    <ui:param name="topmenu" value="1" />
+    <ui:param name="waitdlg" value="1" />
+    <ui:param name="labelstyle" value="width:180px;" />
 
-<ui:define name="naveg">
-	<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
-	<s:link view="/medicines/dispensing.xhtml" value="#{messages['meds.dispensing']}" propagation="none">
-		<f:param name="month" value="#{medicineDispensing.month}"/>
-		<f:param name="year" value="#{medicineDispensing.year}"/>
-	</s:link>
-</ui:define>
+    <ui:define name="naveg">
+        <s:link value="#{messages['medicines']}" view="/medicines/index.html" propagation="none" />
+        <s:link view="/medicines/dispensing.xhtml" value="#{messages['meds.dispensing']}" propagation="none">
+        </s:link>
+    </ui:define>
 
 
-<ui:define name="left">
-	<h:form>
-	<s:link view="/medicines/dispedt.xhtml" value="#{messages['form.edit']}" rendered="#{medicineDispensingHome.canChange}">
-		<f:param name="id" value="#{medicineDispensing.id}" />
-	</s:link>
+    <ui:define name="content_unit">
+        <s:decorate template="/layout/case.xhtml">
+            <ui:param name="case" value="#{caseHome.instance}" />
+        </s:decorate>
 
-	<h:commandLink value="#{messages['form.remove']}" action="#{medicineDispensingHome.remove}" rendered="#{medicineDispensingHome.canChange}" />
-	</h:form>
-</ui:define>
+        <h:panelGroup id="pnldisp">
+            <s:fragment rendered="#{facesContext.renderResponse}">
+                <h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty caseDispensingView.dispensingDays}" styleClass="warn" />
+                <a:repeat value="#{caseDispensingView.dispensingDays}" var="it">
 
-<ui:define name="content">
-<h:form id="main">
-    <table width="750px" class="tabela3" style="margin-bottom:10px" cellpadding="8">
-    <tr><td class="header">
-    	<div style="healthunit-icon">
-    		#{medicineDispensing.tbunit.name}
-    	</div>
-    </td></tr>
-	<tr><td>
+                    <table width="100%"><tr><td>
+                        <h2><h:outputText value="#{it.date}" converter="localeDateConverter" /></h2>
+                    </td><td valign="bottom">
+                        <a:commandLink reRender="pnldisp" style="float:right"
+                                       onclick="if (!confirm('#{messages['form.confirm_remove']}')) {return false;} deleteDispensing(#{it.id},#{caseHome.id})" >
+                            <span class="delete-icon" />#{messages['form.remove']}
+                        </a:commandLink>
+                        <s:link view="/medicines/disppacedt.xhtml" style="float:right;padding-right:30px;">
+                            <f:param name="dispid" value="#{it.id}" />
+                            <span class="edit-icon" />#{messages['form.edit']}
+                        </s:link>
+                    </td></tr></table>
 
-    <s:decorate template="/layout/display.xhtml" >
-    	<ui:define name="label">#{messages['form.id']}:</ui:define>
-    	<h:outputText value="#{medicineDispensing.id}" />
-    </s:decorate>
+                    <s:decorate template="dispensingtable.xhtml">
+                        <ui:param name="table" value="#{it.table}" />
+                    </s:decorate>
+                </a:repeat>
+            </s:fragment>
+        </h:panelGroup>
 
-	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
-    	<h:outputText value="#{medicineDispensing.iniDate}" converter="localeDateConverter" />
-	</s:decorate>
+        <a:jsFunction name="deleteDispensing" action="#{caseDispensingView.deleteDispensing}">
+            <a:actionparam name="param1" assignTo="#{caseDispensingView.dispensingId}" converter="javax.faces.Integer"/>
+            <a:actionparam name="param2" assignTo="#{caseDispensingView.caseId}" converter="javax.faces.Integer"/>
+        </a:jsFunction>
+    </ui:define>
 
-	<s:decorate template="/layout/display.xhtml">
-    	<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
-    	<h:outputText value="#{medicineDispensing.endDate}" converter="localeDateConverter" />
-	</s:decorate>
-
-	<table width="100%" class="table1">
-	<ui:repeat value="#{medicineDispensingHome.sources}" var="s">
-		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
-			<b>#{s.source.name}</b>
-		</td></tr>
-		
-		<tr><th align="left">#{messages['Medicine']}</th>
-		<th align="center">#{messages['Batch.expiryDate']}</th>
-		<th align="right">#{messages['MedicineDispensing.quantity']}</th>
-		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
-		<th align="right">#{messages['global.unitPrice']}</th>
-		<th align="right">#{messages['global.totalPrice']}</th>
-		</s:fragment>
-		</tr>
-		<ui:repeat value="#{s.items}" var="it">
-		<tr bgcolor="#f3f3f0"><td>
-				<div class="medicine-icon" style="float:left"/>
-				#{it.item.medicine}
-		</td>
-		<td>
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{it.item.quantity}">
-				<f:convertNumber pattern="#,###,##0"/>
-			</h:outputText>
-			</b>
-		</td>
-		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
-		<td align="right">
-			<b><h:outputText value="#{it.item.unitPrice}">
-				<f:convertNumber pattern="#,###,##0.0000"/>
-			</h:outputText>
-			</b>
-		</td>
-		<td align="right">
-			<b><h:outputText value="#{it.item.totalPrice}">
-				<f:convertNumber pattern="#,###,##0.00"/>
-			</h:outputText>
-			</b>
-		</td>
-		</s:fragment>
-		</tr>
-		
-		<ui:repeat value="#{it.item.batches}" var="b">
-			<tr style="font-size:9px;">
-				<td class="colb" >
-					<div class="batch-icon" style="float:left" />
-					#{b.batch.batchNumber}<br/>
-					#{b.batch.manufacturer}
-				</td>
-				<td align="center" class="colb">
-					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
-				</td>
-				<td class="colb" align="right">
-					<h:outputText value="#{b.quantity}">
-						<f:convertNumber pattern="#,###,##0"/>
-					</h:outputText>
-				</td>
-				<td align="right" class="colb">
-					<h:outputText value="#{b.batch.unitPrice}">
-						<f:convertNumber pattern="#,###,##0.0000"/>
-					</h:outputText>
-				</td>
-				<td class="colb" align="right">
-					<h:outputText value="#{b.totalPrice}">
-						<f:convertNumber pattern="#,###,##0.00"/>
-					</h:outputText>
-				</td>
-			</tr>
-		</ui:repeat>
-		</ui:repeat>
-	</ui:repeat>
-	</table>
-
-    </td></tr>
-    </table>
-
-</h:form>
-</ui:define>
-
-</ui:composition>  
+</ui:composition>

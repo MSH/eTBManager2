@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
 
-	<restrict>#{s:hasRole('DISP_PAC_EDT')}</restrict>
-	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
-	<param name="dispid" value="#{caseDispensingUIHome.medicineDispensingId}" converterId="javax.faces.Integer" />
+    <restrict>#{s:hasRole('DISP_PAC_EDT')}</restrict>
+    <param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
+    <param name="dispid" value="#{caseDispensingUIHome.medicineDispensingId}" converterId="javax.faces.Integer" />
 
-	<navigation>
-		<rule if-outcome="edtpersisted">
-			<redirect view-id="/medicines/dispensing.xhtml">
-				<message>#{messages['dispensing.success']}</message>
-			</redirect>
-		</rule>
-		<rule if-outcome="newpersisted">
-			<redirect view-id="/medicines/dispcasenew.xhtml">
-				<message>#{messages['dispensing.success']}</message>
-			</redirect>
-		</rule>
-		<rule if-outcome="cancel">
-			<redirect view-id="/medicines/dispcasenew.xhtml">
-			</redirect>
-		</rule>
-	</navigation>
+    <navigation>
+        <rule if-outcome="edtpersisted">
+            <redirect view-id="/medicines/dispdata.xhtml">
+                <message>#{messages['dispensing.success']}</message>
+                <param name="id" value="#{caseHome.id}"></param>
+                <param name="dispid" value="#{dispensingHome.id}"></param>
+            </redirect>
+            <!--
+                        <redirect view-id="/medicines/dispensing.xhtml">
+                            <message>#{messages['dispensing.success']}</message>
+                        </redirect>
+            -->
+        </rule>
+        <rule if-outcome="newpersisted">
+            <redirect view-id="/medicines/dispdata.xhtml">
+                <message>#{messages['dispensing.success']}</message>
+                <param name="id" value="#{caseHome.id}"></param>
+                <param name="dispid" value="#{dispensingHome.id}"></param>
+            </redirect>
+            <!--
+                        <redirect view-id="/medicines/dispcasenew.xhtml">
+                            <message>#{messages['dispensing.success']}</message>
+                        </redirect>
+            -->
+        </rule>
+        <rule if-outcome="cancel">
+            <redirect view-id="/medicines/dispcasenew.xhtml">
+            </redirect>
+        </rule>
+    </navigation>
 
 </page>
