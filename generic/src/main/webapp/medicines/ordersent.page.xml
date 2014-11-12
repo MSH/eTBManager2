@@ -4,7 +4,9 @@
 
 		<restrict>#{s:hasRole('SEND_ORDER')}</restrict>
 		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+
 		<begin-conversation join="true"/>
+
 		<action execute="#{orderShippingHome.initialize}"/>
 
 		<navigation>
@@ -15,16 +17,26 @@
 					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
 				</redirect>
 			</rule>
-			<rule if-outcome="selbatches">
+
+            <rule if-outcome="selbatches">
 				<redirect view-id="/medicines/selbatch.xhtml">
 					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
 				</redirect>
 			</rule>
-			<rule if-outcome="cancel">
+
+            <rule if-outcome="cancel">
 				<end-conversation before-redirect="true"/>
 				<redirect view-id="/medicines/orderdata.xhtml">
 					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer"/>
 				</redirect>
 			</rule>
+
+            <rule if="#{orderHome.instance.status ne 'WAITSHIPMENT'}">
+                <end-conversation/>
+                <redirect view-id="/medicines/orderdata.xhtml">
+                    <message>#{messages['meds.orders.alreadysent']}</message>
+                    <param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+                </redirect>
+            </rule>
 		</navigation>
 </page>

@@ -1,5 +1,4 @@
 body {
-    padding-top:90px;
     background-color:#ffffff;
 }
 
@@ -62,9 +61,8 @@ body {
 
 @media screen and (min-width:550px) {
     body {
-        padding-top:100px;
         padding-bottom:0px;
-        background-color:#ffffff;
+        background-color:#f0f0f0;
     }
     .login-container {
         max-width:500px;
@@ -95,19 +93,23 @@ body {
         font-size:14px;
         color: #909090;
     }
+    #content {
+        padding-top:100px;
+    }
 }
 
 #content {
+    padding-top:90px;
     min-height: 400px;
+    background-color: #fff;
+    padding-bottom:10px;
 }
 
 #footer {
-    margin-top:20px;
     position: relative;
     width: 100%;
     background-color: #f0f0f0;
     color: #cf0;
-    min-height: 300px;
     padding-top:10px;
     border-top:1px solid #c8c8c8;
 }

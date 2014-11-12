@@ -7,6 +7,7 @@ import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.*;
+import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
@@ -572,7 +573,6 @@ public class MovementHome {
 
         int quantity = signal * mov.getQuantity();
 
-        System.out.println("Update Mov: medicine=(" + mov.getMedicine().getId() + ") " + mov.getMedicine().toString() + " += " + quantity);
         entityManager.createQuery("update Movement set availableQuantity = availableQuantity + :qtd, " +
                 "totalPriceInventory = totalPriceInventory + :price " +
                 "where tbunit.id = :unitid and source.id = :sourceid and medicine.id = :medid " +
@@ -592,7 +592,6 @@ public class MovementHome {
         for (BatchMovement bm: mov.getBatches()) {
             int batchQuantity = signal * bm.getQuantity();
 //            entityManager.remove(bm);
-            System.out.println("   # batch=(" + bm.getBatch().getId() + ") " + bm.getBatch().getBatchNumber() + " += " + batchQuantity);
             entityManager.createQuery("update BatchMovement set availableQuantity = availableQuantity + :qtd " +
                     "where movement.id in (select id from Movement where tbunit.id = :unitid and source.id = :sourceid " +
                     "and medicine.id = :medid and date > :dt or (date = :dt and recordDate > :recordDate)) " +
@@ -619,7 +618,7 @@ public class MovementHome {
      * @param price the price to increase or decrease
      */
     private void updateMedicineQuantity(Tbunit unit, Source source, Medicine med, int quantity, float price, Date movDate) {
-        System.out.println(quantity);
+//        System.out.println(quantity);
         // find the entity about quantity available
         Number count = (Number)entityManager.createQuery("select count(id) from StockPosition where tbunit.id = :unitid " +
                 "and source.id = :sourceid and medicine.id = :medid")
@@ -629,25 +628,6 @@ public class MovementHome {
                 .getSingleResult();
 
         boolean existStockPos = count.intValue() > 0;
-//        StockPosition sp = lst.size() > 0? lst.get(0): null;
-
-        // check current quantity to calculate final quantity
-        Number currQtd;
-        int finalQuantity;
-
-        try{
-            currQtd = (Number)entityManager.createQuery("select quantity from StockPosition where tbunit.id = :unitid " +
-                    "and source.id = :sourceid and medicine.id = :medid")
-                    .setParameter("unitid", unit.getId())
-                    .setParameter("sourceid", source.getId())
-                    .setParameter("medid", med.getId())
-                    .getSingleResult();
-        }catch(NoResultException e){
-            currQtd = new Integer(0);
-        }
-        if(currQtd == null) currQtd = new Integer(0);
-
-        finalQuantity = currQtd.intValue() + quantity;
 
         // no stock position information?
         if (!existStockPos) {
@@ -660,9 +640,14 @@ public class MovementHome {
             sp.setTotalPrice(price);
             sp.setLastMovement(movDate);
             entityManager.persist(sp);
+            entityManager.flush();
+            System.out.println("#INSERT StockPosition: " +
+                    "   unit=(" + unit.getId() + ") " + unit.getName().toString() + '\n' +
+                    "   med=(" + med.getId() + ") " + med.toString() + '\n' +
+                    "   qtd= " + quantity + '\n' +
+                    "   date mov = " + movDate);
         }
-        //if finalQuantity < 0 will update stock position to show it, so the user can notice it and call support.
-        else if(finalQuantity > 0 || finalQuantity < 0) {
+        else {
             // update stock position record
             entityManager.createQuery("update StockPosition set quantity = quantity + :qtd, " +
                     "totalPrice = totalPrice + :price, " +
@@ -675,22 +660,14 @@ public class MovementHome {
                     .setParameter("sourceid", source.getId())
                     .setParameter("medid", med.getId())
                     .executeUpdate();
-/*
-            sp.setQuantity( sp.getQuantity() + quantity );
-            sp.setTotalPrice( sp.getTotalPrice() + price );
-            if (sp.getLastMovement().before(movDate)) {
-                sp.setLastMovement(movDate);
-            }
-*/
-        }else if(finalQuantity == 0){
-            entityManager.createQuery("delete from StockPosition " +
-                    "where tbunit.id=:unitid and source.id=:sourceid and medicine.id=:medid")
-                    .setParameter("unitid", unit.getId())
-                    .setParameter("sourceid", source.getId())
-                    .setParameter("medid", med.getId())
-                    .executeUpdate();
+            System.out.println("#UPDATE StockPosition:\n" +
+                    "   unit=(" + unit.getId() + ") " + unit.getName().toString() + '\n' +
+                    "   med=(" + med.getId() + ") " + med.toString() + '\n' +
+                    "   qtd += " + quantity + '\n' +
+                    "   date mov = " + movDate);
         }
     }
+
 
     /**
      * Update available quantity of a batch for a given health unit and medicine source
@@ -708,23 +685,6 @@ public class MovementHome {
                 .getSingleResult();
 
         boolean recordExists = count.intValue() > 0;
-        // check current quantity to calculate final quantity
-        Number currQtd;
-        int finalQuantity;
-
-        try{
-            currQtd = (Number)entityManager.createQuery("select quantity from BatchQuantity where batch.id = :batchid " +
-                    "and tbunit.id = :unitid and source.id = :sourceid")
-                    .setParameter("unitid", unit.getId())
-                    .setParameter("sourceid", source.getId())
-                    .setParameter("batchid", batch.getId())
-                    .getSingleResult();
-        }catch(NoResultException e){
-            currQtd = new Integer(0);
-        }
-        if(currQtd == null) currQtd = new Integer(0);
-
-        finalQuantity = currQtd.intValue() + quantity;
 
         if (!recordExists) {
             BatchQuantity bq = new BatchQuantity();
@@ -734,7 +694,7 @@ public class MovementHome {
             bq.setQuantity(quantity);
             entityManager.persist(bq);
         }
-        else if(finalQuantity > 0 || finalQuantity < 0){
+        else {
             // update batch quantity value
             entityManager.createQuery("update BatchQuantity set quantity = quantity + :qtd " +
                     "where batch.id = :batchid " +
@@ -744,43 +704,24 @@ public class MovementHome {
                     .setParameter("sourceid", source.getId())
                     .setParameter("unitid", unit.getId())
                     .executeUpdate();
-        }else if(finalQuantity == 0){
-            entityManager.createQuery("delete from BatchQuantity " +
-                    "where batch.id = :batchid and tbunit.id = :unitid and source.id = :sourceid")
-                    .setParameter("unitid", unit.getId())
-                    .setParameter("sourceid", source.getId())
+
+            Medicine med = batch.getMedicine();
+            System.out.println("               #UPDATE BatchQuantity: " +
+                    "batch=(" + batch.getId() + ") " + batch.getBatchNumber() + " - " + batch.getManufacturer() +
+                    ", qtd += " + quantity);
+
+
+            // remove records where quantity is zero
+            entityManager.createQuery("delete from BatchQuantity where quantity = 0 " +
+                    "and batch.id = :batchid " +
+                    "and tbunit.id = :unitid and source.id = :sourceid")
                     .setParameter("batchid", batch.getId())
+                    .setParameter("sourceid", source.getId())
+                    .setParameter("unitid", unit.getId())
                     .executeUpdate();
         }
-/*
-        List<BatchQuantity> lst = entityManager.createQuery("from BatchQuantity where batch.id = :batchid " +
-                "and tbunit.id = :unitid and source.id = :sourceid")
-                .setParameter("batchid", batch.getId())
-                .setParameter("sourceid", source.getId())
-                .setParameter("unitid", unit.getId())
-                .getResultList();
-
-        BatchQuantity bq = lst.size() > 0? lst.get(0) : null;
-        if (bq == null) {
-            bq = new BatchQuantity();
-            bq.setTbunit(unit);
-            bq.setSource(source);
-            bq.setBatch(batch);
-            bq.setQuantity(quantity);
-            entityManager.persist(bq);
-        }
-        else {
-            bq.setQuantity( bq.getQuantity() + quantity );
-
-            if (bq.getQuantity() == 0) {
-                entityManager.remove(bq);
-            }
-            else {
-                entityManager.persist(bq);
-            }
-        }
-*/
     }
+
 
     /**
      * Store information about a prepared movement

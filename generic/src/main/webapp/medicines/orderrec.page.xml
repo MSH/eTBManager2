@@ -5,18 +5,28 @@
 
 		<restrict>#{s:hasRole('RECEIV_ORDER')}</restrict>
 		<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+
 		<navigation>
 			<rule if-outcome="received">
 				<redirect view-id="/medicines/orderdata.xhtml">
 					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
 				</redirect>
 			</rule>
+
 			<rule if-outcome="cancel">
 				<end-conversation before-redirect="true" />
 				<redirect view-id="/medicines/orderdata.xhtml">
 					<param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
 				</redirect>
 			</rule>
+
+            <rule if="#{orderHome.instance.status ne 'SHIPPED'}">
+                <end-conversation/>
+                <redirect view-id="/medicines/orderdata.xhtml">
+                    <message>#{messages['meds.orders.alreadyrec']}</message>
+                    <param name="id" value="#{orderHome.id}" converterId="javax.faces.Integer" />
+                </redirect>
+            </rule>
 		</navigation>
 
 </page>
