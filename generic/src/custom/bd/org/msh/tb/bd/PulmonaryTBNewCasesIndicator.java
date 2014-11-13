@@ -22,15 +22,17 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
     @In(create=true) Map<String, String> messages;
 
     //vars that will alocate the result. name pattern is: row_colum_subcolumn. This class generates only the result for the new case table
-    float smearPositive_total_M, smearPositive_total_F,
+    float   smearPositive_total_M, smearPositive_total_F,
             smearPositive_smearNegative_M, smearPositive_smearNegative_F,
             smearPositive_smearPositive_M, smearPositive_smearPositive_F,
             smearPositive_died_M, smearPositive_died_F,
             smearPositive_failure_M, smearPositive_failure_F,
             smearPositive_defaulted_M, smearPositive_defaulted_F,
             smearPositive_transfOut_M, smearPositive_transfOut_F,
+            smearPositive_otherOutcomes_M, smearPositive_otherOutcomes_F,
             smearPositive_notEvaluated_M, smearPositive_notEvaluated_F,
             smearPositive_grandTotal_M, smearPositive_grandTotal_F, smearPositive_grandTotal_T,
+
             /*Suspended by bangldesh team
             xpert_total_M, xpert_total_F,
             xpert_smearNegative_M, xpert_smearNegative_F,
@@ -41,6 +43,7 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
             xpert_transfOut_M, xpert_transfOut_F,
             xpert_notEvaluated_M, xpert_notEvaluated_F,
             xpert_grandTotal_M, xpert_grandTotal_F, xpert_grandTotal_T,*/
+
             smearNegative_total_M, smearNegative_total_F,
             smearNegative_smearNegative_M, smearNegative_smearNegative_F,
             smearNegative_smearPositive_M, smearNegative_smearPositive_F,
@@ -48,8 +51,10 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
             smearNegative_failure_M, smearNegative_failure_F,
             smearNegative_defaulted_M, smearNegative_defaulted_F,
             smearNegative_transfOut_M, smearNegative_transfOut_F,
-            smearNegative_notEvaluated_M, smearNegative_notEvaluated_F,
+            smearNegative_notEvaluated_M, smearNegative_notEvaluated_F,otherOutcomes,
+            smearNegative_otherOutcomes_M, smearNegative_otherOutcomes_F,
             smearNegative_grandTotal_M, smearNegative_grandTotal_F, smearNegative_grandTotal_T,
+
             notEvaluated_total_M, notEvaluated_total_F,
             notEvaluated_smearNegative_M, notEvaluated_smearNegative_F,
             notEvaluated_smearPositive_M, notEvaluated_smearPositive_F,
@@ -57,6 +62,7 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
             notEvaluated_failure_M, notEvaluated_failure_F,
             notEvaluated_defaulted_M, notEvaluated_defaulted_F,
             notEvaluated_transfOut_M, notEvaluated_transfOut_F,
+            notEvaluated_otherOutcomes_M, notEvaluated_otherOutcomes_F,
             notEvaluated_notEvaluated_M, notEvaluated_notEvaluated_F,
             notEvaluated_grandTotal_M, notEvaluated_grandTotal_F, notEvaluated_grandTotal_T;
 
@@ -106,9 +112,9 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
         //Outcome Columns - Male and female
         System.out.println("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_SmearPositiveRow
-                + HQLWhere_New_OutcomeColumns + HQLGroupBy_New_OutcomeColumns);
+                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns);
         result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_SmearPositiveRow
-                + HQLWhere_New_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
+                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
 
@@ -137,6 +143,11 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
                     smearPositive_transfOut_M += qtd.longValue();
                 else if(gender.equals(Gender.FEMALE))
                     smearPositive_transfOut_F += qtd.longValue();
+            }else{
+                if(gender.equals(Gender.MALE))
+                    smearPositive_otherOutcomes_M += qtd.longValue();
+                else if(gender.equals(Gender.FEMALE))
+                    smearPositive_otherOutcomes_F += qtd.longValue();
             }
 
         }
@@ -157,9 +168,9 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
         //grand total columns
         smearPositive_grandTotal_M = smearPositive_smearNegative_M + smearPositive_smearPositive_M + smearPositive_died_M +
-                smearPositive_failure_M + smearPositive_defaulted_M + smearPositive_transfOut_M + smearPositive_notEvaluated_M;
+                smearPositive_failure_M + smearPositive_defaulted_M + smearPositive_transfOut_M + smearPositive_otherOutcomes_M +smearPositive_notEvaluated_M;
         smearPositive_grandTotal_F = smearPositive_smearNegative_F + smearPositive_smearPositive_F + smearPositive_died_F +
-                smearPositive_failure_F + smearPositive_defaulted_F + smearPositive_transfOut_F + smearPositive_notEvaluated_F;
+                smearPositive_failure_F + smearPositive_defaulted_F + smearPositive_transfOut_F + smearPositive_otherOutcomes_F + smearPositive_notEvaluated_F;
         smearPositive_grandTotal_T = smearPositive_grandTotal_M + smearPositive_grandTotal_F;
 
         //total columns
@@ -209,7 +220,7 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
         //Outcome Columns - Male and female
         result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_SmearNegativeRow
-                + HQLWhere_New_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
+                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
 
@@ -238,6 +249,11 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
                     smearNegative_transfOut_M += qtd.longValue();
                 else if(gender.equals(Gender.FEMALE))
                     smearNegative_transfOut_F += qtd.longValue();
+            }else{
+                if(gender.equals(Gender.MALE))
+                    smearNegative_otherOutcomes_M += qtd.longValue();
+                else if(gender.equals(Gender.FEMALE))
+                    smearNegative_otherOutcomes_F += qtd.longValue();
             }
 
         }
@@ -258,9 +274,9 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
         //grand total columns
         smearNegative_grandTotal_M = smearNegative_smearNegative_M + smearNegative_smearPositive_M + smearNegative_died_M +
-                smearNegative_failure_M + smearNegative_defaulted_M + smearNegative_transfOut_M + smearNegative_notEvaluated_M;
+                smearNegative_failure_M + smearNegative_defaulted_M + smearNegative_transfOut_M + smearNegative_otherOutcomes_M + smearNegative_notEvaluated_M;
         smearNegative_grandTotal_F = smearNegative_smearNegative_F + smearNegative_smearPositive_F + smearNegative_died_F +
-                smearNegative_failure_F + smearNegative_defaulted_F + smearNegative_transfOut_F + smearNegative_notEvaluated_F;
+                smearNegative_failure_F + smearNegative_defaulted_F + smearNegative_transfOut_F + smearNegative_otherOutcomes_F + smearNegative_notEvaluated_F;
         smearNegative_grandTotal_T = smearNegative_grandTotal_M + smearNegative_grandTotal_F;
 
         //total columns
@@ -299,13 +315,13 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
         //Outcome Columns - Male and female
         result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow1
-                + HQLWhere_New_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
+                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcNotEvalRowOutcomeColumns(result);
 
         result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_NotEval2RowOutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow2
-                + HQLWhere_New_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
+                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcNotEvalRowOutcomeColumns(result);
@@ -342,9 +358,9 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
         //grand total columns
         notEvaluated_grandTotal_M = notEvaluated_smearNegative_M + notEvaluated_smearPositive_M + notEvaluated_died_M +
-                notEvaluated_failure_M + notEvaluated_defaulted_M + notEvaluated_transfOut_M + notEvaluated_notEvaluated_M;
+                notEvaluated_failure_M + notEvaluated_defaulted_M + notEvaluated_transfOut_M + notEvaluated_otherOutcomes_M + notEvaluated_notEvaluated_M;
         notEvaluated_grandTotal_F = notEvaluated_smearNegative_F + notEvaluated_smearPositive_F + notEvaluated_died_F +
-                notEvaluated_failure_F + notEvaluated_defaulted_F + notEvaluated_transfOut_F + notEvaluated_notEvaluated_F;
+                notEvaluated_failure_F + notEvaluated_defaulted_F + notEvaluated_transfOut_F + notEvaluated_otherOutcomes_F + notEvaluated_notEvaluated_F;
         notEvaluated_grandTotal_T = notEvaluated_grandTotal_M + notEvaluated_grandTotal_F;
 
         //total columns
@@ -399,6 +415,11 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
                     notEvaluated_transfOut_M += qtd.longValue();
                 else if(gender.equals(Gender.FEMALE))
                     notEvaluated_transfOut_F += qtd.longValue();
+            }else{
+                if(gender.equals(Gender.MALE))
+                    notEvaluated_otherOutcomes_M += qtd.longValue();
+                else if(gender.equals(Gender.FEMALE))
+                    notEvaluated_otherOutcomes_F += qtd.longValue();
             }
 
         }
@@ -418,10 +439,11 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
     private void populateTableFields(){
         //The code bellow populates the new case table, smear positive row
+        /*Asked to be removed by Gustavo. If BD team ask it back, just remove the comments.
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_total_F);
         addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.smearpositive"), smearPositive_total_M + smearPositive_total_F);
-
+        */
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_smearNegative_F);
 
@@ -440,11 +462,14 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
         addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_transfOut_M);
         addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_transfOut_F);
 
-        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_notEvaluated_M);
-        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_notEvaluated_F);
+        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_otherOutcomes_M);
+        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_otherOutcomes_F);
 
-        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_M);
-        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_F);
+        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_notEvaluated_M);
+        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_notEvaluated_F);
+
+        addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_M);
+        addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_T);
 
         //The code bellow populates the new case table, xpert row
@@ -478,11 +503,13 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.xpert"), xpert_grandTotal_T);
         */
+
         //The code bellow populates the new case table, smear negative row
+        /*Asked to be removed by Gustavo. If BD team ask it back, just remove the comments.
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_total_F);
         addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.smearnegative"), smearNegative_total_M + smearNegative_total_F);
-
+        */
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_smearNegative_F);
 
@@ -501,18 +528,22 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
         addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_transfOut_M);
         addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_transfOut_F);
 
-        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_notEvaluated_M);
-        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_notEvaluated_F);
+        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_otherOutcomes_M);
+        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_otherOutcomes_F);
 
-        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_grandTotal_M);
-        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_grandTotal_F);
+        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_notEvaluated_M);
+        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_notEvaluated_F);
+
+        addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearnegative"), smearNegative_grandTotal_M);
+        addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearnegative"), smearNegative_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.smearnegative"), smearNegative_grandTotal_T);
 
         //The code bellow populates the new case table, not evaluated row
+        /*Asked to be removed by Gustavo. If BD team ask it back, just remove the comments.
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_total_F);
         addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_total_M + notEvaluated_total_F);
-
+        */
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_smearNegative_F);
 
@@ -531,11 +562,14 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
         addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_transfOut_M);
         addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_transfOut_F);
 
-        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_notEvaluated_M);
-        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_notEvaluated_F);
+        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_otherOutcomes_M);
+        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_otherOutcomes_F);
 
-        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_grandTotal_M);
-        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_grandTotal_F);
+        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_notEvaluated_M);
+        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_notEvaluated_F);
+
+        addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_grandTotal_M);
+        addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.notevaluated"), notEvaluated_grandTotal_T);
 
     }

@@ -40,13 +40,13 @@ public interface TB12Indicator {
     static final String HQLWhere_Both_SmearColumns = " and followup.id = (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = followup.tbcase.id " +
                                                                         "and m4.dateRelease = (select min(m5.dateRelease) from ExamMicroscopy m5 where m5.tbcase.id = m4.tbcase.id and m5.dateRelease > c.treatmentPeriod.iniDate and m5.dateRelease <= :followupExamLimit)) ";
 
-    static final String HQLWhere_New_OutcomeColumns = " and c.state in (5,6,7,8) and (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = c.id " +
+    static final String HQLWhere_Both_OutcomeColumns = " and c.state > 2 and (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = c.id " +
                                                   " and m4.dateRelease = (select min(m5.dateRelease) from ExamMicroscopy m5 where m5.tbcase.id = m4.tbcase.id and m5.dateRelease > c.treatmentPeriod.iniDate and m5.dateRelease <= :followupExamLimit)) is null ";
 
-    static final String HQLWhere_Both_NotEvaluatedColumn = " and c.state not in (5,6,7,8) and (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = c.id " +
+    static final String HQLWhere_Both_NotEvaluatedColumn = " and c.state <= 2 and (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = c.id " +
                                                       " and m4.dateRelease = (select min(m5.dateRelease) from ExamMicroscopy m5 where m5.tbcase.id = m4.tbcase.id and m5.dateRelease > c.treatmentPeriod.iniDate and m5.dateRelease <= :followupExamLimit)) is null ";
 
-    static final String HQLWhere_Both_NotEvaluatedColumn2 = " and c.state not in (5,6,7,8) and followup.tbcase.id = c.id " +
+    static final String HQLWhere_Both_NotEvaluatedColumn2 = " and c.state <= 2 and followup.tbcase.id = c.id " +
                                                            " and followup.id = (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = followup.tbcase.id " +
                                                                         "and m4.dateRelease = (select min(m5.dateRelease) from ExamMicroscopy m5 where m5.tbcase.id = m4.tbcase.id and m5.dateRelease > c.treatmentPeriod.iniDate and m5.dateRelease <= :followupExamLimit)) " +
                                                            " and (followup.result in (6,7) or followup.result is null) ";

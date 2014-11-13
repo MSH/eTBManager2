@@ -39,7 +39,7 @@
 	<ui:include src="/custom/bd/management/filtersbd.xhtml" >
 		<ui:param name="showregdate" value="true" />
 		<ui:param name="readonlyregdate" value="true" />
-		<ui:param name="showinitreatdate" value="true" />
+		<ui:param name="showinitreatdate" value="false" />
         <ui:param name="readonlyinitreatdate" value="true" />
         <ui:param name="disableInfectionSite" value="true" />
         <ui:param name="disablePatientType" value="true" />
@@ -52,12 +52,14 @@
 	<table class="table1" width="800px" align="left">
 	
  	<tr>
-	<th rowspan="2">
+	<th rowspan="2" width="180px">
 				#{messages['manag.pulmonary.patienttype']} 			
 	</th>
+	<!-- Removed, if BD team ask it back just cut out the comment
 	<th colspan="3">
 				#{messages['manag.pulmonary.totpatients']}
 	</th>
+	-->
 	<th colspan="2">
 				#{messages['manag.pulmonary.microscopy.negative']}<br/>
 				#{messages['manag.pulmonary.one']}
@@ -82,13 +84,17 @@
 				#{messages['manag.pulmonary.transferredout']}<br/>
 				#{messages['manag.pulmonary.six']}
 	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.notevaluated']}<br/>
-				#{messages['manag.pulmonary.seven']}
-	</th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.otheroutcomes']}<br/>
+                #{messages['manag.pulmonary.seven']}
+    </th>
+    <th colspan="2">
+                 #{messages['manag.pulmonary.notevaluated']}<br/>
+                 #{messages['manag.pulmonary.eight']}
+    </th>
 	<th colspan="3">
 				#{messages['manag.pulmonary.grandtotal']}<br/>
-				#{messages['manag.pulmonary.onetoseven']}
+				#{messages['manag.pulmonary.onetoeight']}
 	</th>
 	</tr> 
 		<tr>	
@@ -126,70 +132,76 @@
 		</div>
 		<table class="table1" width="800px" align="left">
 			 	<tr>
-	<th rowspan="2">
+	<th rowspan="2" width="180px">
 				#{messages['manag.pulmonary.patienttype']} 			
 	</th>
-	<th colspan="3">
-				#{messages['manag.pulmonary.totpatients']}
-	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.microscopy.negative']}<br/>
-				#{messages['manag.pulmonary.one']}
-	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.microscopy.positive']}<br/>
-				#{messages['manag.pulmonary.two']}
-	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.died']}<br/>
-				#{messages['manag.pulmonary.three']}
-	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.failure']}<br/>
-				#{messages['manag.pulmonary.four']}
-	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.defaulted']}<br/>
-				#{messages['manag.pulmonary.five']}
-	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.transferredout']}<br/>
-				#{messages['manag.pulmonary.six']}
-	</th>
-	<th colspan="2">
-				#{messages['manag.pulmonary.notevaluated']}<br/>
-				#{messages['manag.pulmonary.seven']}
-	</th>
-	<th colspan="3">
-				#{messages['manag.pulmonary.grandtotal']}<br/>
-				#{messages['manag.pulmonary.onetoseven']}
-	</th>
-	</tr> 
-		<tr>
-		<ui:repeat value="#{pulmonaryTBRetreatCasesIndicator.table.columns}" var="col" width="50px">
-			<th>
-				#{col.titleDisplay}
-			</th>
-		</ui:repeat>
-		</tr>
-		<ui:repeat value="#{pulmonaryTBRetreatCasesIndicator.table.rows}" var="row">
-		<tr>
-			<td class="colb">
-				#{row.title}
-			</td>
-			<ui:repeat value="#{row.cells}" var="val">
-			<td class="colcb" style="#{val.column.rowTotal?'':'font-weight:bold;'}">
-				<h:outputText value="#{val.value}" >
-					<f:convertNumber pattern="#,###,##0"/>
-				</h:outputText>
-				</td>
-			</ui:repeat>		
-		</tr>		
-		</ui:repeat>
-	</table>
-	
-		</s:fragment>
-		<!-- end of adding new table -->
+    <!-- Removed, if BD team ask it back just cut out the comment
+    <th colspan="3">
+                #{messages['manag.pulmonary.totpatients']}
+    </th>
+    -->
+    <th colspan="2">
+                #{messages['manag.pulmonary.microscopy.negative']}<br/>
+                #{messages['manag.pulmonary.one']}
+    </th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.microscopy.positive']}<br/>
+                #{messages['manag.pulmonary.two']}
+    </th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.died']}<br/>
+                #{messages['manag.pulmonary.three']}
+    </th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.failure']}<br/>
+                #{messages['manag.pulmonary.four']}
+    </th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.defaulted']}<br/>
+                #{messages['manag.pulmonary.five']}
+    </th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.transferredout']}<br/>
+                #{messages['manag.pulmonary.six']}
+    </th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.otheroutcomes']}<br/>
+                #{messages['manag.pulmonary.seven']}
+    </th>
+    <th colspan="2">
+                #{messages['manag.pulmonary.notevaluated']}<br/>
+                #{messages['manag.pulmonary.eight']}
+    </th>
+    <th colspan="3">
+                #{messages['manag.pulmonary.grandtotal']}<br/>
+                #{messages['manag.pulmonary.onetoeight']}
+    </th>
+    </tr>
+        <tr>
+        <ui:repeat value="#{pulmonaryTBRetreatCasesIndicator.table.columns}" var="col" width="50px">
+            <th>
+                #{col.titleDisplay}
+            </th>
+        </ui:repeat>
+        </tr>
+        <ui:repeat value="#{pulmonaryTBRetreatCasesIndicator.table.rows}" var="row">
+        <tr>
+            <td class="colb">
+                #{row.title}
+            </td>
+            <ui:repeat value="#{row.cells}" var="val">
+            <td class="colcb" style="#{val.column.rowTotal?'':'font-weight:bold;'}">
+                <h:outputText value="#{val.value}" >
+                    <f:convertNumber pattern="#,###,##0"/>
+                </h:outputText>
+                </td>
+            </ui:repeat>
+        </tr>
+        </ui:repeat>
+    </table>
+
+        </s:fragment>
+        <!-- end of adding new table -->
 </h:panelGroup>
 
  <table width="100%">
