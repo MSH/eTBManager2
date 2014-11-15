@@ -42,13 +42,37 @@
                     <f:param id="type" value="date-time"/>
                 </h:outputText>
             </s:decorate>
-            <a href="#" class="button"><span>#{messages['form.update']}</span></a>
+            <s:fragment rendered="#{appUpdateController.status=='UPDATE_AVAILABLE'}">
+                <a href="#" onclick="initDownload(); return false;" class="button-alt"><span>Download new version</span></a>
+            </s:fragment>
         </s:fragment>
 
-        <s:fragment rendered="#{(not appUpdateController.updateAvailable) and (appUpdateController.versionInformation != null)}">
+        <s:fragment rendered="#{(appUpdateController.status == 'INACTIVE') and (empty appUpdateController.errorMessage)}">
             <div class="message message-info">
                 <div class="text-medium">#{messages['admin.checkupdate.msg2']}</div>
             </div>
+        </s:fragment>
+
+        <s:fragment rendered="#{appUpdateController.status == 'DOWNLOADING'}">
+            <b>Downloading new version:</b> #{appUpdateController.downloadProgress} %
+        </s:fragment>
+
+        <s:fragment rendered="#{appUpdateController.status == 'READY_TO_UPDATE'}">
+            <h2>A new version is ready to be installed</h2>
+            <div class="spacer"/>
+            <a href="#" onclick="updateSystem(); return false;" class="button-alt"><span>Install new version</span></a>
+            <p>
+                <b>Important:</b> While installing a new version, e-TB Manager will be unavailable.
+                <br/>
+                <div class="hint">Usually it takes less than 1 minute to install.</div>
+            </p>
+        </s:fragment>
+
+        <s:fragment rendered="#{appUpdateController.status == 'UPDATED'}">
+            <h2>New version is being installed</h2>
+            <p>
+                Wait from 1 to 5 minutes to have e-TB manager available again.
+            </p>
         </s:fragment>
 
         <s:fragment rendered="#{not empty appUpdateController.errorMessage}">
@@ -63,7 +87,18 @@
     </div>
 
     <a:jsFunction name="checkUpdate" oncomplete="afterProcessing(data)" reRender="pnlstatus"
-                  action="#{appUpdateController.checkForUpdate}" data="#{appUpdateController.updateAvailable}"/>
+                action="#{appUpdateController.checkForUpdate}"
+                data="#{appUpdateController.status}"/>
+
+    <a:jsFunction name="initDownload" oncomplete="updateDownloadStatus(data)" reRender="pnlstatus"
+                action="#{appUpdateController.downloadNewVersion}"
+                data="#{appUpdateController.status}" />
+
+    <a:jsFunction name="updateSystem" oncomplete="" reRender="pnlstatus"
+                action="#{appUpdateController.updateNewVersion}" />
+
+    <a:jsFunction name="updateStatus" reRender="pnlstatus" oncomplete="updateDownloadStatus(data)"
+                data="#{appUpdateController.status}" />
 </h:form>
 
 <script type="text/javascript">
@@ -74,6 +109,17 @@ jQuery(document).ready(function() {
 function afterProcessing(data) {
     jQuery("#divproc").slideUp();
     jQuery('#divresult').slideDown();
+    if (data==='DOWNLOADING') {
+        updateStatus();
+    }
+}
+
+function updateDownloadStatus(data) {
+    if (data == 'DOWNLOADING') {
+        setTimeout(function() {
+            updateStatus();
+        }, 2000);
+    }
 }
 
 </script>

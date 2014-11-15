@@ -4,7 +4,10 @@ import org.msh.reports.FilterValue;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Create a SQL declaration to be used in indicator org.msh.reports

@@ -1,12 +1,12 @@
 package org.msh.tb.medicines.dispensing;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.utils.date.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @Name("dispensingSelection")
 @AutoCreate

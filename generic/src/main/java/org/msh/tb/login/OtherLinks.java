@@ -1,14 +1,12 @@
 package org.msh.tb.login;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.SystemConfigHome;
 import org.msh.tb.entities.SystemConfig;
 
 import javax.faces.model.SelectItem;
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 

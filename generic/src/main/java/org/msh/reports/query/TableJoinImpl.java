@@ -3,7 +3,6 @@
  */
 package org.msh.reports.query;
 
-import javax.persistence.JoinTable;
 import java.util.ArrayList;
 import java.util.List;
 

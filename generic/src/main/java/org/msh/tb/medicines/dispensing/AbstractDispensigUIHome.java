@@ -1,27 +1,17 @@
 package org.msh.tb.medicines.dispensing;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.BatchQuantity;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Source;
-import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.Tbunit;
+import org.msh.tb.entities.*;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 public abstract class AbstractDispensigUIHome {
 

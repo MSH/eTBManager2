@@ -7,13 +7,11 @@ import org.jboss.seam.annotations.TransactionPropagationType;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.*;
-import org.msh.tb.entities.BatchQuantity;
 import org.msh.tb.entities.enums.MovementType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.LocaleDateConverter;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import java.text.MessageFormat;
 import java.util.*;
 

@@ -1,5 +1,6 @@
 package org.msh.tb.application.update;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -16,6 +17,16 @@ public class VersionInformation {
     private Date buildDate;
 
     private String version;
+
+    /**
+     * true if there is an update available
+     */
+    private boolean updateAvailable;
+
+    /**
+     * Downloaded file
+     */
+    private File downloadedFile;
 
     public String getBuildNumber() {
         return buildNumber;
@@ -55,5 +66,21 @@ public class VersionInformation {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public boolean isUpdateAvailable() {
+        return updateAvailable;
+    }
+
+    public void setUpdateAvailable(boolean updateAvailable) {
+        this.updateAvailable = updateAvailable;
+    }
+
+    public File getDownloadedFile() {
+        return downloadedFile;
+    }
+
+    public void setDownloadedFile(File downloadedFile) {
+        this.downloadedFile = downloadedFile;
     }
 }

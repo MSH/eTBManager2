@@ -3,20 +3,24 @@ package org.msh.tb.application.update;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.EtbmanagerApp;
+import org.msh.tb.application.tasks.AsyncTask;
+import org.msh.tb.application.tasks.TaskManager;
 import org.msh.tb.entities.SystemConfig;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import javax.persistence.EntityManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.net.HttpURLConnection;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ricardo on 27/10/14.
@@ -56,10 +60,10 @@ public class AppUpdateService {
     }
 
     /**
-     * Connect to the update site and get information about the latest version stored there
-     * @return true if there is a new version available
+     * Return the URL of the new version
+     * @return String value
      */
-    public boolean checkForUpdate() {
+    public String getNewVersionURL() {
         SystemConfig config = etbmanagerApp.getConfiguration();
 
         String warfile = "etbmanager";
@@ -69,7 +73,24 @@ public class AppUpdateService {
         }
         warfile += ".war";
 
-        String path = config.getUpdateSite() + "/" + warfile + ".xml";
+        return config.getUpdateSite() + "/" + warfile;
+    }
+
+    /**
+     * Return the URL of the XML file containing meta information about the new version
+     * @return String value
+     */
+    public String getMetaInfoURL() {
+        return getNewVersionURL() + ".xml";
+    }
+
+
+    /**
+     * Connect to the update site and get information about the latest version stored there
+     * @return true if there is a new version available
+     */
+    public VersionInformation checkForUpdate() {
+        String path = getMetaInfoURL();
 
         try {
             HttpResult res = HttpUtils.getURL(new URL(path));
@@ -77,17 +98,119 @@ public class AppUpdateService {
 
             if (res.getResponseCode() != 200) {
                 errorMessage = "(" + Integer.toString(res.getResponseCode()) + ") " + res.getErrorMessage();
-                return false;
+                return null;
             }
 
             versionInformation = readXMLInformation(content);
-            return isNewVersion(versionInformation);
+            versionInformation.setUpdateAvailable(isNewVersion(versionInformation));
+            return versionInformation;
         }
         catch (Exception e) {
-            return false;
+            errorMessage = e.getMessage();
+            return null;
         }
     }
 
+    /**
+     * Start the download process to get a new version.
+     * @return File where the new version will be download to (check getDownloadProgress). If it returns
+     * null, check errorMessage for details about the error
+     */
+    public File downloadNewVersion(VersionInformation vi) {
+        if (TaskManager.instance().findTaskByClass(DownloadTask.class) != null) {
+            errorMessage = "download on progress";
+            return null;
+        }
+
+        Map<String, Object> params =  new HashMap<String, Object>();
+
+        // set URL
+        params.put(DownloadTask.PARAM_URL, getNewVersionURL());
+
+        // set downloaded file
+        File tmpFile;
+        try {
+            tmpFile = File.createTempFile("etbm", ".war");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        params.put(DownloadTask.PARAM_DESTFILE, tmpFile);
+
+        // set version information
+        params.put(DownloadTask.PARAM_VERSIONINFO, vi);
+
+        TaskManager.instance().runTask(DownloadTask.class, params);
+
+        return tmpFile;
+    }
+
+
+    /**
+     * Update the current version by the version pointer by the give downloaded file
+     * @param newVersionFile points to a file that is the version to replace the current version
+     */
+    public boolean updateNewVersion(File newVersionFile) {
+        if (!newVersionFile.exists()) {
+            throw new RuntimeException("File not found: " + newVersionFile);
+        }
+
+        String path = etbmanagerApp.getConfiguration().getJbossPath();
+        if ((path == null) || (path.isEmpty())) {
+            errorMessage = "JBOSS path was not configured. Check system e-TB Manager setup";
+            return false;
+        }
+
+        // mount war file name
+        String countryCode = etbmanagerApp.getCountryCode();
+        String warFileName = "etbmanager";
+        if ((countryCode != null) && (!countryCode.isEmpty())) {
+            warFileName += '-' + countryCode.toLowerCase() + ".war";
+        }
+        else {
+            warFileName += countryCode.toLowerCase() + ".war";
+        }
+
+        File warFile = new File(path, "server/default/deploy/MSH/" + warFileName);
+
+        // current war file exists ?
+        if (!warFile.exists()) {
+            errorMessage = "Current version not found at " + warFile;
+            return false;
+        }
+
+        // can delete current file ?
+        if (!warFile.delete()) {
+            errorMessage = "Error when trying to replace " + warFile;
+            return false;
+        }
+
+        // moving file to the new place
+        if (!newVersionFile.renameTo(warFile)) {
+            errorMessage = "Error when trying to rename " + newVersionFile + " to " + warFile;
+            return false;
+        }
+
+        errorMessage = null;
+        return true;
+    }
+
+    /**
+     * Return the download progress of the new version, or null if no version is being downloaded
+     * @return file progress between 0 and 100 (%) or null, if no file is being downloaded
+     */
+    public Integer getDownloadProgress() {
+        AsyncTask task = TaskManager.instance().findTaskByClass(DownloadTask.class);
+        return task != null? task.getProgress() : null;
+    }
+
+
+    /**
+     * Return the object in charge of downloading the data
+     * @return instance of {@link org.msh.tb.application.update.DownloadTask}
+     */
+    public DownloadTask getDownloadTask() {
+        return (DownloadTask)TaskManager.instance().findTaskByClass(DownloadTask.class);
+    }
 
     /**
      * Compare the version information in the remote repository with the current version
@@ -121,8 +244,6 @@ public class AppUpdateService {
 
             Element root = doc.getDocumentElement();
             root.normalize();
-
-            System.out.println(root.getNodeName());
 
             if (!"package".equals(root.getNodeName())) {
                 abort("Invalid XML document. Package element not found");

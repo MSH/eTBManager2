@@ -1,13 +1,13 @@
 package org.msh.tb.medicines.dispensing;
 
+import org.msh.tb.entities.Batch;
+import org.msh.tb.entities.Medicine;
+import org.msh.tb.entities.Source;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import org.msh.tb.entities.Batch;
-import org.msh.tb.entities.Medicine;
-import org.msh.tb.entities.Source;
 
 /**
  * Table used for displaying the quantity dispensed of medicine, containing information about

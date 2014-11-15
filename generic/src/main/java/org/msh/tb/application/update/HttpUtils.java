@@ -77,17 +77,18 @@ public class HttpUtils {
     /**
      * Download a file from an URL using a listener to get information about the download progress
      * @param url is the URL to download the file from
+     * @param destFile where downloaded file will be saved to (path + filename)
      * @param listener instance of {@link DownloadProgressListener} to get information about download progress
      * @return instance of {@link java.io.File} pointing to the downloaded file
      * @throws Exception
      */
-    protected File downloadFromURL(URL url, DownloadProgressListener listener) throws Exception  {
+    public static HttpResult downloadFromURL(URL url, File destFile, DownloadProgressListener listener) throws Exception  {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
             int responseCode = conn.getResponseCode();
 
             if (responseCode != HttpURLConnection.HTTP_OK)
-                return null;
+                return new HttpResult(responseCode, null, getHttpResponseCodeMessage(responseCode));
 
             String disposition = conn.getHeaderField("Content-Disposition");
             String contentType = conn.getContentType();
@@ -101,16 +102,9 @@ public class HttpUtils {
                             disposition.length() - 1);
                 }
             }
-            System.out.println(contentType);
-            System.out.println(contentLength);
-            System.out.println(filename);
 
             InputStream in = conn.getInputStream();
-            File file =  new File("test.txt"); //new File(App.getWorkingDirectory().getPath(), filename);
-            if (listener != null)
-                listener.onInitDownload(file);
-
-            FileOutputStream fout = new FileOutputStream(file);
+            FileOutputStream fout = new FileOutputStream(destFile);
 
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead = -1;
@@ -126,7 +120,7 @@ public class HttpUtils {
             }
 
             fout.close();
-            return file;
+            return new HttpResult(200, destFile.getAbsolutePath(), null);
 
         } finally {
             conn.disconnect();
