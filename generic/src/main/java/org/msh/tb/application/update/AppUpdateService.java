@@ -68,8 +68,8 @@ public class AppUpdateService {
 
         String warfile = "etbmanager";
         String countryCode = etbmanagerApp.getCountryCode();
-        if (countryCode != null) {
-            warfile += "-" + countryCode.toLowerCase();
+        if ((countryCode != null) && (!countryCode.trim().isEmpty())) {
+            warfile += "-" + countryCode.trim().toLowerCase();
         }
         warfile += ".war";
 
@@ -93,6 +93,7 @@ public class AppUpdateService {
         String path = getMetaInfoURL();
 
         try {
+            System.out.println("Checking new version at " + path);
             HttpResult res = HttpUtils.getURL(new URL(path));
             String content = res.getResult();
 
