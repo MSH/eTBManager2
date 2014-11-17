@@ -220,7 +220,13 @@ public class AppUpdateService {
      * @return true if the remove version is newer than the current one
      */
     protected boolean isNewVersion(VersionInformation vi) {
-        Integer currv = Integer.parseInt(etbmanagerApp.getBuildNumber());
+        Integer currv;
+        try {
+            currv = Integer.parseInt(etbmanagerApp.getBuildNumber());
+        }
+        catch (Exception e) {
+            currv = null;
+        }
         Integer newv = Integer.parseInt( vi.getBuildNumber() );
 
         if ((currv == null) && (newv == null)) {
