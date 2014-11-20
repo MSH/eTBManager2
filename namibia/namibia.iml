@@ -5,7 +5,7 @@
       <configuration>
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
-          <root url="file://$MODULE_DIR$/../generic/src/main/webapp" relative="/" />
+          <root url="file://$MODULE_DIR$/../full/src/main/webapp" relative="/" />
         </webroots>
         <sourceRoots>
           <root url="file://$MODULE_DIR$/src/main/java" />

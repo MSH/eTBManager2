@@ -31,7 +31,7 @@
 		<resources>
 			<!-- will filter just the persistence.xml -->
 			<resource>
-				<directory>../generic/src/main/resources</directory>
+				<directory>../full/src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
 					<include>META-INF/persistence.xml</include>
@@ -39,7 +39,7 @@
 			</resource>
 			<!-- Will include all other resources -->
 			<resource>
-				<directory>../generic/src/main/resources</directory>
+				<directory>../full/src/main/resources</directory>
 				<excludes>
 					<exclude>META-INF/persistence.xml</exclude>
 				</excludes>
@@ -61,10 +61,10 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>../generic/src/main/java</source>
-								<source>../generic/src/org.msh.reports/java</source>
-								<source>../generic/src/client/java</source>
-								<source>../generic/src/custom/ng</source>
+								<source>../full/src/main/java</source>
+								<source>../full/src/org.msh.reports/java</source>
+								<source>../full/src/client/java</source>
+								<source>../full/src/custom/ng</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -84,14 +84,14 @@
 						</resource>
 						<resource>
 							<filtering>true</filtering>
-							<directory>../generic/src/main/webapp</directory>
+							<directory>../full/src/main/webapp</directory>
 							<includes>
 								<include>**/web.xml</include>
 								<include>**/components.xml</include>
 							</includes>
 						</resource>
 						<resource>
-							<directory>../generic/src/main/webapp</directory>
+							<directory>../full/src/main/webapp</directory>
 							<excludes>
 								<exclude>**/web.xml</exclude>
 							</excludes>
