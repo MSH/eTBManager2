@@ -11,12 +11,11 @@
 	</parent>
 
 	<groupId>org.msh</groupId>
-	<artifactId>full</artifactId>
+	<artifactId>generic</artifactId>
 	<version>2.1.0</version>
 	<packaging>war</packaging>
 	
-	<name>eTB Manager Full version ${project.version}</name>
-    <description>e-TB Manager containing the generic version + customized versions for each country implemented</description>
+	<name>eTB Manager Generic version ${project.version}</name>
 
 	<build>
 		<finalName>${war.filename}</finalName>
@@ -24,7 +23,7 @@
 		<resources>
 			<!-- will filter just the persistence.xml -->
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>../full/src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
 					<include>META-INF/persistence.xml</include>
@@ -32,7 +31,7 @@
 			</resource>
 			<!-- Will include all other resources -->
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>../full/src/main/resources</directory>
 				<excludes>
 					<exclude>META-INF/persistence.xml</exclude>
 				</excludes>
@@ -54,15 +53,8 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>src/main/java</source>
-								<source>src/client/java</source>
-                                <source>src/custom/kh</source>
-								<source>src/custom/na</source>
-								<source>src/custom/uz</source>
-								<source>src/custom/vi</source>
-								<source>src/custom/bd</source>
-								<source>src/custom/md</source>
-								<source>src/custom/ng</source>
+								<source>../full/src/main/java</source>
+								<source>../full/src/client/java</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -77,13 +69,19 @@
 					<webResources>
 						<resource>
 							<filtering>true</filtering>
-							<directory>src/main/webapp</directory>
+							<directory>../full/src/main/webapp</directory>
 							<includes>
 								<include>**/web.xml</include>
 								<include>**/components.xml</include>
 								<!-- include any other file types you want to filter -->
 							</includes>
 						</resource>
+                        <resource>
+                            <directory>../full/src/main/webapp</directory>
+                            <excludes>
+                                <exclude>/custom/**/*</exclude>
+                            </excludes>
+                        </resource>
 					</webResources>
 					<packagingExcludes>WEB-INF/deploy/**</packagingExcludes>
                     <archive>
@@ -128,82 +126,5 @@
 						
 		</plugins>
 	</build>
-	
-	<reporting>
-		<plugins>
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.7</version>
-			</plugin>
-
-			<!-- Generate org.msh.reports about testing results -->
- 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-	 	       	<artifactId>maven-surefire-plugin</artifactId>
-	 	    	<version>2.17</version>
-      		</plugin>
-
-			<!-- Generate javadoc for the project -->
-			<plugin>
-		        <artifactId>maven-javadoc-plugin</artifactId>
-        		<version>2.9</version>
-		        <configuration>
-		        	<show>private</show>
-		       		<doctitle>eTB Manager version ${project.version}</doctitle>
-		        </configuration>
-		    </plugin>
-
-			<!-- Required by PMD and CPD -->
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>2.3</version>
-            </plugin>
-
-			<!-- Generate "PMD" and "CPD" org.msh.reports -->
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.7.1</version>
-                <configuration>
-                	<sourceEncoding>utf-8</sourceEncoding>
-                	<minimumTokens>100</minimumTokens>
-                	<targetJdk>1.5</targetJdk>
-                </configuration>
-            </plugin>
-
-			<!-- Check localization standards compliance -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-		        <artifactId>l10n-maven-plugin</artifactId>
-		        <version>1.0-alpha-2</version>
-		        <configuration>
-		    	    <locales>
-		   	         	<locale>en</locale>
-		   	         	<locale>pt_BR</locale>
-	    	       	 	<locale>ru</locale>
-		            	<locale>in</locale>
-		        	    <locale>vi</locale>
-          			</locales>
-        		</configuration>
-			</plugin>
-
-			<!-- Check for minimum documentation standards -->
-			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-docck-plugin</artifactId>
-        		<version>1.0</version>
-      		</plugin>
-
-			<!-- JDEpendent plugin - generate dependencies report -->
-			<plugin>
-        		<groupId>org.codehaus.mojo</groupId>
-        		<artifactId>jdepend-maven-plugin</artifactId>
-                <version>2.0</version>
-      		</plugin>
-		</plugins>
- 
-	</reporting>
 	
 </project>
