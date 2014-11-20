@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Vendor: MSH - Management Science for Health
+Build-Number: 
+Implementation-Title: eTB Manager Generic version 2.1.0
+Implementation-Version: 2.1.0
+Built-By: 206-225-84-37$
+Build-Jdk: 1.6.0_45
+Created-By: Apache Maven 3.2.2
+Built-Date: 2014-11-17_19:16
+Country-Code: 
+Archiver-Version: Plexus Archiver

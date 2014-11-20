@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Vendor: MSH - Management Science for Health
-Build-Number: 4710
-Implementation-Title: eTB Manager Cambodia version
-Implementation-Version: 2.1.0
-Built-By: ricardo
-Build-Jdk: 1.7.0_65
-Created-By: Apache Maven 3.0.5
-Built-Date: 2014-10-27_17:42
