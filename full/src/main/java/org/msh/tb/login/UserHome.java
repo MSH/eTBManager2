@@ -69,6 +69,8 @@ public class UserHome extends EntityHomeEx<User> {
 		if (loginUserWorkspace.getHealthSystem() != null)
 			uw.setHealthSystem(loginUserWorkspace.getHealthSystem());
 
+        user.setEmail( user.getEmail().trim() );
+
 		// get user view
 		convertView();
 
@@ -127,9 +129,8 @@ public class UserHome extends EntityHomeEx<User> {
 
 		return ret;
 	}
-	
 
-	
+
 	/**
 	 * Valida a conta do usu�rio
 	 * @param context
