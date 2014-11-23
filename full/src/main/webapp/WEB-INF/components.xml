@@ -9,8 +9,10 @@
             xmlns:international="http://jboss.com/products/seam/international"
             xmlns:async="http://jboss.com/products/seam/async"
             xmlns:web="http://jboss.com/products/seam/web"
+            xmlns:resteasy="http://jboss.com/products/seam/resteasy"
             xsi:schemaLocation=
-                    "http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd
+                    "http://jboss.com/products/seam/resteasy http://jboss.com/products/seam/resteasy-2.1.xsd
+                    http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.1.xsd
                  http://jboss.com/products/seam/async http://jboss.com/products/seam/async-2.1.xsd
                  http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.1.xsd 
 
@@ -23,52 +25,55 @@
                  http://jboss.com/products/seam/international http://jboss.com/products/seam/international-2.1.xsd
 
                  http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.1.xsd
-                 http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.1.xsd">
+                 http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.1.xsd"
+        >
 
-   <core:init debug="${app.development}" jndi-pattern="@jndiPattern@"/>
+    <core:init debug="${app.development}" jndi-pattern="@jndiPattern@"/>
 
-   <core:manager concurrent-request-timeout="500" 
-                 conversation-timeout="120000"
-                 default-flush-mode="MANUAL" 
-                 conversation-id-parameter="cid"
-                 parent-conversation-id-parameter="pid" />
-                 
-   <web:rewrite-filter view-mapping="*.seam" />
+    <core:manager concurrent-request-timeout="500"
+                  conversation-timeout="120000"
+                  default-flush-mode="MANUAL"
+                  conversation-id-parameter="cid"
+                  parent-conversation-id-parameter="pid" />
 
-   <async:quartz-dispatcher/>
- 
-   <persistence:managed-persistence-context name="entityManager"
-                                     auto-create="true"
-                          entity-manager-factory="#{mdrtbEntityManagerFactory}"/>
+    <web:rewrite-filter view-mapping="*.seam" />
 
-   <persistence:entity-manager-factory name="mdrtbEntityManagerFactory" 
-                      persistence-unit-name="mdrtb"/>
-   
-   <security:identity authenticate-method="#{authenticator.authenticate}" remember-me="true" />
+    <resteasy:application resource-path-prefix="/api" />
 
-	<component class="org.jboss.seam.web.MultipartFilter">
-		<property name="createTempFiles">true</property>
-		<property name="maxRequestSize">1000000</property>
-	</component>
-                        
-   <event type="org.jboss.seam.security.notLoggedIn">
-       <action execute="#{redirect.captureCurrentView}"/>
-   </event>
-   <event type="org.jboss.seam.security.loginSuccessful">
-       <action execute="#{redirect.returnToCapturedView}"/>
-   </event>
-   
-	<mail:mail-session session-jndi-name="java:/mail/etbMail" />
+    <async:quartz-dispatcher/>
+
+    <persistence:managed-persistence-context name="entityManager"
+                                             auto-create="true"
+                                             entity-manager-factory="#{mdrtbEntityManagerFactory}"/>
+
+    <persistence:entity-manager-factory name="mdrtbEntityManagerFactory"
+                                        persistence-unit-name="mdrtb"/>
+
+    <security:identity authenticate-method="#{authenticator.authenticate}" remember-me="true" />
+
+    <component class="org.jboss.seam.web.MultipartFilter">
+        <property name="createTempFiles">true</property>
+        <property name="maxRequestSize">1000000</property>
+    </component>
+
+    <event type="org.jboss.seam.security.notLoggedIn">
+        <action execute="#{redirect.captureCurrentView}"/>
+    </event>
+    <event type="org.jboss.seam.security.loginSuccessful">
+        <action execute="#{redirect.returnToCapturedView}"/>
+    </event>
+
+    <mail:mail-session session-jndi-name="java:/mail/etbMail" />
 
 
 
-	<framework:entity-query name="allusers" ejbql="from User u" order="u.name"/>
-	
-    <component name="org.jboss.seam.document.documentStore" > 
+    <framework:entity-query name="allusers" ejbql="from User u" order="u.name"/>
+
+    <component name="org.jboss.seam.document.documentStore" >
         <property name="useExtensions">true</property>
         <property name="errorPage">/pdfMissing.seam</property>
     </component>
 
-	<international:locale-selector cookie-enabled="true"/>
+    <international:locale-selector cookie-enabled="true"/>
 
 </components>

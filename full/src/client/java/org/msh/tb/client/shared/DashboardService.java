@@ -13,7 +13,7 @@ import org.msh.tb.client.shared.model.CReportUIData;
  * @author Ricardo Memoria
  *
  */
-@RemoteServiceRelativePath("../seam/resource/gwtRpc")
+@RemoteServiceRelativePath("../resources/gwtRpc")
 public interface DashboardService extends RemoteService{
 
 	/**

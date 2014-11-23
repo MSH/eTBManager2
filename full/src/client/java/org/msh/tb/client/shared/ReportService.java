@@ -14,7 +14,7 @@ import java.util.HashMap;
  * @author Ricardo Memoria
  *
  */
-@RemoteServiceRelativePath("../seam/resource/gwtRpc")
+@RemoteServiceRelativePath("../resources/gwtRpc")
 public interface ReportService extends RemoteService {
 	
 	/**

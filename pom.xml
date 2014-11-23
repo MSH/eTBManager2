@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.msh</groupId>
 	<artifactId>etbmanager</artifactId>
-	<version>2.1.0</version>
+	<version>2.2.0</version>
 	<packaging>pom</packaging>
 	<name>eTB Manager</name>
 	<description>eTB Manager Web Suite</description>
@@ -123,6 +123,11 @@
 			<artifactId>jboss-seam-mail</artifactId>
 			<version>2.2.1.Final</version>
 		</dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam-resteasy</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
 		<dependency>
 			<groupId>org.jboss.seam</groupId>
 			<artifactId>jboss-seam-ioc</artifactId>
@@ -258,6 +263,18 @@
 			<artifactId>gwt-seam</artifactId>
 			<version>0.3.1</version>
 		</dependency>
+
+        <!-- Rest support using resteasy -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <version>2.2.1.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <version>2.2.1.GA</version>
+        </dependency>
 
 		<!-- These dependencies are declared here as provided, otherwise they'll 
 			be included in the war lib -->
