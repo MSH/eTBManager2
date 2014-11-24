@@ -14,7 +14,7 @@ import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.tbunits.TBUnitSelection;
-import org.msh.utils.Passwords;
+import org.msh.utils.UserUtils;
 import org.msh.utils.date.DateUtils;
 
 import javax.persistence.EntityManager;
@@ -136,7 +136,7 @@ public class UserSession {
     		.createQuery("from UserLogin ul " +
     				"join fetch ul.user join fetch ul.workspace " +
     				"where ul.sessionId = :ses")
-    		.setParameter("ses", Passwords.hashPassword(sessionId))
+    		.setParameter("ses", UserUtils.hashPassword(sessionId))
     		.getResultList();
     	
     	if (lst.size() == 0)
@@ -267,7 +267,7 @@ public class UserSession {
 		UUID uid = UUID.randomUUID();
 		sessionId = uid.toString();
 		sessionId = sessionId.replace("-", "");
-        userLogin.setSessionId( Passwords.hashPassword(sessionId) );
+        userLogin.setSessionId( UserUtils.hashPassword(sessionId) );
 
         return uid.toString();
 	}

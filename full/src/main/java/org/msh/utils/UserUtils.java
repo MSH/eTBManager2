@@ -3,8 +3,16 @@ package org.msh.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.regex.Pattern;
 
-public class Passwords {
+public class UserUtils {
+
+    private static final String EMAIL_PATTERN =
+            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+    // keep it compiled
+    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
 	/**
 	 * Aplica hash MD5 na senha informada
@@ -48,4 +56,14 @@ public class Passwords {
 		
 		return sen;
 	}
+
+
+    /**
+     * Check if e-mail address is valid
+     * @param email the e-mail address to be validated
+     * @return true if e-mail is valid
+     */
+    public static final boolean isValidEmail(String email) {
+        return pattern.matcher(email).matches();
+    }
 }

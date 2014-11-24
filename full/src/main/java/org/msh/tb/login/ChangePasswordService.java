@@ -7,7 +7,7 @@ import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.enums.UserState;
-import org.msh.utils.Passwords;
+import org.msh.utils.UserUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -34,7 +34,7 @@ public class ChangePasswordService {
     private String newPassword2;
 
 	public String execute() {
-		String pwd = Passwords.hashPassword(password);
+		String pwd = UserUtils.hashPassword(password);
 		
 		User user = entityManager.find(User.class, userLogin.getUser().getId());
 
@@ -69,7 +69,7 @@ public class ChangePasswordService {
 		if (user.getState() == UserState.BLOCKED)
 			throw new RuntimeException("User is blocked");
 
-		String pwd = Passwords.hashPassword(newPassword1);
+		String pwd = UserUtils.hashPassword(newPassword1);
 		user.setPassword(pwd);
 		user.setState(UserState.ACTIVE);
 		entityManager.persist(user);

@@ -15,7 +15,7 @@ import org.msh.tb.misc.DmSystemHome;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.userprofile.UserProfilesQuery;
-import org.msh.utils.Passwords;
+import org.msh.utils.UserUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -99,9 +99,9 @@ public class UserHome extends EntityHomeEx<User> {
 			String senha = null;
 			if (password != null)
 				 senha = password;
-			else senha = Passwords.generateNewPassword();
+			else senha = UserUtils.generateNewPassword();
 			
-			user.setPassword(Passwords.hashPassword(senha));
+			user.setPassword(UserUtils.hashPassword(senha));
 			Contexts.getEventContext().set("password", senha);
 			enviaMailNovoUsuario();
 
@@ -193,8 +193,8 @@ public class UserHome extends EntityHomeEx<User> {
 
 		
 	public String sendNewPassword() {
-		String senha = Passwords.generateNewPassword();
-		getUserInstance().setPassword(Passwords.hashPassword(senha));
+		String senha = UserUtils.generateNewPassword();
+		getUserInstance().setPassword(UserUtils.hashPassword(senha));
 		Contexts.getEventContext().set("password", senha);
 
 		User user = getUserInstance();

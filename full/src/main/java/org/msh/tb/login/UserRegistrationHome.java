@@ -11,7 +11,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.misc.DmSystemHome;
-import org.msh.utils.Passwords;
+import org.msh.utils.UserUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -52,8 +52,8 @@ public class UserRegistrationHome {
 		user.setRegistrationDate(new Date());
 		user.setState(UserState.ACTIVE);
 
-		String password = Passwords.generateNewPassword();
-		user.setPassword(Passwords.hashPassword(password));
+		String password = UserUtils.generateNewPassword();
+		user.setPassword(UserUtils.hashPassword(password));
 		Contexts.getEventContext().set("password", password);
 		Contexts.getEventContext().set("user", user);
 		

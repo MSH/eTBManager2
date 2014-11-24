@@ -3,6 +3,7 @@ package org.msh.tb.webservices;
 import org.jboss.seam.Component;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
+import org.msh.etbm.services.auth.AuthenticationService;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.login.AuthenticatorBean;
 import org.msh.tb.login.UserSession;
@@ -36,20 +37,16 @@ public class AuthenticatorService {
 	public Response login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="workspaceId") int workspaceid) {
 		Response resp = new Response();
 		try {
-			AuthenticatorBean authenticator = (AuthenticatorBean)Component.getInstance("authenticator");
-			authenticator.setWorkspaceId(workspaceid);
-			authenticator.setTryRestorePrevSession(true);
+            AuthenticationService srv = (AuthenticationService)Component.getInstance("authenticationService");
+            String token = srv.login(username, password, workspaceid);
 
-			Credentials credentials = Identity.instance().getCredentials();
-			credentials.setUsername(username);
-			credentials.setPassword(password);
-			Identity.instance().login();
-
-			if (Identity.instance().isLoggedIn()) {
+			if (token != null) {
 				resp.setResult(UserSession.instance().getSessionId());
 				resp.setErrorno(Response.RESP_SUCCESS);
 			}
-			else resp.setErrorno(Response.RESP_AUTHENTICATION_FAIL);
+			else {
+                resp.setErrorno(Response.RESP_AUTHENTICATION_FAIL);
+            }
 
 		} catch (Exception e) {
 			resp.setErrormsg(e.getMessage());

@@ -9,7 +9,7 @@ import org.jboss.seam.security.Identity;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.UserState;
-import org.msh.utils.Passwords;
+import org.msh.utils.UserUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -94,7 +94,7 @@ public class AuthenticatorBean {
      * @return instance of the {@link UserWorkspace} class representing the validated user, or null if it's not found
      */
     public UserWorkspace validateUserPassword(String username, String password, Integer workspaceId) {
-    	String pwdhash = Passwords.hashPassword(password);
+    	String pwdhash = UserUtils.hashPassword(password);
 
     	// no workspace was defined ?
     	if (workspaceId == null) {
