@@ -21,6 +21,7 @@ public class DashboardServiceGWT implements DashboardService {
 	@Override
 	@WebRemote
 	public CReportUIData initialize() {
+        ReportResources.instance().prepareDashboard();
         CReportUIData data = ReportGenerator.createInitializationData(true);
         return data;
 		// get list of indicators

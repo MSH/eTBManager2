@@ -263,4 +263,10 @@
             where prof.name like 'Administr%';
         </sql>
     </changeSet>
+    
+    <changeSet id="v2.1.10" author="rmemoria">
+        <addColumn tableName="systemconfig">
+            <column name="pubds_workspace_id" type="int"></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

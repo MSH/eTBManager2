@@ -110,7 +110,10 @@ public class EtbmanagerApp {
 		
 		List<SystemConfig> lst = entityManager.createQuery("from SystemConfig s where s.id = 1").getResultList();
 		if (lst.size() > 0) {
-			return lst.get(0);
+            SystemConfig cfg = lst.get(0);
+            cfg.getWorkspace();
+            cfg.getPubDashboardWorkspace();
+			return cfg;
 		}
 
 		SystemConfig cfg = new SystemConfig();

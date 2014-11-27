@@ -25,8 +25,8 @@ public class AuthenticationRest {
      * @return the token ID inside the standard result
      */
     @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @POST
     public StandardResult login(AuthenticationForm form) {
         String token = authenticationService.login(form.getLogin(), form.getPassword(), form.getWorkspace());

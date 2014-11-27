@@ -1,5 +1,6 @@
 package org.msh.reports;
 
+import org.jboss.seam.security.Identity;
 import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.filters.Filter;
@@ -169,26 +170,27 @@ public class IndicatorReport {
      * @param sqlBuilder instance of SqlBuilder that will create the query
      */
     private void applyUserViewRestrictions(SqlBuilder sqlBuilder) {
-        UserWorkspace user = UserSession.getUserWorkspace();
+        if (Identity.instance().isLoggedIn()) {
+            UserWorkspace user = UserSession.getUserWorkspace();
 
-        // user is limited to just an administrative unit ?
-        if (user.getView() == UserView.ADMINUNIT) {
-            AdministrativeUnit au = user.getAdminUnit();
-            if (au != null) {
-                TableJoin join = sqlBuilder.join("tbunit", "tbcase.owner_unit_id").join("administrativeunit", "tbunit.id");
-                sqlBuilder.addRestriction("administrativeunit.code like :code_1");
-                sqlBuilder.addParameter("code_1", au.getCode() + "%");
+            // user is limited to just an administrative unit ?
+            if (user.getView() == UserView.ADMINUNIT) {
+                AdministrativeUnit au = user.getAdminUnit();
+                if (au != null) {
+                    TableJoin join = sqlBuilder.join("tbunit", "tbcase.owner_unit_id").join("administrativeunit", "tbunit.id");
+                    sqlBuilder.addRestriction("administrativeunit.code like :code_1");
+                    sqlBuilder.addParameter("code_1", au.getCode() + "%");
+                }
+                return;
             }
-            return;
-        }
 
-        // user view is limited to just a health facility ?
-        if (user.getView() == UserView.TBUNIT) {
-            Tbunit unit = user.getTbunit();
-            if (unit != null) {
-                sqlBuilder.addRestriction("tbcase.owner_unit_id = " + unit.getId());
+            // user view is limited to just a health facility ?
+            if (user.getView() == UserView.TBUNIT) {
+                Tbunit unit = user.getTbunit();
+                if (unit != null) {
+                    sqlBuilder.addRestriction("tbcase.owner_unit_id = " + unit.getId());
+                }
             }
-            return;
         }
     }
 

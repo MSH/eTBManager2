@@ -25,6 +25,7 @@ public class SystemConfigHome {
 	
 	private SystemConfig systemConfig;
 	private Workspace workspace;
+    private Workspace pubdsWorkspace;
 	private List<Tbunit> units;
 	private List<UserProfile> profiles;
 	private TransactionLogService logService;
@@ -53,6 +54,8 @@ public class SystemConfigHome {
 			return "error";
 
 		systemConfig.setWorkspace(workspace);
+
+        systemConfig.setPubDashboardWorkspace(pubdsWorkspace);
 		
 		entityManager.persist(systemConfig);
 		entityManager.flush();
@@ -117,6 +120,7 @@ public class SystemConfigHome {
 	public void initializeEditing() {
 		if (workspace == null) {
 			workspace = getSystemConfig().getWorkspace();
+            pubdsWorkspace = getSystemConfig().getPubDashboardWorkspace();
 			logService = new TransactionLogService();
 			logService.recordEntityState(getSystemConfig(), Operation.EDIT);
 		}
@@ -131,4 +135,12 @@ public class SystemConfigHome {
 		localeSelector.setLanguage("pt_BR");
 		localeSelector.select();
 	}
+
+    public Workspace getPubdsWorkspace() {
+        return pubdsWorkspace;
+    }
+
+    public void setPubdsWorkspace(Workspace pubdsWorkspace) {
+        this.pubdsWorkspace = pubdsWorkspace;
+    }
 }

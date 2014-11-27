@@ -38,7 +38,17 @@
 
     <web:rewrite-filter view-mapping="*.seam" />
 
-    <resteasy:application resource-path-prefix="/api" />
+    <resteasy:application resource-path-prefix="/api" >
+        <resteasy:media-type-mappings>
+            <key>json</key>
+            <value>application/json</value>
+        </resteasy:media-type-mappings>
+
+        <resteasy:media-type-mappings>
+            <key>xml</key>
+            <value>application/xml</value>
+        </resteasy:media-type-mappings>
+    </resteasy:application>
 
     <async:quartz-dispatcher/>
 

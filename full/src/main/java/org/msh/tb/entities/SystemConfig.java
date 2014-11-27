@@ -59,6 +59,10 @@ public class SystemConfig {
     @Column(length = 250)
     private String jbossPath;
 
+    @ManyToOne
+    @JoinColumn(name="PUBDS_WORKSPACE_ID")
+    private Workspace pubDashboardWorkspace;
+
 	/**
 	 * @return the id
 	 */
@@ -240,5 +244,13 @@ public class SystemConfig {
 
     public void setJbossPath(String jbossPath) {
         this.jbossPath = jbossPath;
+    }
+
+    public Workspace getPubDashboardWorkspace() {
+        return pubDashboardWorkspace;
+    }
+
+    public void setPubDashboardWorkspace(Workspace pubDashboardWorkspace) {
+        this.pubDashboardWorkspace = pubDashboardWorkspace;
     }
 }

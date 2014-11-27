@@ -3,8 +3,13 @@ package org.msh.tb.reports2;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.contexts.Contexts;
+import org.jboss.seam.security.Identity;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.variables.Variable;
+import org.msh.tb.application.EtbmanagerApp;
+import org.msh.tb.entities.SystemConfig;
+import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.*;
 import org.msh.tb.reports2.VariableImpl.UnitType;
@@ -339,11 +344,35 @@ public class ReportResources {
 	 */
 	public static ReportResources instance() {
 		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
-		if (ws.getExtension() != null) {
+		if ((ws != null) && (ws.getExtension() != null)) {
 			ReportResources res = (ReportResources)Component.getInstance("reportResources." + ws.getExtension());
 			if (res != null)
 				return res;
 		}
 		return (ReportResources)Component.getInstance("reportResources");
 	}
+
+
+    /**
+     * Prepare the environment for the execution of the dashboard. The dashboard can
+     * be generated in a public view, so some variables must be included in the event scope
+     */
+    public void prepareDashboard() {
+        if (Identity.instance().isLoggedIn()) {
+            return;
+        }
+
+        SystemConfig cfg = EtbmanagerApp.instance().getConfiguration();
+        if (cfg.getPubDashboardWorkspace() == null) {
+            throw new RuntimeException("Not authorized");
+        }
+
+        Contexts.getEventContext().set("defaultWorkspace", cfg.getPubDashboardWorkspace());
+
+        UserWorkspace uw = new UserWorkspace();
+        uw.setWorkspace(cfg.getPubDashboardWorkspace());
+        uw.setView(UserView.COUNTRY);
+
+        Contexts.getEventContext().set("userWorkspace", uw);
+    }
 }

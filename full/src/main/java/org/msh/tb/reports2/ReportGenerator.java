@@ -5,6 +5,7 @@ package org.msh.tb.reports2;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
+import org.jboss.seam.security.Identity;
 import org.msh.reports.IndicatorReport;
 import org.msh.reports.datatable.Row;
 import org.msh.reports.filters.Filter;
@@ -110,8 +111,17 @@ public class ReportGenerator {
         }
 
 		// get the current user
-		User user = UserSession.getUser();
-		
+		User user;
+        if (Identity.instance().isLoggedIn()) {
+            user = UserSession.getUser();
+        }
+        else {
+            if (!dashboard) {
+                throw new RuntimeException("Not authorized");
+            }
+            user = null;
+        }
+
 		ArrayList<CReport> reps = new ArrayList<CReport>();
 		
 		for (Report rep: lst) {

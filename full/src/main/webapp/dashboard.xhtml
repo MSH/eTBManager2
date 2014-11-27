@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+<head>
+    <title>Dashboard</title>
+    <meta http-equiv="keywords" content="eTB Manager,MSH,DR-TB,TB,Tuberculosis,Second Line,First Line" />
+    <meta http-equiv="description" content="eTB Manager System" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta name="gwt:property" content="locale=#{locale}" />
+
+    <script src="#{request.contextPath}/a4j/g/3_3_3.Finalorg/richfaces/renderkit/html/scripts/jquery/jquery.js" type="text/javascript"></script>
+    <link class="user" href="#{request.contextPath}/public/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="#{request.contextPath}/appgwt/appgwt.nocache.js" type="text/javascript"></script>
+    <script src="#{request.contextPath}/public/js/highchart/highcharts.js" type="text/javascript"></script>
+    <link href="#{request.contextPath}/public/themes/green4/skin.css?v=5" rel="stylesheet" type="text/css" media="screen" />
+    <link href="#{request.contextPath}/public/themes/green4/print.css?v=5" rel="stylesheet" type="text/css" media="print" />
+</head>
+
+<body>
+
+<script type="text/javascript">
+    <!--
+    window.gwtmodule='dashboard';
+    window.decSeparator = '#{timezones.decimalSeparator}';
+    window.appcontextpath='#{request.contextPath}';
+    window.etbmlang='#{localeSelector.localeString}';
+-->
+</script>
+
+<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+
+<div id="entryPointId" >
+    <div style="text-align:center;font-size:1.4em;margin-top:50px;margn-bottom:50px;">
+        <div class="wait-icon2"></div>Loading...
+    </div>
+</div>
+
+
+</body>
+</html>

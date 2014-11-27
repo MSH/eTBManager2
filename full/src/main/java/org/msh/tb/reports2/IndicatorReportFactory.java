@@ -50,8 +50,8 @@ public class IndicatorReportFactory implements ReportResourceProvider {
 		IndicatorReport rep = new IndicatorReport();
 		rep.setTableName("tbcase");
 		rep.addTableJoin("patient_id", "patient.id");
-		
-		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
+
+        Workspace ws = (Workspace)Component.getInstance("defaultWorkspace");
 		rep.addRestriction("patient.workspace_id = " + ws.getId());
 		return rep;
 	}

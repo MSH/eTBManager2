@@ -7,7 +7,6 @@ import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
 import org.msh.tb.login.AuthenticatorBean;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.webservices.Response;
 
 /**
  * Created by ricardo on 24/11/14.

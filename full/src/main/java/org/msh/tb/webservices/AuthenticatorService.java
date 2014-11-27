@@ -1,8 +1,6 @@
 package org.msh.tb.webservices;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.security.Credentials;
-import org.jboss.seam.security.Identity;
 import org.msh.etbm.services.auth.AuthenticationService;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.login.AuthenticatorBean;

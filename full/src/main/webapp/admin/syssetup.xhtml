@@ -72,6 +72,7 @@
         </h:panelGroup>
 
         <hr/>
+        #{messages['admin.syssetup.links']}
         <s:decorate template="/layout/edit.xhtml" >
             <ui:define name="label">#{messages['SystemConfig.otherLinks']}:</ui:define>
             <h:inputTextarea value="#{systemConfigHome.systemConfig.otherLinks}" style="width:400px;height:100px"></h:inputTextarea>
@@ -80,6 +81,7 @@
 
         <hr/>
 
+        #{messages['admin.syssetup.sysupdate']}
         <s:decorate template="/layout/edit.xhtml" >
             <ui:define name="label">#{messages['SystemConfig.updateSite']}:</ui:define>
             <h:inputText value="#{systemConfigHome.systemConfig.updateSite}" style="width:500px"></h:inputText>
@@ -89,6 +91,17 @@
             <ui:define name="label">#{messages['SystemConfig.jbossPath']}:</ui:define>
             <h:inputText value="#{systemConfigHome.systemConfig.jbossPath}" style="width:500px"></h:inputText>
             <div class="hint">#{messages['SystemConfig.jbossPath.hint']}</div>
+        </s:decorate>
+
+        <hr/>
+
+        #{messages['admin.syssetup.pubdashboard']}
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['SystemConfig.pubDashboardWorkspace']}:</ui:define>
+            <h:selectOneMenu value="#{systemConfigHome.pubdsWorkspace}" required="true">
+                <s:selectItems value="#{workspaces}" var="it" label="#{it.name}" noSelectionLabel="- #{messages['global.disabled']} -"/>
+                <s:convertEntity />
+            </h:selectOneMenu>
         </s:decorate>
 
 

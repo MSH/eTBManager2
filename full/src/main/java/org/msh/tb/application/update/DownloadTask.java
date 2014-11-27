@@ -1,7 +1,6 @@
 package org.msh.tb.application.update;
 
 import org.msh.tb.application.tasks.AsyncTaskImpl;
-import org.msh.tb.login.SessionData;
 
 import java.io.File;
 import java.net.MalformedURLException;

@@ -36,6 +36,9 @@ public class ReportServiceGWT implements ReportService {
 	@Override
 	@WebRemote
 	public CIndicatorResponse executeIndicator(CIndicatorRequest reportData) {
+        if (reportData.isDashboard()) {
+            ReportResources.instance().prepareDashboard();
+        }
 		return ReportGenerator.generateReport(reportData);
 	}
 

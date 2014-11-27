@@ -4,7 +4,6 @@ import org.jboss.seam.annotations.Name;
 import org.msh.etbm.services.pub.SendNewPasswordService;
 import org.msh.etbm.services.pub.UserRegistrationService;
 import org.msh.tb.application.App;
-import org.msh.tb.login.SendPasswordBean;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;

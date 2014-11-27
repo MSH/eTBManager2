@@ -4,8 +4,10 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.SystemConfigHome;
 
-import javax.persistence.EntityManager;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.Date;
 
 /**
@@ -19,10 +21,9 @@ public class RestTest {
     SystemConfigHome systemConfigHome;
 
     @GET
-    @Path("/hello/{id}")
-    @Produces("application/json")
-    public RestData hello(@PathParam("id") Integer id) {
-        System.out.println("id = " + id);
+    @Path("/hello")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestData hello() {
         RestData data = new RestData();
         data.setAge(40);
         data.setBirthDate(new Date());

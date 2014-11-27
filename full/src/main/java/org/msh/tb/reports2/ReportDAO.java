@@ -53,9 +53,9 @@ public class ReportDAO {
 	 * @return list of {@link Report} objects
 	 */
 	public List<Report> getDashboardIndicators() {
-		return entityManager
-			.createQuery("from Report where dashboard = true and workspace.id = #{defaultWorkspace.id} order by title")
-			.getResultList();
+        return entityManager
+                .createQuery("from Report where dashboard = true and workspace.id = #{defaultWorkspace.id} order by title")
+                .getResultList();
 	}
 	
 	@Transactional
