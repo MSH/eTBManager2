@@ -24,7 +24,7 @@ public class NoCacheFilter implements Filter {
 		String path = r.getServletPath();
 
 		// Inform the browser that page should not be stored in cache
-		if (path.endsWith(".seam")) 
+		if ((path.endsWith(".seam")) || (path.contains("nocache")))
 		{
 			((HttpServletResponse)response).setHeader("Cache-Control","no-store");
 			((HttpServletResponse)response).setHeader("Pragma","no-cache");
