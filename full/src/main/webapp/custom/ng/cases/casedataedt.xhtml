@@ -235,22 +235,22 @@
 	</div>
 	
 	  <div id="showconfcasefields" style="clear:both;">
-	 <s:decorate template="/layout/dateedit.xhtml">
-    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
-    	<ui:param name="required" value="#{tbcase.validated}" /> 
-    	<!-- <ui:param name="required" value="true" /> -->
-    	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" />	
-    	<ui:param name="checkDeathDate" value="true" />
-    	</s:decorate>
-    	
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
-    			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-		</s:decorate>
-	
+          <s:decorate template="/layout/dateedit.xhtml">
+              <ui:define name="label">#{messages['TbCase.diagnosisDate']}:<span style="color:red;">*</span></ui:define>
+              <ui:param name="edtid" value="diagdateedt" />
+              <ui:param name="required" value="false" />
+              <ui:param name="datefield" value="#{tbcase.diagnosisDate}" />
+              <ui:param name="checkDeathDate" value="true" />
+          </s:decorate>
+
+          <s:decorate template="/layout/edit.xhtml">
+              <ui:define name="label">#{messages['PatientType']}:</ui:define>
+              <h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
+                  <s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                  <s:convertEnum />
+              </h:selectOneMenu>
+          </s:decorate>
+
 	<rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
 
 		<div id="patientTypeOther">

@@ -25,7 +25,7 @@
 	<a:commandLink action="#{caseEditingHome.saveEditing}" styleClass="button" onclick="if (!disableButton(this)) return false;" reRender="main,messages">
 		<span>#{messages['form.save']}</span>
 	</a:commandLink>
-		<a:commandLink  action="cancel" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
+		<a:commandLink  action="cancel" styleClass="button-alt" ajaxSingle="true" onclick="if (!disableButton(this)) return false;" >
 			<span>#{messages['form.cancel']}</span>
 		</a:commandLink>
 	</div>	

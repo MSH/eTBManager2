@@ -435,7 +435,7 @@ public class CaseEditingHome {
 		}
 		
 		if ((tbcase.getDiagnosisType() == DiagnosisType.CONFIRMED) && (tbcase.getDiagnosisDate() == null)) {
-			facesMessages.addToControlFromResourceBundle("reghidden", "javax.faces.component.UIInput.REQUIRED");
+			facesMessages.addToControlFromResourceBundle("diagdateedt", "javax.faces.component.UIInput.REQUIRED");
 			return false;
 		}
 		

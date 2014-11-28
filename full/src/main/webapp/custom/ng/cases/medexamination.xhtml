@@ -15,11 +15,11 @@
 	</s:link>
 
 	<h:panelGroup id="medexamtbl">
-	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="error" rendered="#{empty medicalExaminationNGHome.allResults}" />
+	<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="error" rendered="#{empty medicalExaminationHome.allResults}" />
 
 	<!-- <h:dataTable id="medexamtbl" value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
 		<h:column> -->
-	<ui:repeat var="r" value="#{medicalExaminationNGHome.allResults}">
+	<ui:repeat var="r" value="#{medicalExaminationHome.allResults}">
 		<div class="spacer" />
 		
 		<div class="region1">
@@ -29,7 +29,7 @@
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 				</s:link>
-				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id}, #{medicalExaminationNGHome.lastResult});return false;" 
+				<h:commandLink value="#{messages['form.remove']}" onclick="if (confirm('#{messages['form.confirm_remove']}')) remMedExam(#{r.id});return false;"
 				      rendered="#{caseHome.canEditCaseData}">
 				</h:commandLink>
 			</div>
@@ -41,8 +41,8 @@
 	
 		<ui:param name="showfooter" value="0" />
 
-		<a:jsFunction name="remMedExam" action="#{medicalExaminationNGHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEditCaseData}">
-			<a:actionparam name="param1" assignTo="#{medicalExaminationNGHome.id}" converter="javax.faces.Integer"/>
+		<a:jsFunction name="remMedExam" action="#{medicalExaminationHome.remove}" reRender="medexamtbl" ajaxSingle="true" rendered="#{caseHome.canEditCaseData}">
+			<a:actionparam name="param1" assignTo="#{medicalExaminationHome.id}" converter="javax.faces.Integer"/>
 		</a:jsFunction>
 
 

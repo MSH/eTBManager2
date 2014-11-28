@@ -8,7 +8,7 @@
                 xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbCase.classification.key]}" />
+<ui:param name="title" value="#{messages['cases.edit']} - #{messages[tbcase.classification.key]}" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="left" value="0" />
 <ui:param name="waitdlg" value="1" />
@@ -18,7 +18,6 @@
 <h1>#{title}</h1>
 <h:form id="main" styleClass="form1">
 
- <div class="form-content">
 <!-- <table width="100%"><tr><td> -->
 
 	<ui:include src="/custom/ng/cases/casedataedt.xhtml" />
@@ -27,15 +26,18 @@
 	
 <!-- <table width="100%"><tr><td align="right"> -->
 	
-	</div>
 	 <div class="form-footer">
 	 <div style="float:right">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandLink action="#{caseNGHome.saveEditing}" styleClass="button" reRender="main,messages">
+	<a:commandLink action="#{caseNGHome.saveEditing}" styleClass="button"
+        reRender="main,messages"
+        onclick="if (!disableButton(this)) return false;" >
 	<span>#{messages['form.save']}</span> 
 	</a:commandLink>
-	<s:link view="/custom/ng/cases/casedata.xhtml" styleClass="button-alt" propagation="end">
+	<s:link view="/custom/ng/cases/casedata.xhtml" styleClass="button-alt"
+            propagation="end"
+            onclick="if (!disableButton(this)) return false;">
 		<f:param name="id" value="#{caseHome.id}" />
 		<span>#{messages['form.cancel']}</span> 
 	</s:link>

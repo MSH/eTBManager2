@@ -10,25 +10,22 @@ import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("ng")
-public class MedicalExamination_Ng extends MedicalExamination{
+public class MedicalExaminationNG extends MedicalExamination{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1942104893681482326L;
 	
-private Qualification Qualification;
+    private Qualification Qualification;
 
-@Column(length=100)
-private String otherQualifiedProfessional;
+    @Column(length=100)
+    private String otherQualifiedProfessional;
 
-@ManyToOne(fetch=FetchType.LAZY)
-@JoinColumn(name="SIDE_EFFECT")
-@PropertyLog(messageKey="TbField.SIDEEFFECT")
-private FieldValue sideeffect;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="SIDE_EFFECT")
+    @PropertyLog(messageKey="TbField.SIDEEFFECT")
+    private FieldValue sideeffect;
 
-private YesNoType patientReferred;
-	
+    private YesNoType patientReferred;
+
 	public Qualification getQualification() {
 		return Qualification;
 	}

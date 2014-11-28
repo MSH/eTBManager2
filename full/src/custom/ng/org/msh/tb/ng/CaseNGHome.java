@@ -25,11 +25,11 @@ public class CaseNGHome {
 	CaseEditingHome caseEditingHome;
 	@In(create = true)
 	TreatmentHome treatmentHome;
-	@In(required = false)
-	MedicalExaminationNGHome medicalExaminationNGHome;
+//	@In(required = false)
+//	MedicalExaminationNGHome medicalExaminationNGHome;
 
 	/**
-	 * Return an instance of a {@link TbCaseNA} class
+	 * Return an instance of a {@link TbCaseNG} class
 	 * 
 	 * @return
 	 */
@@ -45,12 +45,14 @@ public class CaseNGHome {
 	 * 
 	 * @return "persisted" if successfully saved
 	 */
+/*
 	@Transactional
 	public String saveNew() {
 		String ret = caseEditingHome.saveNew();
 		saveMedicalExamination();
 		return ret;
 	}
+*/
 
 	/**
 	 * Save changes made to an already existing case in the Nigerian workspace
@@ -82,6 +84,7 @@ public class CaseNGHome {
 	 * 
 	 * @return
 	 */
+/*
 	public String saveMedicalExamination() {
 		if (medicalExaminationNGHome == null)
 			return "error";
@@ -89,5 +92,6 @@ public class CaseNGHome {
 		medicalExaminationNGHome.setDisplayMessage(false);
 		return medicalExaminationNGHome.persist();
 	}
+*/
 
 }

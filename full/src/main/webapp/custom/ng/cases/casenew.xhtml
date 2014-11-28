@@ -31,18 +31,18 @@
     		<s:decorate template="/layout/dateedit.xhtml" >
     			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
     			<ui:param name="required" value="true" /> 
-    			<ui:param name="datefield" value="#{medicalExamination_Ng.date}" /> 
+    			<ui:param name="datefield" value="#{medicalExamination.date}" /> 
     			<ui:param name="checkDeathDate" value="true" />
     		</s:decorate>
 		
 		    <s:decorate template="/layout/edit.xhtml" >
 		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
-		    	<h:inputText value="#{medicalExamination_Ng.responsible}" required="true" style=" width : 340px;" maxlength="100"/>
+		    	<h:inputText value="#{medicalExamination.responsible}" required="true" style=" width : 340px;" maxlength="100"/>
 	    	</s:decorate>
     
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
-    		<h:inputText value="#{medicalExamination_Ng.height}" required="false">
+    		<h:inputText value="#{medicalExamination.height}" required="false">
     		</h:inputText>
     		#{messages['MedicalExamination.height.unit']}
     	</s:decorate>
@@ -50,14 +50,14 @@
     
     	<s:decorate template="/layout/edit.xhtml" >
     		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-    		<h:inputText value="#{medicalExamination_Ng.weight}" required="false"/>#{messages['MedicalExamination.weight.unit']}
+    		<h:inputText value="#{medicalExamination.weight}" required="false"/>#{messages['MedicalExamination.weight.unit']}
     	</s:decorate>
     
 
 		    <s:decorate template="/layout/textarea.xhtml" >
 		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
 		    	<ui:param name="maxlength" value="250" />
-		    	<ui:param name="field" value="#{medicalExamination_Ng.comments}" />
+		    	<ui:param name="field" value="#{medicalExamination.comments}" />
 		    	<ui:param name="style" value="width : 500px; height:100px;" />
 		    </s:decorate>
 	</div>
@@ -67,7 +67,7 @@
 		<div style="float:right">
 			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 		</div>
-		<a:commandLink action="#{caseNGHome.saveNew}" styleClass="button" reRender="main,messages">
+		<a:commandLink action="#{caseEditingHome.saveNew}" onclick="if (!disableButton(this)) return false;" styleClass="button" reRender="main,messages">
 			<span>#{messages['form.save']}</span>
 		</a:commandLink>
 		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" >
