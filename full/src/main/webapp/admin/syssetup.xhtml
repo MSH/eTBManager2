@@ -98,7 +98,7 @@
         #{messages['admin.syssetup.pubdashboard']}
         <s:decorate template="/layout/edit.xhtml" >
             <ui:define name="label">#{messages['SystemConfig.pubDashboardWorkspace']}:</ui:define>
-            <h:selectOneMenu value="#{systemConfigHome.pubdsWorkspace}" required="true">
+            <h:selectOneMenu value="#{systemConfigHome.pubdsWorkspace}">
                 <s:selectItems value="#{workspaces}" var="it" label="#{it.name}" noSelectionLabel="- #{messages['global.disabled']} -"/>
                 <s:convertEntity />
             </h:selectOneMenu>
