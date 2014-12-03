@@ -21,4 +21,10 @@
         </sql>
     </changeSet>
 
+    <changeSet id="24.2.1" author="msantos">
+        <sql>
+            update tbcase set rifampcinResistance = false where tbcase.drugResistanceType is null;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
