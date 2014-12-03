@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="24.1" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="secDrugsReceived" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="24.2" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="rifampcinResistance" type="boolean" />
+        </addColumn>
+        <sql>
+            update tbcase set rifampcinResistance = false where tbcase.drugResistanceType != 4;
+            update tbcase set rifampcinResistance = true where tbcase.drugResistanceType = 4;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -19,12 +19,9 @@ public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 	private static final long serialVersionUID = -1014269108674534236L;
 
 	private static final XpertResult results[] = {
-		XpertResult.INVALID,
-		XpertResult.ERROR,
-		XpertResult.NO_RESULT,
-		XpertResult.TB_NOT_DETECTED,
-		XpertResult.TB_DETECTED
-//		XpertResult.ONGOING
+        XpertResult.TB_DETECTED,
+        XpertResult.TB_NOT_DETECTED,
+        XpertResult.INVALID_NORESULT_ERROR
 	};
 	
 	@Factory("examGenexpert")

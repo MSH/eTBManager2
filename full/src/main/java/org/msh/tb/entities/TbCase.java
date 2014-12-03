@@ -155,8 +155,10 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	private Tbunit notificationUnit;
 	
 	private boolean notifAddressChanged;
-	
-	private boolean tbContact;
+
+    private boolean tbContact;
+
+    private boolean rifampcinResistance;
 	
 	@Column(length=100)
 	private String patientContactName;
@@ -231,6 +233,9 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
     @OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
     private List<ExamXpert> examsXpert = new ArrayList<ExamXpert>();
+
+    @PropertyLog(operations={Operation.NEW, Operation.DELETE})
+    private SecDrugsReceived secDrugsReceived;
 
 	private int issueCounter;
 	
@@ -1350,5 +1355,17 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
     public void setExamsXpert(List<ExamXpert> examsXpert) {
         this.examsXpert = examsXpert;
+    }
+
+    public void setSecDrugsReceived(SecDrugsReceived secDrugsReceived) {this.secDrugsReceived = secDrugsReceived;}
+
+    public SecDrugsReceived getSecDrugsReceived(){return this.secDrugsReceived;}
+
+    public boolean isRifampcinResistance() {
+        return rifampcinResistance;
+    }
+
+    public void setRifampcinResistance(boolean rifampcinResistance) {
+        this.rifampcinResistance = rifampcinResistance;
     }
 }

@@ -45,7 +45,7 @@
         </div>
 
         <s:decorate template="/layout/edit.xhtml" >
-            <ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
+            <ui:define name="label">#{messages['cases.exams.media']}:</ui:define>
             <h:selectOneMenu value="#{examCulture.method}" required="false">
                 <s:selectItems value="#{fieldsQuery.cultureMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
                 <s:convertEntity />

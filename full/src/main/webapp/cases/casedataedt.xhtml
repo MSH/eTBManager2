@@ -199,21 +199,33 @@
     	<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
+    <s:decorate id="resistancetype" template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    	<h:selectOneMenu value="#{tbcase.drugResistanceType}" >
+    	<h:selectOneMenu value="#{tbcase.drugResistanceType}" onchange="checkRifampsinResistance(this)">
     		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
+        <h:selectBooleanCheckbox id="rifampsinResist" value="#{tbcase.rifampcinResistance}"/>#{messages['DrugResistanceType.RIF_RESISTANCE']}
     </s:decorate>
 
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
-    			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-		</s:decorate>
+        <script type="text/javascript">
+            function checkRifampsinResistance(resistType){
+                if(resistType.selectedIndex == 3 || resistType.selectedIndex == 4){
+                    document.getElementById("main:resistancetype:rifampsinResist").checked = true;
+                    document.getElementById("main:resistancetype:rifampsinResist").setAttribute("disabled", true);
+                }else{
+                    document.getElementById("main:resistancetype:rifampsinResist").removeAttribute("disabled", true);
+                }
+            }
+        </script>
+
+    <s:decorate template="/layout/edit.xhtml">
+        <ui:define name="label">#{messages['PatientType']}:</ui:define>
+        <h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
+            <s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
 
 <rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
 
@@ -223,6 +235,14 @@
     		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
 		</div>
+
+    <s:decorate template="/layout/edit.xhtml">
+        <ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
+        <h:selectOneMenu id="secDrugsRec" value="#{tbcase.secDrugsReceived}" required="#{tbcase.validated}">
+            <s:selectItems var="it" value="#{secDrugsRec}" noSelectionLabel="-" label="#{messages[it.key]}" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>

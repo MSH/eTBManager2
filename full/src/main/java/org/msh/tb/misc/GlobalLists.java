@@ -30,17 +30,28 @@ public class GlobalLists {
 //	@In(required=false) Workspace defaultWorkspace;
 
 	private List<SelectItem> numberOfAFBs;
-	
-	private static final PatientType patientTypes[] = {
-		PatientType.NEW,
-		PatientType.TRANSFER_IN,
-		PatientType.RELAPSE,
-		PatientType.AFTER_DEFAULT,
-		PatientType.FAILURE_FT,
-		PatientType.FAILURE_RT,
-		PatientType.RESISTANCE_PATTERN_CHANGED,
-		PatientType.OTHER
-	};
+
+    private static final PatientType patientTypes[] = {
+            PatientType.NEW,
+            PatientType.TRANSFER_IN,
+            PatientType.RELAPSE,
+            PatientType.AFTER_DEFAULT,
+            PatientType.FAILURE_FT,
+            PatientType.FAILURE_RT,
+            PatientType.RESISTANCE_PATTERN_CHANGED,
+            PatientType.OTHER
+    };
+
+    private static final InfectionSite infectionSites[] = {
+            InfectionSite.PULMONARY,
+            InfectionSite.EXTRAPULMONARY
+    };
+
+    private static final SecDrugsReceived secDrugsReceived[] = {
+            SecDrugsReceived.YES,
+            SecDrugsReceived.NO,
+            SecDrugsReceived.UNKNOWN
+    };
 	
 	private static final CaseState caseStates[] = {
 		CaseState.WAITING_TREATMENT,
@@ -96,7 +107,8 @@ public class GlobalLists {
 		CultureResult.POSITIVE,
 		CultureResult.PLUS,
 		CultureResult.PLUS2,
-		CultureResult.PLUS3,
+        CultureResult.PLUS3,
+        CultureResult.NTM,
 		CultureResult.CONTAMINATED,
 		CultureResult.PENDING
 	};
@@ -150,8 +162,7 @@ public class GlobalLists {
 		DrugResistanceType.MONO_RESISTANCE,
 		DrugResistanceType.POLY_RESISTANCE,
 		DrugResistanceType.MULTIDRUG_RESISTANCE,
-		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
-		DrugResistanceType.RIF_RESISTANCE
+		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE
 	};
 	
 	private static final ShippedReceivedDiffTypes shippedReceivedDiffType[] = {
@@ -343,11 +354,16 @@ public class GlobalLists {
 	public PatientType[] getPatientTypes() {
 		return getComponentValueWorkspace("patientTypes", PatientType[].class, patientTypes);
 	}
-	
-	@Factory("infectionSites")
-	public InfectionSite[] getInfectionSite() {
-		return InfectionSite.values();
-	}
+
+    @Factory("infectionSites")
+    public InfectionSite[] getInfectionSite() {
+        return getComponentValueWorkspace("infectionSites", InfectionSite[].class, infectionSites);
+    }
+
+    @Factory("secDrugsRec")
+    public SecDrugsReceived[] getSecDrugsRec() {
+        return getComponentValueWorkspace("secDrugsReceived", SecDrugsReceived[].class, secDrugsReceived);
+    }
 		
 //	@Factory("caseClassifications")
 	public CaseClassification[] getCaseClassifications() {
