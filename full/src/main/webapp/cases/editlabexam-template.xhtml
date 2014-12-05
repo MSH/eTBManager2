@@ -7,6 +7,7 @@
 
     <h1>#{title}</h1>
     <s:decorate template="/layout/casebody.xhtml">
+
         <a:form id="formexam" styleClass="form1">
 
             <div class="form-content">
@@ -22,6 +23,8 @@
                         <ui:param name="checkDeathDate" value="true" />
                     </s:decorate>
                 </div>
+
+                <ui:insert name="afterdatecollected"/>
 
                 <div id="divsample">
                     <s:decorate template="/layout/edit.xhtml" >

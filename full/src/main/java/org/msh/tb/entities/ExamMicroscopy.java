@@ -21,8 +21,9 @@ public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 	
 	private Integer numberOfAFB;
 
-
 	private SampleType sampleType;
+
+    private String otherSampleType;
 
     @Override
     public ExamResult getExamResult() {
@@ -74,4 +75,12 @@ public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 	public void setSampleType(SampleType sampleType) {
 		this.sampleType = sampleType;
 	}
+
+    public String getOtherSampleType() {
+        return otherSampleType;
+    }
+
+    public void setOtherSampleType(String otherSampleType) {
+        this.otherSampleType = otherSampleType;
+    }
 }

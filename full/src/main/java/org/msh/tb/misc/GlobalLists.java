@@ -177,6 +177,11 @@ public class GlobalLists {
             ExamStatus.ONGOING,
             ExamStatus.PERFORMED
     };
+
+    private static final SampleType microscopySampleTypes[] = {
+            SampleType.SPUTUM,
+            SampleType.OTHER
+    };
 	
 	/**
 	 * Get component according to the workspace in use
@@ -580,6 +585,9 @@ public class GlobalLists {
 		return numberOfAFBs;
 	}
 
+    public SampleType[] getMicroscopySampleTypes() {
+        return getComponentValueWorkspace("microscopySampleTypes", SampleType[].class, microscopySampleTypes);
+    }
 
 	public static GlobalLists instance(){
 		return (GlobalLists)Component.getInstance("globalLists");

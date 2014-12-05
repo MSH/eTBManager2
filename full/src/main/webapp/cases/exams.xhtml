@@ -41,15 +41,24 @@
 				<h:outputText value="#{r.sampleNumber}" title="#{messages['PatientSample.sampleNumber']}" />
 				</div>
 			</h:column>
-			
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
-				</f:facet>
-				<h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
-				<br/>
-				#{r.laboratory.adminUnit.name}
-			</h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages['Laboratory']}" styleClass="collh"/>
+                </f:facet>
+                <h:outputText value="#{r.laboratory.abbrevName}" title="#{r.laboratory.name}" />
+                <br/>
+                #{r.laboratory.adminUnit.name}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages['SpecimenType']}" styleClass="collh"/>
+                </f:facet>
+                <h:outputText value="#{messages[r.sampleType.key]}" title="#{r.sampleType.key}" />
+                <h:outputText value=": #{r.otherSampleType}" title="#{r.otherSampleType}" rendered="#{r.sampleType.ordinal() == 1 and (not empty r.otherSampleType)}"/>
+                <br/>
+            </h:column>
 			
 			<h:column>
 				<f:facet name="header">

@@ -27,4 +27,10 @@
         </sql>
     </changeSet>
 
+    <changeSet id="24.3" author="msantos">
+        <addColumn tableName="exammicroscopy">
+            <column name="otherSampleType" type="varchar(50)" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
