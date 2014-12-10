@@ -74,25 +74,15 @@
 	    <url-pattern>/services/authentication/*</url-pattern>
   	</servlet-mapping>
 
-  	<servlet>
-    	<servlet-name>DataExchangeService</servlet-name>
-		<servlet-class>org.msh.tb.webservices.DataExchangeService</servlet-class>
-	</servlet>
+    <servlet>
+        <servlet-name>QuantbService</servlet-name>
+        <servlet-class>org.msh.tb.webservices.quantb.QuantbService</servlet-class>
+    </servlet>
 
-  	<servlet-mapping>
-    	<servlet-name>DataExchangeService</servlet-name>
-	    <url-pattern>/services/exchange/*</url-pattern>
-  	</servlet-mapping>
-
-  	<servlet>
-    	<servlet-name>xpertService</servlet-name>
-		<servlet-class>org.msh.tb.webservices.XpertService</servlet-class>
-	</servlet>
-
-  	<servlet-mapping>
-    	<servlet-name>xpertService</servlet-name>
-	    <url-pattern>/services/xpertservice/*</url-pattern>
-  	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>QuantbService</servlet-name>
+        <url-pattern>/services/quantb/*</url-pattern>
+    </servlet-mapping>
 
  
 	<!-- Ajax4jsf -->

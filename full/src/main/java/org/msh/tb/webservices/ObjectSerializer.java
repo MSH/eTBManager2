@@ -80,10 +80,10 @@ public class ObjectSerializer implements DataInterceptor {
 	 * @param clazz
 	 * @return
 	 */
-	public static <E> E deserializeFromXml(String xml, Class<E> clazz) {
+	public static <T> T deserializeFromXml(String xml, Class<T> clazz) {
 		DataUnmarshaller du = DataStreamUtils.createXMLUnmarshaller(instance().context);
 		InputStream is = DataStreamUtils.createStringInputStream(xml);
-		return (E)du.unmarshall(is);
+		return (T)du.unmarshall(is);
 	}
 
 	/**

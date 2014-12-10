@@ -27,11 +27,11 @@ public class DataExchangeService {
 	
 	/**
 	 * Import data represented in the XML format
-	 * @param resp
+	 * @param handler
 	 * @param xmldata
 	 */
 	protected Object importSessionData(RemoteActionHandler handler, String xmldata) {
-		ExamDST exam = handler.deserializeFromXml(xmldata, ExamDST.class);
+		ExamDST exam = (ExamDST)handler.deserializeFromXml(xmldata, ExamDST.class);
 		if (exam == null) {
 			handler.setResponseError(Response.RESP_VALIDATION_ERROR, "No data found in xml");
 			return null;

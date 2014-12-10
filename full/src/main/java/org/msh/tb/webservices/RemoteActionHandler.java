@@ -10,6 +10,9 @@ import org.msh.tb.login.AuthenticatorBean;
 
 import javax.persistence.EntityManager;
 import javax.xml.bind.ValidationException;
+import javax.xml.transform.Result;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -30,7 +33,7 @@ import java.util.List;
  * @author Ricardo Memoria
  *
  */
-public abstract class RemoteActionHandler {
+public abstract class RemoteActionHandler<E extends Response> {
 
 	private String sessionId;
 	private Object data;
@@ -75,18 +78,62 @@ public abstract class RemoteActionHandler {
 	protected abstract Object execute(Object data) throws ValidationException;
 
 
+    /**
+     * Get the result type used as generic type
+     * @return Class of E
+     */
+    public Class<Response> getResultType() {
+        Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+
+        if (types.length  == 0) {
+            return null;
+        }
+
+        return (Class<Response>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    /**
+     * Create instance of the response class
+     * @return
+     */
+    protected Response createResponseInstance() {
+        try {
+            Class<Response> clazz = getResultType();
+            if (clazz != null) {
+                return clazz.newInstance();
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return new Response();
+    }
+
+    /**
+     * Return the response object that will be serialized to the caller
+     * @return instance of the Response class
+     */
+    public E getResponse() {
+        if (response == null) {
+            response = createResponseInstance();
+        }
+        return (E)response;
+    }
+
 	/**
 	 * Run the remote call handler, calling the <code>execute()</code> method. If information about user
 	 * authentication is supported, the system will call the authenticate method before. 
 	 * @return instance of the {@link Response} class already serialized to the client
 	 */
-	public Response run() {
-		response = new Response();
+	public E run() {
+		response = getResponse();
 		try {
 			// authenticate first ?
 			if (sessionId != null) {
 				if (!authenticate())
-					return response;
+					return (E)response;
 			}
 
 			if (transactional)
@@ -113,7 +160,7 @@ public abstract class RemoteActionHandler {
 			setResponseError(Response.RESP_UNEXPECTED_ERROR, e.toString());
 		}
 		
-		return response;
+		return (E)response;
 //		return getSerializedResponse();
 	}
 
@@ -189,10 +236,11 @@ public abstract class RemoteActionHandler {
 	
 	
 	/**
-	 * @param data
+	 * @param xmldata
+     * @param clazz
 	 * @return
 	 */
-	public <E> E deserializeFromXml(String xmldata, Class<E> clazz) {
+	public <T> T deserializeFromXml(String xmldata, Class<T> clazz) {
 		return ObjectSerializer.deserializeFromXml(xmldata, clazz);
 	}
 
