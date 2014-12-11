@@ -131,6 +131,7 @@ public class UserSession {
      * @param sessionId
      * @return
      */
+    @Transactional
     protected UserLogin registerLogin(String sessionId, boolean statelessLogin) {
     	List<UserLogin> lst = getEntityManager()
     		.createQuery("from UserLogin ul " +

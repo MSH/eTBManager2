@@ -48,8 +48,6 @@ public class AuthenticatorBean {
      * to find a workspace available (which is initially the last workspace logged or the first
      * in the list of available workspaces).
      * <p/>
-     * @param username - User name (or login)
-     * @param password - User password
      * @return
      */
     public boolean authenticate() {

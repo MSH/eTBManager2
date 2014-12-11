@@ -12,7 +12,7 @@ import javax.jws.soap.SOAPBinding;
 /**
  * Created by ricardo on 09/12/14.
  */
-@WebService(name="dataExchangeService", serviceName="dataExchangeService")
+@WebService(name="quantbService", serviceName="quantbService")
 @SOAPBinding(style= SOAPBinding.Style.RPC)
 public class QuantbService {
 
