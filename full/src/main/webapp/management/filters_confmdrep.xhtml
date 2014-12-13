@@ -125,7 +125,7 @@ function handleContextClick(comp) {
 			#{messages['PatientType']}:
 		</ui:define>
 		<h:selectOneMenu value="#{indicatorFilters.patientType}">
-			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+			<s:selectItems var="it" value="#{patientTypesDRTB}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
 		</h:selectOneMenu>
 	</s:decorate>
 

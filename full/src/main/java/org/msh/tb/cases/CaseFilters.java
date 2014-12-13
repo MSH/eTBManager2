@@ -63,7 +63,8 @@ public class CaseFilters {
 	private int firstRecord;
 	private int order;
 	private boolean inverseOrder;
-	private PatientType patientType;
+    private PatientType patientType;
+    private PatientType previouslyTreatedType;
 	private InfectionSite infectionSite;
 	private DiagnosisType diagnosisType;
 	private Integer iniMonth;
@@ -931,4 +932,11 @@ public class CaseFilters {
 		this.stateIndex = stateIndex;
 	}
 
+    public PatientType getPreviouslyTreatedType() {
+        return previouslyTreatedType;
+    }
+
+    public void setPreviouslyTreatedType(PatientType previouslyTreatedType) {
+        this.previouslyTreatedType = previouslyTreatedType;
+    }
 }

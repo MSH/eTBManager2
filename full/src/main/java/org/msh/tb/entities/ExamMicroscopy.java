@@ -2,6 +2,7 @@ package org.msh.tb.entities;
 
 import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.entities.enums.SampleType;
+import org.msh.tb.entities.enums.VisualAppearance;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
@@ -24,6 +25,8 @@ public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 	private SampleType sampleType;
 
     private String otherSampleType;
+
+    private VisualAppearance visualAppearance;
 
     @Override
     public ExamResult getExamResult() {
@@ -82,5 +85,13 @@ public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 
     public void setOtherSampleType(String otherSampleType) {
         this.otherSampleType = otherSampleType;
+    }
+
+    public VisualAppearance getVisualAppearance() {
+        return visualAppearance;
+    }
+
+    public void setVisualAppearance(VisualAppearance visualAppearance) {
+        this.visualAppearance = visualAppearance;
     }
 }

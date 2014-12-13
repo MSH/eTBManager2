@@ -56,10 +56,14 @@ public class IncidenceIndicator extends Indicator {
 		// include filter by regimen
 		if (filters.getRegimen() != null)
 			hql += " and c.regimen.id = #{indicatorFilters.regimen.id}";
-		
-		// include filter by patient type
-		if (filters.getPatientType() != null)
-			hql += " and c.patientType = #{indicatorFilters.patientType}";
+
+        // include filter by patient type
+        if (filters.getPatientType() != null)
+            hql += " and c.patientType = #{indicatorFilters.patientType}";
+
+        // include filter by previously treated type
+        if (filters.getPatientType() != null && filters.getPatientType().equals(PatientType.PREVIOUSLY_TREATED) && filters.getPreviouslyTreatedType() != null)
+            hql += " and c.previouslyTreatedType = #{indicatorFilters.previouslyTreatedType}";
 		
 		// include filter by patient first treatment type
 		if(filters.getPatTypFirstTreat() !=null && (filters.getPatTypFirstTreat() == PatientType.NEW ||filters.getPatTypFirstTreat() == PatientType.TRANSFER_IN))

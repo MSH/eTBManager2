@@ -57,7 +57,8 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"upper(p.name) like #{caseFilters.nameLike}",
 		"upper(p.middleName) like #{caseFilters.middleNameLike}",
 		"upper(p.lastName) like #{caseFilters.lastNameLike}",
-		"c.patientType = #{caseFilters.patientType}",
+        "c.patientType = #{caseFilters.patientType}",
+        "c.previouslyTreatedType = #{caseFilters.previouslyTreatedType}",
 		"c.infectionSite = #{caseFilters.infectionSite}",
 		"c.diagnosisType = #{caseFilters.diagnosisType}",
 		"c.validationState = #{caseFilters.validationState}",
@@ -83,7 +84,11 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 */
 	@Override
 	public List<CaseResultItem> getResultList() {
-		if (resultList == null)
+		if(caseFilters.getPatientType() != null && !caseFilters.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)){
+            caseFilters.setPreviouslyTreatedType(null);
+        }
+
+        if (resultList == null)
 		{
 			javax.persistence.Query query = createQuery();
 			List<Object[]> lst = query==null ? null : query.getResultList();

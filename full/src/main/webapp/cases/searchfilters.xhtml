@@ -66,11 +66,19 @@
 
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-		<h:selectOneMenu value="#{caseFilters.patientType}" >
-			<s:selectItems value="#{patientTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+		<h:selectOneMenu id="patType" value="#{caseFilters.patientType}" >
+			<s:selectItems value="#{patientTypesALL}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
+        <div id="prevTreatType" style="#{caseFilters.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+            <h:selectOneMenu value="#{caseFilters.previouslyTreatedType}" >
+                <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+        </div>
 	</s:decorate>
+
+    <rich:jQuery selector="#patType" query="change(function(){ showPrevTreatType(this); })" />
 
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
@@ -133,6 +141,15 @@
 	<rich:jQuery name="showdates" timing="onJScall" selector="#datesdiv" query="show(500)" />
 	<rich:jQuery name="hidedates" timing="onJScall" selector="#datesdiv" query="hide(500)" />
 <script type="text/javascript">
+<!--
+function isPatientTypePrevTreat(cb) {
+    return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'PREVIOUSLY_TREATED'));
+}
+function showPrevTreatType(cb) {
+    if (isPatientTypePrevTreat(cb))
+        jQuery('#prevTreatType').show(500);
+    else jQuery('#prevTreatType').hide(500);
+}
 function onChangePeriod() {
 	vals = mountDateValues();
 	ini = vals[0] + vals[1];
@@ -158,6 +175,7 @@ function validateFilters() {
 	}
 	return true;
 }
+-->
 </script>
 
 </td></tr></table>

@@ -466,6 +466,10 @@ public class CaseEditingHome {
                 facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.details.valerror1");
             }
 		}
+
+        if(!tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)){
+            tbcase.setPreviouslyTreatedType(null);
+        }
 		
 		return true;
 	}

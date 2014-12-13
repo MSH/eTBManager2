@@ -172,8 +172,12 @@ public class CaseHQLBase extends Controller {
 		// include filter by patient type
 		if (filters.getPatientType() != null)
 			hql += " and c.patientType = #{indicatorFilters.patientType}";
-		
-		// include filter by source
+
+        // include filter by previously treated type
+        if (filters.getPatientType() != null && filters.getPatientType().equals(PatientType.PREVIOUSLY_TREATED) && filters.getPreviouslyTreatedType() != null)
+            hql += " and c.previouslyTreatedType = #{indicatorFilters.previouslyTreatedType}";
+
+        // include filter by source
 		if (filters.getSource() != null)
 			hql += " and exists(select pm.id from PrescribedMedicine pm where pm.source.id = #{indicatorFilters.source.id} and pm.tbcase.id = c.id)";
 

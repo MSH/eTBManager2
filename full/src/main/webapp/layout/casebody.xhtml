@@ -23,7 +23,11 @@
 	<div>
 		<div class="#{tbcase.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;"/>
 		<div class="text-big">#{tbcase.patient.fullName}</div>
-		<div class="text-medium">#{tbcase.displayCaseNumber}</div>
+        <div class="text-medium">
+            <h:outputText value="#{messages['DisplayCaseNumber.TB']}:" rendered="#{tbcase.classification.ordinal() == 0}"/>
+            <h:outputText value="#{messages['DisplayCaseNumber.DRTB']}:" rendered="#{tbcase.classification.ordinal() == 1}"/>
+            #{tbcase.displayCaseNumber}
+        </div>
 		<ui:insert name="casenumber" />
 	</div>
 	<div>

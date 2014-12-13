@@ -59,6 +59,13 @@
                 <h:outputText value=": #{r.otherSampleType}" title="#{r.otherSampleType}" rendered="#{r.sampleType.ordinal() == 1 and (not empty r.otherSampleType)}"/>
                 <br/>
             </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="#{messages['VisualAppearance']}" styleClass="collh"/>
+                </f:facet>
+                <h:outputText value="#{messages[r.sampleType.key]}" title="#{r.visualAppearance.key}" />
+            </h:column>
 			
 			<h:column>
 				<f:facet name="header">

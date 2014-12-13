@@ -45,7 +45,8 @@ public class IndicatorFilters {
 
     private TBUnitSelection2 tbunitselection = new TBUnitSelection2("unitid", false, TBUnitType.HEALTH_UNITS);
 	private CaseClassification classification;
-	private PatientType patientType;
+    private PatientType patientType;
+    private PatientType previouslyTreatedType;
 	private InfectionSite infectionSite;
 	private Gender gender;
 	private Regimen regimen;
@@ -591,5 +592,13 @@ public class IndicatorFilters {
 	}
 	public HealthSystem getHealthSystem() {
 		return healthSystem;
-	}	
+	}
+
+    public PatientType getPreviouslyTreatedType() {
+        return previouslyTreatedType;
+    }
+
+    public void setPreviouslyTreatedType(PatientType previouslyTreatedType) {
+        this.previouslyTreatedType = previouslyTreatedType;
+    }
 }

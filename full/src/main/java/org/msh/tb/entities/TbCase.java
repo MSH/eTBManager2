@@ -105,9 +105,12 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	
 	@NotNull
 	private ValidationState validationState;
-	
-	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
-	private PatientType patientType;
+
+    @PropertyLog(operations={Operation.NEW, Operation.DELETE})
+    private PatientType patientType;
+
+    @PropertyLog(operations={Operation.NEW, Operation.DELETE})
+    private PatientType previouslyTreatedType;
 
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private DiagnosisType diagnosisType;
@@ -1367,5 +1370,13 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
     public void setRifampcinResistance(boolean rifampcinResistance) {
         this.rifampcinResistance = rifampcinResistance;
+    }
+
+   public PatientType getPreviouslyTreatedType() {
+        return previouslyTreatedType;
+    }
+
+    public void setPreviouslyTreatedType(PatientType previouslyTreatedType) {
+        this.previouslyTreatedType = previouslyTreatedType;
     }
 }

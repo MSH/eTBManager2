@@ -32,7 +32,11 @@ public enum CaseState {
 	
 	
 	//Vietnam
-	TREATMENT_REFUSED;
+	TREATMENT_REFUSED,
+
+    //New Generic Options
+    NOT_EVALUATED,
+    MOVED_SECONDLINE
 	
 	;
 	

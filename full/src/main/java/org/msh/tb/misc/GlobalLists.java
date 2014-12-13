@@ -42,6 +42,39 @@ public class GlobalLists {
             PatientType.OTHER
     };
 
+    private static final PatientType patientTypesDRTB[] = {
+            PatientType.NEW,
+            PatientType.RELAPSE,
+            PatientType.AFTER_DEFAULT,
+            PatientType.FAILURE_FT,
+            PatientType.FAILURE_RT,
+            PatientType.OTHER
+    };
+
+    private static final PatientType patientTypesTB[] = {
+            PatientType.NEW,
+            PatientType.PREVIOUSLY_TREATED,
+            PatientType.UNKNOWN_PREVIOUS_TB_TREAT
+    };
+
+    private static final PatientType patientTypesALL[] = {
+            PatientType.NEW,
+            PatientType.PREVIOUSLY_TREATED,
+            PatientType.UNKNOWN_PREVIOUS_TB_TREAT,
+            PatientType.RELAPSE,
+            PatientType.AFTER_DEFAULT,
+            PatientType.FAILURE_FT,
+            PatientType.FAILURE_RT,
+            PatientType.OTHER
+    };
+
+    private static final PatientType prevTreatedTypes[] = {
+            PatientType.RELAPSE,
+            PatientType.TREATMENT_AFTER_FAILURE,
+            PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP,
+            PatientType.OTHER_PREVIOUSLY_TREATED
+    };
+
     private static final InfectionSite infectionSites[] = {
             InfectionSite.PULMONARY,
             InfectionSite.EXTRAPULMONARY
@@ -181,6 +214,12 @@ public class GlobalLists {
     private static final SampleType microscopySampleTypes[] = {
             SampleType.SPUTUM,
             SampleType.OTHER
+    };
+
+    private static final VisualAppearance microscopyVisualAppearence[] = {
+            VisualAppearance.BLOOD_STAINED,
+            VisualAppearance.MUCOPURULENT,
+            VisualAppearance.SALIVA
     };
 	
 	/**
@@ -354,11 +393,31 @@ public class GlobalLists {
 	public Nationality[] getNationalities() {
 		return nationalities;
 	}
-	
-	@Factory("patientTypes")
-	public PatientType[] getPatientTypes() {
-		return getComponentValueWorkspace("patientTypes", PatientType[].class, patientTypes);
-	}
+
+    @Factory("patientTypes")
+    public PatientType[] getPatientTypes() {
+        return getComponentValueWorkspace("patientTypes", PatientType[].class, patientTypes);
+    }
+
+    @Factory("patientTypesTB")
+    public PatientType[] getPatientTypesTB() {
+        return getComponentValueWorkspace("patientTypesTB", PatientType[].class, patientTypesTB);
+    }
+
+    @Factory("patientTypesDRTB")
+    public PatientType[] getPatientTypesDRTB() {
+        return getComponentValueWorkspace("patientTypesDRTB", PatientType[].class, patientTypesDRTB);
+    }
+
+    @Factory("patientTypesALL")
+    public PatientType[] getPatientTypesALL() {
+        return getComponentValueWorkspace("patientTypesALL", PatientType[].class, patientTypesALL);
+    }
+
+    @Factory("prevTreatedTypes")
+    public PatientType[] getPrevTreatedTypes() {
+        return getComponentValueWorkspace("prevTreatedTypes", PatientType[].class, prevTreatedTypes);
+    }
 
     @Factory("infectionSites")
     public InfectionSite[] getInfectionSite() {
@@ -587,6 +646,10 @@ public class GlobalLists {
 
     public SampleType[] getMicroscopySampleTypes() {
         return getComponentValueWorkspace("microscopySampleTypes", SampleType[].class, microscopySampleTypes);
+    }
+
+    public VisualAppearance[] getMicroscopyVisualAppearence() {
+        return getComponentValueWorkspace("microscopyVisualAppearence", VisualAppearance[].class, microscopyVisualAppearence);
     }
 
 	public static GlobalLists instance(){

@@ -219,17 +219,32 @@
             }
         </script>
 
-    <s:decorate template="/layout/edit.xhtml">
-        <ui:define name="label">#{messages['PatientType']}:</ui:define>
-        <h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
-            <s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
-            <s:convertEnum />
-        </h:selectOneMenu>
-    </s:decorate>
+        <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}">
+            <ui:define name="label">#{messages['PatientType']}:</ui:define>
+            <h:selectOneMenu id="patType1" value="#{tbcase.patientType}" required="#{tbcase.validated}" onchange="checkPrevTreatType()">
+                <s:selectItems var="it" value="#{patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+            <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+                <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" required="#{tbcase.validated}">
+                    <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                    <s:convertEnum />
+                </h:selectOneMenu>
+            </div>
+        </s:decorate>
 
-<rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
+        <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
+            <ui:define name="label">#{messages['PatientType']}:</ui:define>
+            <h:selectOneMenu id="patType2" value="#{tbcase.patientType}" required="#{tbcase.validated}">
+                <s:selectItems var="it" value="#{patientTypesDRTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+        </s:decorate>
 
-		<div id="patientTypeOther">
+        <rich:jQuery selector="#patType1" query="change(function(){ showPrevTreatType(this); })" />
+        <rich:jQuery selector="#patType2" query="change(function(){ showPatientTypeOther(this); })" />
+
+		<div id="patientTypeOther" style="#{tbcase.patientType != 'OTHER' ? 'display:none' : ''}">
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
     		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
@@ -256,12 +271,21 @@
 <script type="text/javascript">
 <!--
 function isPatientTypeOther(cb) {
-   return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'OTHER'));
+    return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'OTHER'));
+}
+function isPatientTypePrevTreat(cb) {
+    return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'PREVIOUSLY_TREATED'));
 }
 function showPatientTypeOther(cb) {
-  if (isPatientTypeOther(cb))
-  	jQuery('#patientTypeOther').show(500);
-  else jQuery('#patientTypeOther').hide(500);
+    window.alert(isPatientTypeOther(cb));
+    if (isPatientTypeOther(cb))
+        jQuery('#patientTypeOther').show(500);
+    else jQuery('#patientTypeOther').hide(500);
+}
+function showPrevTreatType(cb) {
+    if (isPatientTypePrevTreat(cb))
+        jQuery('#prevTreatType').show(500);
+    else jQuery('#prevTreatType').hide(500);
 }
 function showExtrapulmonary(cb) {
   if (isExtrapulmonary(cb))
