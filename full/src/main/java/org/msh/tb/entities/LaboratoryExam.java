@@ -286,19 +286,19 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	}
 
 /*
-	public Date getDateCollected() {
+	pub Date getDateCollected() {
 		return dateCollected;
 	}
 
-	public void setDateCollected(Date dateCollected) {
+	pub void setDateCollected(Date dateCollected) {
 		this.dateCollected = dateCollected;
 	}
 
-	public String getSampleNumber() {
+	pub String getSampleNumber() {
 		return sampleNumber;
 	}
 
-	public void setSampleNumber(String sampleNumber) {
+	pub void setSampleNumber(String sampleNumber) {
 		this.sampleNumber = sampleNumber;
 	}
 */

@@ -1,7 +1,5 @@
 package org.msh.tb.webservices.quantb;
 
-import org.msh.tb.webservices.quantb.QTBMedicineRegimen;
-
 import java.util.List;
 
 /**

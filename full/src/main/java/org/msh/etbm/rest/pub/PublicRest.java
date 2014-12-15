@@ -1,16 +1,18 @@
-package org.msh.etbm.rest;
+package org.msh.etbm.rest.pub;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.pub.SendNewPasswordService;
 import org.msh.etbm.services.pub.UserRegistrationService;
 import org.msh.tb.application.App;
+import org.msh.tb.application.EtbmanagerApp;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Set of public rest api
+ * Set of pub rest api
  *
  * Created by ricardo on 24/11/14.
  */
@@ -55,5 +57,22 @@ public class PublicRest {
         catch (Exception e) {
             return new StandardResult(false, e.getMessage());
         }
+    }
+
+
+    @Path("/about")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public AboutResult about() {
+        EtbmanagerApp app = EtbmanagerApp.instance();
+        AboutResult res = new AboutResult();
+
+        res.setBuildDate(app.getBuildDate());
+        res.setBuildNumber(app.getBuildNumber());
+        res.setCountryCode(app.getCountryCode());
+        res.setImplementationTitle(app.getImplementationTitle());
+        res.setImplementationVersion(app.getImplementationVersion());
+        return res;
     }
 }

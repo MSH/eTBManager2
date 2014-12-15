@@ -1,4 +1,4 @@
-package org.msh.etbm.rest;
+package org.msh.etbm.rest.pub;
 
 /**
  * Authentication form sent by the client to log a user into the system.

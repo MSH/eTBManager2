@@ -1,7 +1,8 @@
-package org.msh.etbm.rest;
+package org.msh.etbm.rest.pub;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.auth.AuthenticationService;
 
 import javax.ws.rs.*;

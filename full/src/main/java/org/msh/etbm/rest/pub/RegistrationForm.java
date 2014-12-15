@@ -1,4 +1,4 @@
-package org.msh.etbm.rest;
+package org.msh.etbm.rest.pub;
 
 import javax.validation.constraints.NotNull;
 

@@ -38,7 +38,7 @@
 
     <web:rewrite-filter view-mapping="*.seam" />
 
-    <resteasy:application resource-path-prefix="/api" >
+    <resteasy:application resource-path-prefix="/api" destroy-session-after-request="false" >
         <resteasy:media-type-mappings>
             <key>json</key>
             <value>application/json</value>

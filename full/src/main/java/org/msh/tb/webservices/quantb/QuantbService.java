@@ -1,8 +1,6 @@
 package org.msh.tb.webservices.quantb;
 
 import org.msh.tb.webservices.RemoteActionHandler;
-import org.msh.tb.webservices.Response;
-import org.msh.tb.webservices.quantb.QuantbData;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

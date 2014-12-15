@@ -10,7 +10,6 @@ import org.msh.tb.login.AuthenticatorBean;
 
 import javax.persistence.EntityManager;
 import javax.xml.bind.ValidationException;
-import javax.xml.transform.Result;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="2.2.1" author="rmemoria">
+        <createTable tableName="gnexpertdata">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="systemName" type="varchar(255)"></column>
+            <column name="hostId" type="varchar(255)"></column>
+            <column name="assay" type="varchar(255)"></column>
+            <column name="assayVersion" type="varchar(10)"></column>
+            <column name="sampleId" type="varchar(45)"></column>
+            <column name="patientId" type="varchar(255)"></column>
+            <column name="user" type="varchar(255)"></column>
+            <column name="testStartedOn" type="datetime"></column>
+            <column name="testEndedOn" type="datetime"></column>
+            <column name="reagentLotId" type="varchar(255)"></column>
+            <column name="cartridgeExpirationDate" type="datetime"></column>
+            <column name="cartridgeSerial" type="varchar(255)"></column>
+            <column name="moduleSerial" type="varchar(255)"></column>
+            <column name="instrumentSerial" type="varchar(255)"></column>
+            <column name="softwareVersion" type="varchar(255)"></column>
+            <column name="resultIdMtb" type="int"></column>
+            <column name="resultIdRif" type="int"></column>
+            <column name="deviceSerial" type="varchar(255)"></column>
+            <column name="notes" type="varchar(255)"></column>
+            <column name="messageSentOn" type="datetime"></column>
+            <column name="assayHostTestCode" type="varchar(255)"></column>
+            <column name="resultText" type="varchar(255)"></column>
+            <column name="computerName" type="varchar(255)"></column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

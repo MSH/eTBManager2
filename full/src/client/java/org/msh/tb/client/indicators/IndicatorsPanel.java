@@ -25,7 +25,7 @@ public class IndicatorsPanel extends Composite {
      * Update the styles used in the indicators according to its status
      */
 /*
-    public void updateIndicatorsStyles() {
+    pub void updateIndicatorsStyles() {
         boolean prevSingle = false;
         boolean endOfLine = true;
         for (int i = 0; i < pnlContent.getWidgetCount(); i++) {
