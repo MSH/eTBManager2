@@ -165,7 +165,7 @@
 
 	<div id="divregdate">
     <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
+    	<ui:define name="label">#{tbcase.classification == 'TB' ? messages['TbCase.registrationDate.TB'] : messages['TbCase.registrationDate']}:</ui:define>
     	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
 		<ui:param name="required" value="true" />
 		<ui:param name="edtid" value="regdateedt" />
@@ -197,6 +197,14 @@
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" />
     	<ui:param name="edtid" value="diagdateedt" />
     	<ui:param name="checkDeathDate" value="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+        <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
+        <h:selectOneMenu value="#{tbcase.caseDefinition}" >
+            <s:selectItems var="it" value="#{caseDefinitions}" noSelectionLabel="-" label="#{messages[it.key]}" />
+            <s:convertEnum />
+        </h:selectOneMenu>
     </s:decorate>
 
     <s:decorate id="resistancetype" template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
@@ -267,6 +275,30 @@
     		</h:selectOneMenu>
 		</s:decorate>
 
+    <s:decorate rendered="#{tbcase.classification == 'DRTB'}">
+
+        <s:decorate template="/layout/dateedit.xhtml" >
+            <ui:define name="label">#{messages['TbCase.bmuTbRegistDate']}:</ui:define>
+            <ui:param name="required" value="false" />
+            <ui:param name="datefield" value="#{tbcase.lastBmuDateTbRegister}" />
+            <ui:param name="edtid" value="bmudate" />
+            <ui:param name="checkDeathDate" value="true" />
+            <ui:param name="future" value="false" />
+            <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                <f:param value="#{tbcase.patient.getLastTbCase().getDiagnosisDateFormated()}" />
+            </h:outputFormat>
+        </s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml">
+            <ui:define name="label">#{messages['TbCase.bmuTbRegistNumber']}:</ui:define>
+            <h:inputText value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
+            <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                <f:param value="#{tbcase.patient.getLastTbCase().displayCaseNumber}"/>
+            </h:outputFormat>
+        </s:decorate>
+
+    </s:decorate>
+
 <rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
 <script type="text/javascript">
 <!--
@@ -277,7 +309,6 @@ function isPatientTypePrevTreat(cb) {
     return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'PREVIOUSLY_TREATED'));
 }
 function showPatientTypeOther(cb) {
-    window.alert(isPatientTypeOther(cb));
     if (isPatientTypeOther(cb))
         jQuery('#patientTypeOther').show(500);
     else jQuery('#patientTypeOther').hide(500);
@@ -351,6 +382,15 @@ function isPulmonary(cb) {
 		</s:decorate>
 
 		<h:panelGroup id="prevtreats">
+         <s:div id="slAlertMessage" styleClass="medalertmsg" style="width:600px;margin-bottom:8px">
+             <span style="margin-left:6px;margin-right:6px">
+                 <h:outputText value="#{messages['SystemSugest.msg1']} "/>
+                 <h:outputText rendered="#{prevTBTreatmentHome.usedSecondLineDrugs()}" value="#{messages['SystemSugest']} #{messages['global.yes']}"/>
+                 <h:outputText rendered="#{prevTBTreatmentHome.usedAnyDrugs() and (not prevTBTreatmentHome.usedSecondLineDrugs())}" value="#{messages['SystemSugest']} #{messages['global.no']}"/>
+                 <h:outputText rendered="#{(not prevTBTreatmentHome.usedAnyDrugs())}" value="#{messages['SystemSugest']} #{messages['manag.ind.interim.unknown']}"/>
+            </span>
+         </s:div>
+         <br/>
 		<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
 		<table width="98%" class="table1 small">
 			<tr>
@@ -370,7 +410,7 @@ function isPulmonary(cb) {
 				</th>
 			</a:repeat>
 			</tr>
-		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
+		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it" rowKeyVar="row">
 			<tr>
 				<td class="colcb">#{it.index}
 				</td>
@@ -387,7 +427,9 @@ function isPulmonary(cb) {
 				</td>
 				<a:repeat value="#{it.items}" var="sub">
 				<td class="colcb">
-					<h:selectBooleanCheckbox value="#{sub.selected}" />
+					<h:selectBooleanCheckbox value="#{sub.selected}" id="s#{row}#{s.id}">
+                        <a:support event="onchange" reRender="slAlertMessage" ajaxSingle="true" process="s#{row}#{s.id}"/>
+                    </h:selectBooleanCheckbox>
 				</td>
 				</a:repeat>
 				<td class="colcb">

@@ -467,7 +467,7 @@ public class CaseEditingHome {
             }
 		}
 
-        if(!tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)){
+        if(tbcase.getPatientType() != null && !tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)){
             tbcase.setPreviouslyTreatedType(null);
         }
 		

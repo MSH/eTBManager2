@@ -64,4 +64,20 @@
         </sql>
     </changeSet>
 
+    <changeSet id="24.6" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="caseDefinition" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="24.7" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="lastBmuDateTbRegister" type="date" />
+        </addColumn>
+
+        <addColumn tableName="tbcase">
+            <column name="lastBmuTbRegistNumber" type="varchar(50)" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

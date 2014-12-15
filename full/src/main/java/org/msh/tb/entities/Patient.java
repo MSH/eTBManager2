@@ -2,6 +2,8 @@ package org.msh.tb.entities;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.Component;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.NameComposition;
 import org.msh.tb.transactionlog.Operation;
@@ -241,6 +243,20 @@ public class Patient extends WSObject implements Serializable, SyncKey {
 	public void setFatherName(String fatherName) {
 		this.fatherName = fatherName;
 	}
+
+    public TbCase getLastTbCase(){
+        TbCase result = null;
+        for(TbCase c : getCases()){
+            if(c.getClassification().equals(CaseClassification.TB) && c.getDiagnosisType().equals(DiagnosisType.CONFIRMED)){
+                if(result == null) {
+                    result = c;
+                }else if(c.getDiagnosisDate().after(result.getDiagnosisDate())) {
+                    result = c;
+                }
+            }
+        }
+        return result;
+    }
 	
 	
 }

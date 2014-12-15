@@ -80,6 +80,11 @@ public class GlobalLists {
             InfectionSite.EXTRAPULMONARY
     };
 
+    private static final CaseDefinition caseDefinitions[] = {
+            CaseDefinition.BACTERIOLOGICALLY_CONFIRMED,
+            CaseDefinition.CLINICALLY_DIAGNOSED
+    };
+
     private static final SecDrugsReceived secDrugsReceived[] = {
             SecDrugsReceived.YES,
             SecDrugsReceived.NO,
@@ -417,6 +422,11 @@ public class GlobalLists {
     @Factory("prevTreatedTypes")
     public PatientType[] getPrevTreatedTypes() {
         return getComponentValueWorkspace("prevTreatedTypes", PatientType[].class, prevTreatedTypes);
+    }
+
+    @Factory("caseDefinitions")
+    public CaseDefinition[] getCaseDefinitions() {
+        return getComponentValueWorkspace("caseDefinitions", CaseDefinition[].class, caseDefinitions);
     }
 
     @Factory("infectionSites")

@@ -112,6 +112,9 @@ public class TbCase implements Serializable, Transactional, SyncKey {
     @PropertyLog(operations={Operation.NEW, Operation.DELETE})
     private PatientType previouslyTreatedType;
 
+    @PropertyLog(operations={Operation.NEW, Operation.DELETE})
+    private CaseDefinition caseDefinition;
+
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
 	private DiagnosisType diagnosisType;
 	
@@ -241,6 +244,14 @@ public class TbCase implements Serializable, Transactional, SyncKey {
     private SecDrugsReceived secDrugsReceived;
 
 	private int issueCounter;
+
+    @Temporal(TemporalType.DATE)
+    @PropertyLog(operations={Operation.NEW, Operation.DELETE})
+    private Date lastBmuDateTbRegister;
+
+    @Column(length=50)
+    @PropertyLog(operations={Operation.NEW, Operation.DELETE})
+    private String lastBmuTbRegistNumber;
 	
 	@Transient
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
@@ -771,10 +782,13 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	}
 
 
-	public Date getDiagnosisDate() {
-		return diagnosisDate;
-	}
+    public Date getDiagnosisDate() {
+        return diagnosisDate;
+    }
 
+    public String getDiagnosisDateFormated() {
+        return DateUtils.formatAsLocale(diagnosisDate, false);
+    }
 
 	public void setDiagnosisDate(Date diagnosisDate) {
 		this.diagnosisDate = diagnosisDate;
@@ -1378,5 +1392,29 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
     public void setPreviouslyTreatedType(PatientType previouslyTreatedType) {
         this.previouslyTreatedType = previouslyTreatedType;
+    }
+
+    public CaseDefinition getCaseDefinition() {
+        return caseDefinition;
+    }
+
+    public void setCaseDefinition(CaseDefinition caseDefinition) {
+        this.caseDefinition = caseDefinition;
+    }
+
+    public Date getLastBmuDateTbRegister() {
+        return lastBmuDateTbRegister;
+    }
+
+    public void setLastBmuDateTbRegister(Date lastBmuDateTbRegister) {
+        this.lastBmuDateTbRegister = lastBmuDateTbRegister;
+    }
+
+    public String getLastBmuTbRegistNumber() {
+        return lastBmuTbRegistNumber;
+    }
+
+    public void setLastBmuTbRegistNumber(String lastBmuTbRegistNumber) {
+        this.lastBmuTbRegistNumber = lastBmuTbRegistNumber;
     }
 }

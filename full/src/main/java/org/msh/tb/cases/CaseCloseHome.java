@@ -33,14 +33,14 @@ public class CaseCloseHome extends Controller{
 	private String comment;
 	
 	protected static final CaseState[] outcomesMDR = {
-		CaseState.CURED, 
-		CaseState.DEFAULTED, 
-		CaseState.DIED,
-		CaseState.FAILED,
-		CaseState.TREATMENT_COMPLETED,
-		CaseState.TRANSFERRED_OUT,
-		CaseState.DIAGNOSTIC_CHANGED,
-		CaseState.OTHER};
+		CaseState.CURED,
+        CaseState.TREATMENT_COMPLETED,
+        CaseState.FAILED,
+        CaseState.DIED,
+        CaseState.DEFAULTED,
+        CaseState.NOT_EVALUATED,
+        CaseState.OTHER
+    };
 
 	protected static final CaseState[] outcomesTB = {
 		CaseState.CURED,

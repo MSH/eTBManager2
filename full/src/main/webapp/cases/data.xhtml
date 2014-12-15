@@ -134,7 +134,7 @@
 		</td></tr>
 		<tr><td>
 		<s:decorate template="/layout/display.xhtml">
-	    	<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
+	    	<ui:define name="label">#{tbcase.classification == 'TB' ? messages['TbCase.registrationDate.TB'] : messages['TbCase.registrationDate']}:</ui:define>
 	    	<h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
 		</s:decorate>
 	
@@ -177,10 +177,25 @@
             <h:outputText rendered="#{not tbcase.rifampcinResistance}">#{messages['global.no']}</h:outputText>
         </s:decorate>
 
+        <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.caseDefinition}">
+            <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
+            #{messages[tbcase.caseDefinition.key]}
+        </s:decorate>
+
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		#{messages[tbcase.infectionSite.key]}
 		</s:decorate>
+
+        <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.lastBmuDateTbRegister}">
+            <ui:define name="label">#{messages['TbCase.bmuTbRegistDate']}:</ui:define>
+            <h:outputText id="dt" value="#{tbcase.lastBmuDateTbRegister}" converter="localeDateConverter"/>
+        </s:decorate>
+
+        <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.lastBmuTbRegistNumber}">
+            <ui:define name="label">#{messages['TbCase.bmuTbRegistNumber']}:</ui:define>
+            #{tbcase.lastBmuTbRegistNumber}
+        </s:decorate>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.pulmonaryType!=null}">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>

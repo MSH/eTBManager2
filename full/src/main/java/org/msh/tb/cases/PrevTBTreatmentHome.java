@@ -10,6 +10,7 @@ import org.msh.tb.SubstancesQuery;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.date.DateUtils;
@@ -400,6 +401,31 @@ public class PrevTBTreatmentHome {
 		}
 		return false;
 	}
+
+    public boolean usedSecondLineDrugs(){
+
+        for(Item i : treatments) {
+            for (ItemSelect it : i.getItems()) {
+                if (it.isSelected()) {
+                    Substance s = (Substance) it.getItem();
+                    if(s.getLine().equals(MedicineLine.SECOND_LINE))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean usedAnyDrugs(){
+        for(Item i : treatments) {
+            for (ItemSelect it : i.getItems()) {
+                if (it.isSelected()) {
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
 	
 /*	private int numItems;
 	private List<SelectItem> numTreatments;
