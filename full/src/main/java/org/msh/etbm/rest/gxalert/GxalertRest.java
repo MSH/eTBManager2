@@ -33,18 +33,18 @@ public class GxalertRest {
     @POST
     public StandardResult add(GxalertForm form) {
         GxalertData data = new GxalertData();
-        data.setAssay(form.getAssay());
-        data.setAssayHostTestCode(form.getAssayHostTestCode());
+
         try {
             PropertyUtils.copyProperties(data, form);
+
+            GxalertService srv = (GxalertService) Component.getInstance("gxalertService");
+
+            srv.saveData(data);
+
         } catch (Exception e) {
             e.printStackTrace();
-            new StandardResult(false, e.getMessage());
+            return new StandardResult(false, e.getMessage());
         }
-
-        GxalertService srv = (GxalertService) Component.getInstance("gxalertService");
-
-        srv.saveData(data);
 
         return new StandardResult(true, data.getId());
     }

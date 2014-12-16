@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
  * Created by ricardo on 23/11/14.
  */
 @Name("authenticationRest")
-@Path("/auth")
+@Path("/pub")
 public class AuthenticationRest {
 
     @In AuthenticationService authenticationService;
@@ -35,13 +35,4 @@ public class AuthenticationRest {
         return new StandardResult(token != null, token);
     }
 
-
-    /**
-     * Logs the user out of the system, i.e, invalidate the user token
-     * @param token a valid user token
-     * @return
-     */
-    public StandardResult logout(@QueryParam("tk") String token) {
-        return new StandardResult(true, null);
-    }
 }

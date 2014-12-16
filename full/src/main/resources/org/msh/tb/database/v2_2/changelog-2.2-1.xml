@@ -7,7 +7,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
     <changeSet id="2.2.1" author="rmemoria">
-        <createTable tableName="gnexpertdata">
+        <createTable tableName="gxalertdata">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" />
             </column>
@@ -34,6 +34,11 @@
             <column name="assayHostTestCode" type="varchar(255)"></column>
             <column name="resultText" type="varchar(255)"></column>
             <column name="computerName" type="varchar(255)"></column>
+            <column name="recordDate" type="datetime"></column>
+            <column name="lastTransaction_ID" type="int"></column>
+            <column name="WORKSPACE_ID" type="int">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

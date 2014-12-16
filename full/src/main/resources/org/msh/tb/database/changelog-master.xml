@@ -39,4 +39,7 @@
     <!-- Starting version 2.1 -->
     <include file="org/msh/tb/database/v2_1/changelog-1.xml" />
     <include file="org/msh/tb/database/v2_1/WHOupdates-nov14.xml" />
+
+  <!-- Starting version 2.2 -->
+  <include file="org/msh/tb/database/v2_2/changelog-2.2-1.xml" />
 </databaseChangeLog>

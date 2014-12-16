@@ -107,6 +107,7 @@ public class AppUpdateService {
             return versionInformation;
         }
         catch (Exception e) {
+            e.printStackTrace();
             errorMessage = e.getMessage();
             return null;
         }

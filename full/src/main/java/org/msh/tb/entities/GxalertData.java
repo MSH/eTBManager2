@@ -58,6 +58,19 @@ public class GxalertData extends WSObject {
     private String resultText;
     private String computerName;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
+    private Date recordDate;
+
+
+    public Date getRecordDate() {
+        return recordDate;
+    }
+
+    public void setRecordDate(Date recordDate) {
+        this.recordDate = recordDate;
+    }
+
     public Integer getId() {
         return id;
     }
