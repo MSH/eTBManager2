@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="Gxalert integration" />
+<ui:param name="left" value="0" />
+
+<ui:define name="menu_lateral">
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+
+	<s:decorate template="/layout/naveg.xhtml">
+		<ui:param name="list" value="#{gxalertResults}" />
+
+		<div style="max-width: 980px;overflow-x: scroll">
+		<h:dataTable id="tbl" value="#{gxalertResults.resultList}" var="r" border="0"
+					 columnClasses="collb"
+					 styleClass="table1"
+					 rowClasses="lin1,lin2" width="100%" rendered="#{gxalertResults.resultCount > 0}">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="ID">
+					</h:outputText>
+				</f:facet>
+				#{r.id}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="System name">
+					</h:outputText>
+				</f:facet>
+				#{r.systemName}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Host ID">
+					</h:outputText>
+				</f:facet>
+				#{r.hostId}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Assay">
+					</h:outputText>
+				</f:facet>
+				#{r.assay}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Assay version">
+					</h:outputText>
+				</f:facet>
+				#{r.assayVersion}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Sample ID">
+					</h:outputText>
+				</f:facet>
+				#{r.sampleId}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Patient ID">
+					</h:outputText>
+				</f:facet>
+				#{r.patientId}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="User">
+					</h:outputText>
+				</f:facet>
+				#{r.user}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Test started on">
+					</h:outputText>
+				</f:facet>
+				#{r.testStartedOn}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="testEndedOn">
+					</h:outputText>
+				</f:facet>
+				#{r.testEndedOn}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Reagent Lot ID">
+					</h:outputText>
+				</f:facet>
+				#{r.reagentLotId}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Cartridge Expiration Date">
+					</h:outputText>
+				</f:facet>
+				#{r.cartridgeExpirationDate}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Cartridge Serial">
+					</h:outputText>
+				</f:facet>
+				#{r.cartridgeSerial}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Module serial">
+					</h:outputText>
+				</f:facet>
+				#{r.moduleSerial}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Instrument Serial">
+					</h:outputText>
+				</f:facet>
+				#{r.instrumentSerial}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Software version">
+					</h:outputText>
+				</f:facet>
+				#{r.softwareVersion}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="resultIdMtb">
+					</h:outputText>
+				</f:facet>
+				#{r.resultIdMtb}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="resultIdRif">
+					</h:outputText>
+				</f:facet>
+				#{r.resultIdRif}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="device Serial">
+					</h:outputText>
+				</f:facet>
+				#{r.deviceSerial}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Notes">
+					</h:outputText>
+				</f:facet>
+				#{r.notes}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="message Sent On">
+					</h:outputText>
+				</f:facet>
+				#{r.messageSentOn}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="assay Host Test Code">
+					</h:outputText>
+				</f:facet>
+				#{r.assayHostTestCode}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="Result text">
+					</h:outputText>
+				</f:facet>
+				#{r.resultText}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="computerName">
+					</h:outputText>
+				</f:facet>
+				#{r.computerName}
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText styleClass="collh" value="record timestamp">
+					</h:outputText>
+				</f:facet>
+				#{r.recordDate}
+			</h:column>
+		</h:dataTable>
+		</div>
+
+	</s:decorate>
+
+</ui:define>
+
+</ui:composition>  
