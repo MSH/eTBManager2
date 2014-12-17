@@ -289,7 +289,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 
 			switch (stateIndex) {
 			// CLOSED
-			case CaseFilters.CLOSED: cond = "c.state > " + Integer.toString( CaseState.ONTREATMENT.ordinal() );
+			case CaseFilters.CLOSED: cond = "c.state >= " + Integer.toString( CaseState.CURED.ordinal() );
 			break;
 
 			// SUSPECT NOT ON TREATMENT
