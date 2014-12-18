@@ -217,10 +217,15 @@ public class CaseEditingHome {
 		
 		TbCase tbcase = caseHome.getInstance();
 
-		tbcase.setNotificationUnit(tbunitselection.getSelected());
+    	tbcase.setNotificationUnit(tbunitselection.getSelected());
 		tbcase.getNotifAddress().setAdminUnit(notifAdminUnit.getSelectedUnit());
 		tbcase.getCurrentAddress().setAdminUnit(currentAdminUnit.getSelectedUnit());
-		
+
+        //fix the inconsistence when owner unit is null.
+        if(tbcase.getOwnerUnit() == null){
+            updateOwnerUnit(tbcase);
+        }
+
 		if (!tbcase.isNotifAddressChanged()) {
 			tbcase.getCurrentAddress().copy(tbcase.getNotifAddress());
 		}
@@ -237,6 +242,27 @@ public class CaseEditingHome {
 		return s;
 	}
 
+    private void updateOwnerUnit(TbCase tbcase){
+        if(tbcase.getOwnerUnit() == null){
+            if(tbcase.getHealthUnits() != null && tbcase.getHealthUnits().size() > 0){
+                TreatmentHealthUnit ownerUnit = null;
+                for(TreatmentHealthUnit h : tbcase.getHealthUnits()){
+                    if(ownerUnit == null) {
+                        ownerUnit = h;
+                    }else{
+                        if(h != null && ownerUnit != null && ownerUnit.getPeriod().getEndDate().before(h.getPeriod().getEndDate())){
+                            ownerUnit = h;
+                        }
+                    }
+                }
+                tbcase.setOwnerUnit(ownerUnit.getTbunit());
+            }else if(tbcase.getNotificationUnit() != null){
+                tbcase.setOwnerUnit(tbcase.getNotificationUnit());
+            }
+        }
+    }
+
+
 	/**
 	 * Save changes made to a case
 	 * @return
@@ -247,7 +273,12 @@ public class CaseEditingHome {
 		tbcase.setNotificationUnit(tbunitselection.getSelected());
 		tbcase.getNotifAddress().setAdminUnit(notifAdminUnit.getSelectedUnit());
 		tbcase.getCurrentAddress().setAdminUnit(currentAdminUnit.getSelectedUnit());
-		
+
+        //fix the inconsistence when owner unit is null.
+        if(tbcase.getOwnerUnit() == null){
+            updateOwnerUnit(tbcase);
+        }
+
 		if (!tbcase.isNotifAddressChanged()) {
 			tbcase.getCurrentAddress().copy(tbcase.getNotifAddress());
 		}

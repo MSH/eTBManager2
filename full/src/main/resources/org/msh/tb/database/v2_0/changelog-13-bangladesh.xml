@@ -537,4 +537,24 @@
         </sql>
     </changeSet>
 
+    <!-- Solve some inconsistences on BD database-->
+    <changeSet id="13.21" author="msantos" context="BD">
+        <sql>
+            update tbcase
+            set NOTIF_ADMINUNIT_ID = (select adminunit_id from tbunit u where u.id = NOTIFICATION_UNIT_ID)
+            where NOTIF_ADMINUNIT_ID is null and NOTIFICATION_UNIT_ID is not null;
+
+            update tbcase
+            set owner_unit_id = (
+            select t1.unit_id
+            from treatmenthealthunit t1
+            where t1.case_id = tbcase.id and t1.endDate = (select max(enddate) from treatmenthealthunit t2 where t2.case_id = t1.case_id))
+            where owner_unit_id is null;
+
+            update tbcase
+            set owner_unit_id = NOTIFICATION_UNIT_ID
+            where owner_unit_id is null;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
