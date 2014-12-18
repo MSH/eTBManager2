@@ -41,4 +41,8 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="2.2.2" author="rmemoria">
+        <sql>update sys_user set ulaAccepted=false where ulaAccepted is null</sql>
+    </changeSet>
 </databaseChangeLog>
