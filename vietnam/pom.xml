@@ -16,10 +16,11 @@
     <properties>
         <workspace-context>VI</workspace-context>
         <war.filename>etbmanager-vi</war.filename>
+        <country-extension>vi</country-extension>
     </properties>
 
     <build>
-        <finalName>etbmanager-vi</finalName>
+        <finalName>${war.filename}</finalName>
 
         <resources>
             <!-- will filter just the persistence.xml -->
@@ -56,7 +57,7 @@
                             <sources>
                                 <source>../full/src/main/java</source>
                                 <source>../full/src/client/java</source>
-                                <source>../full/src/custom/vi</source>
+                                <source>../full/src/custom/${country-extension}</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -86,7 +87,17 @@
                             <directory>../full/src/main/webapp</directory>
                             <excludes>
                                 <exclude>**/web.xml</exclude>
+                                <exclude>custom/**/*</exclude>
                             </excludes>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <directory>../full/src/main/webapp</directory>
+                            <includes>
+                                <include>custom/${country-extension}/**/*</include>
+                            </includes>
                         </resource>
                     </webResources>
                     <packagingExcludes>WEB-INF/deploy/**</packagingExcludes>

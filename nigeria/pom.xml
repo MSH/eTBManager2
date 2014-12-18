@@ -1,29 +1,23 @@
-<?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<groupId>org.msh</groupId>
 		<artifactId>etbmanager</artifactId>
+		<groupId>org.msh</groupId>
 		<version>2.2.0</version>
 	</parent>
 
-	<groupId>org.msh</groupId>
-	<artifactId>nigeria</artifactId>
-	<version>2.2.0</version>
-	<packaging>war</packaging>
+	<modelVersion>4.0.0</modelVersion>
 
-	<name>eTB Manager Nigeria version</name>
-	<url>https://www.etbmanager.org</url>
+	<artifactId>nigeria</artifactId>
+	<packaging>war</packaging>
 
 	<properties>
 		<workspace-context>NG</workspace-context>
-        <war.filename>etbmanager-ng</war.filename>
-    </properties>
-
-
+		<war.filename>etbmanager-ng</war.filename>
+		<country-extension>ng</country-extension>
+	</properties>
 
 	<build>
 		<finalName>${war.filename}</finalName>
@@ -62,9 +56,8 @@
 						<configuration>
 							<sources>
 								<source>../full/src/main/java</source>
-								<source>../full/src/org.msh.reports/java</source>
 								<source>../full/src/client/java</source>
-								<source>../full/src/custom/ng</source>
+								<source>../full/src/custom/${country-extension}</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -72,7 +65,7 @@
 			</plugin>
 
 
-		    <!-- Replace values in the configuration files -->
+			<!-- Replace values in the configuration files -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -94,22 +87,33 @@
 							<directory>../full/src/main/webapp</directory>
 							<excludes>
 								<exclude>**/web.xml</exclude>
+								<exclude>custom/**/*</exclude>
 							</excludes>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</resource>
+						<resource>
+							<directory>../full/src/main/webapp</directory>
+							<includes>
+								<include>custom/${country-extension}/**/*</include>
+							</includes>
 						</resource>
 					</webResources>
 					<packagingExcludes>WEB-INF/deploy/**</packagingExcludes>
-                    <archive>
-                        <manifestEntries>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Built-Date>${buildDate}</Built-Date>
-                            <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-                            <Country-Code>${workspace-context}</Country-Code>
-                            <Build-Number>${buildNumber}</Build-Number>
-                        </manifestEntries>
-                    </archive>
+					<archive>
+						<manifestEntries>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Built-Date>${buildDate}</Built-Date>
+							<Implementation-Title>${project.name}</Implementation-Title>
+							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+							<Country-Code>${workspace-context}</Country-Code>
+							<Build-Number>${buildNumber}</Build-Number>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
