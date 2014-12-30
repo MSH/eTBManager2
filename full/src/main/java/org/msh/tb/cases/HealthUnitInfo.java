@@ -9,6 +9,7 @@ public class HealthUnitInfo {
 
 	private Integer unitId;
 	private String unitName;
+    private String secondAdminUnitLevel;
 	private String adminUnitCode;
 	private Long casesNotifs;
 	private Long casesOnTreatment;
@@ -126,4 +127,12 @@ public class HealthUnitInfo {
 	public void setCasesNotOnTreatment(Long casesNotOnTreatment) {
 		this.casesNotOnTreatment = casesNotOnTreatment;
 	}
+
+    public String getSecondAdminUnitLevel() {
+        return secondAdminUnitLevel;
+    }
+
+    public void setSecondAdminUnitLevel(String secondAdminUnitLevel) {
+        this.secondAdminUnitLevel = secondAdminUnitLevel;
+    }
 }

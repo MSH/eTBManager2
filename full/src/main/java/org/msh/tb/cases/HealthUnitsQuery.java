@@ -5,6 +5,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.adminunits.AdminUnitGroup;
+import org.msh.tb.adminunits.CountryLevelInfo;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
@@ -34,10 +35,14 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	protected UserWorkspace userWorkspace;
 	@In(create=true) CaseFilters caseFilters;
 	@In(create=true) FacesMessages facesMessages;
+    @In (create=true)
+    CountryLevelInfo countryLevelInfo;
 	
 	private List<HealthUnitInfo> resultList;
 	private List<AdminUnitGroup<HealthUnitInfo>> adminUnits;
 	private List<AdministrativeUnit> adminsLevel1;
+
+    private final String SECOND_LEVEL_ADMINUNIT_SQL = ", (select name1 from administrativeunit a2 where a2.code like substring(a.code,1,6) and a2.workspace_id = a.workspace_id and length(a2.code) > 5) as secLevelAUname ";
 
 
 	/* (non-Javadoc)
@@ -67,10 +72,12 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 				"(select count(*) from tbcase c " +
 				"where c.state=0 and c.owner_unit_id = u.id " + casecond + ") as notontreat " +
 
+                (countryLevelInfo.getLevelsWorspace().isHasLevel2() ? SECOND_LEVEL_ADMINUNIT_SQL : "") +
+
 				"from tbunit u inner join administrativeunit a on a.id = u.adminunit_id " +
-				"where u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
+				"where u.treatmentHealthUnit = true and u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 				(hsID != null? " and u.healthsystem_id = " + hsID: "") + 
-				" group by u.id, u.name1, a.code having numcases > 0 or ontreat > 0 or transferin > 0 or transferout > 0 order by a.code, u.name1";
+				" group by u.id, u.name1, a.code order by a.code, secLevelAUname, u.name1";
 		
 		Query query = entityManager.createNativeQuery(sql);
 		if ( getFirstResult()!=null) query.setFirstResult( getFirstResult() );
@@ -206,6 +213,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			info.setCasesTransferIn(readLongValue(vals[5]));
 			info.setCasesTransferOut(readLongValue(vals[6]));
 			info.setCasesNotOnTreatment(readLongValue(vals[7]));
+            info.setSecondAdminUnitLevel((String)vals[8]);
 
 			res.add(info);
 		}

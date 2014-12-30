@@ -275,30 +275,6 @@
     		</h:selectOneMenu>
 		</s:decorate>
 
-    <s:decorate rendered="#{tbcase.classification == 'DRTB'}">
-
-        <s:decorate template="/layout/dateedit.xhtml" >
-            <ui:define name="label">#{messages['TbCase.bmuTbRegistDate']}:</ui:define>
-            <ui:param name="required" value="false" />
-            <ui:param name="datefield" value="#{tbcase.lastBmuDateTbRegister}" />
-            <ui:param name="edtid" value="bmudate" />
-            <ui:param name="checkDeathDate" value="true" />
-            <ui:param name="future" value="false" />
-            <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                <f:param value="#{tbcase.patient.getLastTbCase().getDiagnosisDateFormated()}" />
-            </h:outputFormat>
-        </s:decorate>
-
-        <s:decorate template="/layout/edit.xhtml">
-            <ui:define name="label">#{messages['TbCase.bmuTbRegistNumber']}:</ui:define>
-            <h:inputText value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
-            <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                <f:param value="#{tbcase.patient.getLastTbCase().displayCaseNumber}"/>
-            </h:outputFormat>
-        </s:decorate>
-
-    </s:decorate>
-
 <rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
 <script type="text/javascript">
 <!--
@@ -362,7 +338,31 @@ function isPulmonary(cb) {
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
-		
+
+        <s:decorate rendered="#{tbcase.classification == 'DRTB'}">
+
+            <s:decorate template="/layout/dateedit.xhtml" >
+                <ui:define name="label">#{messages['TbCase.bmuTbRegistDate']}:</ui:define>
+                <ui:param name="required" value="false" />
+                <ui:param name="datefield" value="#{tbcase.lastBmuDateTbRegister}" />
+                <ui:param name="edtid" value="bmudate" />
+                <ui:param name="checkDeathDate" value="true" />
+                <ui:param name="future" value="false" />
+                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                    <f:param value="#{tbcase.patient.getLastTbCase().getDiagnosisDateFormated()}" />
+                </h:outputFormat>
+            </s:decorate>
+
+            <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages['TbCase.bmuTbRegistNumber']}:</ui:define>
+                <h:inputText value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
+                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                    <f:param value="#{tbcase.patient.getLastTbCase().displayCaseNumber}"/>
+                </h:outputFormat>
+            </s:decorate>
+
+        </s:decorate>
+
 		</s:fragment>
 		</td></tr></table></div>
 	</div>

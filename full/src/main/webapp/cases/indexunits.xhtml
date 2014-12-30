@@ -21,7 +21,14 @@
 			</div>
 		</th></tr>
 		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQuery.adminUnits.size()>1?'none':'table-row'}">
-			<th width="250px">#{messages['cases.healthUnit']}</th>
+            <th width="250px">
+                #{messages['cases.healthUnit']}
+            </th>
+            <s:fragment rendered="#{levelInfo.hasLevel2}">
+                <th>
+                    <h:outputText value="#{levelInfo.nameLevel2}"/>
+                </th>
+            </s:fragment>
 			<th align="center">#{messages['cases.ongoing.notontreat']}</th>
 			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
 			<th align="center">#{messages['cases.trasnferin']}</th>
@@ -29,12 +36,17 @@
 		</tr>
 		<a:repeat value="#{adm.items}" var="it">
 		<tr class="unit#{adm.adminUnit.id}" style="display:#{healthUnitsQuery.adminUnits.size()>1?'none':'table-row'}">
-			<td class="highlight">
-				<s:link>
-					<f:param name="id" value="#{it.unitId}" />
-					<div class="icon-hu" />#{it.unitName}
-				</s:link>
-			</td>
+            <td class="highlight">
+                <s:link>
+                    <f:param name="id" value="#{it.unitId}" />
+                    <div class="icon-hu" />#{it.unitName}
+                </s:link>
+            </td>
+            <s:fragment rendered="#{levelInfo.hasLevel2}">
+                <td class="highlight">
+                    <s:span styleClass="hint" style="display:inline" rendered="#{countryLevelInfo.getLevelsWorspace().hasLevel2}">#{it.secondAdminUnitLevel}</s:span>
+                </td>
+            </s:fragment>
 			<td align="center">
 				<s:link value="#{it.casesNotOnTreatment==null?'-':it.casesNotOnTreatment}"  view="/cases/searchresult.xhtml" styleClass="link-small" rendered="#{it.casesNotOnTreatment > 0}">
 					<f:param name="stateIndex" value="102"/>
