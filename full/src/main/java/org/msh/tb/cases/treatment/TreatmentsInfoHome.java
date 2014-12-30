@@ -1,9 +1,7 @@
 package org.msh.tb.cases.treatment;
 
 import org.jboss.seam.Component;
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.Patient;
@@ -11,6 +9,7 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.*;
+import org.msh.tb.login.SessionData;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -26,14 +25,12 @@ import java.util.List;
  */
 @Name("treatmentsInfoHome")
 @BypassInterceptors
-@Scope(ScopeType.CONVERSATION)
 public class TreatmentsInfoHome {
 
 	private List<CaseGroup> groups;
 	private Tbunit tbunit;
 
-    private int orderby;
-    private boolean inverseOrderBy;
+    private Integer orderby;
 
 	/**
 	 * Return the list of treatments for the health unit tbunit
@@ -58,17 +55,17 @@ public class TreatmentsInfoHome {
 		groups = new ArrayList<CaseGroup>();
 
 		List<Object[]> lst = App.getEntityManager().createQuery("select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
-                "c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate, " +
+				"c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate, " +
                 "(select ( sum(day1) + sum(day2) + sum(day3) + sum(day4) + sum(day5) + sum(day6) + sum(day7) + sum(day8) + sum(day9) " +
-                "+ sum(day10) + sum(day11) + sum(day12) + sum(day13) + sum(day14) + sum(day15) + sum(day16) + sum(day17) + sum(day18) " +
-                "+ sum(day19) + sum(day20) + sum(day21) + sum(day22) + sum(day23) + sum(day24) + sum(day25) + sum(day26) + sum(day27) " +
-                "+ sum(day28) + sum(day29) + sum(day30) + sum(day31) ) as total " +
-                "from TreatmentMonitoring tm0 where tm0.tbcase.id = c.id) as medicineTakenDays " +
+                    "+ sum(day10) + sum(day11) + sum(day12) + sum(day13) + sum(day14) + sum(day15) + sum(day16) + sum(day17) + sum(day18) " +
+                    "+ sum(day19) + sum(day20) + sum(day21) + sum(day22) + sum(day23) + sum(day24) + sum(day25) + sum(day26) + sum(day27) " +
+                    "+ sum(day28) + sum(day29) + sum(day30) + sum(day31) ) as total " +
+                    "from TreatmentMonitoring tm0 where tm0.tbcase.id = c.id) as medicineTakenDays " +
                 "from TbCase c " +
-                "join c.patient p left join c.pulmonaryType pt " +
-                "where c.state = " + CaseState.ONTREATMENT.ordinal() +
-                " and c.ownerUnit.id = " + unit.getId() +
-                "group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " + getHQLOrderBy())
+				"join c.patient p left join c.pulmonaryType pt " +
+				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
+				" and c.ownerUnit.id = " + unit.getId() +
+				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " + getHQLOrderBy())
 			.getResultList();
 
 		Patient p = new Patient();
@@ -373,15 +370,21 @@ public class TreatmentsInfoHome {
     private String getHQLOrderBy(){
         String hql = " order by ";
 
-        if(orderby  != 0 && inverseOrderBy)
-            hql += " desc ";
+        Boolean inverseOrderBy = (Boolean) SessionData.instance().getValue("treatmentsInfoHome_inverseOrderBy");
+        if(inverseOrderBy == null)
+            inverseOrderBy = new Boolean(false);
+        if(this.orderby == null)
+            this.orderby = new Integer(0);
 
-        switch (orderby){
+        switch (orderby.intValue()){
             case 0:
                 hql += " c.classification, p.name, p.lastName, p.middleName ";
                 break;
             case 1:
-                hql += " p.name, p.lastName, p.middleName ";
+                if(inverseOrderBy.booleanValue())
+                    hql += " p.name desc, p.lastName desc, p.middleName desc ";
+                else
+                    hql += " p.name, p.lastName, p.middleName ";
                 break;
             case 2:
                 hql += " c.patientType ";
@@ -403,17 +406,35 @@ public class TreatmentsInfoHome {
                 break;*/
         }
 
+
+        if((orderby.intValue()  != 0 && orderby.intValue()  != 1) && inverseOrderBy.booleanValue())
+            hql += " desc ";
+
         return hql;
     }
 
-    public int getOrderby() {
+    public Integer getOrderby() {
         return orderby;
     }
 
-    public void setOrderby(int orderby) {
-        if (orderby == this.orderby)
-            inverseOrderBy = !inverseOrderBy;
-        else inverseOrderBy = false;
-        this.orderby = orderby;
+    public void setOrderby(Integer orderby) {
+        if(SessionData.instance().getValue("treatmentsInfoHome_inverseOrderBy") == null)
+            SessionData.instance().setValue("treatmentsInfoHome_inverseOrderBy", new Boolean(false));
+
+        if(SessionData.instance().getValue("treatmentsInfoHome_orderBy") == null)
+            SessionData.instance().setValue("treatmentsInfoHome_orderBy", orderby);
+
+        /*Check if the user clicked twice on the same link*/
+        this.orderby = (Integer) SessionData.instance().getValue("treatmentsInfoHome_orderBy");
+        Boolean tempInverse = (Boolean) SessionData.instance().getValue("treatmentsInfoHome_inverseOrderBy");
+
+        if (orderby.equals(this.orderby)) {
+            tempInverse = new Boolean(!tempInverse.booleanValue());
+            SessionData.instance().setValue("treatmentsInfoHome_inverseOrderBy", tempInverse);
+        }else {
+            SessionData.instance().setValue("treatmentsInfoHome_inverseOrderBy", new Boolean(false));
+        }
+
+        SessionData.instance().setValue("treatmentsInfoHome_orderBy", orderby);
     }
 }
