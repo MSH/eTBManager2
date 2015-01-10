@@ -23,7 +23,7 @@ public class CasesViewController {
 	/**
 	 * selected unit from the user
 	 */
-	private Tbunit selectedUnit;
+	protected Tbunit selectedUnit;
 
 	
 	/**
@@ -46,16 +46,16 @@ public class CasesViewController {
 	 */
 	public void setSelectedUnit(Tbunit selectedUnit) {
 		this.selectedUnit = selectedUnit;
-		
+
 		// sync selected unit with other components
-		TreatmentsInfoHome comp1 = (TreatmentsInfoHome)App.getComponent("treatmentsInfoHome");
+		TreatmentsInfoHome comp1 = (TreatmentsInfoHome)App.getComponentFromDefaultWorkspaceOrGeneric("treatmentsInfoHome");
 		if (comp1 != null)
 			comp1.setTbunit(selectedUnit);
 
 		CaseStateReport comp2 = (CaseStateReport)App.getComponent("caseStateReport");
 		comp2.setTbunit(selectedUnit);
 	}
-	
+
 	/**
 	 * Set the selected unit id
 	 * @param id

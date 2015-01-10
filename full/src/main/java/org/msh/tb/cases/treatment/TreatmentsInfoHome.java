@@ -27,10 +27,10 @@ import java.util.List;
 @BypassInterceptors
 public class TreatmentsInfoHome {
 
-	private List<CaseGroup> groups;
-	private Tbunit tbunit;
+	protected List<CaseGroup> groups;
+    protected Tbunit tbunit;
 
-    private Integer orderby;
+    protected Integer orderby;
 
 	/**
 	 * Return the list of treatments for the health unit tbunit
@@ -134,6 +134,7 @@ public class TreatmentsInfoHome {
 		private PatientType patientType;
         private String pulmonaryType;
         private Date registrationDate;
+        private String pulmonaryTypesBD;
 		
 		/**
 		 * @return the caseId
@@ -184,6 +185,14 @@ public class TreatmentsInfoHome {
 			this.numDaysDone = numDaysDone;
 		}
 
+        public String getPulmonaryTypesBD() {
+            return pulmonaryTypesBD;
+        }
+
+        public void setPulmonaryTypesBD(String pulmonaryTypesBD) {
+            this.pulmonaryTypesBD = pulmonaryTypesBD;
+        }
+
         /**
          * Return the percentage progress of the treatment
          * @return
@@ -217,14 +226,13 @@ public class TreatmentsInfoHome {
             if ((treatmentPeriod == null) || (treatmentPeriod.isEmpty()))
                 return null;
 
-            double days;
-            if(DateUtils.getDate().before(treatmentPeriod.getEndDate()))
-                days = DateUtils.daysBetween(treatmentPeriod.getIniDate(), DateUtils.getDate());
-            else
-                days = DateUtils.daysBetween(treatmentPeriod.getIniDate(), treatmentPeriod.getEndDate());
-
+            double days = numDaysPlanned;
             int daysDone = getNumDaysDone();
-            Double result = (daysDone == 0? 0: daysDone / days * 100);
+
+            if(days == 0 || daysDone == 0)
+                return 0.0;
+
+            Double result = daysDone / days * 100;
             if (result == null)
                 return null;
 
@@ -367,7 +375,7 @@ public class TreatmentsInfoHome {
 		else tbunit = App.getEntityManager().find(Tbunit.class, id);
 	}
 
-    private String getHQLOrderBy(){
+    protected String getHQLOrderBy(){
         String hql = " order by ";
 
         Boolean inverseOrderBy = (Boolean) SessionData.instance().getValue("treatmentsInfoHome_inverseOrderBy");

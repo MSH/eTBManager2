@@ -79,7 +79,9 @@ public class CaseStateReport  {
 				" group by c.state, c.diagnosisType";
 		
 		List<Object[]> lst = App.getEntityManager().createNativeQuery(sql).getResultList();
-		
+
+        createItemsList();
+
 		total = new Item( App.getMessage("global.total"), 0);
 		
 		for (Object[] val: lst) {
@@ -101,7 +103,7 @@ public class CaseStateReport  {
 			}
 */		}
 		
-		Collections.sort(items, new Comparator<CaseStateItem>() {
+		/*Collections.sort(items, new Comparator<CaseStateItem>() {
 
 			public int compare(CaseStateItem o1, CaseStateItem o2) {
 				Integer cs1 = o1.getStateIndex();
@@ -114,9 +116,18 @@ public class CaseStateReport  {
 				return cs1.compareTo(cs2);
 			}
 
-		});
+		});*/
+
 	}
 
+    private void createItemsList(){
+        findItem(CaseState.ONTREATMENT,DiagnosisType.CONFIRMED);
+        findItem(CaseState.WAITING_TREATMENT,DiagnosisType.CONFIRMED);
+        findItem(CaseState.ONTREATMENT,DiagnosisType.SUSPECT);
+        findItem(CaseState.WAITING_TREATMENT,DiagnosisType.SUSPECT);
+        findItem(CaseState.TRANSFERRING,DiagnosisType.SUSPECT);
+        findItem(CaseState.CURED,DiagnosisType.SUSPECT);
+    }
 
 	/**
 	 * Get HQL instruction to be included in the WHERE clause
@@ -323,7 +334,7 @@ public class CaseStateReport  {
 		else
 			if (state == CaseState.TRANSFERRING) {
 				sc = CaseFilters.TRANSFERRING;
-				desc = App.getMessage(CaseState.TRANSFERRING.getKey());
+				desc = App.getMessage("cases.transferin2");
 			}
 			else {
 				sc = state.ordinal();

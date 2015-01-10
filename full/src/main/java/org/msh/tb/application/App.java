@@ -3,6 +3,7 @@ package org.msh.tb.application;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.Workspace;
 
 import javax.persistence.EntityManager;
 
@@ -50,7 +51,26 @@ public class App {
 	public static Object getComponent(String name, boolean create) {
 		return Component.getInstance(name, create);
 	}
-	
+
+    /**
+     * Return an instance of a component. The name of the component must be composed of the name parameter
+     * plus the suffix _ws, where _ws is the extension of the default workspace on upper case letters.
+     * @param name
+     * @return
+     */
+    public static Object getComponentFromDefaultWorkspaceOrGeneric(String name) {
+        Object ret;
+        Workspace ws = (Workspace) App.getComponent("defaultWorkspace",true);
+
+        String s = name + "_" + ws.getExtension();
+        ret = Component.getInstance(s, true);
+
+        if(ret == null)
+            ret = Component.getInstance(name, true);
+
+        return ret;
+    }
+
 	/**
 	 * Return a component of a specified class
 	 * @param clazz

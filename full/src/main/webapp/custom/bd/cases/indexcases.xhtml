@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+        >
+
+    <div class="spacer" />
+    <div class="icon-hu-big" style="float:left;"/>
+    <div class="text-big">#{treatmentsInfoHome_bd.tbunit.name}</div>
+    #{treatmentsInfoHome_bd.tbunit.adminUnit.fullDisplayName}"
+    <div class="spacer" />
+
+    <s:div id="patientlist">
+        <table class="table2" >
+            <a:repeat var="grp" value="#{treatmentsInfoHome_bd.groups}">
+
+                <tr>
+                    <th colspan="7">#{messages[grp.classification.key]}</th>
+                </tr>
+                <tr>
+                    <th align="left"><a:commandLink value="#{messages['Patient']}" onclick="changeOrder(1);return false;" styleClass="link-header-sr"/></th>
+                    <th align="left"><a:commandLink value="#{messages['PatientType']}" onclick="changeOrder(2);return false;" styleClass="link-header-sr"/></th>
+                    <th align="left"><a:commandLink value="#{messages['InfectionSite']}" onclick="changeOrder(3);return false;" styleClass="link-header-sr"/></th>
+                    <th align="left"><a:commandLink value="#{messages['TbCase.registrationDate']}" onclick="changeOrder(4);return false;" styleClass="link-header-sr"/></th>
+                    <th align="left"><a:commandLink value="#{messages['TbCase.iniTreatmentDate']}" onclick="changeOrder(5);return false;" styleClass="link-header-sr"/></th>
+                    <th>#{messages['cases.mantreatmentplaned']}(%)</th>
+                    <th>#{messages['cases.actualtreatprogr']}(%)</th>
+                </tr>
+                <a:repeat value="#{grp.treatments}" var="it">
+                    <tr>
+                        <td>
+                            <s:link value="#{it.patientName}" view="/cases/casedata.xhtml" >
+                                <f:param name="id" value="#{it.caseId}"/>
+                            </s:link>
+                        </td>
+                        <td>
+                            <h:outputText value="#{messages[it.patientType.key]}" />
+                        </td>
+                        <td>
+                            <h:outputText value="#{messages[it.infectionSite.key]}" />
+                            <s:fragment rendered="#{it.infectionSite == 'PULMONARY'}">
+                                <span class="hint">#{it.pulmonaryTypesBD}</span>
+                                <h:outputText rendered="#{it.pulmonaryTypesBD == 'NEGATIVE' and not empty it.pulmonaryType}"
+                                              value=" - #{it.pulmonaryType}" styleClass="hint" />
+                            </s:fragment>
+                        </td>
+                        <td>
+                            <h:outputText value="#{it.registrationDate}" converter="localeDateConverter"/>
+                        </td>
+                        <td align="center">
+                            <h:outputText value="#{it.treatmentPeriod.iniDate}" converter="localeDateConverter" />
+                        </td>
+                        <td align="left" width="155px">
+                            <s:fragment rendered="#{it.progressPoints!=null}">
+                                <div class="progress-icon" style="width:#{it.progressPoints}px;float:left;">
+                                    <!-- &nbsp;  -->
+                                </div>
+                                <h:outputText value="#{it.plannedProgress}" >
+                                    <f:convertNumber pattern="#,###,##0.0"/>
+                                </h:outputText>%
+                            </s:fragment>
+                        </td>
+                        <td align="left" width="155px">
+                            <s:fragment rendered="#{it.medicineIntakePoints!=null}">
+                                <div class="progress-icon" style="width:#{it.medicineIntakePoints}px;float:left;">
+                                    <!-- &nbsp;  -->
+                                </div>
+                                <h:outputText value="#{it.takenMedicineProgress}" >
+                                    <f:convertNumber pattern="#,###,##0.0"/>
+                                </h:outputText>%
+                            </s:fragment>
+                        </td>
+                    </tr>
+                </a:repeat>
+            </a:repeat>
+        </table>
+    </s:div>
+
+    <a:jsFunction name="changeOrder" reRender="patientlist" ajaxSingle="true" >
+        <a:actionparam name="param1" assignTo="#{treatmentsInfoHome_bd.orderby}" converter="javax.faces.Integer" />
+    </a:jsFunction>
+
+</ui:composition>  
