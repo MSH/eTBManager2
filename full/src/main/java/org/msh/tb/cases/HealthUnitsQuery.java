@@ -42,7 +42,7 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 	private List<AdminUnitGroup<HealthUnitInfo>> adminUnits;
 	private List<AdministrativeUnit> adminsLevel1;
 
-    private final String SECOND_LEVEL_ADMINUNIT_SQL = ", (select name1 from administrativeunit a2 where a2.code like substring(a.code,1,6) and a2.workspace_id = a.workspace_id and length(a2.code) > 5) as secLevelAUname ";
+    private final String SECOND_LEVEL_ADMINUNIT_SQL = ", (select name1 from administrativeunit a2 where a2.code like substring(a.code,1,6) and a2.workspace_id = a.workspace_id and length(a2.code) > 5 limit 1) as secLevelAUname ";
 
 
 	/* (non-Javadoc)
