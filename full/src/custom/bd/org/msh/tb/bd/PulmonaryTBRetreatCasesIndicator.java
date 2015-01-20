@@ -499,7 +499,7 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
     @Override
     protected String getHQLWhere(){
-        return super.getHQLWhere() + " and c.patientType in (0,1,2,3,4,5) ";
+        return super.getHQLWhere() + " and c.patientType in (1,2,3,4,5) ";
     }
 
     @Override
