@@ -80,4 +80,13 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="24.8" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="movedSecondLineTreatment" type="boolean" />
+        </addColumn>
+        <sql>
+            update tbcase set movedSecondLineTreatment = false;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

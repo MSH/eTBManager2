@@ -30,11 +30,15 @@
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
-		<ui:define name="label">#{messages['cases.outcome']}:</ui:define>
-		<h:selectOneRadio id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
-			<s:selectItems value="#{caseCloseHome.outcomes}" var="v" label="#{messages[v.key]}"/>
-			<s:convertEnum />
-		</h:selectOneRadio>
+        <ui:define name="label">#{messages['cases.outcome']}:</ui:define>
+        <h:selectOneRadio id="selstate" value="#{caseCloseHome.state}" required="true" layout="pageDirection">
+            <s:selectItems value="#{caseCloseHome.outcomes}" var="v" label="#{messages[v.key]}"/>
+            <s:convertEnum />
+        </h:selectOneRadio>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+        <h:selectBooleanCheckbox id="movedToSecondLine" value="#{tbcase.movedSecondLineTreatment}"/>#{messages['CaseState.MOVED_SECONDLINE']}
     </s:decorate>
 
 	<div id="comments" style="display:block;clear:both;" >

@@ -165,6 +165,8 @@ public class TbCase implements Serializable, Transactional, SyncKey {
     private boolean tbContact;
 
     private boolean rifampcinResistance;
+
+    private boolean movedSecondLineTreatment;
 	
 	@Column(length=100)
 	private String patientContactName;
@@ -1416,5 +1418,13 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
     public void setLastBmuTbRegistNumber(String lastBmuTbRegistNumber) {
         this.lastBmuTbRegistNumber = lastBmuTbRegistNumber;
+    }
+
+    public boolean isMovedSecondLineTreatment() {
+        return movedSecondLineTreatment;
+    }
+
+    public void setMovedSecondLineTreatment(boolean movedSecondLineTreatment) {
+        this.movedSecondLineTreatment = movedSecondLineTreatment;
     }
 }

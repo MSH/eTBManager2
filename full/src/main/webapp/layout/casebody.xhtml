@@ -8,15 +8,17 @@
 
 	<div class="spacer" />
 	<div style="float:right">
-		<h:outputText value="#{caseHome.getStatusString2(tbcase)}" styleClass="status-label" style="float:right"/><br />
+        <h:outputText value="#{caseHome.getStatusString2(tbcase)}" styleClass="status-label"/>
+        <h:outputText value=" - #{messages['CaseState.MOVED_SECONDLINE']}" styleClass="status-label" rendered="#{tbcase.movedSecondLineTreatment}"/><br />
+
 		<s:div rendered="#{tbcase.open}" style="clear:both;">
 			<b><h:outputText  value="#{messages[tbcase.getCaseEvolution()]}" style="float:right; color:#292929"/></b>
 		</s:div>
 		<s:fragment rendered="#{not tbcase.open}">
-			<div class="status-label"><div style="font-size:0.8em">
+			<div class="status-label"><div style="font-size:0.8em;float:right">
 			#{messages['TbCase.outcomeDate']}: 
 			<h:outputText value="#{tbcase.outcomeDate}" rendered="#{not tbcase.open}" converter="localeDateConverter" style="padding-left:10px;"/>
-			</div></div>
+            </div></div>
 		</s:fragment>
 		<ui:insert name="state-content" />
 	</div>

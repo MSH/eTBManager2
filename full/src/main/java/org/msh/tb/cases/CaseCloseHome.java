@@ -49,7 +49,6 @@ public class CaseCloseHome extends Controller{
         CaseState.DIED,
         CaseState.DEFAULTED,
         CaseState.NOT_EVALUATED,
-        CaseState.MOVED_SECONDLINE,
         CaseState.OTHER
     };
 	
@@ -129,6 +128,7 @@ public class CaseCloseHome extends Controller{
 		else tbcase.setState(CaseState.ONTREATMENT);
 		
 		tbcase.setOtherOutcome(null);
+        tbcase.setMovedSecondLineTreatment(false);
 
 		caseHome.setTransactionLogActive(false);
 		caseHome.persist();
