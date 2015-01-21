@@ -355,11 +355,10 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
     private void populateTableFields(){
         //The code bellow populates the retreat case table, relapse row
-        /*Asked to be removed by Gustavo. If BD team ask it back, just remove the comments.
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_total_F);
         addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.relapse"), relapse_total_M + relapse_total_F);
-        */
+
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_smearNegative_F);
 
@@ -383,17 +382,17 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
         addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_notEvaluated_M);
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_notEvaluated_F);
-
+        /*BD team asked to hide this column
         addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_grandTotal_M);
         addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.relapse"), relapse_grandTotal_T);
+        */
 
         //The code bellow populates the new case table, failures row
-        /*Asked to be removed by Gustavo. If BD team ask it back, just remove the comments.
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_total_F);
         addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.failures"), failure_total_M + failure_total_F);
-        */
+
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_smearNegative_F);
 
@@ -417,17 +416,17 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
         addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_notEvaluated_M);
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_notEvaluated_F);
-
+        /*BD team asked to hide this column
         addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_grandTotal_M);
         addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.failures"), failure_grandTotal_T);
+        */
 
         //The code bellow populates the new case table, default negative row
-        /*Asked to be removed by Gustavo. If BD team ask it back, just remove the comments.
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_total_F);
         addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.default"), default_total_M + default_total_F);
-        */
+
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_smearNegative_F);
 
@@ -451,17 +450,17 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
         addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_notEvaluated_M);
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_notEvaluated_F);
-
+        /*BD team asked to hide this column
         addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_grandTotal_M);
         addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.default"), default_grandTotal_T);
+        */
 
         //The code bellow populates the new case table, others row
-        /*Asked to be removed by Gustavo. If BD team ask it back, just remove the comments.
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_total_F);
         addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.others"), other_total_M + other_total_F);
-        */
+
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_smearNegative_F);
 
@@ -486,10 +485,11 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
         addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_notEvaluated_M);
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_notEvaluated_F);
 
+        /*BD team asked to hide this column
         addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_grandTotal_M);
         addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.others"), other_grandTotal_T);
-
+        */
     }
 
     private boolean isSmearPositive(MicroscopyResult micResult){
