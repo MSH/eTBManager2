@@ -506,4 +506,8 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
     public boolean isHasTotal() {
         return true;
     }
+
+    public double getSputumConversionRate(){
+        return 100;
+    }
 }

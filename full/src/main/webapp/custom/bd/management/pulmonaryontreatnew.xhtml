@@ -48,13 +48,9 @@
 	<!-- adding new table -->
 	<s:fragment rendered="#{indicatorController.executing}">
 
-	#{messages['manag.pulmonary.new']}<b> - #{messages['manag.case.sputumconversionrate']}:
-    <h:outputText value="#{pulmonaryTBNewCasesIndicator.getSputumConversionRate()}">
-        <f:convertNumber pattern="#,###,##0"/>
-    </h:outputText>%
-    </b>
+	#{messages['manag.pulmonary.new']}
 
-    <table class="table1" width="800px" align="left">
+    <table class="table1" width="800px" align="left" style="float:none">
 	
         <tr>
         <th rowspan="2" width="180px">
@@ -142,7 +138,7 @@
         #{messages['manag.pulmonary.retreat']}
     </div>
 
-    <table class="table1" width="800px" align="left">
+    <table class="table1" width="800px" align="left" style="float:none">
         <tr>
         <th rowspan="2" width="180px">
                     #{messages['manag.pulmonary.patienttype']}
@@ -214,6 +210,34 @@
         </ui:repeat>
 
     </table>
+
+        <br/><br/>
+
+        <table class="table1" style="float:none;width:30%">
+            <tr>
+                <th colspan="2">#{messages['manag.case.sputumconversionrate']}</th>
+            </tr>
+            <tr>
+                <th>
+                    #{messages['manag.pulmonary.new']}
+                </th>
+                <td>
+                    <h:outputText value="#{pulmonaryTBNewCasesIndicator.getSputumConversionRate()}">
+                        <f:convertNumber pattern="#,###,##0"/>
+                    </h:outputText>%
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    #{messages['manag.pulmonary.retreat']}
+                </th>
+                <td>
+                    <h:outputText value="#{pulmonaryTBRetreatCasesIndicator.getSputumConversionRate()}">
+                        <f:convertNumber pattern="#,###,##0"/>
+                    </h:outputText>%
+                </td>
+            </tr>
+        </table>
 
     </s:fragment>
     <!-- end of adding new table -->
