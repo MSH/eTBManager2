@@ -33,17 +33,6 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
             smearPositive_notEvaluated_M, smearPositive_notEvaluated_F,
             smearPositive_grandTotal_M, smearPositive_grandTotal_F, smearPositive_grandTotal_T,
 
-            /*Suspended by bangldesh team
-            xpert_total_M, xpert_total_F,
-            xpert_smearNegative_M, xpert_smearNegative_F,
-            xpert_smearPositive_M, xpert_smearPositive_F,
-            xpert_died_M, xpert_died_F,
-            xpert_failure_M, xpert_failure_F,
-            xpert_defaulted_M, xpert_defaulted_F,
-            xpert_transfOut_M, xpert_transfOut_F,
-            xpert_notEvaluated_M, xpert_notEvaluated_F,
-            xpert_grandTotal_M, xpert_grandTotal_F, xpert_grandTotal_T,*/
-
             smearNegative_total_M, smearNegative_total_F,
             smearNegative_smearNegative_M, smearNegative_smearNegative_F,
             smearNegative_smearPositive_M, smearNegative_smearPositive_F,
@@ -85,7 +74,7 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
     private void calculateSmearPositiveRowIndicators(){
         List<Object[]> result;
 
-        //Smears columns - Male and female
+        //Smears columns - Male and female - only for cases with ini treatment date
         result = getEntityManager().createQuery(" select c.patient.gender, followup.result, count(followup.result) " + HQLFrom_New_NotEval2SmearColumns + getHQLWhere() +
                 " and followup.tbcase.id = m.tbcase.id " + HQLWhere_New_SmearPositiveRow + HQLWhere_Both_SmearColumns + HQLGroupBy_New_SmearColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
@@ -110,9 +99,7 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
             }
         }
 
-        //Outcome Columns - Male and female
-        System.out.println("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_SmearPositiveRow
-                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns);
+        //Outcome Columns - Male and female - only for cases with ini treatment date
         result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_SmearPositiveRow
                 + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
@@ -153,18 +140,25 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
         }
 
         //Not Evaluated Column - Male and female
+        //Column not evaluated when has no follow up exam registered (even if don't have ini treat date)
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_SmearPositiveRow
                 + HQLWhere_Both_NotEvaluatedColumn + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcSmearPosRowNotEvalColumns(result);
 
+        //Column not evaluated when has follow up exam registered and that exam has pending result.
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_NotEval2SmearColumns + getHQLWhere() + HQLWhere_New_SmearPositiveRow
                 + HQLWhere_Both_NotEvaluatedColumn2 + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcSmearPosRowNotEvalColumns(result);
 
+        //Column not evaluated when case doesn't have ini treatment date but has (diag) exams with result. As the case don't have ini treat date, it can't have follow up exam.
+        result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() +
+                HQLWhere_New_SmearRowNotEvalColumn + " and m.result in (1,2,3,4,5) " + HQLGroupBy_New_NotEvaluatedColumn)
+                .getResultList();
+        calcSmearPosRowNotEvalColumns(result);
 
         //grand total columns
         smearPositive_grandTotal_M = smearPositive_smearNegative_M + smearPositive_smearPositive_M + smearPositive_died_M +
@@ -259,15 +253,23 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
         }
 
         //Not Evaluated Column - Male and female
+        //Column not evaluated when has no follow up exam registered (even if don't have ini treat date)
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_SmearNegativeRow
                 + HQLWhere_Both_NotEvaluatedColumn + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcSmearNegRowNotEvalColumns(result);
 
+        //Column not evaluated when has follow up exam registered and that exam has pending result.
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_NotEval2SmearColumns + getHQLWhere() + HQLWhere_New_SmearNegativeRow
                 + HQLWhere_Both_NotEvaluatedColumn2 + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
+                .getResultList();
+        calcSmearNegRowNotEvalColumns(result);
+
+        //Column not evaluated when case doesn't have ini treatment date but has (diag) exams with result. As the case don't have ini treat date, it can't have follow up exam.
+        result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() +
+                HQLWhere_New_SmearRowNotEvalColumn + " and m.result = 0 " + HQLGroupBy_New_NotEvaluatedColumn)
                 .getResultList();
         calcSmearNegRowNotEvalColumns(result);
 
@@ -314,13 +316,29 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
 
         //Outcome Columns - Male and female
+        //Not eval row, when case has ini treat date and diag exam registered as pending.
         result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow1
                 + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcNotEvalRowOutcomeColumns(result);
 
+        //Not eval row, when case has ini treat date and no diag exam registered.
         result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_NotEval2RowOutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow2
+                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
+                .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
+                .getResultList();
+        calcNotEvalRowOutcomeColumns(result);
+
+        //Not eval row, when case has no ini treat date and (no diag exam registered OR diag exam registered with no result).
+        result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow3
+                + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
+                .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
+                .getResultList();
+        calcNotEvalRowOutcomeColumns(result);
+
+        //Not eval row, when case has no ini treat date and diag registered as pending or with no result. As the case don't have ini treat, it can't have follow up exam.
+        result = getEntityManager().createQuery("select c.patient.gender, c.state, count(c.state) " + HQLFrom_New_NotEval2RowOutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow4
                 + HQLWhere_Both_OutcomeColumns + HQLGroupBy_New_OutcomeColumns)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
@@ -328,31 +346,43 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
 
 
         //Not Evaluated Column - Male and female
-        //Not eval row, when case has diag exam registered as pending. Not eval col when case has no follow up exam registered.
+        //Not eval row, when case has ini treat date and diag exam registered as pending. Not eval col when case has no follow up exam registered.
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_OutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow1
                 + HQLWhere_Both_NotEvaluatedColumn + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcNotEvalRowNotEvalColumns(result);
 
-        //Not eval row, when case has diag exam registered as pending. Not eval col when case has follow up exam registered as pending.
+        //Not eval row, when case has ini treat date and diag exam registered as pending. Not eval col when case has follow up exam registered as pending.
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_NotEval2SmearColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow1
                 + HQLWhere_Both_NotEvaluatedColumn2 + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcNotEvalRowNotEvalColumns(result);
 
-        //Not eval row, when case has no diag exam registered. Not eval col when case has no follow up exam registered.
+        //Not eval row, when case has ini treat date and no diag exam registered. Not eval col when case has no follow up exam registered.
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + HQLFrom_New_NotEval2RowOutcomeNotEvalColumns + getHQLWhere() + HQLWhere_New_NotEvaluatedRow2
                 + HQLWhere_Both_NotEvaluatedColumn + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
                 .getResultList();
         calcNotEvalRowNotEvalColumns(result);
 
-        //Not eval row, when case has no diag exam registered. Not eval col when case has follow up exam registered as pending.
+        //Not eval row, when case has ini treat date and no diag exam registered. Not eval col when case has follow up exam registered as pending.
         result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + " from ExamMicroscopy m, ExamMicroscopy followup join m.tbcase c " + getHQLWhere() + HQLWhere_New_NotEvaluatedRow2
                 + HQLWhere_Both_NotEvaluatedColumn2 + HQLGroupBy_New_NotEvaluatedColumn)
                 .setParameter("followupExamLimit", DateUtils.incDays(getIndicatorFilters().getEndDate(),90))
+                .getResultList();
+        calcNotEvalRowNotEvalColumns(result);
+
+        //Not eval row, when case has no ini treat date and (no diag exam registered OR diag exam registered with no result). As the case don't have ini treat, it can't have follow up exam, so it is not evaluated on the column.
+        result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + " from ExamMicroscopy m right join m.tbcase c " + getHQLWhere() + HQLWhere_New_NotEvaluatedRow3
+                + " and c.state <= 2 " + HQLGroupBy_New_NotEvaluatedColumn)
+                .getResultList();
+        calcNotEvalRowNotEvalColumns(result);
+
+        //Not eval row, when case has no ini treat date and diag registered as pending or with no result. As the case don't have ini treat, it can't have follow up exam, so it is not evaluated on the column.
+        result = getEntityManager().createQuery("select c.patient.gender, count(c.id) " + " from ExamMicroscopy m right join m.tbcase c " + getHQLWhere() + HQLWhere_New_NotEvaluatedRow4
+                + " and c.state <= 2 " +  HQLGroupBy_New_NotEvaluatedColumn)
                 .getResultList();
         calcNotEvalRowNotEvalColumns(result);
 
@@ -470,38 +500,6 @@ public class PulmonaryTBNewCasesIndicator extends Indicator2D implements TB12Ind
         addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_M);
         addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_F);
         addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.smearpositive"), smearPositive_grandTotal_T);
-        */
-
-        //The code bellow populates the new case table, xpert row
-        /*suspended, Bangladesh team was not sure about the rules
-        addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_total_M);
-        addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_total_F);
-        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.xpert"), xpert_total_M + xpert_total_F);
-
-        addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_smearNegative_M);
-        addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_smearNegative_F);
-
-        addValue(messages.get("manag.gender.male2"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_smearPositive_M);
-        addValue(messages.get("manag.gender.female2"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_smearPositive_F);
-
-        addValue(messages.get("manag.gender.male3"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_died_M);
-        addValue(messages.get("manag.gender.female3"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_died_F);
-
-        addValue(messages.get("manag.gender.male4"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_failure_M);
-        addValue(messages.get("manag.gender.female4"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_failure_F);
-
-        addValue(messages.get("manag.gender.male5"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_defaulted_M);
-        addValue(messages.get("manag.gender.female5"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_defaulted_F);
-
-        addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_transfOut_M);
-        addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_transfOut_F);
-
-        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_notEvaluated_M);
-        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_notEvaluated_F);
-
-        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.xpert"), xpert_grandTotal_M);
-        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.xpert"), xpert_grandTotal_F);
-        addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.xpert"), xpert_grandTotal_T);
         */
 
         //The code bellow populates the new case table, smear negative row
