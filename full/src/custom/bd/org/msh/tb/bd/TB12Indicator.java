@@ -66,7 +66,9 @@ public interface TB12Indicator {
                                                         " and (m.result in (6,7) or m.result is null)";
 
     static final String HQLWhere_Both_SmearColumns = " and followup.id = (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = followup.tbcase.id " +
-                                                     " and m4.dateRelease = (select min(m5.dateRelease) from ExamMicroscopy m5 where m5.tbcase.id = m4.tbcase.id and m5.dateRelease > c.treatmentPeriod.iniDate and m5.dateRelease <= :followupExamLimit)) ";
+                                                                            " and m4.dateRelease = (select min(m5.dateRelease) from ExamMicroscopy m5 " +
+                                                                                                        " where m5.tbcase.id = m4.tbcase.id and m5.dateRelease > c.treatmentPeriod.iniDate " +
+                                                                                                        " and m5.dateRelease <= :followupExamLimit)) ";
 
     static final String HQLWhere_Both_OutcomeColumns = " and c.state > 2 and (select max(m4.id) from ExamMicroscopy m4 where m4.tbcase.id = c.id " +
                                                        " and m4.dateRelease = (select min(m5.dateRelease) from ExamMicroscopy m5 where m5.tbcase.id = m4.tbcase.id and m5.dateRelease > c.treatmentPeriod.iniDate and m5.dateRelease <= :followupExamLimit)) is null ";

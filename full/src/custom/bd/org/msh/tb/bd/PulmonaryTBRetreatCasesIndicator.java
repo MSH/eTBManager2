@@ -493,7 +493,7 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
     }
 
     private boolean isSmearPositive(MicroscopyResult micResult){
-        return (micResult.equals(MicroscopyResult.PLUS) || micResult.equals(MicroscopyResult.PLUS2) || micResult.equals(MicroscopyResult.PLUS4) || micResult.equals(MicroscopyResult.PLUS4)
+        return (micResult.equals(MicroscopyResult.PLUS) || micResult.equals(MicroscopyResult.PLUS2) || micResult.equals(MicroscopyResult.PLUS3) || micResult.equals(MicroscopyResult.PLUS4)
                 || micResult.equals(MicroscopyResult.POSITIVE));
     }
 
@@ -508,6 +508,6 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
     }
 
     public double getSputumConversionRate(){
-        return 100;
+        return 10000;
     }
 }
