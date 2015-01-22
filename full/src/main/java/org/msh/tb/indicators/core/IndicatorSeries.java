@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * @author Ricardo Memória
+ * @author Ricardo MemÃ³ria
  * Contains a series of a 
  */
 public class IndicatorSeries implements Comparator<IndicatorItem>{

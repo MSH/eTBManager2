@@ -12,7 +12,7 @@ import org.msh.tb.vi.entities.TbCaseVI;
 /**
  * Handle basic operations with a TB/MDR case. Check {@link CaseEditingHome} for notification and editing of case data
  * Specific operations concerning exams, case regimes, heath units and medical consultations are handled by other classes.
- * @author Ricardo Memória 
+ * @author Ricardo MemÃ³ria
  * Cambodia - Vani Rao
  */
 @Name("caseHomeVI")
