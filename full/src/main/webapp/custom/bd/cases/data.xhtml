@@ -208,9 +208,10 @@
     		#{messages[tbcase.infectionSite.key]}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.pulmonaryType!=null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcasebd.pulmonaryTypesBD!=null}">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
-    		#{tbcase.pulmonaryType}
+    		#{messages[tbcasebd.pulmonaryTypesBD.key]}
+            <h:outputText rendered="#{not empty tbcase.pulmonaryType}" value=" - #{tbcase.pulmonaryType}"/>
 		</s:decorate>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.extrapulmonaryType!=null}">

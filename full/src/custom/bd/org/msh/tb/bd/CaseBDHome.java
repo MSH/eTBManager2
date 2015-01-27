@@ -6,6 +6,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.bd.cases.exams.MedicalExaminationBdHome;
 import org.msh.tb.bd.entities.TbCaseBD;
+import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
@@ -42,7 +43,9 @@ public class CaseBDHome {
 	@Transactional
 	public String saveNew() {
 		String ret = caseEditingHome.saveNew();
-		
+
+        validatePulmonaryTypes();
+
 		if(ret.equals("error"))
 			return "error";
 		
@@ -51,8 +54,10 @@ public class CaseBDHome {
 		return ret;
 	}
 
-
-
+    private void validatePulmonaryTypes(){
+        if(getTbCaseBD().getPulmonaryTypesBD().equals(PulmonaryTypesBD.POSITIVE))
+            getTbCaseBD().setPulmonaryType(null);
+    }
 
 	/**
 	 * Save changes made to an already existing case in the Namibian workspace
@@ -60,7 +65,8 @@ public class CaseBDHome {
 	 */
 	@Transactional
 	public String saveEditing() {
-		return caseEditingHome.saveEditing();
+        validatePulmonaryTypes();
+        return caseEditingHome.saveEditing();
 	}
 	
 	/**
