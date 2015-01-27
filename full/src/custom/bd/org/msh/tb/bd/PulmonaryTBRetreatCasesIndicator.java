@@ -26,7 +26,7 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
     @In(create=true) Map<String, String> messages;
 
     //vars that will alocate the result. name pattern is: row_colum_subcolumn. This class generates only the result for the new case table
-    float relapse_total_M, relapse_total_F,
+    float relapse_total_M, relapse_total_F, relapse_total_T,
             relapse_smearNegative_M, relapse_smearNegative_F,
             relapse_smearPositive_M, relapse_smearPositive_F,
             relapse_died_M, relapse_died_F,
@@ -35,9 +35,8 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
             relapse_transfOut_M, relapse_transfOut_F,
             relapse_notEvaluated_M, relapse_notEvaluated_F,
             relapse_otherOutcomes_M, relapse_otherOutcomes_F,
-            relapse_grandTotal_M, relapse_grandTotal_F, relapse_grandTotal_T,
 
-            failure_total_M, failure_total_F,
+            failure_total_M, failure_total_F, failure_total_T,
             failure_smearNegative_M, failure_smearNegative_F,
             failure_smearPositive_M, failure_smearPositive_F,
             failure_died_M, failure_died_F,
@@ -46,9 +45,8 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
             failure_transfOut_M, failure_transfOut_F,
             failure_notEvaluated_M, failure_notEvaluated_F,
             failure_otherOutcomes_M, failure_otherOutcomes_F,
-            failure_grandTotal_M, failure_grandTotal_F, failure_grandTotal_T,
 
-            default_total_M, default_total_F,
+            default_total_M, default_total_F, default_total_T,
             default_smearNegative_M, default_smearNegative_F,
             default_smearPositive_M, default_smearPositive_F,
             default_died_M, default_died_F,
@@ -57,18 +55,39 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
             default_transfOut_M, default_transfOut_F,
             default_notEvaluated_M, default_notEvaluated_F,
             default_otherOutcomes_M, default_otherOutcomes_F,
-            default_grandTotal_M, default_grandTotal_F, default_grandTotal_T,
 
-            other_total_M, other_total_F,
-            other_smearNegative_M, other_smearNegative_F,
-            other_smearPositive_M, other_smearPositive_F,
-            other_died_M, other_died_F,
-            other_failure_M, other_failure_F,
-            other_defaulted_M, other_defaulted_F,
-            other_transfOut_M, other_transfOut_F,
-            other_otherOutcomes_M, other_otherOutcomes_F,
-            other_notEvaluated_M, other_notEvaluated_F,
-            other_grandTotal_M, other_grandTotal_F, other_grandTotal_T;
+            //otherp = cases with patient type as other
+            otherp_total_M, otherp_total_F, otherp_total_T,
+            otherp_smearNegative_M, otherp_smearNegative_F,
+            otherp_smearPositive_M, otherp_smearPositive_F,
+            otherp_died_M, otherp_died_F,
+            otherp_failure_M, otherp_failure_F,
+            otherp_defaulted_M, otherp_defaulted_F,
+            otherp_transfOut_M, otherp_transfOut_F,
+            otherp_otherOutcomes_M, otherp_otherOutcomes_F,
+            otherp_notEvaluated_M, otherp_notEvaluated_F,
+
+            /*Task Suspended. Waiting definition from BD team
+            //othern = cases with patient type as other with diag exam as smear negative.
+            othern_total_M, othern_total_F, othern_total_T,
+            othern_smearNegative_M, othern_smearNegative_F,
+            othern_smearPositive_M, othern_smearPositive_F,
+            othern_died_M, othern_died_F,
+            othern_failure_M, othern_failure_F,
+            othern_defaulted_M, othern_defaulted_F,
+            othern_transfOut_M, othern_transfOut_F,
+            othern_otherOutcomes_M, othern_otherOutcomes_F,
+            othern_notEvaluated_M, othern_notEvaluated_F;*/
+
+            total_total_M, total_total_F, total_total_T,
+            total_smearNegative_M, total_smearNegative_F,
+            total_smearPositive_M, total_smearPositive_F,
+            total_died_M, total_died_F,
+            total_failure_M, total_failure_F,
+            total_defaulted_M, total_defaulted_F,
+            total_transfOut_M, total_transfOut_F,
+            total_otherOutcomes_M, total_otherOutcomes_F,
+            total_notEvaluated_M, total_notEvaluated_F;
 
     @Override
     protected void createIndicators() {
@@ -76,38 +95,8 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
         calculateOutcomeColumnsIndicators();
         calculateNotEvaluatedColumnsIndicators();
 
-        //calculate total
-        relapse_grandTotal_F = relapse_smearNegative_F + relapse_smearPositive_F + relapse_died_F + relapse_failure_F + relapse_defaulted_F +
-                relapse_transfOut_F + relapse_otherOutcomes_F + relapse_notEvaluated_F;
-        relapse_grandTotal_M = relapse_smearNegative_M + relapse_smearPositive_M + relapse_died_M + relapse_failure_M + relapse_defaulted_M +
-                relapse_transfOut_M + relapse_otherOutcomes_M + relapse_notEvaluated_M;
-        relapse_grandTotal_T = relapse_grandTotal_F + relapse_grandTotal_M;
-        relapse_total_F = relapse_grandTotal_F;
-        relapse_total_M = relapse_grandTotal_M;
-
-        failure_grandTotal_F = failure_smearNegative_F + failure_smearPositive_F + failure_died_F + failure_failure_F + failure_defaulted_F +
-                failure_transfOut_F + failure_otherOutcomes_F + failure_notEvaluated_F;
-        failure_grandTotal_M = failure_smearNegative_M + failure_smearPositive_M + failure_died_M + failure_failure_M + failure_defaulted_M +
-                failure_transfOut_M + failure_otherOutcomes_M + failure_notEvaluated_M;
-        failure_grandTotal_T = failure_grandTotal_F + failure_grandTotal_M;
-        failure_total_F = failure_grandTotal_F;
-        failure_total_M = failure_grandTotal_M;
-
-        default_grandTotal_F = default_smearNegative_F + default_smearPositive_F + default_died_F + default_failure_F + default_defaulted_F +
-                default_transfOut_F + default_otherOutcomes_F + default_notEvaluated_F;
-        default_grandTotal_M = default_smearNegative_M + default_smearPositive_M + default_died_M + default_failure_M + default_defaulted_M +
-                default_transfOut_M + default_otherOutcomes_M + default_notEvaluated_M;
-        default_grandTotal_T = default_grandTotal_F + default_grandTotal_M;
-        default_total_F = default_grandTotal_F;
-        default_total_M = default_grandTotal_M;
-
-        other_grandTotal_F = other_smearNegative_F + other_smearPositive_F + other_died_F + other_failure_F + other_defaulted_F +
-                other_transfOut_F + other_otherOutcomes_F + other_notEvaluated_F;
-        other_grandTotal_M = other_smearNegative_M + other_smearPositive_M + other_died_M + other_failure_M + other_defaulted_M +
-                other_transfOut_M + other_otherOutcomes_M + other_notEvaluated_M;
-        other_grandTotal_T = other_grandTotal_F + other_grandTotal_M;
-        other_total_F = other_grandTotal_F;
-        other_total_M = other_grandTotal_M;
+        calculateTotalColumn();
+        calculateTotalRow();
 
         populateTableFields();
     }
@@ -166,14 +155,14 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
             }else{ //others - types not counted on the options above
                 if(gender.equals(Gender.FEMALE)){
                     if(micResult.equals(MicroscopyResult.NEGATIVE))
-                        other_smearNegative_F += qtd;
+                        otherp_smearNegative_F += qtd;
                     else if (isSmearPositive(micResult))
-                        other_smearPositive_F += qtd;
+                        otherp_smearPositive_F += qtd;
                 }else if(gender.equals(Gender.MALE)){
                     if(micResult.equals(MicroscopyResult.NEGATIVE))
-                        other_smearNegative_M += qtd;
+                        otherp_smearNegative_M += qtd;
                     else if (isSmearPositive(micResult))
-                        other_smearPositive_M += qtd;
+                        otherp_smearPositive_M += qtd;
                 }
             }
         }
@@ -275,27 +264,27 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
             }else{ //others - types not counted on the options above
                 if(gender.equals(Gender.FEMALE)){
                     if(outcome.equals(CaseState.DIED)){
-                        other_died_F += qtd;
+                        otherp_died_F += qtd;
                     }else if(outcome.equals(CaseState.FAILED)){
-                        other_failure_F += qtd;
+                        otherp_failure_F += qtd;
                     }else if(outcome.equals(CaseState.DEFAULTED)){
-                        other_defaulted_F += qtd;
+                        otherp_defaulted_F += qtd;
                     }else if(outcome.equals(CaseState.TRANSFERRED_OUT)){
-                        other_transfOut_F += qtd;
+                        otherp_transfOut_F += qtd;
                     }else{
-                        other_otherOutcomes_F += qtd;
+                        otherp_otherOutcomes_F += qtd;
                     }
                 }else if(gender.equals(Gender.MALE)){
                     if(outcome.equals(CaseState.DIED)){
-                        other_died_M += qtd;
+                        otherp_died_M += qtd;
                     }else if(outcome.equals(CaseState.FAILED)){
-                        other_failure_M += qtd;
+                        otherp_failure_M += qtd;
                     }else if(outcome.equals(CaseState.DEFAULTED)){
-                        other_defaulted_M += qtd;
+                        otherp_defaulted_M += qtd;
                     }else if(outcome.equals(CaseState.TRANSFERRED_OUT)){
-                        other_transfOut_M += qtd;
+                        otherp_transfOut_M += qtd;
                     }else{
-                        other_otherOutcomes_M += qtd;
+                        otherp_otherOutcomes_M += qtd;
                     }
                 }
             }
@@ -345,9 +334,9 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
                 }
             }else{//others - types not counted on the options above
                 if(gender.equals(Gender.FEMALE)){
-                    other_notEvaluated_F += qtd;
+                    otherp_notEvaluated_F += qtd;
                 }else if(gender.equals(Gender.MALE)){
-                    other_notEvaluated_M += qtd;
+                    otherp_notEvaluated_M += qtd;
                 }
             }
         }
@@ -357,7 +346,7 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
         //The code bellow populates the retreat case table, relapse row
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_total_F);
-        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.relapse"), relapse_total_M + relapse_total_F);
+        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.relapse"), relapse_total_T);
 
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_smearNegative_F);
@@ -382,16 +371,11 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
         addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_notEvaluated_M);
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_notEvaluated_F);
-        /*BD team asked to hide this column
-        addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.relapse"), relapse_grandTotal_M);
-        addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.relapse"), relapse_grandTotal_F);
-        addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.relapse"), relapse_grandTotal_T);
-        */
 
-        //The code bellow populates the new case table, failures row
+        //The code bellow populates the retreat case table, failures row
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_total_F);
-        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.failures"), failure_total_M + failure_total_F);
+        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.failures"), failure_total_T);
 
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_smearNegative_F);
@@ -416,16 +400,11 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
         addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_notEvaluated_M);
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_notEvaluated_F);
-        /*BD team asked to hide this column
-        addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.failures"), failure_grandTotal_M);
-        addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.failures"), failure_grandTotal_F);
-        addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.failures"), failure_grandTotal_T);
-        */
 
-        //The code bellow populates the new case table, default negative row
+        //The code bellow populates the retreat case table, default negative row
         addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_total_M);
         addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_total_F);
-        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.default"), default_total_M + default_total_F);
+        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.default"), default_total_T);
 
         addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_smearNegative_M);
         addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_smearNegative_F);
@@ -450,46 +429,96 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
 
         addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_notEvaluated_M);
         addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_notEvaluated_F);
-        /*BD team asked to hide this column
-        addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.default"), default_grandTotal_M);
-        addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.default"), default_grandTotal_F);
-        addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.default"), default_grandTotal_T);
+
+        //The code bellow populates the retreat case table, patient type as others with smear positive diag exam
+        addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_total_M);
+        addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_total_F);
+        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.others"), otherp_total_T);
+
+        addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_smearNegative_M);
+        addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_smearNegative_F);
+
+        addValue(messages.get("manag.gender.male2"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_smearPositive_M);
+        addValue(messages.get("manag.gender.female2"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_smearPositive_F);
+
+        addValue(messages.get("manag.gender.male3"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_died_M);
+        addValue(messages.get("manag.gender.female3"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_died_F);
+
+        addValue(messages.get("manag.gender.male4"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_failure_M);
+        addValue(messages.get("manag.gender.female4"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_failure_F);
+
+        addValue(messages.get("manag.gender.male5"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_defaulted_M);
+        addValue(messages.get("manag.gender.female5"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_defaulted_F);
+
+        addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_transfOut_M);
+        addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_transfOut_F);
+
+        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_otherOutcomes_M);
+        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_otherOutcomes_F);
+
+        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), otherp_notEvaluated_M);
+        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), otherp_notEvaluated_F);
+
+        //The code bellow populates the new case table, patient type as others and smear negative diag exam.
+        /*Task suspended because BDTEAM said that some changes may occour. Waiting definition.
+        addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_total_M);
+        addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_total_F);
+        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.others")+"NEG", othern_total_T);
+
+        addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_smearNegative_M);
+        addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_smearNegative_F);
+
+        addValue(messages.get("manag.gender.male2"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_smearPositive_M);
+        addValue(messages.get("manag.gender.female2"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_smearPositive_F);
+
+        addValue(messages.get("manag.gender.male3"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_died_M);
+        addValue(messages.get("manag.gender.female3"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_died_F);
+
+        addValue(messages.get("manag.gender.male4"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_failure_M);
+        addValue(messages.get("manag.gender.female4"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_failure_F);
+
+        addValue(messages.get("manag.gender.male5"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_defaulted_M);
+        addValue(messages.get("manag.gender.female5"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_defaulted_F);
+
+        addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_transfOut_M);
+        addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_transfOut_F);
+
+        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_otherOutcomes_M);
+        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_otherOutcomes_F);
+
+        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others")+"NEG", othern_notEvaluated_M);
+        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others")+"NEG", othern_notEvaluated_F);
         */
 
-        //The code bellow populates the new case table, others row
-        addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_total_M);
-        addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_total_F);
-        addValue(messages.get("manag.pulmonary.sum"), messages.get("manag.pulmonary.others"), other_total_M + other_total_F);
+        //The code bellow populates the retreat case table, patient type as others with smear positive diag exam
+        addValue(messages.get("manag.gender.male0"), messages.get("manag.gender.male"), messages.get("global.total"), total_total_M);
+        addValue(messages.get("manag.gender.female0"), messages.get("manag.gender.female"), messages.get("global.total"), total_total_F);
+        addValue(messages.get("manag.pulmonary.sum"), messages.get("global.total"), total_total_T);
 
-        addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_smearNegative_M);
-        addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_smearNegative_F);
+        addValue(messages.get("manag.gender.male1"), messages.get("manag.gender.male"), messages.get("global.total"), total_smearNegative_M);
+        addValue(messages.get("manag.gender.female1"), messages.get("manag.gender.female"), messages.get("global.total"), total_smearNegative_F);
 
-        addValue(messages.get("manag.gender.male2"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_smearPositive_M);
-        addValue(messages.get("manag.gender.female2"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_smearPositive_F);
+        addValue(messages.get("manag.gender.male2"), messages.get("manag.gender.male"), messages.get("global.total"), total_smearPositive_M);
+        addValue(messages.get("manag.gender.female2"), messages.get("manag.gender.female"), messages.get("global.total"), total_smearPositive_F);
 
-        addValue(messages.get("manag.gender.male3"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_died_M);
-        addValue(messages.get("manag.gender.female3"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_died_F);
+        addValue(messages.get("manag.gender.male3"), messages.get("manag.gender.male"), messages.get("global.total"), total_died_M);
+        addValue(messages.get("manag.gender.female3"), messages.get("manag.gender.female"), messages.get("global.total"), total_died_F);
 
-        addValue(messages.get("manag.gender.male4"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_failure_M);
-        addValue(messages.get("manag.gender.female4"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_failure_F);
+        addValue(messages.get("manag.gender.male4"), messages.get("manag.gender.male"), messages.get("global.total"), total_failure_M);
+        addValue(messages.get("manag.gender.female4"), messages.get("manag.gender.female"), messages.get("global.total"), total_failure_F);
 
-        addValue(messages.get("manag.gender.male5"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_defaulted_M);
-        addValue(messages.get("manag.gender.female5"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_defaulted_F);
+        addValue(messages.get("manag.gender.male5"), messages.get("manag.gender.male"), messages.get("global.total"), total_defaulted_M);
+        addValue(messages.get("manag.gender.female5"), messages.get("manag.gender.female"), messages.get("global.total"), total_defaulted_F);
 
-        addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_transfOut_M);
-        addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_transfOut_F);
+        addValue(messages.get("manag.gender.male6"), messages.get("manag.gender.male"), messages.get("global.total"), total_transfOut_M);
+        addValue(messages.get("manag.gender.female6"), messages.get("manag.gender.female"), messages.get("global.total"), total_transfOut_F);
 
-        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_otherOutcomes_M);
-        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_otherOutcomes_F);
+        addValue(messages.get("manag.gender.male7"), messages.get("manag.gender.male"), messages.get("global.total"), total_otherOutcomes_M);
+        addValue(messages.get("manag.gender.female7"), messages.get("manag.gender.female"), messages.get("global.total"), total_otherOutcomes_F);
 
-        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_notEvaluated_M);
-        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_notEvaluated_F);
+        addValue(messages.get("manag.gender.male8"), messages.get("manag.gender.male"), messages.get("global.total"), total_notEvaluated_M);
+        addValue(messages.get("manag.gender.female8"), messages.get("manag.gender.female"), messages.get("global.total"), total_notEvaluated_F);
 
-        /*BD team asked to hide this column
-        addValue(messages.get("manag.gender.male9"), messages.get("manag.gender.male"), messages.get("manag.pulmonary.others"), other_grandTotal_M);
-        addValue(messages.get("manag.gender.female9"), messages.get("manag.gender.female"), messages.get("manag.pulmonary.others"), other_grandTotal_F);
-        addValue(messages.get("manag.pulmonary.tot"), messages.get("manag.pulmonary.others"), other_grandTotal_T);
-        */
     }
 
     private boolean isSmearPositive(MicroscopyResult micResult){
@@ -502,12 +531,73 @@ public class PulmonaryTBRetreatCasesIndicator extends Indicator2D implements TB1
         return super.getHQLWhere() + " and c.patientType in (1,2,3,4,5) ";
     }
 
-    @Override
-    public boolean isHasTotal() {
-        return true;
-    }
-
     public double getSputumConversionRate(){
         return 10000;
+    }
+
+    private void calculateTotalColumn(){
+        //calculate total
+        relapse_total_F = relapse_smearNegative_F + relapse_smearPositive_F + relapse_died_F + relapse_failure_F + relapse_defaulted_F +
+                relapse_transfOut_F + relapse_otherOutcomes_F + relapse_notEvaluated_F;
+        relapse_total_M = relapse_smearNegative_M + relapse_smearPositive_M + relapse_died_M + relapse_failure_M + relapse_defaulted_M +
+                relapse_transfOut_M + relapse_otherOutcomes_M + relapse_notEvaluated_M;
+        relapse_total_T = relapse_total_F + relapse_total_M;
+
+        failure_total_F = failure_smearNegative_F + failure_smearPositive_F + failure_died_F + failure_failure_F + failure_defaulted_F +
+                failure_transfOut_F + failure_otherOutcomes_F + failure_notEvaluated_F;
+        failure_total_M = failure_smearNegative_M + failure_smearPositive_M + failure_died_M + failure_failure_M + failure_defaulted_M +
+                failure_transfOut_M + failure_otherOutcomes_M + failure_notEvaluated_M;
+        failure_total_T = failure_total_F + failure_total_M;
+
+        default_total_F = default_smearNegative_F + default_smearPositive_F + default_died_F + default_failure_F + default_defaulted_F +
+                default_transfOut_F + default_otherOutcomes_F + default_notEvaluated_F;
+        default_total_M = default_smearNegative_M + default_smearPositive_M + default_died_M + default_failure_M + default_defaulted_M +
+                default_transfOut_M + default_otherOutcomes_M + default_notEvaluated_M;
+        default_total_T = default_total_F + default_total_M;
+
+        otherp_total_F = otherp_smearNegative_F + otherp_smearPositive_F + otherp_died_F + otherp_failure_F + otherp_defaulted_F +
+                otherp_transfOut_F + otherp_otherOutcomes_F + otherp_notEvaluated_F;
+        otherp_total_M = otherp_smearNegative_M + otherp_smearPositive_M + otherp_died_M + otherp_failure_M + otherp_defaulted_M +
+                otherp_transfOut_M + otherp_otherOutcomes_M + otherp_notEvaluated_M;
+        otherp_total_T = otherp_total_F + otherp_total_M;
+
+        /*Task Suspended. Waiting definition from BD team
+        othern_total_F = othern_smearNegative_F + othern_smearPositive_F + othern_died_F + othern_failure_F + othern_defaulted_F +
+                othern_transfOut_F + othern_otherOutcomes_F + othern_notEvaluated_F;
+        othern_total_M = othern_smearNegative_M + othern_smearPositive_M + othern_died_M + othern_failure_M + othern_defaulted_M +
+                othern_transfOut_M + othern_otherOutcomes_M + othern_notEvaluated_M;
+        othern_total_T = othern_total_F + othern_total_M;
+        */
+    }
+
+    private void calculateTotalRow(){
+        total_total_M = relapse_total_M + failure_total_M + default_total_M + otherp_total_M;
+        total_total_F = relapse_total_F + failure_total_F + default_total_F + otherp_total_F;
+        total_total_T = relapse_total_T + failure_total_T + default_total_T + otherp_total_T;
+
+        total_smearNegative_M = relapse_smearNegative_M + failure_smearNegative_M + default_smearNegative_M + otherp_smearNegative_M;
+        total_smearNegative_F = relapse_smearNegative_F + failure_smearNegative_F + default_smearNegative_F + otherp_smearNegative_F;
+
+        total_smearPositive_M = relapse_smearPositive_M + failure_smearPositive_M + default_smearPositive_M + otherp_smearPositive_M;
+        total_smearPositive_F = relapse_smearPositive_F + failure_smearPositive_F + default_smearPositive_F + otherp_smearPositive_F;
+
+        total_died_M = relapse_died_M + failure_died_M + default_died_M + otherp_died_M;
+        total_died_F = relapse_died_F + failure_died_F + default_died_F + otherp_died_F;
+
+        total_failure_M = relapse_failure_M + failure_failure_M + default_failure_M + otherp_failure_M;
+        total_failure_F = relapse_failure_F + failure_failure_F + default_failure_F + otherp_failure_F;
+
+        total_defaulted_M = relapse_defaulted_M + failure_defaulted_M + default_defaulted_M + otherp_defaulted_M;
+        total_defaulted_F = relapse_defaulted_F + failure_defaulted_F + default_defaulted_F + otherp_defaulted_F;
+
+        total_transfOut_M = relapse_transfOut_M + failure_transfOut_M + default_transfOut_M + otherp_transfOut_M;
+        total_transfOut_F = relapse_transfOut_F + failure_transfOut_F + default_transfOut_F + otherp_transfOut_F;
+
+        total_otherOutcomes_M = relapse_otherOutcomes_M + failure_otherOutcomes_M + default_otherOutcomes_M + otherp_otherOutcomes_M;
+        total_otherOutcomes_F = relapse_otherOutcomes_F + failure_otherOutcomes_F + default_otherOutcomes_F + otherp_otherOutcomes_F;
+
+        total_notEvaluated_M = relapse_notEvaluated_M + failure_notEvaluated_M + default_notEvaluated_M + otherp_notEvaluated_M;
+        total_notEvaluated_F = relapse_notEvaluated_F + failure_notEvaluated_F + default_notEvaluated_F + otherp_notEvaluated_F;
+
     }
 }
