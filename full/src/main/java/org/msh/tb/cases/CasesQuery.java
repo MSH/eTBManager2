@@ -226,6 +226,13 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
             else if(caseFilters.getRifampsinResist().equals(YesNoType.YES))
                 addCondition(" c.rifampcinResistance = true");
         }
+
+        if(caseFilters.getMovedToSecLineReg() != null){
+            if(caseFilters.getMovedToSecLineReg().equals(YesNoType.NO))
+                addCondition(" c.movedSecondLineTreatment = false");
+            else if(caseFilters.getMovedToSecLineReg().equals(YesNoType.YES))
+                addCondition(" c.movedSecondLineTreatment = true");
+        }
 		
 		if (!hqlCondition.isEmpty())
 			hqlCondition = " where ".concat(hqlCondition);

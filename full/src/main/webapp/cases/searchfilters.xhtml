@@ -56,6 +56,14 @@
 		</h:selectOneMenu>
 	</s:decorate>
 
+    <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['CaseState.MOVED_SECONDLINE']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.movedToSecLineReg}" >
+            <s:selectItems value="#{yesNoList}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
+
 	<s:decorate template="/layout/display.xhtml">
 		<ui:define name="label">#{messages['ValidationState']}:</ui:define>
 		<h:selectOneMenu value="#{caseFilters.validationState}" >
@@ -97,6 +105,14 @@
 	</s:decorate>
 
     <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.diagnosisType}" >
+            <s:selectItems value="#{diagnosisTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml">
         <ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
         <h:selectOneMenu value="#{caseFilters.drugResistanceType}" >
             <s:selectItems value="#{drugResistanceTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
@@ -108,14 +124,6 @@
         <ui:define name="label">#{messages['DrugResistanceType.RIF_RESISTANCE']}:</ui:define>
         <h:selectOneMenu value="#{caseFilters.rifampsinResist}" >
             <s:selectItems value="#{yesNoList}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
-            <s:convertEnum />
-        </h:selectOneMenu>
-    </s:decorate>
-
-    <s:decorate template="/layout/display.xhtml">
-        <ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-        <h:selectOneMenu value="#{caseFilters.diagnosisType}" >
-            <s:selectItems value="#{diagnosisTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
             <s:convertEnum />
         </h:selectOneMenu>
     </s:decorate>
