@@ -67,6 +67,8 @@ public class CaseFilters {
     private PatientType previouslyTreatedType;
 	private InfectionSite infectionSite;
 	private DiagnosisType diagnosisType;
+    private DrugResistanceType drugResistanceType;
+    private YesNoType rifampsinResist;
 	private Integer iniMonth;
 	private Integer iniYear;
 	private Integer endMonth;
@@ -938,5 +940,21 @@ public class CaseFilters {
 
     public void setPreviouslyTreatedType(PatientType previouslyTreatedType) {
         this.previouslyTreatedType = previouslyTreatedType;
+    }
+
+    public DrugResistanceType getDrugResistanceType() {
+        return drugResistanceType;
+    }
+
+    public void setDrugResistanceType(DrugResistanceType drugResistanceType) {
+        this.drugResistanceType = drugResistanceType;
+    }
+
+    public YesNoType getRifampsinResist() {
+        return rifampsinResist;
+    }
+
+    public void setRifampsinResist(YesNoType rifampsinResist) {
+        this.rifampsinResist = rifampsinResist;
     }
 }

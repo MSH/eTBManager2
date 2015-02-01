@@ -195,7 +195,6 @@ public class GlobalLists {
 		DstResult.ONGOING
 	};
 
-	
 	private static final DrugResistanceType drugResistanceTypes[] = {
 		DrugResistanceType.MONO_RESISTANCE,
 		DrugResistanceType.POLY_RESISTANCE,

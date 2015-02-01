@@ -65,7 +65,9 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		"nu.healthSystem.id = #{userWorkspace.healthSystem.id}",
 		"year(p.birthDate) = #{caseFilters.birthYear}",
 		"c.ownerUnit.id = #{caseFilters.unitId}",
-	"exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
+        "c.drugResistanceType = #{caseFilters.drugResistanceType}",
+	    "exists(select t.id from c.tags t where t.id = #{caseFilters.tagid})"};
+
 
 	protected static final String notifCond = "(nu.id = #{caseFilters.tbunitselection.tbunit.id})";
 	protected static final String treatCond = "c.ownerUnit.id =  #{caseFilters.tbunitselection.tbunit.id}";
@@ -217,6 +219,13 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
+
+        if(caseFilters.getRifampsinResist() != null){
+            if(caseFilters.getRifampsinResist().equals(YesNoType.NO))
+                addCondition(" c.rifampcinResistance = false");
+            else if(caseFilters.getRifampsinResist().equals(YesNoType.YES))
+                addCondition(" c.rifampcinResistance = true");
+        }
 		
 		if (!hqlCondition.isEmpty())
 			hqlCondition = " where ".concat(hqlCondition);

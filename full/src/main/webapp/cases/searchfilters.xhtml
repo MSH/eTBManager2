@@ -4,7 +4,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:s="http://jboss.com/products/seam/taglib"
-                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich" xmlns:a="http://richfaces.org/a4j">
 
 <ui:param name="labelstyle" value="width:150px;" />
 
@@ -42,7 +42,7 @@
 
 	<s:decorate template="/layout/display.xhtml" >
 		<ui:define name="label">#{messages['CaseClassification']}:</ui:define>
-		<h:selectOneMenu value="#{caseFilters.classification}" >
+		<h:selectOneMenu value="#{caseFilters.classification}" id="classification">
 			<s:selectItems value="#{globalLists.caseClassifications}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
 			<s:convertEnum />
 		</h:selectOneMenu>
@@ -95,17 +95,30 @@
 			<s:convertEntity />
 		</h:selectOneMenu>
 	</s:decorate>
-	
-	<!-- VR: To add 'Type of Diagnostic' in the advance search page -->
- 	 <s:decorate template="/layout/display.xhtml">
-		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
-		<h:selectOneMenu value="#{caseFilters.diagnosisType}" >
-			<s:selectItems value="#{diagnosisTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
-			<s:convertEnum />
-		</h:selectOneMenu>
-	</s:decorate>
-	<!-- End -->
-	
+
+    <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.drugResistanceType}" >
+            <s:selectItems value="#{drugResistanceTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['DrugResistanceType.RIF_RESISTANCE']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.rifampsinResist}" >
+            <s:selectItems value="#{yesNoList}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.diagnosisType}" >
+            <s:selectItems value="#{diagnosisTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
 
    <h2>#{messages['cases.casesearching.filterdates']}</h2>
 
