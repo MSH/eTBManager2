@@ -51,7 +51,7 @@ public class FilterFactory implements FilterConstructor{
 	/**
 	 * Register new filters by its name and class type
 	 * @param type is the name 
-	 * @param filterClass
+	 * @param filterConstructor
 	 */
 	public void registerFilter(String type, FilterConstructor filterConstructor) {
 		filterConstructors.put(type, filterConstructor);
@@ -60,7 +60,7 @@ public class FilterFactory implements FilterConstructor{
 	/**
 	 * Set the default filter type. The default filter type is the one created when
 	 * no filter type name is specified
-	 * @param filterClass class that implements the {@link FilterWidget} interface
+	 * @param filterConstructor class that implements the {@link FilterWidget} interface
 	 */
 	public void setDefaultFilter(FilterConstructor filterConstructor) {
 		defaultFilterConstructor = filterConstructor;
@@ -117,7 +117,4 @@ public class FilterFactory implements FilterConstructor{
 		
 		return null;
 	}
-	
-	
-
 }

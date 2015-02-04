@@ -20,6 +20,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -281,6 +283,13 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			if(info.getCasesOnTreatment() != null)
 				adminUnitGroup.setCasesOnTreatment(adminUnitGroup.getCasesOnTreatment() + info.getCasesOnTreatment());
 		}
+
+		Collections.sort(adminUnits, new Comparator<AdminUnitGroup<HealthUnitInfo>>() {
+			@Override
+			public int compare(AdminUnitGroup<HealthUnitInfo> o1, AdminUnitGroup<HealthUnitInfo> o2) {
+				return o1.getAdminUnit().getName().getName1().compareToIgnoreCase(o2.getAdminUnit().getName().getName1());
+			}
+		});
 	}
 	
 	

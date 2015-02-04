@@ -135,7 +135,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	
 	/**
 	 * Check if role name suffix is allowed to the case according to its classification
-	 * @param sufixName
+	 * @param suffixName
 	 * @return
 	 */
 	public boolean checkRoleBySuffix(String suffixName) {
@@ -341,6 +341,7 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	 * @return boolean value
 	 */
 	public boolean isCanEditExams() {
+		System.out.println(checkRoleBySuffix("CASE_EXAMS_EDT"));
 		return getTbCase().isOpen() && checkRoleBySuffix("CASE_EXAMS_EDT") && isWorkingUnit();
 	}
 
