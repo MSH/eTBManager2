@@ -57,7 +57,9 @@ public enum TbField {
     //Bangladesh
     MEDEXAM_DOTTYPE,
     MEDEXAM_REFTOTYPE,
-	SOURCE_REFERRAL;
+	SOURCE_REFERRAL,
+	OCCUPATION,
+	REASON_XPERT_EXAM;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

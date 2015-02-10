@@ -14,4 +14,24 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="2.2.ng.2" author="rmemoria" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="occupation_id" type="int"></column>
+            <column name="otherOccupation" type="varchar(250)"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2.ng.3" author="rmemoria" context="NG">
+        <addColumn tableName="examxpert">
+            <column name="reason_id" type="int"></column>
+            <column name="otherReason" type="varchar(250)"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2.ng.4" author="rmemoria" context="NG">
+        <addColumn tableName="examxpert">
+            <column name="discriminator" type="varchar(250)"></column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

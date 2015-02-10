@@ -5,11 +5,13 @@ import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.tb.transactionlog.Operation;
 import org.msh.tb.transactionlog.PropertyLog;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="discriminator", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("gen")
 @Table(name="examxpert")
 public class ExamXpert extends LaboratoryExam implements Serializable{
 	private static final long serialVersionUID = 7672681749376963359L;

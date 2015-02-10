@@ -362,5 +362,19 @@ public class FieldsQuery {
 		field = TbField.SOURCE_REFERRAL;
 		return getValues();
 	}
+
+	/**
+	 * Return list of options for patient occupation
+	 * @return
+	 */
+	public List<FieldValue> getOccupations() {
+		field = TbField.OCCUPATION;
+		return getValues();
+	}
+
+	public List<FieldValue> getReasosXpertTest() {
+		field = TbField.REASON_XPERT_EXAM;
+		return getValues();
+	}
 }
 
