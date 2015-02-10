@@ -12,33 +12,28 @@
 
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
-	<s:decorate template="/layout/editname.xhtml">
-    	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
-		<ui:param name="patientdata" value="#{tbcase.patient}" />
-		<ui:param name="required" value="#{true}" />
-	</s:decorate>
-	
+		<s:decorate template="/layout/editname.xhtml">
+			<ui:define name="label">#{messages['Patient.name']}:</ui:define>
+			<ui:param name="patientdata" value="#{tbcase.patient}" />
+			<ui:param name="required" value="#{true}" />
+		</s:decorate>
 	</td></tr>
 	<tr><td>
-
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
 			<h:inputText id="edtage" value="#{tbcase.age}" style="width:80px;" required="true" >
 				<f:validateLongRange minimum="0" maximum="150"/>
 			</h:inputText>
 		</s:decorate>
-
 	</td><td>
-	
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Gender']}:</ui:define>
-    		<!-- <h:selectOneMenu value="#{tbCase.patient.gender}" required="true">-->
-    		<h:selectOneMenu value="#{tbcase.patient.gender}" required="true">
-    		<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
-    		<s:convertEnum />
-    	</h:selectOneMenu>
-	</s:decorate>
-	
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['Gender']}:</ui:define>
+			<!-- <h:selectOneMenu value="#{tbCase.patient.gender}" required="true">-->
+			<h:selectOneMenu value="#{tbcase.patient.gender}" required="true">
+				<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
 	</td></tr>
 
     </table>
