@@ -155,6 +155,14 @@ public class FieldsOptions {
 
 
 	/**
+	 * Return list of X-Ray presentations
+	 * @return
+	 */
+	public List<FieldValue> getSourcesReferral() {
+		return getOptions(TbField.SOURCE_REFERRAL);
+	}
+
+	/**
 	 * Return list of pulmonary types
 	 * @return
 	 */

@@ -353,5 +353,14 @@ public class FieldsQuery {
         field = TbField.MEDEXAM_REFTOTYPE;
         return getValues();
     }
+
+	/**
+	 * Return list of sources of referral
+	 * @return
+	 */
+	public List<FieldValue> getSourcesReferral() {
+		field = TbField.SOURCE_REFERRAL;
+		return getValues();
+	}
 }
 

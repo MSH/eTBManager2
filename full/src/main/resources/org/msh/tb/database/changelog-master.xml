@@ -42,4 +42,5 @@
 
   <!-- Starting version 2.2 -->
   <include file="org/msh/tb/database/v2_2/changelog-2.2-1.xml" />
+  <include file="org/msh/tb/database/v2_2/changelog-2.2-2-ng.xml" />
 </databaseChangeLog>

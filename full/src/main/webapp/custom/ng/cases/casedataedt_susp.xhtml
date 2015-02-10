@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<div class="form-content">
+	<h2>#{messages['cases.suspectdata']}</h2>
+
+	<table width="100%" style="border-collapse:collapse;">
+	<tr><td colspan="2">
+	<s:decorate template="/layout/editname.xhtml">
+    	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
+		<ui:param name="patientdata" value="#{tbcase.patient}" />
+		<ui:param name="required" value="#{true}" />
+	</s:decorate>
+	
+	</td></tr>
+	<tr><td>
+
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
+			<h:inputText id="edtage" value="#{tbcase.age}" style="width:80px;" required="true" >
+				<f:validateLongRange minimum="0" maximum="150"/>
+			</h:inputText>
+		</s:decorate>
+
+	</td><td>
+	
+	<s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Gender']}:</ui:define>
+    		<!-- <h:selectOneMenu value="#{tbCase.patient.gender}" required="true">-->
+    		<h:selectOneMenu value="#{tbcase.patient.gender}" required="true">
+    		<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+	</s:decorate>
+	
+	</td></tr>
+
+    </table>
+    </div>
+   
+	<div class="form-content">
+
+	<h2>#{messages['cases.suspectnotifdata']}</h2>
+
+	<table width="100%" style="border-collapse:collapse;">
+	<tr><td style="padding-bottom:10px;">
+		<s:decorate template="/layout/editfield.xhtml" >
+			<ui:define name="label">#{messages['TbField.SOURCE_REFERRAL']}:</ui:define>
+			<ui:param name="id" value="sr" />
+			<ui:param name="field" value="#{tbcase.sourceReferral}" />
+			<ui:param name="list" value="#{fieldsQuery.sourcesReferral}" />
+		</s:decorate>
+
+		<s:decorate template="/layout/dateedit.xhtml" >
+			<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
+			<ui:param name="datefield" value="#{tbcase.registrationDate}" />
+			<ui:param name="required" value="true" />
+			<ui:param name="checkDeathDate" value="true" />
+		</s:decorate>
+
+		<div class="paragraph"><b>#{messages['TbCase.notificationUnit']}</b></div>
+		<s:decorate template="/layout/tbselection.xhtml" >
+			<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
+			<ui:param name="required" value="true" />
+		</s:decorate>
+
+	</td></tr></table>
+	</div>
+
+
+
+	<div class="form-content">
+		<h2>#{messages['cases.exammicroscopy']}</h2>
+
+		<s:decorate template="/layout/edit.xhtml" >
+			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+			<h:selectOneMenu id="cbres" value="#{examMicroscopy.result}" required="true">
+				<s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="#{messages['global.notdone']}" label="#{messages[it.key]}" />
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
+
+		<rich:jQuery selector="#cbres" query="change( function(){ examResultChanged(this, 'micdata'); })" />
+
+		<div id="micdata" style="#{empty examMicroscopyHome.instance.result? 'display:none': ''}">
+			<s:decorate template="/custom/ng/cases/edtsample.xhtml">
+				<ui:param name="examHome" value="#{examMicroscopyHome}" />
+			</s:decorate>
+
+			<div class="paragraph">#{messages['cases.exams.results']}</div>
+			<s:decorate template="/layout/dateedit.xhtml" >
+				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+				<ui:param name="required" value="false" />
+				<ui:param name="future" value="true" />
+				<ui:param name="datefield" value="#{examMicroscopy.dateRelease}" />
+			</s:decorate>
+
+			<s:decorate template="/layout/edit.xhtml" >
+				<ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
+				<h:selectOneMenu value="#{examMicroscopy.numberOfAFB}" >
+					<f:selectItems value="#{numberOfAFBs}" />
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate template="/layout/edit.xhtml" >
+				<ui:define name="label">#{messages['global.comments']}:</ui:define>
+				<h:inputText value="#{examMicroscopy.comments}" maxlength="200" style="width:350px;"/>
+			</s:decorate>
+		</div>
+	</div>
+
+
+
+	<div class="form-content">
+		<h2>#{messages['cases.examxpert']}</h2>
+
+		<s:decorate template="/layout/edit.xhtml" >
+			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+			<h:selectOneMenu id="cbres2" value="#{examGenexpert.result}" required="true"
+							 onchange="examResultChanged(this);xpertResultChanged(this);">
+				<s:selectItems value="#{examXpertHome.genexpertResults}"
+							   var="it"
+							   noSelectionLabel="#{messages['global.notdone']}"
+							   label="#{messages[it.key]}" />
+				<s:convertEnum />
+			</h:selectOneMenu>
+			<div id="rifres" style="#{empty examXpertHome.instance.result!='TB_DETECTED'? 'display:none': ''}">
+				<h:selectOneMenu id="rifres" value="#{examGenexpert.rifResult}">
+					<s:selectItems value="#{examXpertHome.rifResults}" var="it"
+								   noSelectionLabel="-" label="#{messages[it.key]}" />
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</div>
+		</s:decorate>
+
+		<rich:jQuery selector="#cbres2" query="change( function(){ examResultChanged(this, 'xpertdata'); })" />
+		<div id="xpertdata" style="#{empty examXpertHome.instance.result? 'display:none': ''}">
+			<s:decorate template="/custom/ng/cases/edtsample.xhtml">
+				<ui:param name="examHome" value="#{examXpertHome}" />
+			</s:decorate>
+		</div>
+	</div>
+
+
+	<div class="form-content">
+		<h2>#{messages['cases.examculture']}</h2>
+
+		<s:decorate template="/layout/edit.xhtml" >
+			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+			<h:selectOneMenu id="cbres3" value="#{examCulture.result}" required="true">
+				<s:selectItems value="#{cultureResults}" var="it" noSelectionLabel="#{messages['global.notdone']}" label="#{messages[it.key]}" />
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
+
+		<rich:jQuery selector="#cbres3" query="change( function(){ examResultChanged(this, 'cultdata'); })" />
+
+		<div id="cultdata" style="#{empty examCultureHome.instance.result? 'display:none': ''}">
+			<s:decorate template="/custom/ng/cases/edtsample.xhtml">
+				<ui:param name="examHome" value="#{examCultureHome}" />
+			</s:decorate>
+
+			<div class="paragraph">#{messages['cases.exams.results']}</div>
+			<s:decorate template="/layout/dateedit.xhtml" >
+				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+				<ui:param name="edtid" value="dtrelease" />
+				<ui:param name="required" value="false" />
+				<ui:param name="future" value="true" />
+				<ui:param name="datefield" value="#{examCulture.dateRelease}" />
+			</s:decorate>
+
+			<s:decorate template="/layout/edit.xhtml" >
+				<ui:define name="label">#{messages['ExamCulture.numberOfColonies']}:</ui:define>
+				<h:selectOneMenu value="#{examCulture.numberOfColonies}" >
+					<f:selectItems value="#{examCultureHome.getNumColonies()}"/>
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<s:decorate template="/layout/edit.xhtml" >
+				<ui:define name="label">#{messages['global.comments']}:</ui:define>
+				<h:inputText value="#{examCulture.comments}" maxlength="200" style="width:350px;"/>
+			</s:decorate>
+		</div>
+	</div>
+
+	<div class="form-content">
+		<h2>#{messages['caes.examhiv']}</h2>
+	</div>
+
+<script type="text/javascript">
+	<!--
+	function examResultChanged(cb, elem, immediate) {
+		if (cb.selectedIndex !== 0)
+			jQuery('#'+ elem).slideDown(immediate?0:500)
+		else jQuery('#' + elem).slideUp(immediate?0:500);
+	}
+	function xpertResultChanged(cb) {
+		var s = cb.options[cb.selectedIndex].value;
+		if (s === 'TB_DETECTED') {
+			jQuery('#rifres').show();
+		}
+		else {
+			jQuery('#rifres').hide();
+		}
+	}
+	-->
+</script>
+
+
+</ui:composition>

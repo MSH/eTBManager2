@@ -152,7 +152,7 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 
 
 	/**
-	 * @param filter the filter to set
+	 * @param type the filter to set
 	 */
 	public void setUnitType(TBUnitType type) {
 		this.type = type;

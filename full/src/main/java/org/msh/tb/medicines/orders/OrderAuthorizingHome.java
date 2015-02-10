@@ -11,6 +11,8 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.OrderStatus;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.orders.SourceOrderItem.OrderItemAux;
+import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitType;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -24,6 +26,8 @@ public class OrderAuthorizingHome extends Controller {
 	@In(create=true) OrderHome orderHome;
 	@In(required=true) UserSession userSession;
 	@In(create=true) FacesMessages facesMessages;
+
+	private TBUnitSelection unitSelection;
 
 	/**
 	 * Inicializa os dados para a autoriza��o
@@ -49,6 +53,12 @@ public class OrderAuthorizingHome extends Controller {
 		order.setStatus(OrderStatus.WAITSHIPMENT);
 		order.setApprovingDate(authDate);
 
+		// check if the supplier must be changed
+		if ((unitSelection != null) && (unitSelection.getSelected() != null) &&
+				(!unitSelection.getSelected().getId().equals(order.getUnitTo().getId()))) {
+			order.setUnitTo(unitSelection.getSelected());
+		}
+
 		Tbunit unit = entityManager.merge(userSession.getTbunit());
 		order.setAuthorizer(unit);
 
@@ -67,5 +77,17 @@ public class OrderAuthorizingHome extends Controller {
 		Events.instance().raiseEvent("medicine-order-authorized");
 		
 		return "authorized";
+	}
+
+	/**
+	 * Get the object for selection of the medicine supplier
+	 * @return
+	 */
+	public TBUnitSelection getUnitSelection() {
+		if (unitSelection == null) {
+			unitSelection = new TBUnitSelection("autid", false, TBUnitType.MEDICINE_SUPPLIERS);
+			unitSelection.setSelected(order.getUnitTo());
+		}
+		return unitSelection;
 	}
 }

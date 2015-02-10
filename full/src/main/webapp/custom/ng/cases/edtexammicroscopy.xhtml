@@ -51,19 +51,19 @@
 
 	<div style="display:block;width:600px;">
 	<div id="pnlrespositive">
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
-    	<h:selectOneMenu value="#{examMicroscopy.numberOfAFB}" >
-    		<f:selectItems value="#{numberOfAFBs}" />
-    	</h:selectOneMenu>
-    </s:decorate>
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
+		<h:selectOneMenu value="#{examMicroscopy.numberOfAFB}" >
+			<f:selectItems value="#{numberOfAFBs}" />
+		</h:selectOneMenu>
+	</s:decorate>
 	</div>
 	</div>
-	
-    <s:decorate template="/layout/edit.xhtml" >
-    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<h:inputText value="#{examMicroscopy.comments}" maxlength="200" style="width:350px;"/>
-    </s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['global.comments']}:</ui:define>
+		<h:inputText value="#{examMicroscopy.comments}" maxlength="200" style="width:350px;"/>
+	</s:decorate>
 
 	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
 	</div>

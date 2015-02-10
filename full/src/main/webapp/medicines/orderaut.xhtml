@@ -17,11 +17,38 @@
 <h1>#{title}</h1>
 <h:form>
     
-    <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
-    <tr><td><b>#{messages['Order.unitFrom']}: </b>#{order.unitFrom.name}
-    </td><td><b>#{messages['Order.unitTo']}: </b>#{order.unitTo.name}
-    </td></tr>
+    <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse" class="table1">
+    <tr>
+		<td width="40%">
+			<h2>#{messages['Order.unitFrom']}: </h2>
+			<s:decorate template="/layout/unit.xhtml">
+				<ui:param name="unit" value="#{order.unitFrom}" />
+			</s:decorate>
+		</td>
+		<td width="60%">
+			<h2>#{messages['Order.unitTo']}: </h2>
+			<div id="todiv">
+				<s:decorate template="/layout/unit.xhtml">
+					<ui:param name="unit" value="#{order.unitTo}" />
+				</s:decorate>
+				<a href="#" class="button-alt" onclick="editUnitToClick()"><span>#{messages['form.edit']}</span></a>
+			</div>
+			<div id="todivedt" style="#{orderAuthorizingHome.unitSelection.selected == order.unitTo? 'display:none': ''}">
+				<s:decorate template="/layout/tbselection.xhtml">
+					<ui:param name="labelstyle" value="width:70px" />
+					<ui:param name="tbunitselection" value="#{orderAuthorizingHome.unitSelection}" />
+				</s:decorate>
+			</div>
+		</td>
+    </tr>
     </table>
+
+	<script type="text/javascript">
+		function editUnitToClick() {
+			jQuery('#todiv').hide();
+			jQuery('#todivedt').show();
+		}
+	</script>
 
     <s:decorate template="/layout/display.xhtml" >
     	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
@@ -30,8 +57,11 @@
     
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
-    	<ui:param name="redasterisk" value="#{orderHome.requiredObservation}" />
-    	<h:inputTextarea id="ordercomments" value="#{orderCommentsHome.orderComment.comment}" maxlength="200" style="width:400px;height:40px;" />
+    	<ui:param name="redasterisk"
+				  value="#{orderHome.requiredObservation}" />
+    	<h:inputTextarea id="ordercomments"
+						 value="#{orderCommentsHome.orderComment.comment}"
+						 style="width:400px;height:40px;" />
     </s:decorate>
 	<br/>   
 
@@ -44,7 +74,7 @@
 		<b>#{s.source.name}</b>
 	</td></tr>
 	<tr><td>
-		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" rowClasses="lin1,lin2" columnClasses="coll,coll,colr,colr,highlight colr">
+		<h:dataTable value="#{s.items}" var="it" styleClass="table1" width="100%" rowClasses="lin1,lin2" columnClasses="coll,coll,colr,colr,highlight colr">
 			<h:column>
 				<f:facet name="header"><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></f:facet>
 				<div class="medicine-icon" style="float:left"/>

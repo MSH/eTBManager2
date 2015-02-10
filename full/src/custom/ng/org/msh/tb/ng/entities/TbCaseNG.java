@@ -1,6 +1,7 @@
 package org.msh.tb.ng.entities;
 
 import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.transactionlog.PropertyLog;
 
@@ -31,6 +32,11 @@ public class TbCaseNG extends TbCase{
 	@JoinColumn(name="SUSPECT_TYPE")
 	@PropertyLog(messageKey="TbField.SUSPECT_TYPE")
 	private FieldValue suspectType;
+
+	@Embedded
+	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SOURCEREFERRAL_ID")) })
+	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherSourceReferral")) })
+	private FieldValueComponent sourceReferral;
 	
 	public List<CaseDispensing_Ng> getDispng() {
 		return dispng;
@@ -63,4 +69,14 @@ public class TbCaseNG extends TbCase{
 		this.suspectType = suspectType;
 	}
 
+	public FieldValueComponent getSourceReferral() {
+		if (sourceReferral == null) {
+			sourceReferral = new FieldValueComponent();
+		}
+		return sourceReferral;
+	}
+
+	public void setSourceReferral(FieldValueComponent sourceReferral) {
+		this.sourceReferral = sourceReferral;
+	}
 }

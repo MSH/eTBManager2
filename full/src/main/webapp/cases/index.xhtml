@@ -153,7 +153,7 @@
 		<span>#{messages['form.search']}</span>
 	</a:commandLink>
 
-	<rich:jQuery timming="onload" selector="#patname" query="focus()" />
+	<rich:jQuery timing="onload" selector="#patname" query="focus()" />
 	<rich:hotKey selector="#patname" key="return" handler="disableButton(#{rich:element('btnsearchpat')});execSearch();" /> 
 	<a:jsFunction name="execSearch" action="search" reRender="messages">
 		<a:actionparam name="param1" assignTo="#{caseFilters.searchCriteria}" value="#{'PATIENT'}"/>

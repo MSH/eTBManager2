@@ -84,7 +84,8 @@ public class GlobalLists {
 		TbField.ART_REGIMEN,
 		TbField.RISK_GROUP,
 		TbField.ADJUSTMENT,
-		TbField.SUSPECT_TYPE
+		TbField.SUSPECT_TYPE,
+		TbField.SOURCE_REFERRAL
 	};
 	
 	private static final SuspectType suspectTypes[] = {

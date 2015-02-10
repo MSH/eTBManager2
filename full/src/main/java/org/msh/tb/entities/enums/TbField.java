@@ -56,7 +56,8 @@ public enum TbField {
 	MANUFACTURER,
     //Bangladesh
     MEDEXAM_DOTTYPE,
-    MEDEXAM_REFTOTYPE;
+    MEDEXAM_REFTOTYPE,
+	SOURCE_REFERRAL;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());
