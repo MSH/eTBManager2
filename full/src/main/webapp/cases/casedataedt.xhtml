@@ -8,6 +8,9 @@
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
 	<div class="form-content">
+
+    <ui:include src="/layout/casereginfoedt.xhtml" />
+
 	<h2>#{messages['cases.patientdata']}</h2>
 	<table width="100%" style="border-collapse:collapse;">
 	<tr><td colspan="2">
@@ -24,14 +27,7 @@
 	</s:decorate>
 	
 	</td></tr>
-	<tr><td>
-	
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;" maxlength="50"></h:inputText>
-	</s:decorate>
-	
-	</td><td>
+	<tr><td colspan="2">
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Gender']}:</ui:define>
@@ -163,17 +159,6 @@
 
 	</td></tr><tr><td>
 
-	<div id="divregdate">
-    <s:decorate template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{tbcase.classification == 'TB' ? messages['TbCase.registrationDate.TB'] : messages['TbCase.registrationDate']}:</ui:define>
-    	<ui:param name="datefield" value="#{tbcase.registrationDate}" /> 
-		<ui:param name="required" value="true" />
-		<ui:param name="edtid" value="regdateedt" />
-		<ui:param name="checkDeathDate" value="true" />
-    </s:decorate>
-    </div>
-    <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
-
 	<a:region>
     <s:decorate template="/layout/edit.xhtml" rendered="#{caseHome.managed}">
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
@@ -234,7 +219,7 @@
                 <s:convertEnum />
             </h:selectOneMenu>
             <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
-                <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" required="#{tbcase.validated}">
+                <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" id="previouslyTreatedType">
                     <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
                     <s:convertEnum />
                 </h:selectOneMenu>
@@ -339,31 +324,7 @@ function isPulmonary(cb) {
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
 
-        <s:decorate rendered="#{tbcase.classification == 'DRTB'}">
-
-            <s:decorate template="/layout/dateedit.xhtml" >
-                <ui:define name="label">#{messages['TbCase.bmuTbRegistDate']}:</ui:define>
-                <ui:param name="required" value="false" />
-                <ui:param name="datefield" value="#{tbcase.lastBmuDateTbRegister}" />
-                <ui:param name="edtid" value="bmudate" />
-                <ui:param name="checkDeathDate" value="true" />
-                <ui:param name="future" value="false" />
-                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                    <f:param value="#{tbcase.patient.getLastTbCase().getDiagnosisDateFormated()}" />
-                </h:outputFormat>
-            </s:decorate>
-
-            <s:decorate template="/layout/edit.xhtml">
-                <ui:define name="label">#{messages['TbCase.bmuTbRegistNumber']}:</ui:define>
-                <h:inputText value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
-                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                    <f:param value="#{tbcase.patient.getLastTbCase().displayCaseNumber}"/>
-                </h:outputFormat>
-            </s:decorate>
-
-        </s:decorate>
-
-		</s:fragment>
+        </s:fragment>
 		</td></tr></table></div>
 	</div>
 

@@ -792,6 +792,10 @@ public class TbCase implements Serializable, Transactional, SyncKey {
         return DateUtils.formatAsLocale(diagnosisDate, false);
     }
 
+    public String getRegistrationDateFormated() {
+        return DateUtils.formatAsLocale(registrationDate, false);
+    }
+
 	public void setDiagnosisDate(Date diagnosisDate) {
 		this.diagnosisDate = diagnosisDate;
 	}

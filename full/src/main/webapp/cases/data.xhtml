@@ -16,15 +16,11 @@
 			<span>#{messages['form.edit']}</span>
 		</s:link>
 
+        <ui:include src="/layout/casereginfo.xhtml" />
+
 		<h2>#{messages['cases.patientdata']}</h2>
 		<table style="border-collapse:collapse;width:100%">
 		<tr><td>
-			<s:decorate template="/layout/display.xhtml">
-		    	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-				#{tbcase.patient.securityNumber}
-			</s:decorate>
-	
-		</td><td>
 	
 			<s:decorate template="/layout/display.xhtml">
 		    	<ui:define name="label">#{messages['Gender']}:</ui:define>
@@ -132,13 +128,6 @@
 		</s:decorate>
 
 		</td></tr>
-		<tr><td>
-		<s:decorate template="/layout/display.xhtml">
-	    	<ui:define name="label">#{tbcase.classification == 'TB' ? messages['TbCase.registrationDate.TB'] : messages['TbCase.registrationDate']}:</ui:define>
-	    	<h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
-		</s:decorate>
-	
-		</td></tr>
 		<tr>
 		
 		<s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED'}">
@@ -186,16 +175,6 @@
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
     		#{messages[tbcase.infectionSite.key]}
 		</s:decorate>
-
-        <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.lastBmuDateTbRegister}">
-            <ui:define name="label">#{messages['TbCase.bmuTbRegistDate']}:</ui:define>
-            <h:outputText id="dt" value="#{tbcase.lastBmuDateTbRegister}" converter="localeDateConverter"/>
-        </s:decorate>
-
-        <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.lastBmuTbRegistNumber}">
-            <ui:define name="label">#{messages['TbCase.bmuTbRegistNumber']}:</ui:define>
-            #{tbcase.lastBmuTbRegistNumber}
-        </s:decorate>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.pulmonaryType!=null}">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<!--<h2>#{messages['cases.registerinformation']}</h2>-->
+
+    <table width="100%" style="border-collapse:collapse;">
+
+        <!-- Suspect on an user defined case number workspace -->
+        <s:fragment rendered="#{tbcase.diagnosisType == 'SUSPECT' and defaultWorkspace.getSuspectCaseNumber() == 'USER_DEFINED'}">
+            <tr><td>
+                <s:decorate template="/layout/display.xhtml">
+                    <ui:define name="label">#{messages['TbCase.registrationCode']}:</ui:define>
+                    <h:outputText value="#{empty tbcase.suspectRegistrationCode ? messages['cases.nonumber'] : tbcase.suspectRegistrationCode}"/>
+                </s:decorate>
+            </td>
+            <td>
+                <s:decorate template="/layout/display.xhtml" >
+                    <ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
+                    <h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
+                </s:decorate>
+            </td></tr>
+        </s:fragment>
+
+        <!-- Suspect on an not user defined case number workspace -->
+        <s:fragment rendered="#{tbcase.diagnosisType == 'SUSPECT' and defaultWorkspace.getSuspectCaseNumber() != 'USER_DEFINED'}">
+            <tr><td colspan="2">
+                <s:decorate template="/layout/display.xhtml" >
+                    <ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
+                    <h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
+                </s:decorate>
+            </td></tr>
+        </s:fragment>
+
+        <!-- Confirmed Tb case on an user defined case number workspace -->
+        <s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED' and tbcase.classification == 'TB'
+                                                        and defaultWorkspace.getConfirmedCaseNumber() == 'USER_DEFINED'}">
+            <tr><td>
+                <s:decorate template="/layout/display.xhtml">
+                    <ui:define name="label">#{messages['DisplayCaseNumber.TB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:180px"/>
+                    <h:outputText value="#{empty tbcase.registrationCode ? messages['cases.nonumber'] : tbcase.registrationCode}"/>
+                </s:decorate>
+            </td>
+            <td>
+                <s:decorate template="/layout/display.xhtml" >
+                    <ui:define name="label">#{messages['TbCase.registrationDate.TB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:230px"/>
+                    <h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
+                </s:decorate>
+            </td></tr>
+        </s:fragment>
+
+        <!-- Confirmed Tb case on an not user defined case number workspace -->
+        <s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED' and tbcase.classification == 'TB'
+                                                        and defaultWorkspace.getConfirmedCaseNumber() != 'USER_DEFINED'}">
+            <tr><td colspan="2">
+                <s:decorate template="/layout/display.xhtml" >
+                    <ui:define name="label">#{messages['TbCase.registrationDate.TB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:230px"/>
+                    <h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
+                </s:decorate>
+            </td></tr>
+        </s:fragment>
+
+        <!-- Confirmed DRTb case on an user defined case number workspace -->
+        <s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED' and tbcase.classification == 'DRTB'
+                                                        and defaultWorkspace.getConfirmedCaseNumber() == 'USER_DEFINED'}">
+            <tr><td>
+                <s:decorate template="/layout/display.xhtml">
+                    <ui:define name="label">#{messages['DisplayCaseNumber.DRTB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:280px"/>
+                    <h:outputText value="#{empty tbcase.registrationCode ? messages['cases.nonumber'] : tbcase.registrationCode}"/>
+                </s:decorate>
+            </td>
+            <td>
+                <s:decorate template="/layout/display.xhtml" >
+                    <ui:define name="label">#{messages['TbCase.registrationDate.DRTB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:280px"/>
+                    <h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
+                </s:decorate>
+            </td></tr>
+
+            <s:fragment rendered="#{not empty tbcase.lastBmuTbRegistNumber or not empty tbcase.lastBmuDateTbRegister}">
+            <tr>
+                <s:fragment rendered="#{not empty tbcase.lastBmuTbRegistNumber}">
+                <td colspan="#{empty tbcase.lastBmuDateTbRegister ? 2 : 1}">
+                <s:decorate template="/layout/display.xhtml">
+                    <ui:define name="label">#{messages['DisplayCaseNumber.TB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:280px"/>
+                    #{tbcase.lastBmuTbRegistNumber}
+                </s:decorate>
+                </td>
+                </s:fragment>
+
+                <s:fragment rendered="#{not empty tbcase.lastBmuDateTbRegister}">
+                <td colspan="#{empty tbcase.lastBmuTbRegistNumber ? 2 : 1}">
+                <s:decorate template="/layout/display.xhtml" >
+                    <ui:define name="label">#{messages['TbCase.registrationDate.TB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:280px"/>
+                    <h:outputText id="dt" value="#{tbcase.lastBmuDateTbRegister}" converter="localeDateConverter"/>
+                </s:decorate>
+                </td>
+                </s:fragment>
+            </tr>
+            </s:fragment>
+
+        </s:fragment>
+
+        <!-- Confirmed DRTb case on an not user defined case number workspace -->
+        <s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED' and tbcase.classification == 'DRTB'
+                                                        and defaultWorkspace.getConfirmedCaseNumber() != 'USER_DEFINED'}">
+            <tr><td colspan="2">
+                <s:decorate template="/layout/display.xhtml" >
+                    <ui:define name="label">#{messages['TbCase.registrationDate.DRTB']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:280px"/>
+                    <h:outputText id="dt" value="#{tbcase.registrationDate}" converter="localeDateConverter"/>
+                </s:decorate>
+            </td></tr>
+
+            <s:fragment rendered="#{not empty tbcase.lastBmuTbRegistNumber or not empty tbcase.lastBmuDateTbRegister}">
+                <tr>
+                    <s:fragment rendered="#{not empty tbcase.lastBmuTbRegistNumber}">
+                        <td colspan="#{empty tbcase.lastBmuDateTbRegister ? 2 : 1}">
+                            <s:decorate template="/layout/display.xhtml">
+                                <ui:define name="label">#{messages['DisplayCaseNumber.TB']}:</ui:define>
+                                <ui:param name="labelstyle" value="width:280px"/>
+                                #{tbcase.lastBmuTbRegistNumber}
+                            </s:decorate>
+                        </td>
+                    </s:fragment>
+
+                    <s:fragment rendered="#{not empty tbcase.lastBmuDateTbRegister}">
+                        <td colspan="#{empty tbcase.lastBmuTbRegistNumber ? 2 : 1}">
+                            <s:decorate template="/layout/display.xhtml" >
+                                <ui:define name="label">#{messages['TbCase.registrationDate.TB']}:</ui:define>
+                                <ui:param name="labelstyle" value="width:280px"/>
+                                <h:outputText id="dt" value="#{tbcase.lastBmuDateTbRegister}" converter="localeDateConverter"/>
+                            </s:decorate>
+                        </td>
+                    </s:fragment>
+                </tr>
+            </s:fragment>
+
+        </s:fragment>
+
+    </table>
+
+</ui:composition>

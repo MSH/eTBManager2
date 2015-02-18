@@ -9,6 +9,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.international.StatusMessage;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
@@ -114,6 +115,12 @@ public class CaseEditingHome {
 					}					
 				}
 			}
+
+            TbCase lastcase = caseHome.getInstance().getPatient().getLastTbCase();
+            if(caseHome.getInstance().getClassification().equals(CaseClassification.DRTB) && lastcase != null){
+                caseHome.getInstance().setLastBmuTbRegistNumber(lastcase.getDisplayCaseNumber());
+                caseHome.getInstance().setLastBmuDateTbRegister(lastcase.getRegistrationDate());
+            }
 		}
 
 		// initialize items with previous TB treatments
@@ -495,12 +502,28 @@ public class CaseEditingHome {
 
             if ((!ws.isAllowRegAfterDiagnosis()) && (tbcase.getRegistrationDate().after(tbcase.getDiagnosisDate()))) {
                 facesMessages.addToControlFromResourceBundle("diagdateedt", "cases.details.valerror1");
+                return false;
             }
 		}
 
         if(tbcase.getPatientType() != null && !tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)){
             tbcase.setPreviouslyTreatedType(null);
         }
+
+        if(tbcase.getClassification().equals(CaseClassification.DRTB)){
+            if(tbcase.getLastBmuDateTbRegister() != null && tbcase.getRegistrationDate() != null
+                    && tbcase.getLastBmuDateTbRegister().after(tbcase.getRegistrationDate())){
+                facesMessages.addToControlFromResourceBundle("bmudateInputDate", StatusMessage.Severity.FATAL ,"cases.details.valerror2", null);
+                return false;
+            }
+        }
+
+        if(tbcase.getClassification().equals(CaseClassification.TB) && tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)
+                && tbcase.isValidated() && tbcase.getPreviouslyTreatedType() == null){
+            facesMessages.addToControlFromResourceBundle("patType1", "javax.faces.component.UIInput.REQUIRED");
+            return false;
+        }
+
 		
 		return true;
 	}
