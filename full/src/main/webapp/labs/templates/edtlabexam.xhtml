@@ -25,12 +25,16 @@
                     </s:decorate>
                 </div>
 
+                <ui:insert name="afterdatecollected"/>
+
                 <div id="divsample">
                     <s:decorate template="/layout/edit.xhtml" >
                         <ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
                         <h:inputText value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
                     </s:decorate>
                 </div>
+
+                <ui:insert name="aftersamplenumber"/>
 
                 <s:decorate template="/layout/edit.xhtml" >
                     <ui:define name="label">#{messages['ExamStatus']}:</ui:define>
