@@ -384,7 +384,7 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 	 * @return
 	 */
 	protected String generateHQLPatientNumber(String key) {
-		if (key == null)
+		if (key == null || key.equals(""))
 			return "";
 
 		String hql = "";
