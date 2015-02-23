@@ -270,78 +270,76 @@
 		</td></tr></table>
 	</div>
 
-	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
-		<div class="form-content">
-			<h2>#{messages['cases.prevtreat']}</h2>
+	<div class="form-content">
+		<h2>#{messages['cases.prevtreat']}</h2>
 
-			<table width="100%" style="border-collapse:collapse;"><tr><td>
-				<s:decorate template="/layout/edit.xhtml">
-					<ui:define name="label">
-						#{messages['cases.prevtreat.numprev']}:
-					</ui:define>
-					<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
-						<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
-						<a:support event="onchange" ajaxSingle="true" reRender="prevtreats"/>
-					</h:selectOneMenu>
-				</s:decorate>
+		<table width="100%" style="border-collapse:collapse;"><tr><td>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">
+					#{messages['cases.prevtreat.numprev']}:
+				</ui:define>
+				<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
+					<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
+					<a:support event="onchange" ajaxSingle="true" reRender="prevtreats"/>
+				</h:selectOneMenu>
+			</s:decorate>
 
-				<h:panelGroup id="prevtreats">
-					<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
-						<table width="98%" class="table1 small">
-							<tr>
-								<th rowspan="2">#{messages['cases.prevtreat.num']}
+			<h:panelGroup id="prevtreats">
+				<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
+					<table width="98%" class="table1 small">
+						<tr>
+							<th rowspan="2">#{messages['cases.prevtreat.num']}
+							</th>
+							<th rowspan="2">#{messages['cases.prevtreat.date']}
+							</th>
+							<th colspan="#{prevTBTreatmentHome.substances.size}">
+								#{messages['cases.prevtreat.regs']}
+							</th>
+							<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
+							</th>
+						</tr>
+						<tr>
+							<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
+								<th>#{s.abbrevName}
 								</th>
-								<th rowspan="2">#{messages['cases.prevtreat.date']}
-								</th>
-								<th colspan="#{prevTBTreatmentHome.substances.size}">
-									#{messages['cases.prevtreat.regs']}
-								</th>
-								<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
-								</th>
-							</tr>
-							<tr>
-								<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
-									<th>#{s.abbrevName}
-									</th>
-								</a:repeat>
-							</tr>
-							<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
-								<tr>
-									<td class="colcb">#{it.index}
-									</td>
-									<td class="colcb">
-										<h:selectOneMenu value="#{it.prevTBTreatment.month}">
-											<f:selectItems value="#{months}"/>
-										</h:selectOneMenu>
-										<s:validateAll>
-											<h:selectOneMenu id="year" value="#{it.prevTBTreatment.year}" required="true">
-												<f:selectItems value="#{years}"/>
-											</h:selectOneMenu>
-										</s:validateAll>
-										<h:message for="year" styleClass="error"/>
-									</td>
-									<a:repeat value="#{it.items}" var="sub">
-										<td class="colcb">
-											<h:selectBooleanCheckbox value="#{sub.selected}" />
-										</td>
-									</a:repeat>
-									<td class="colcb">
-										<s:validateAll>
-											<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
-												<s:selectItems var="v" value="#{globalLists.prevTBTreatmentOutcomes}" label="#{messages[v.key]}" noSelectionLabel="-" />
-												<s:convertEnum />
-											</h:selectOneMenu>
-										</s:validateAll>
-										<h:message for="oc" styleClass="error"/>
-									</td>
-								</tr>
 							</a:repeat>
-						</table>
-					</s:fragment>
-				</h:panelGroup>
-			</td></tr></table>
-		</div>
-	</s:fragment>
+						</tr>
+						<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
+							<tr>
+								<td class="colcb">#{it.index}
+								</td>
+								<td class="colcb">
+									<h:selectOneMenu value="#{it.prevTBTreatment.month}">
+										<f:selectItems value="#{months}"/>
+									</h:selectOneMenu>
+									<s:validateAll>
+										<h:selectOneMenu id="year" value="#{it.prevTBTreatment.year}" required="true">
+											<f:selectItems value="#{years}"/>
+										</h:selectOneMenu>
+									</s:validateAll>
+									<h:message for="year" styleClass="error"/>
+								</td>
+								<a:repeat value="#{it.items}" var="sub">
+									<td class="colcb">
+										<h:selectBooleanCheckbox value="#{sub.selected}" />
+									</td>
+								</a:repeat>
+								<td class="colcb">
+									<s:validateAll>
+										<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
+											<s:selectItems var="v" value="#{globalLists.prevTBTreatmentOutcomes}" label="#{messages[v.key]}" noSelectionLabel="-" />
+											<s:convertEnum />
+										</h:selectOneMenu>
+									</s:validateAll>
+									<h:message for="oc" styleClass="error"/>
+								</td>
+							</tr>
+						</a:repeat>
+					</table>
+				</s:fragment>
+			</h:panelGroup>
+		</td></tr></table>
+	</div>
 
 	<rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
 	<script type="text/javascript">
