@@ -24,6 +24,7 @@ import org.msh.utils.date.DateUtils;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -53,6 +54,11 @@ public class CaseEditingHome {
 	private AdminUnitSelection notifAdminUnit;
 	private AdminUnitSelection currentAdminUnit;
 	protected boolean initialized;
+
+    /*patientid: Identify the id of the patient DRTB case used to search its BMU Tb case
+    * regdate: identify the registration date used to search its BMU Tb case
+    * BMUTbcase: The TBcase found*/
+    private HashMap<String, Object> BMUcase;
 
 	/**
 	 * 1 - Standard, 2 - Individualized
@@ -116,11 +122,7 @@ public class CaseEditingHome {
 				}
 			}
 
-            TbCase lastcase = caseHome.getInstance().getPatient().getLastTbCase();
-            if(caseHome.getInstance().getClassification().equals(CaseClassification.DRTB) && lastcase != null){
-                caseHome.getInstance().setLastBmuTbRegistNumber(lastcase.getDisplayCaseNumber());
-                caseHome.getInstance().setLastBmuDateTbRegister(lastcase.getRegistrationDate());
-            }
+            updateBMUinfo();
 		}
 
 		// initialize items with previous TB treatments
@@ -518,7 +520,7 @@ public class CaseEditingHome {
             }
         }
 
-        if(tbcase.getClassification().equals(CaseClassification.TB) && tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)
+        if(tbcase.getClassification().equals(CaseClassification.TB) && tbcase.getPatientType() != null && tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)
                 && tbcase.isValidated() && tbcase.getPreviouslyTreatedType() == null){
             facesMessages.addToControlFromResourceBundle("patType1", "javax.faces.component.UIInput.REQUIRED");
             return false;
@@ -600,4 +602,89 @@ public class CaseEditingHome {
 		this.tbunitselection = tbunitselection;
 	}
 
+    public HashMap<String, Object> getBMUcase() {
+        if(this.BMUcase == null){
+            updateBMUTbCase();
+        }else {
+            Integer patientId = (Integer) this.BMUcase.get("patientid");
+            Date regDate = (Date) this.BMUcase.get("regdate");
+            TbCase DRTBcase = caseHome.getInstance();
+            Patient DRTBpatient = patientHome.getInstance();
+
+            if (DRTBcase == null)
+                return null;
+
+            if (!isSamePatientAndRegDate(DRTBpatient, DRTBcase.getRegistrationDate(), patientId, regDate))
+                updateBMUTbCase();
+        }
+        return BMUcase;
+    }
+
+    private boolean isSamePatientAndRegDate(Patient patient, Date regDate, Integer patientIdSearched, Date regDateSearched){
+        if(patient.getId() == null)
+            return false;
+
+        boolean isSamePatient = patient.getId().equals(patientIdSearched);
+
+        boolean isSameRegDate = false;
+
+        if(regDate == null && regDateSearched == null)
+            isSameRegDate = true;
+        else if (regDate != null)
+            isSameRegDate = regDate.equals(regDateSearched);
+
+        return isSamePatient && isSameRegDate;
+    }
+
+    public void setBMUcase(HashMap<String, Object> BMUcase) {
+        this.BMUcase = BMUcase;
+    }
+
+    public TbCase getBMUTbCaseObject(){
+        TbCase BMUcase = (TbCase) getBMUcase().get("BMUTbcase");
+
+        return BMUcase;
+    }
+
+    public void updateBMUTbCase(){
+        if(BMUcase == null)
+            BMUcase = new HashMap<String, Object>();
+
+        //If instance is null, patient is null, or it is not DRTB, no sense to calculate BMUTbcase
+        if(caseHome.getInstance()==null || (!caseHome.getInstance().getClassification().equals(CaseClassification.DRTB))
+                || caseHome.getInstance().getPatient() == null || caseHome.getInstance().getPatient().getId() == null || caseHome.getInstance().getPatient().getId().equals(0)){
+            BMUcase.put("patientid", null);
+            BMUcase.put("regdate", null);
+            BMUcase.put("BMUTbcase", null);
+            return;
+        }
+
+        BMUcase.put("patientid", caseHome.getInstance().getPatient().getId());
+        BMUcase.put("regdate", caseHome.getInstance().getRegistrationDate());
+
+        Date queryDate = caseHome.getInstance().getRegistrationDate();
+        if(queryDate == null)
+            queryDate = new Date();
+
+        List<TbCase> cases = (List<TbCase>) entityManager.createQuery("from TbCase c where c.patient.id = :patientId and c.classification = :TB  and c.diagnosisType = :CONFIRMED " +
+                                                                                        " and c.registrationDate < :DRTBRegDate order by c.registrationDate desc")
+                                                         .setParameter("patientId", caseHome.getInstance().getPatient().getId())
+                                                         .setParameter("TB", CaseClassification.TB)
+                                                         .setParameter("CONFIRMED", DiagnosisType.CONFIRMED)
+                                                         .setParameter("DRTBRegDate", queryDate)
+                                                         .getResultList();
+
+        if(cases == null || cases.size() < 1)
+            BMUcase.put("BMUTbcase", null);
+        else
+            BMUcase.put("BMUTbcase", cases.get(0));
+    }
+
+    public void updateBMUinfo(){
+        TbCase BMUcase = this.getBMUTbCaseObject();
+        if(caseHome.getInstance().getClassification().equals(CaseClassification.DRTB) && BMUcase != null && caseHome.getId() == null){
+            caseHome.getInstance().setLastBmuTbRegistNumber(BMUcase.getDisplayCaseNumber());
+            caseHome.getInstance().setLastBmuDateTbRegister(BMUcase.getRegistrationDate());
+        }
+    }
 }

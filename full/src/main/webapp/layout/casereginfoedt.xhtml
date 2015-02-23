@@ -112,6 +112,10 @@
                     <ui:param name="future" value="false" />
                     <ui:param name="checkDeathDate" value="true" />
                     <ui:param name="labelstyle" value="width:290px"/>
+                    <ui:define name="insidecalendartag">
+                        <a:support event="oninputkeyup" ajaxSingle="true" reRender="bmunumbermsg,bmudatemsg,bmunumber,bmudatespan" action="#{caseEditingHome.updateBMUinfo}" />
+                        <a:support event="onchanged" ajaxSingle="true" reRender="bmunumbermsg,bmudatemsg,bmunumber,bmudatespan" action="#{caseEditingHome.updateBMUinfo}"/>
+                    </ui:define>
                 </s:decorate>
                 </div>
             </td></tr>
@@ -119,9 +123,10 @@
                 <s:decorate template="/layout/edit.xhtml">
                     <ui:define name="label">#{messages['DisplayCaseNumber.TB']}:</ui:define>
                     <ui:param name="labelstyle" value="width:250px"/>
-                    <h:inputText value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
+                    <h:inputText id="bmunumber" value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
                 </s:decorate>
             </td><td width="453px">
+                <s:span id="bmudatespan">
                 <s:decorate template="/layout/dateedit.xhtml" >
                     <ui:define name="label">#{messages['TbCase.registrationDate.TB']}:</ui:define>
                     <ui:param name="required" value="false" />
@@ -131,14 +136,15 @@
                     <ui:param name="future" value="false" />
                     <ui:param name="labelstyle" value="width:290px"/>
                 </s:decorate>
+                </s:span>
             </td></tr>
             <tr><td>
-                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                    <f:param value="#{tbcase.patient.getLastTbCase().displayCaseNumber}"/>
+                <h:outputFormat id="bmunumbermsg" rendered="#{not empty caseEditingHome.getBMUTbCaseObject()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                    <f:param value="#{caseEditingHome.getBMUTbCaseObject().displayCaseNumber}"/>
                 </h:outputFormat>
             </td><td>
-                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                    <f:param value="#{tbcase.patient.getLastTbCase().getRegistrationDateFormated()}" />
+                <h:outputFormat id="bmudatemsg" rendered="#{not empty caseEditingHome.getBMUTbCaseObject()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                    <f:param value="#{caseEditingHome.getBMUTbCaseObject().getRegistrationDateFormated()}" />
                 </h:outputFormat>
             </td></tr>
         </s:fragment>
@@ -148,24 +154,29 @@
                                                         and defaultWorkspace.getConfirmedCaseNumber() != 'USER_DEFINED'}">
             <tr><td colspan="2">
                 <div id="divregdate">
-                <s:decorate template="/layout/dateedit.xhtml" >
-                    <ui:define name="label">#{messages['TbCase.registrationDate.DRTB']}:</ui:define>
-                    <ui:param name="datefield" value="#{tbcase.registrationDate}" />
-                    <ui:param name="required" value="true" />
-                    <ui:param name="edtid" value="regdateedt" />
-                    <ui:param name="checkDeathDate" value="true" />
-                    <ui:param name="future" value="false" />
-                    <ui:param name="labelstyle" value="width:290px"/>
-                </s:decorate>
+                    <s:decorate template="/layout/dateedit.xhtml" >
+                        <ui:define name="label">#{messages['TbCase.registrationDate.DRTB']}:</ui:define>
+                        <ui:param name="datefield" value="#{tbcase.registrationDate}" />
+                        <ui:param name="required" value="true" />
+                        <ui:param name="edtid" value="regdateedt" />
+                        <ui:param name="checkDeathDate" value="true" />
+                        <ui:param name="future" value="false" />
+                        <ui:param name="labelstyle" value="width:290px"/>
+                        <ui:define name="insidecalendartag">
+                            <a:support event="oninputkeyup" ajaxSingle="true" reRender="bmunumbermsg2,bmudatemsg2,bmunumber2,bmudatespan2" action="#{caseEditingHome.updateBMUinfo}" />
+                            <a:support event="onchanged" ajaxSingle="true" reRender="bmunumbermsg2,bmudatemsg2,bmunumber2,bmudatespan2" action="#{caseEditingHome.updateBMUinfo}"/>
+                        </ui:define>
+                    </s:decorate>
                 </div>
             </td></tr>
             <tr><td width="438px">
                 <s:decorate template="/layout/edit.xhtml">
                     <ui:define name="label">#{messages['DisplayCaseNumber.TB']}:</ui:define>
                     <ui:param name="labelstyle" value="width:290px"/>
-                    <h:inputText value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
+                    <h:inputText id="bmunumber2" value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
                 </s:decorate>
             </td><td width="553px">
+                <s:span id="bmudatespan2">
                 <s:decorate template="/layout/dateedit.xhtml" >
                     <ui:define name="label">#{messages['TbCase.registrationDate.TB']}:</ui:define>
                     <ui:param name="required" value="false" />
@@ -175,14 +186,15 @@
                     <ui:param name="future" value="false" />
                     <ui:param name="labelstyle" value="width:250px"/>
                 </s:decorate>
+                </s:span>
             </td></tr>
             <tr><td>
-                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                    <f:param value="#{tbcase.patient.getLastTbCase().displayCaseNumber}"/>
+                <h:outputFormat id="bmunumbermsg2" rendered="#{not empty caseEditingHome.getBMUTbCaseObject()}" value="#{messages['SystemSugest.msg3']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                    <f:param value="#{caseEditingHome.getBMUTbCaseObject().displayCaseNumber}"/>
                 </h:outputFormat>
             </td><td>
-                <h:outputFormat rendered="#{not empty tbcase.patient.getLastTbCase()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
-                    <f:param value="#{tbcase.patient.getLastTbCase().getRegistrationDateFormated()}" />
+                <h:outputFormat id="bmudatemsg2" rendered="#{not empty caseEditingHome.getBMUTbCaseObject()}" value="#{messages['SystemSugest.msg2']}" styleClass="medalertmsg" style="padding-left:4px;width:400px">
+                    <f:param value="#{caseEditingHome.getBMUTbCaseObject().getRegistrationDateFormated()}" />
                 </h:outputFormat>
             </td></tr>
         </s:fragment>

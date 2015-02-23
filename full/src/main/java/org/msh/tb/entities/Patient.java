@@ -244,19 +244,4 @@ public class Patient extends WSObject implements Serializable, SyncKey {
 		this.fatherName = fatherName;
 	}
 
-    public TbCase getLastTbCase(){
-        TbCase result = null;
-        for(TbCase c : getCases()){
-            if(c.getClassification().equals(CaseClassification.TB) && c.getDiagnosisType().equals(DiagnosisType.CONFIRMED)){
-                if(result == null) {
-                    result = c;
-                }else if(c.getDiagnosisDate().after(result.getDiagnosisDate())) {
-                    result = c;
-                }
-            }
-        }
-        return result;
-    }
-	
-	
 }
