@@ -9,15 +9,20 @@
 
 <h:form>
 
-	<s:link view="/custom/ng/cases/edtmedexam.xhtml" style="float:right;" styleClass="button-alt" rendered="#{caseHome.canEditCaseData}">
+    <div class="spacer" />
+
+    <s:link view="/custom/ng/cases/edtmedexam.xhtml" style="float:right;" rendered="#{caseHome.canEditCaseData}" styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
-	<h2>#{messages['cases.details.medexam']}</h2>
 
 	<h:panelGroup id="medexamtbl">
-		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="error" rendered="#{empty medicalExaminationHome.allResults}" />
+        <h2>#{messages['cases.details.medexam']}</h2>
+
+        <s:div styleClass="region3" rendered="#{empty medicalExaminationHome.allResults}"><div class="content">
+            <h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
+        </div></s:div>
 
 		<!-- <h:dataTable id="medexamtbl" value="#{medicalExaminationHome.allResults}" var="r" rendered="#{not empty medicalExaminationHome.allResults}" width="100%">
             <h:column> -->
