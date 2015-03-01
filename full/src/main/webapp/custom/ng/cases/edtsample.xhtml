@@ -11,22 +11,25 @@
     <div id="divdtcollected">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
-    	<ui:param name="required" value="true" /> 
+    	<ui:param name="required" value="#{not empty fieldsrequired ? fieldsrequired : true}" />
     	<ui:param name="future" value="true" /> 
     	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
     	<ui:param name="checkDeathDate" value="true" />
+        <ui:param name="redasterisk" value="#{not empty redasteriskforreq ? redasteriskforreq : false}"/>
+        <ui:param name="edtid" value="datecollected#{not empty idcompl ? idcompl : ''}"/>
     </s:decorate>
     </div>
 
 	<div id="divsample">
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" rendered="#{not empty hassampletype ? hassampletype : false}">
     	<ui:define name="label">#{messages['PatientSample.sampleType']}:</ui:define>
-    	<h:selectOneMenu value="#{examType.sampleType}" required="true">
+        <ui:param name="redasterisk" value="#{not empty redasteriskforreq ? redasteriskforreq : false}"/>
+    	<h:selectOneMenu id="sampletype#{not empty idcompl ? idcompl : ''}" value="#{examHome.instance.sampleType}" required="#{not empty fieldsrequired ? fieldsrequired : true}">
     		<s:selectItems value="#{sampletypes_ng}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
-    </s:decorate>	
-	
+    </s:decorate>
+
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
     	<h:inputText value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
@@ -34,7 +37,7 @@
     </div>
 
     <s:decorate template="/layout/labselection.xhtml" >
-    	<ui:param name="required" value="true" />
+    	<ui:param name="required" value="#{not empty fieldsrequired ? fieldsrequired : true}" />
     	<ui:param name="labselection" value="#{examHome.labselection}" />
     </s:decorate>
 

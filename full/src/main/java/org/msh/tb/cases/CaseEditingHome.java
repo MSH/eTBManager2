@@ -44,7 +44,7 @@ public class CaseEditingHome {
 	protected EntityManager entityManager;
 	@In(create=true) protected PrevTBTreatmentHome prevTBTreatmentHome;
 	@In(create=true) MedicalExaminationHome medicalExaminationHome;
-	@In(create=true) FacesMessages facesMessages;
+	@In(create=true) protected FacesMessages facesMessages;
 	
 	@In(required=false) StartTreatmentHome startTreatmentHome;
 	@In(required=false) ExamMicroscopyHome examMicroscopyHome;
@@ -251,7 +251,7 @@ public class CaseEditingHome {
 		return s;
 	}
 
-    private void updateOwnerUnit(TbCase tbcase){
+    protected void updateOwnerUnit(TbCase tbcase){
         if(tbcase.getOwnerUnit() == null){
             if(tbcase.getHealthUnits() != null && tbcase.getHealthUnits().size() > 0){
                 TreatmentHealthUnit ownerUnit = null;

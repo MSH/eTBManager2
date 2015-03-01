@@ -131,7 +131,7 @@
 
 
 <ui:define name="content">
-	<ui:include src="#{tbcase.classification == 'DRTB'? 'casedata_drtb.xhtml': 'casedata_tb.xhtml'}" />
+	<ui:include src="#{tbcase.diagnosisType == 'SUSPECT'? 'casedata_susp.xhtml': (tbcase.classification == 'TB'? 'casedata_tb.xhtml': 'casedata_drtb.xhtml')}" />
 </ui:define>
 
 </ui:composition>  

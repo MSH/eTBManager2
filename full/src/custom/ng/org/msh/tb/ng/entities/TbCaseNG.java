@@ -3,6 +3,8 @@ package org.msh.tb.ng.entities;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.ng.entities.enums.HIVPosition;
+import org.msh.tb.ng.entities.enums.HIVPositionDetail;
 import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
@@ -37,6 +39,10 @@ public class TbCaseNG extends TbCase{
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SOURCEREFERRAL_ID")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherSourceReferral")) })
 	private FieldValueComponent sourceReferral;
+
+    private HIVPosition hivPosition;
+
+    private HIVPositionDetail hivPositionDetail;
 	
 	public List<CaseDispensing_Ng> getDispng() {
 		return dispng;
@@ -79,4 +85,21 @@ public class TbCaseNG extends TbCase{
 	public void setSourceReferral(FieldValueComponent sourceReferral) {
 		this.sourceReferral = sourceReferral;
 	}
+
+    public HIVPosition getHivPosition() {
+        return hivPosition;
+    }
+
+    public void setHivPosition(HIVPosition hivPosition) {
+        this.hivPosition = hivPosition;
+    }
+
+    public HIVPositionDetail getHivPositionDetail() {
+        return hivPositionDetail;
+    }
+
+    public void setHivPositionDetail(HIVPositionDetail hivPositionDetail) {
+        this.hivPositionDetail = hivPositionDetail;
+    }
 }
+

@@ -27,6 +27,20 @@ import java.util.List;
 @BypassInterceptors
 public class TreatmentsInfoHome {
 
+    /*HQl was is a paramneter to make easier customizations for others workspaces*/
+    private static final String HQL = "select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
+            "c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate, " +
+            "(select ( sum(day1) + sum(day2) + sum(day3) + sum(day4) + sum(day5) + sum(day6) + sum(day7) + sum(day8) + sum(day9) " +
+            "+ sum(day10) + sum(day11) + sum(day12) + sum(day13) + sum(day14) + sum(day15) + sum(day16) + sum(day17) + sum(day18) " +
+            "+ sum(day19) + sum(day20) + sum(day21) + sum(day22) + sum(day23) + sum(day24) + sum(day25) + sum(day26) + sum(day27) " +
+            "+ sum(day28) + sum(day29) + sum(day30) + sum(day31) ) as total " +
+            "from TreatmentMonitoring tm0 where tm0.tbcase.id = c.id) as medicineTakenDays " +
+            "from TbCase c " +
+            "join c.patient p left join c.pulmonaryType pt " +
+            "where c.state = " + CaseState.ONTREATMENT.ordinal() +
+            " and c.ownerUnit.id = :unitId " +
+            "group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification ";
+
 	protected List<CaseGroup> groups;
     protected Tbunit tbunit;
 
@@ -38,7 +52,7 @@ public class TreatmentsInfoHome {
 	 */
 	public List<CaseGroup> getGroups() {
 		if (groups == null)
-			createTreatments();
+			createTreatments(HQL);
 		return groups;
 	}
 
@@ -46,7 +60,7 @@ public class TreatmentsInfoHome {
 	/**
 	 * Create the list of treatments for the health unit TB unit
 	 */
-	private void createTreatments() {
+    protected void createTreatments(String hql) {
 		// get the unit id selected
 		Tbunit unit = getTbunit();
 		if (unit == null)
@@ -54,19 +68,9 @@ public class TreatmentsInfoHome {
 
 		groups = new ArrayList<CaseGroup>();
 
-		List<Object[]> lst = App.getEntityManager().createQuery("select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
-				"c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate, " +
-                "(select ( sum(day1) + sum(day2) + sum(day3) + sum(day4) + sum(day5) + sum(day6) + sum(day7) + sum(day8) + sum(day9) " +
-                    "+ sum(day10) + sum(day11) + sum(day12) + sum(day13) + sum(day14) + sum(day15) + sum(day16) + sum(day17) + sum(day18) " +
-                    "+ sum(day19) + sum(day20) + sum(day21) + sum(day22) + sum(day23) + sum(day24) + sum(day25) + sum(day26) + sum(day27) " +
-                    "+ sum(day28) + sum(day29) + sum(day30) + sum(day31) ) as total " +
-                    "from TreatmentMonitoring tm0 where tm0.tbcase.id = c.id) as medicineTakenDays " +
-                "from TbCase c " +
-				"join c.patient p left join c.pulmonaryType pt " +
-				"where c.state = " + CaseState.ONTREATMENT.ordinal() +
-				" and c.ownerUnit.id = " + unit.getId() +
-				"group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification " + getHQLOrderBy())
-			.getResultList();
+		List<Object[]> lst = App.getEntityManager().createQuery(hql + getHQLOrderBy())
+                                                    .setParameter("unitId", unit.getId())
+			                                        .getResultList();
 
 		Patient p = new Patient();
 		Workspace ws = (Workspace)Component.getInstance("defaultWorkspace", true);
@@ -386,13 +390,13 @@ public class TreatmentsInfoHome {
 
         switch (orderby.intValue()){
             case 0:
-                hql += " c.classification, p.name, p.lastName, p.middleName ";
+                hql += " c.classification, upper(p.lastName), upper(p.name), upper(p.middleName) ";
                 break;
             case 1:
                 if(inverseOrderBy.booleanValue())
-                    hql += " p.name desc, p.lastName desc, p.middleName desc ";
+                    hql += " upper(p.lastName) desc, upper(p.name) desc, upper(p.middleName) desc ";
                 else
-                    hql += " p.name, p.lastName, p.middleName ";
+                    hql += " upper(p.lastName), upper(p.name), upper(p.middleName) ";
                 break;
             case 2:
                 hql += " c.patientType ";
@@ -433,6 +437,7 @@ public class TreatmentsInfoHome {
             SessionData.instance().setValue("treatmentsInfoHome_orderBy", orderby);
 
         /*Check if the user clicked twice on the same link*/
+        SessionData.instance().setValue("treatmentsInfoHome_orderBy", orderby);
         this.orderby = (Integer) SessionData.instance().getValue("treatmentsInfoHome_orderBy");
         Boolean tempInverse = (Boolean) SessionData.instance().getValue("treatmentsInfoHome_inverseOrderBy");
 
@@ -442,7 +447,5 @@ public class TreatmentsInfoHome {
         }else {
             SessionData.instance().setValue("treatmentsInfoHome_inverseOrderBy", new Boolean(false));
         }
-
-        SessionData.instance().setValue("treatmentsInfoHome_orderBy", orderby);
     }
 }

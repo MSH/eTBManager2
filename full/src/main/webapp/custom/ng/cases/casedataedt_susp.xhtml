@@ -3,7 +3,6 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
- 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:rich="http://richfaces.ajax4jsf.org/rich">
 
@@ -15,21 +14,22 @@
 		<s:decorate template="/layout/editname.xhtml">
 			<ui:define name="label">#{messages['Patient.name']}:</ui:define>
 			<ui:param name="patientdata" value="#{tbcase.patient}" />
-			<ui:param name="required" value="#{true}" />
+			<ui:param name="redasterisk" value="#{true}" />
 		</s:decorate>
 	</td></tr>
 	<tr><td>
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
-			<h:inputText id="edtage" value="#{tbcase.age}" style="width:80px;" required="true" >
+            <ui:param name="redasterisk" value="#{true}" />
+			<h:inputText id="edtage" value="#{tbcase.age}" style="width:80px;">
 				<f:validateLongRange minimum="0" maximum="150"/>
 			</h:inputText>
 		</s:decorate>
 	</td><td>
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['Gender']}:</ui:define>
-			<!-- <h:selectOneMenu value="#{tbCase.patient.gender}" required="true">-->
-			<h:selectOneMenu value="#{tbcase.patient.gender}" required="true">
+            <ui:param name="redasterisk" value="#{true}" />
+			<h:selectOneMenu id="gender" value="#{tbcase.patient.gender}">
 				<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
 				<s:convertEnum />
 			</h:selectOneMenu>
@@ -55,27 +55,32 @@
 		<s:decorate template="/layout/dateedit.xhtml" >
 			<ui:define name="label">#{messages['TbCase.registrationDate']}:</ui:define>
 			<ui:param name="datefield" value="#{tbcase.registrationDate}" />
-			<ui:param name="required" value="true" />
+            <ui:param name="redasterisk" value="true" />
+            <ui:param name="future" value="false" />
 			<ui:param name="checkDeathDate" value="true" />
-		</s:decorate>
+            <ui:param name="edtid" value="edtregdate" />
+        </s:decorate>
 
 		<div class="paragraph"><b>#{messages['TbCase.notificationUnit']}</b></div>
 		<s:decorate template="/layout/tbselection.xhtml" >
-			<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
-			<ui:param name="required" value="true" />
+			<ui:param name="tbunitselection" value="#{caseEditingHomeNg.tbunitselection}" />
+            <ui:param name="redasterisk" value="true" />
 		</s:decorate>
 
 	</td></tr></table>
 	</div>
 
-
+    <!-- exams only for new cases -->
+    <s:fragment rendered="#{empty tbcase.id}">
 
 	<div class="form-content">
 		<h2>#{messages['cases.exammicroscopy']}</h2>
 
 		<s:decorate template="/layout/edit.xhtml" >
 			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-			<h:selectOneMenu id="cbres" value="#{examMicroscopy.result}" required="true">
+            <ui:param name="redasterisk" value="#{true}" />
+            <ui:param name="idcompl" value="mic"/>
+			<h:selectOneMenu id="cbres" value="#{examMicroscopy.result}">
 				<s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="#{messages['global.notdone']}" label="#{messages[it.key]}" />
 				<s:convertEnum />
 			</h:selectOneMenu>
@@ -86,14 +91,19 @@
 		<div id="micdata" style="#{empty examMicroscopyHome.instance.result? 'display:none': ''}">
 			<s:decorate template="/custom/ng/cases/edtsample.xhtml">
 				<ui:param name="examHome" value="#{examMicroscopyHome}" />
+                <ui:param name="fieldsrequired" value="false"/>
+                <ui:param name="redasteriskforreq" value="true"/>
+                <ui:param name="idcompl" value="mic"/>
+                <ui:param name="hassampletype" value="true" />
 			</s:decorate>
 
 			<div class="paragraph">#{messages['cases.exams.results']}</div>
 			<s:decorate template="/layout/dateedit.xhtml" >
 				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-				<ui:param name="required" value="false" />
-				<ui:param name="future" value="true" />
+				<ui:param name="redasterisk" value="true" />
+				<ui:param name="future" value="false" />
 				<ui:param name="datefield" value="#{examMicroscopy.dateRelease}" />
+                <ui:param name="edtid" value="datereleasemic"/>
 			</s:decorate>
 
 			<s:decorate template="/layout/edit.xhtml" >
@@ -117,7 +127,8 @@
 
 		<s:decorate template="/layout/edit.xhtml" >
 			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-			<h:selectOneMenu id="cbres2" value="#{examGenexpert.result}" required="true"
+            <ui:param name="redasterisk" value="#{true}" />
+			<h:selectOneMenu id="cbres2" value="#{examGenexpert.result}"
 							 onchange="examResultChanged(this);xpertResultChanged(this);">
 				<s:selectItems value="#{examXpertHome.genexpertResults}"
 							   var="it"
@@ -138,6 +149,9 @@
 		<div id="xpertdata" style="#{empty examXpertHome.instance.result? 'display:none': ''}">
 			<s:decorate template="/custom/ng/cases/edtsample.xhtml">
 				<ui:param name="examHome" value="#{examXpertHome}" />
+                <ui:param name="fieldsrequired" value="false"/>
+                <ui:param name="redasteriskforreq" value="true"/>
+                <ui:param name="idcompl" value="xpert"/>
 			</s:decorate>
 		</div>
 	</div>
@@ -148,7 +162,8 @@
 
 		<s:decorate template="/layout/edit.xhtml" >
 			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-			<h:selectOneMenu id="cbres3" value="#{examCulture.result}" required="true">
+            <ui:param name="redasterisk" value="#{true}" />
+			<h:selectOneMenu id="cbres3" value="#{examCulture.result}">
 				<s:selectItems value="#{cultureResults}" var="it" noSelectionLabel="#{messages['global.notdone']}" label="#{messages[it.key]}" />
 				<s:convertEnum />
 			</h:selectOneMenu>
@@ -159,14 +174,18 @@
 		<div id="cultdata" style="#{empty examCultureHome.instance.result? 'display:none': ''}">
 			<s:decorate template="/custom/ng/cases/edtsample.xhtml">
 				<ui:param name="examHome" value="#{examCultureHome}" />
+                <ui:param name="fieldsrequired" value="false"/>
+                <ui:param name="redasteriskforreq" value="true"/>
+                <ui:param name="idcompl" value="culture"/>
+                <ui:param name="hassampletype" value="true" />
 			</s:decorate>
 
 			<div class="paragraph">#{messages['cases.exams.results']}</div>
 			<s:decorate template="/layout/dateedit.xhtml" >
 				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-				<ui:param name="edtid" value="dtrelease" />
-				<ui:param name="required" value="false" />
-				<ui:param name="future" value="true" />
+				<ui:param name="edtid" value="datereleaseculture" />
+				<ui:param name="redasterisk" value="true" />
+				<ui:param name="future" value="false" />
 				<ui:param name="datefield" value="#{examCulture.dateRelease}" />
 			</s:decorate>
 
@@ -184,8 +203,32 @@
 		</div>
 	</div>
 
+    </s:fragment>
+
 	<div class="form-content">
-		<h2>#{messages['caes.examhiv']}</h2>
+		<h2>#{messages['manag.hivreport']}</h2>
+
+        <s:decorate template="/layout/edit.xhtml" >
+            <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+            <ui:param name="redasterisk" value="true" />
+            <h:selectOneMenu id="hivresult" value="#{tbcaseng.hivPosition}" >
+                <s:selectItems value="#{hivpositions_ng}" var="it" noSelectionLabel=" - " label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+        </s:decorate>
+
+        <div id="hivdata" style="#{tbcaseng.hivPosition == 'POSITIVE' ? '' : 'display:none'}">
+            <s:decorate template="/layout/edit.xhtml" id="hivdetaildec" >
+                <ui:define name="label">#{messages['TbCase.resultdate']}:</ui:define>
+                <ui:param name="redasterisk" value="true" />
+                <h:selectOneMenu id="hivdetail" value="#{tbcaseng.hivPositionDetail}" >
+                    <s:selectItems value="#{hivpositiondetails_ng}" var="it" noSelectionLabel=" - " label="#{messages[it.key]}" />
+                    <s:convertEnum />
+                </h:selectOneMenu>
+            </s:decorate>
+        </div>
+
+        <rich:jQuery selector="#hivresult" query="change( function(){ hivStatusChanged(this, 'hivdata'); })" />
 	</div>
 
 <script type="text/javascript">
@@ -204,6 +247,13 @@
 			jQuery('#rifres').hide();
 		}
 	}
+    function hivStatusChanged(cb, elem, immediate) {
+        if (cb.selectedIndex !== 1)
+            jQuery('#'+ elem).slideUp(immediate?0:500)
+        else {
+            jQuery('#' + elem).slideDown(immediate ? 0 : 500);
+        }
+    }
 	-->
 </script>
 

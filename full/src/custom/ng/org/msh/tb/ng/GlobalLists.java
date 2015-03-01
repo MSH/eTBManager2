@@ -4,10 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.entities.enums.*;
-import org.msh.tb.ng.entities.enums.Dot;
-import org.msh.tb.ng.entities.enums.HealthFacility;
-import org.msh.tb.ng.entities.enums.Qualification;
-import org.msh.tb.ng.entities.enums.SuspectType;
+import org.msh.tb.ng.entities.enums.*;
 
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
@@ -101,15 +98,26 @@ public class GlobalLists {
 		DrugResistanceType.MULTIDRUG_RESISTANCE,
 		DrugResistanceType.EXTENSIVEDRUG_RESISTANCE,
 	};
-	
-	private static final SampleType sampleType[] = {
-		SampleType.SPUTUM,
-		SampleType.PUS,
-		SampleType.CSF,
-		SampleType.URINE,
-		SampleType.STOOL,
-		SampleType.TISSUE,
-	};
+
+    private static final SampleType sampleType[] = {
+            SampleType.SPUTUM,
+            SampleType.PUS,
+            SampleType.CSF,
+            SampleType.URINE,
+            SampleType.STOOL,
+            SampleType.TISSUE,
+    };
+
+    private static final HIVPosition hivPositions[] = {
+            HIVPosition.POSITIVE,
+            HIVPosition.NEGATIVE,
+            HIVPosition.UNKNOWN
+    };
+
+    private static final HIVPositionDetail hivPositionDetails[] = {
+            HIVPositionDetail.BEFORE_REGISTRATION,
+            HIVPositionDetail.AFTER_REGISTRATION
+    };
 
 	
 	private int[] comorb_years = {1,2,3,4,5,6,7,8,9,10};
@@ -167,10 +175,20 @@ public class GlobalLists {
 		return drugResistanceType;
 	}
 
-	@Factory("sampletypes_ng")
-	public static SampleType[] getSampletype() {
-		return sampleType;
-	}
+    @Factory("sampletypes_ng")
+    public static SampleType[] getSampletype() {
+        return sampleType;
+    }
+
+    @Factory("hivpositions_ng")
+    public static HIVPosition[] getHivPositions() {
+        return hivPositions;
+    }
+
+    @Factory("hivpositiondetails_ng")
+    public static HIVPositionDetail[] getHivPositionsDetails() {
+        return hivPositionDetails;
+    }
 
 	/**
 	 * Return the list of years for the duration of the comorbidity

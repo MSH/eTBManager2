@@ -30,10 +30,10 @@
 	 <div style="float:right">
 		<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
 	</div>
-	<a:commandLink action="#{caseNGHome.saveEditing}" styleClass="button"
+	<a:commandLink action="#{caseEditingHomeNg.saveEditing}" styleClass="button"
         reRender="main,messages"
         onclick="if (!disableButton(this)) return false;" >
-	<span>#{messages['form.save']}</span> 
+	<span>#{messages['form.save']}</span>
 	</a:commandLink>
 	<s:link view="/custom/ng/cases/casedata.xhtml" styleClass="button-alt"
             propagation="end"

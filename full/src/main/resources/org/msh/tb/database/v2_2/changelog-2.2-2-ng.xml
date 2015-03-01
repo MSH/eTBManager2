@@ -34,4 +34,16 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="2.2.ng.5" author="msantos" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="hivPosition" type="int"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2.ng.6" author="msantos" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="hivPositionDetail" type="int"></column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

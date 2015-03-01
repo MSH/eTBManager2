@@ -45,4 +45,19 @@
     <changeSet id="2.2.2" author="rmemoria">
         <sql>update sys_user set ulaAccepted=false where ulaAccepted is null</sql>
     </changeSet>
+
+    <changeSet id="2.2.3" author="msantos">
+        <sql>
+            ALTER TABLE examxpert
+            DROP FOREIGN KEY `genex_lab_fk`;
+            ALTER TABLE `examxpert`
+            CHANGE COLUMN `laboratory_ID` `laboratory_ID` INT(11) NULL ;
+            ALTER TABLE `examxpert`
+            ADD CONSTRAINT `genex_lab_fk`
+            FOREIGN KEY (`laboratory_ID`)
+            REFERENCES `laboratory` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+        </sql>
+    </changeSet>
 </databaseChangeLog>
