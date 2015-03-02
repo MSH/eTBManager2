@@ -46,6 +46,7 @@
         <sql>update sys_user set ulaAccepted=false where ulaAccepted is null</sql>
     </changeSet>
 
+    <!-- nao funcionou em bangladesh TODO
     <changeSet id="2.2.3" author="msantos">
         <sql>
             ALTER TABLE examxpert
@@ -59,5 +60,5 @@
             ON DELETE CASCADE
             ON UPDATE CASCADE
         </sql>
-    </changeSet>
+    </changeSet> -->
 </databaseChangeLog>
