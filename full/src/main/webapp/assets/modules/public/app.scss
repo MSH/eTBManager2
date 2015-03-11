@@ -1,0 +1,13 @@
+/**
+* SASS file of the public pages of the public pages (no authentication required)
+*/
+
+@import '../common';
+
+
+
+// Component styles are injected through grunt
+// injector
+@import 'login.scss';
+@import 'signup.scss';
+// endinjector

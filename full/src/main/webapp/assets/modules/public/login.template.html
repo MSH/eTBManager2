@@ -1,0 +1,54 @@
+<div class="app-banner-img">
+    <div class="container app-login-container" ng-init="initFocus=true">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 app-login-form">
+                <div class="wrapper text-center">
+                    <h2>${messages['mdrtb_system']}</h2>
+                    <p>
+                        ${messages['login.msg1']}
+                    </p>
+                </div>
+                <div ng-show="entering" class="text-center">
+                    <i class="fa fa-circle-o-notch fa-spin fa-4x"></i>
+                </div>
+                <form name="form" class="form-validation ng-pristine ng-invalid ng-invalid-required" ng-hide="entering">
+                    <div class="form-group">
+                        <input type="text" placeholder="${messages['login.user_login']}"
+                               class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-email input-lg"
+                               ng-model="user.login" required="" focus-me="initFocus">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="${messages['User.password']}"
+                               class="form-control no-border ng-pristine ng-invalid ng-invalid-required input-lg"
+                               ng-model="user.password" required="">
+                    </div>
+                    <div class="text-center" ng-show="loginfailed">
+                        <p>
+                            <b>${messages['org.jboss.seam.loginFailed']}</b>
+                        </p>
+                    </div>
+                    <div class="wrapper">
+                        <button type="submit" class="btn btn-lg btn-danger btn-block app-btn-disabled" busy-when-url="login" ng-click="login()"
+                                busy ng-disabled="form.$invalid" disabled="disabled">
+                            <busy-message><i class="fa fa-circle-o-notch fa-spin"></i> ${messages['global.wait']}</busy-message>${messages['login.enter']}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container top-space-2x">
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4 text-center">
+            <i class="fa fa-question-circle fa-4x text-success"></i>
+            <br/>
+            <h4>
+                <div class="text-uppercase text-success" href="#">${messages['login.msg2']}</div>
+            </h4>
+            <a ui-sref="main.forgotpwd" href="#">${messages['login.click_here']}</a>
+        </div>
+    </div>
+</div>

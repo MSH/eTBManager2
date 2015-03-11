@@ -1,0 +1,83 @@
+<div class="container" ng-init="initFocus=true">
+	<div >
+    <div class="row">
+		<div class="col-md-4 col-md-offset-4 text-center">
+    		<h3>[[Create a new profile]]</h3>
+		</div>
+	</div>
+
+	<div class="row" ng-show="!messageSent" ng-cloak>
+		<div class="col-md-4 col-md-offset-4 text-center">
+			<div class="row wrapper">
+	    		<p>
+	    			[[For you convenience, register with your social network]]:
+	    		</p>
+				<div class="col-md-4">
+		          <a href="javascript:;" class="btn btn-facebook btn-block">
+			          <i class="fa fa-facebook fa-2x"></i>
+			          <br/>
+			          Facebook
+		          </a>
+				</div>
+				<div class="col-md-4">
+		          <a href="javascript:;" class="btn btn-google btn-block">
+			          <i class="fa fa-google fa-2x"></i>
+			          <br/>
+			          Google
+		          </a>
+				</div>
+				<div class="col-md-4">
+		          <a href="javascript:;" class="btn btn-twitter btn-block">
+			          <i class="fa fa-twitter fa-2x"></i>
+			          <br/>
+			          Twitter
+		          </a>
+				</div>
+			</div>
+
+			<div class="row top-space-2x">
+				<div class="wrapper">
+					[[or, enter your e-mail address]]:
+				</div>
+			      <form name="form" class="form-validation">
+
+			        <div class="form-group">
+			        	<div class="input-group-lg">
+			          		<input type="email" class="form-control ng-invalid ng-invalid-required ng-valid-email" placeholder="[[e-mail]]" ng-model="email" focus-me="initFocus" required="">
+			          	</div>
+			          <div ng-show="errorMessage">
+			            <ul class="parsley-error-list" >
+			                <li class="required" style="display:list-item">{{errorMessage}}</li>
+			            </ul>
+			          </div>
+			        </div> <!-- /.form-group -->
+			        <div class="form-group">
+			          <button type="submit" busy ng-click="signin()" class="btn btn-primary btn-block btn-lg" ng-disabled="form.$invalid" disabled="disabled">
+						<busy-message><i class="fa fa-circle-o-notch fa-spin"></i> [[Processing]]...</busy-message>
+			          [[Continue]] &nbsp; <i class="fa fa-play-circle"></i></button>
+			        </div> <!-- /.form-group -->
+			      </form>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<div class="row" ng-show="messageSent" ng-cloak>
+
+		<div class="col-md-6 col-md-offset-3 text-center">
+	    <div class="panel panel-default" >
+	    	<div class="panel-body">
+	    		<div class="pull-left">
+	    		</div>
+	        	A message with instructions was sent to the e-mail below
+	        	<div class="wrapper-2x">
+	    			<i class="fa fa-envelope fa-2x text-muted"></i>
+	        		<strong>{{email}}</strong>
+	        	</div>
+	        	To continue with registration, check the instructions in the message.
+		        <a ui-sref="main.login" class="wrapper-2x">[[Go to login]]</a>
+	    	</div>
+        </div>
+      </div>
+    </div> <!-- /.account-body -->
+</div>

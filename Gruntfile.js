@@ -8,7 +8,7 @@
 
 
 //var client = 'src/main/client';
-var client = 'src/main/webapp/assets';
+var client = 'full/src/main/webapp/assets';
 
 
 module.exports = function (grunt) {
@@ -96,7 +96,7 @@ module.exports = function (grunt) {
 		// open the browser in the given URL
 		open: {
 			server: {
-				url: 'http://localhost:8080/sitetb/assets/public.html'
+				url: 'http://localhost:8080/etbmanager/assets/public.html'
 			}
 		},
 

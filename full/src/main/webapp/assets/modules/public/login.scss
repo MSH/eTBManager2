@@ -1,0 +1,31 @@
+/** */
+.app-banner-img {
+  background-image: url("../images/background.jpg") ;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width: 992px) {
+  .app-banner-img {
+    background-size: auto;
+  }
+}
+
+@media (min-width: 992px) {
+  .app-banner-img {
+    background-size: 100%;
+  }
+}
+
+.app-login-container {
+  color: #ffffff;
+  padding-top:40px;
+  padding-bottom: 40px;
+  min-height:300px;
+}
+
+.app-btn-disabled:disabled {
+  opacity: 1 !important;
+  color: #EFE2E2;
+  background-color: #E28E8E;
+}

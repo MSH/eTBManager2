@@ -1,0 +1,37 @@
+<nav class="navbar navbar-inverse navbar-fixed-top bg-primary" role="navigation">
+	<div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                [[iHealth]]
+            </a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a ui-sref="main.login">[[Login]]</a>
+                </li>
+                <li>
+                    <div class="navbar-form">
+                        <div class="form-group">
+                            <select class="form-control nav-ctrl" ng-model="selLocale" ng-options="loc.name for loc in locales" ng-change="localeChanged()">
+                            </select>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+<!-- Here goes the content -->
+<div ui-view></div>
+
+<!-- Here goes the footer -->

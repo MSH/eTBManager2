@@ -1,0 +1,26 @@
+$google-color: #dd4b39;
+$facebook-color: #4669b4;
+$twitter-color: #15beff;
+
+@mixin button-social($bgcolor) {
+	color: #ffffff;
+	background-color: $bgcolor;
+	border-color: darken($bgcolor, 10%);
+
+	&:hover {
+		background-color: darken($bgcolor, 10%);
+		color: #ffffff;
+	}
+}
+
+.btn-google {
+	@include button-social($google-color);
+}
+
+.btn-twitter {
+	@include button-social($twitter-color);
+}
+
+.btn-facebook {
+	@include button-social($facebook-color);
+}

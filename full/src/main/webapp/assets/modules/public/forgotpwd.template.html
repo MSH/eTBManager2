@@ -1,0 +1,25 @@
+<div class="container" ng-init="initFocus=true">
+	<div class="row">
+		<div class="col-md-5 col-md-offset-3">
+		    <div class="wrapper text-center">
+				<h2>${messages['login.msg2']}</h2>
+				<p>
+                    ${messages['login.enteremail']}
+	    		</p>
+			    <form name="form" class="form-validation ng-pristine ng-invalid ng-invalid-required">
+			    	<p>
+			    	<div class="input-group-lg">
+			    		<input type="email" placeholder="${messages['User.email']}" ng-model="email" class="form-control ng-required ng-valid-email" focus-me="initFocus" required="">
+			    	</div>
+			    	</p>
+			    	<p>
+			    	<button type="submit" class="btn btn-lg btn-danger btn-block" ng-click="send()" ng-disabled="form.$invalid" disabled="disabled">${messages['admin.users.newpasswd']}</button>
+			    	</p>
+			    </form>
+                <div class="top-space-3x">
+                    <a ui-sref="main.login" >${messages['form.return']}</a>
+                </div>
+	    	</div>
+		</div>
+	</div>
+</div>

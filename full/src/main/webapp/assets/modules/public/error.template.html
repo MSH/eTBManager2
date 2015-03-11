@@ -1,0 +1,26 @@
+<div class="container" ng-init="processing=true">
+    
+	<div >
+	    <div class="row">
+			<div class="col-md-4 col-md-offset-4 text-center">
+	    		<h1><i class="fa fa-frown-o"></i> Sorry, an error has occurred!</h1>
+			</div>
+		</div>
+
+		<div class="col-md-6 col-md-offset-3 text-center wrapper-2x text-muted">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					Error # {{code}}
+					<div ng-show="processing">
+						<h2>
+						<i class="fa fa-circle-o-notch fa-spin"></i> [[Wait]]...
+						</h2>
+					</div>
+					<div ng-hide="processing">
+						{{message}}
+					</div>
+				</div>
+	    	</div>
+    	</div>
+    </div> <!-- /.account-body -->
+</div>
