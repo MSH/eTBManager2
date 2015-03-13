@@ -49,7 +49,7 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 		String ret = null;
 		
 		if ((parent != null) && (parent.getLevel() == 5)) {
-			facesMessages.add("M�ximum level reached");
+			facesMessages.add("Maximum level reached");
 			return "error";
 		}
 		
@@ -88,19 +88,25 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 				facesMessages.addFromResourceBundle("admin.adminunits.maxlevel");
 				return "error";
 			}
-			
-			//Update parent and code and persists
+
+            //old parent
+            AdministrativeUnit oldParent = adminUnit.getParent();
+
+			//Update parent and code
 			String oldCode = adminUnit.getCode();
 			adminUnit.setParent(parent);
 			adminUnit.setCode(generateNewCode(parent));
-			ret = super.persist();
+            ret = super.persist();
 			
 			//Update code of possible sons
 			List<AdministrativeUnit> sons = getEntityManager().createQuery("from AdministrativeUnit where code like :oldCode and workspace.id = :workspaceId")
 											.setParameter("oldCode", oldCode+"%")
 											.setParameter("workspaceId", adminUnit.getWorkspace().getId())
 											.getResultList();
-			
+
+            updateUnitsCount(parent);
+            updateUnitsCount(oldParent);
+
 			for(AdministrativeUnit au : sons){
 				au.setCode(generateNewCode(au.getParent()));
 				getEntityManager().merge(au);
@@ -112,11 +118,21 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 		}else{
 			ret = super.persist();
 		}
-		
+
 		return ret;
 	}
 
+    private void updateUnitsCount(AdministrativeUnit auforupdate){
+        if(auforupdate == null)
+            return;
 
+        Long unitsCount = (Long) getEntityManager().createQuery(" select count(*) from AdministrativeUnit a where a.parent.id = :parentId")
+                                            .setParameter("parentId", auforupdate.getId())
+                                            .getSingleResult();
+
+        auforupdate.setUnitsCount(unitsCount.intValue());
+        getEntityManager().persist(auforupdate);
+    }
 	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.EntityHomeEx#setId(java.lang.Object)
