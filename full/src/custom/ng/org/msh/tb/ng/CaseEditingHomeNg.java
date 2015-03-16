@@ -12,10 +12,7 @@ import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.exams.ExamXpertHome;
 import org.msh.tb.entities.*;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.ValidationState;
-import org.msh.tb.entities.enums.XpertResult;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.ng.entities.TbCaseNG;
 import org.msh.tb.ng.entities.enums.HIVPosition;
 
@@ -34,6 +31,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     @In(create = true) ExamCultureHome examCultureHome;
 
     boolean suspectValidationError;
+    boolean tbCaseValidationError;
 
     /**
      * Initialize the caseHome object for editing
@@ -68,7 +66,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     }
 
     /*
-    * Validates suspect data, checking required fields
+    * Validates suspect data, checking required fields and other rules
     */
     private boolean validateSuspectData(){
         suspectValidationError = true;
@@ -119,6 +117,19 @@ public class CaseEditingHomeNg extends CaseEditingHome {
             tbcase.setHivPositionDetail(null);
 
         return suspectValidationError;
+    }
+
+    /*
+    * Validates TB case data, checking required fields and other rules
+    */
+    private boolean validateTbCaseData(){
+        tbCaseValidationError = validateSuspectData();
+        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+
+        if(!validateRequired(tbcase.getNotifAddress().getAddress(), "address")) tbCaseValidationError = false;
+        //TODO: falta verificar quais campos são required
+
+        return tbCaseValidationError;
     }
 
     private String saveNewSuspect(){
@@ -186,6 +197,71 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         return s;
     }
 
+    private String saveNewTbCase(){
+        if(!validateTbCaseData())
+            return "error";
+        //TODO
+        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+
+        tbcase.setSuspectClassification(tbcase.getClassification());
+
+        // save the patient's data
+        patientHome.persist();
+
+        // get notification unit
+        tbcase.setNotificationUnit(getTbunitselection().getSelected());
+        tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
+
+        tbcase.setOwnerUnit(tbcase.getNotificationUnit());
+
+        if (tbcase.getValidationState() == null)
+            tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
+
+        if (tbcase.getState() == null)
+            tbcase.setState(CaseState.WAITING_TREATMENT);
+
+        updatePatientAge();
+
+        // treatment was defined ?
+        caseHome.setTransactionLogActive(true);
+        if (!caseHome.persist().equals("persisted"))
+            return "error";
+
+        caseHome.setTransactionLogActive(false);
+
+        caseHome.updateCaseTags();
+
+        return "persisted";
+    }
+
+    /**
+     * Save changes made to a case
+     * @return
+     */
+    public String saveEditingTbCase() {
+        if (!validateTbCaseData())
+            return "error";
+        //TODO
+        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+
+        tbcase.setNotificationUnit(getTbunitselection().getSelected());
+        tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
+
+        //fix the inconsistence when owner unit is null.
+        if(tbcase.getOwnerUnit() == null){
+            updateOwnerUnit(tbcase);
+        }
+
+        updatePatientAge();
+
+        String s = caseHome.persist();
+
+        if ("persisted".equals(s))
+            caseHome.updateCaseTags();
+
+        return s;
+    }
+
     /**
      * Overrides parent method to apply validation manually
      */
@@ -195,9 +271,12 @@ public class CaseEditingHomeNg extends CaseEditingHome {
 
         if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.SUSPECT))
             result = saveNewSuspect();
-        else
+        else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.TB))
+            result = saveNewTbCase();
+        else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.DRTB))
             result = "TODO MY FRIEND";
-
+        else
+            result = "error";
 
         if(!result.equals("persisted"))
             return "error";
@@ -229,8 +308,12 @@ public class CaseEditingHomeNg extends CaseEditingHome {
 
         if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.SUSPECT))
             result = saveEditingSuspect();
-        else
+        else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.TB))
+            result = saveEditingTbCase();
+        else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.DRTB))
             result = "TODO MY FRIEND";
+        else
+            result = "error";
 
         if(!result.equals("persisted"))
             return "error";

@@ -46,6 +46,25 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="2.2.NG.7" author="MSANTOS" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="maritalstatus_id" type="int"></column>
+            <column name="otherMarital" type="varchar(250)"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2.NG.8" author="MSANTOS" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="intakeAntiTBDrugs" type="int"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2.NG.9" author="MSANTOS" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="intakeAntiTBDrugsDuration" type="int"></column>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="2.2.3" author="msantos" context="NG">
         <sql>
             ALTER TABLE examxpert
@@ -60,6 +79,5 @@
             ON UPDATE CASCADE
         </sql>
     </changeSet>
-
 
 </databaseChangeLog>

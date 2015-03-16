@@ -246,7 +246,7 @@
           <s:decorate template="/layout/edit.xhtml">
               <ui:define name="label">#{messages['PatientType']}:</ui:define>
               <h:selectOneMenu id="patType" value="#{tbcase.patientType}" required="#{tbcase.validated}">
-                  <s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                  <s:selectItems var="it" value="#{patientTypesDRTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
                   <s:convertEnum />
               </h:selectOneMenu>
           </s:decorate>

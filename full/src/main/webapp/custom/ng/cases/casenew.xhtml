@@ -24,7 +24,7 @@
 
 	<ui:include src="/custom/ng/cases/casedataedt.xhtml" />	
 
-<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED' and tbcase.classification=='DRTB'}">
 	<div class="form-content">
 	<h2>#{messages['MedicalExamination']}</h2>
 

@@ -58,7 +58,7 @@
 
     <tr>
         <td>
-            <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.sourceReferral != null and tbcase.sourceReferral.value != null}">
+            <s:decorate template="/layout/display.xhtml" rendered="#{tbcaseng.sourceReferral != null and tbcaseng.sourceReferral.value != null}">
                 <ui:define name="label">#{messages['TbField.SOURCE_REFERRAL']}:</ui:define>
                 #{tbcase.sourceReferral.value.name.name1}
             </s:decorate>
@@ -85,7 +85,7 @@
 
     <tr>
         <td>
-            <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.hivPosition!=null}">
+            <s:decorate template="/layout/display.xhtml" rendered="#{tbcaseng.hivPosition!=null}">
                 <ui:define name="label">#{messages['manag.hivreport']}:</ui:define>
                 #{messages[tbcase.hivPosition.key]}
                 <h:outputText value=" - #{messages[tbcase.hivPositionDetail.key]}" rendered="#{tbcase.hivPosition == 'POSITIVE' and tbcase.hivPositionDetail != null}"/>

@@ -15,6 +15,42 @@ import java.util.List;
 @BypassInterceptors
 public class GlobalLists {
 
+    private PatientType patientTypes[] = {
+            PatientType.NEW,
+            PatientType.TRANSFER_IN,
+            PatientType.RELAPSE,
+            PatientType.AFTER_DEFAULT,
+            PatientType.FAILURE_FT,
+            PatientType.FAILURE_RT,
+            PatientType.RESISTANCE_PATTERN_CHANGED,
+            PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP,
+            PatientType.TREATMENT_AFTER_FAILURE,
+            PatientType.OTHER_PREVIOUSLY_TREATED,
+            PatientType.UNKNOWN_PREVIOUS_TB_TREAT,
+            PatientType.OTHER
+    };
+
+    private PatientType patientTypesDRTB[] = {
+            PatientType.NEW,
+            PatientType.TRANSFER_IN,
+            PatientType.RELAPSE,
+            PatientType.AFTER_DEFAULT,
+            PatientType.FAILURE_FT,
+            PatientType.FAILURE_RT,
+            PatientType.RESISTANCE_PATTERN_CHANGED,
+            PatientType.OTHER
+    };
+
+    private PatientType patientTypesTB[] = {
+            PatientType.NEW,
+            PatientType.RELAPSE,
+            PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP,
+            PatientType.TREATMENT_AFTER_FAILURE,
+            PatientType.OTHER_PREVIOUSLY_TREATED,
+            PatientType.TRANSFER_IN,
+            PatientType.UNKNOWN_PREVIOUS_TB_TREAT
+    };
+
 	private final static Nationality[] nationalityTypes = {
 		Nationality.NIGERIA,
 		Nationality.OTHER
@@ -24,12 +60,22 @@ public class GlobalLists {
 		HIVResult.NEGATIVE,
 		HIVResult.POSITIVE,
 		HIVResult.NOTDONE
-	};	
-	
-	@Factory("nationalitiesNg")
-	public Nationality[] getNationalitiesNg() {
-		return nationalityTypes;
-	}
+	};
+
+    private final static IntakeAntiDrugsDuration[] intakeAntiDrugsDuration = {
+        IntakeAntiDrugsDuration.LESS_4WEEKS,
+        IntakeAntiDrugsDuration.GREATER_4WEEKS
+    };
+
+    @Factory("intakeAntiDrugsDuration")
+    public IntakeAntiDrugsDuration[] getIntakeAntiDrugsDuration() {
+        return intakeAntiDrugsDuration;
+    }
+
+    @Factory("nationalitiesNg")
+    public Nationality[] getNationalitiesNg() {
+        return nationalityTypes;
+    }
 	
 	@Factory("hivResultNg")
 	public HIVResult[] gethivResultNg() {
@@ -119,17 +165,16 @@ public class GlobalLists {
             HIVPositionDetail.AFTER_REGISTRATION
     };
 
-	
 	private int[] comorb_years = {1,2,3,4,5,6,7,8,9,10};
 	
 	@Factory("tbFields.ng")
 	public TbField[] getTbFields() {
 		return tbFields;
 	}
-	
-	public ReferredBy[] getRefByTypes() {
-		return refByTypes;
-	}
+
+    public ReferredBy[] getRefByTypes() {
+        return refByTypes;
+    }
 	
 	public ReferredTo[] getRefToTypes() {
 		return refToTypes;
@@ -188,6 +233,16 @@ public class GlobalLists {
     @Factory("hivpositiondetails_ng")
     public static HIVPositionDetail[] getHivPositionsDetails() {
         return hivPositionDetails;
+    }
+
+    public PatientType[] getPatientTypes() {
+        return patientTypes;
+    }
+
+    public PatientType[] getPatientTypesTB() { return patientTypesTB; }
+
+    public PatientType[] getPatientTypesDRTB() {
+        return patientTypesDRTB;
     }
 
 	/**

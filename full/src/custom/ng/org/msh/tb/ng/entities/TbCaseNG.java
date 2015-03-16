@@ -3,8 +3,10 @@ package org.msh.tb.ng.entities;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ng.entities.enums.HIVPosition;
 import org.msh.tb.ng.entities.enums.HIVPositionDetail;
+import org.msh.tb.ng.entities.enums.IntakeAntiDrugsDuration;
 import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
@@ -35,14 +37,28 @@ public class TbCaseNG extends TbCase{
 	@PropertyLog(messageKey="TbField.SUSPECT_TYPE")
 	private FieldValue suspectType;
 
-	@Embedded
-	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SOURCEREFERRAL_ID")) })
-	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherSourceReferral")) })
-	private FieldValueComponent sourceReferral;
+    @Embedded
+    @AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SOURCEREFERRAL_ID")) })
+    @AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherSourceReferral")) })
+    private FieldValueComponent sourceReferral;
+
+    @Embedded
+    @AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "occupation_id")) })
+    @AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherOccupation")) })
+    private FieldValueComponent occupation;
 
     private HIVPosition hivPosition;
 
     private HIVPositionDetail hivPositionDetail;
+
+    @Embedded
+    @AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "maritalstatus_id")) })
+    @AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherMarital")) })
+    private FieldValueComponent maritalStatus;
+
+    private YesNoType intakeAntiTBDrugs;
+
+    private IntakeAntiDrugsDuration intakeAntiTBDrugsDuration;
 	
 	public List<CaseDispensing_Ng> getDispng() {
 		return dispng;
@@ -100,6 +116,44 @@ public class TbCaseNG extends TbCase{
 
     public void setHivPositionDetail(HIVPositionDetail hivPositionDetail) {
         this.hivPositionDetail = hivPositionDetail;
+    }
+
+    public FieldValueComponent getOccupation() {
+        if (occupation == null) {
+            occupation = new FieldValueComponent();
+        }
+        return occupation;
+    }
+
+    public void setOccupation(FieldValueComponent occupation) {
+        this.occupation = occupation;
+    }
+
+    public FieldValueComponent getMaritalStatus() {
+        if (maritalStatus == null) {
+            maritalStatus = new FieldValueComponent();
+        }
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(FieldValueComponent maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public YesNoType getIntakeAntiTBDrugs() {
+        return intakeAntiTBDrugs;
+    }
+
+    public void setIntakeAntiTBDrugs(YesNoType intakeAntiTBDrugs) {
+        this.intakeAntiTBDrugs = intakeAntiTBDrugs;
+    }
+
+    public IntakeAntiDrugsDuration getIntakeAntiTBDrugsDuration() {
+        return intakeAntiTBDrugsDuration;
+    }
+
+    public void setIntakeAntiTBDrugsDuration(IntakeAntiDrugsDuration intakeAntiTBDrugsDuration) {
+        this.intakeAntiTBDrugsDuration = intakeAntiTBDrugsDuration;
     }
 }
 
