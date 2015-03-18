@@ -104,7 +104,8 @@ public abstract class RemoteActionHandler<E extends Response> {
             }
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            // do nothing, because there is no response class
+//            throw new RuntimeException(e);
         }
 
         return new Response();
