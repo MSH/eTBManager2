@@ -329,8 +329,9 @@ else jQuery('#pulmonary2').hide(500);
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
-<rich:jQuery selector="#pulmonarybd" query="each(function(){ if (isPulmonary(this)) {jQuery('#pulmonary2').hide(); }})" />
-		
+<rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary2').hide(); }})" />
+<rich:jQuery selector="#pulmonarybd" query="each(function(){showPulmonaryTypes(this)})" />
+
 		</s:fragment>		
 		</td></tr></table>
 	</div>

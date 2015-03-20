@@ -10,7 +10,7 @@ import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.cases.treatment.TreatmentHome;
-
+import org.msh.tb.entities.enums.InfectionSite;
 
 
 /**
@@ -55,8 +55,12 @@ public class CaseBDHome {
 	}
 
     private void validatePulmonaryTypes(){
-        if(getTbCaseBD().getPulmonaryTypesBD().equals(PulmonaryTypesBD.POSITIVE))
+        if(getTbCaseBD().getInfectionSite().equals(InfectionSite.EXTRAPULMONARY)){
             getTbCaseBD().setPulmonaryType(null);
+            getTbCaseBD().setPulmonaryTypesBD(null);
+        } else if(getTbCaseBD().getInfectionSite().equals(InfectionSite.PULMONARY) && getTbCaseBD().getPulmonaryTypesBD().equals(PulmonaryTypesBD.POSITIVE)){
+            getTbCaseBD().setPulmonaryType(null);
+        }
     }
 
 	/**
