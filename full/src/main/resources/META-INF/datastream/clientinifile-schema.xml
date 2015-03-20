@@ -262,8 +262,18 @@
             <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
             <property name="method.id" elementName="method" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
         </objectGraph>
-        
+
+        <objectGraph name="examxpert" class="org.msh.tb.entities.ExamXpert">
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
+        </objectGraph>
+
         <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult">
             <property name="id" xmlAttribute="true" use="REQUIRED"/>
             <property name="exam.id" elementName="exam" xmlAttribute="true" />
@@ -279,6 +289,7 @@
             <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
             <property name="method.id" elementName="method" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="examculture" class="org.msh.tb.entities.ExamCulture" >
@@ -289,6 +300,7 @@
             <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
             <property name="method.id" elementName="method" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="examhiv" class="org.msh.tb.entities.ExamHIV">
