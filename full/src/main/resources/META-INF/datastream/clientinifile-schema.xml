@@ -250,6 +250,8 @@
             <property name="examsXpert" use="IGNORE" />
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="tags" use="IGNORE" />
+            <property name="rifampcinResistance" use="IGNORE" />
+            <property name="movedSecondLineTreatment" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
