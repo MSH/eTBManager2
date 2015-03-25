@@ -1,20 +1,16 @@
 package org.msh.tb.bd;
 
-import org.apache.axis.i18n.Messages;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
+import org.msh.tb.cases.treatment.TreatmentInfo;
 import org.msh.tb.cases.treatment.TreatmentsInfoHome;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.Tbunit;
-import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.*;
-import org.msh.tb.login.SessionData;
-import org.msh.tb.login.UserSession;
-import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
 import java.util.ArrayList;

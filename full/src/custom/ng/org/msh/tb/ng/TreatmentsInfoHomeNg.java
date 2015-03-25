@@ -4,6 +4,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
+import org.msh.tb.cases.treatment.TreatmentInfo;
 import org.msh.tb.cases.treatment.TreatmentsInfoHome;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.Tbunit;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @Name("treatmentsInfoHomeNg")
 @BypassInterceptors
-public class TreatmentsInfoHomeNg extends TreatmentsInfoHome{
+public class TreatmentsInfoHomeNg extends TreatmentsInfoHome {
 
     private static final String HQL_CONFIRMED = "select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
             "c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate, " +
@@ -39,12 +40,7 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome{
             "group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification ";
 
     private static final String HQL_SUSPECT = "select c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, " +
-            "c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate, " +
-            "(select ( sum(day1) + sum(day2) + sum(day3) + sum(day4) + sum(day5) + sum(day6) + sum(day7) + sum(day8) + sum(day9) " +
-            "+ sum(day10) + sum(day11) + sum(day12) + sum(day13) + sum(day14) + sum(day15) + sum(day16) + sum(day17) + sum(day18) " +
-            "+ sum(day19) + sum(day20) + sum(day21) + sum(day22) + sum(day23) + sum(day24) + sum(day25) + sum(day26) + sum(day27) " +
-            "+ sum(day28) + sum(day29) + sum(day30) + sum(day31) ) as total " +
-            "from TreatmentMonitoring tm0 where tm0.tbcase.id = c.id) as medicineTakenDays " +
+            "c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate " +
             "from TbCase c " +
             "join c.patient p left join c.pulmonaryType pt " +
             "where c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal() +
@@ -111,7 +107,7 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome{
             CaseGroup grp = suspectGroup;
             InfectionSite is = (InfectionSite) vals[9];
 
-            TreatmentInfo info = new TreatmentInfo();
+            TreatmentInfo info = new TreatmentInfoNg();
             info.setCaseId((Integer)vals[0]);
 
             p.setName((String)vals[1]);
@@ -126,14 +122,92 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome{
             info.setInfectionSite(is);
             info.setPulmonaryType((String) vals[10]);
             info.setRegistrationDate((Date) vals[11]);
-            if(vals[12] != null)
-                info.setNumDaysDone(((Long) vals[12]).intValue());
-            else
-                info.setNumDaysDone(0);
 
             grp.getTreatments().add(info);
         }
+
+        loadCultureResults();
+        loadMicroscopyResults();
+        loadXpertResults();
     }
+
+
+    /**
+     * Simple way to return a list of exam results from the suspect cases
+     * @param fields the list of fields to be included in the HQL sentence
+     * @param entity the name of the entity to be included in the 'from' clause of the HQL sentence
+     * @return list of objects, where the last item is the case number
+     */
+    protected List<Object[]> getExamResults(String fields, String entity) {
+        CaseGroup grp = getSuspectGroup();
+        String s = "";
+        for (TreatmentInfo info: grp.getTreatments()) {
+            TreatmentInfoNg item = (TreatmentInfoNg)info;
+            if (!s.isEmpty()) {
+                s += ",";
+            }
+            s += info.getCaseId();
+        }
+        String hql = "select " + fields + ", tbcase.id " +
+                "from " + entity + " where tbcase.id in (" + s + ") " +
+                "order by dateCollected";
+
+        return App.getEntityManager().createQuery(hql).getResultList();
+    }
+
+    /**
+     * Load information about xpert results of suspect cases
+     */
+    protected void loadXpertResults() {
+        List<Object[]> lst = getExamResults("result, rifResult", "ExamXpert");
+
+        for (Object[] vals: lst) {
+            XpertResult res = (XpertResult)vals[0];
+            XpertRifResult rif = (XpertRifResult)vals[1];
+            Integer caseId = (Integer)vals[2];
+
+            TreatmentInfoNg info = (TreatmentInfoNg)getSuspectGroup().findByCaseId(caseId);
+            if (info != null) {
+                info.setXpertResult(res);
+                info.setXpertRifResult(rif);
+            }
+        }
+    }
+
+    /**
+     * Load information about culture result of suspect cases
+     */
+    protected void loadCultureResults() {
+        List<Object[]> lst = getExamResults("result", "ExamCulture");
+
+        for (Object[] vals: lst) {
+            CultureResult res = (CultureResult)vals[0];
+            Integer caseId = (Integer)vals[1];
+
+            TreatmentInfoNg info = (TreatmentInfoNg)getSuspectGroup().findByCaseId(caseId);
+            if (info != null) {
+                info.setCultureResult(res);
+            }
+        }
+    }
+
+    /**
+     * Load information about microscopy result of suspect cases
+     */
+    protected void loadMicroscopyResults() {
+        List<Object[]> lst = getExamResults("result", "ExamMicroscopy");
+
+        for (Object[] vals: lst) {
+            MicroscopyResult res = (MicroscopyResult)vals[0];
+            Integer caseId = (Integer)vals[1];
+
+            TreatmentInfoNg info = (TreatmentInfoNg)getSuspectGroup().findByCaseId(caseId);
+            if (info != null) {
+                info.setMicroscopyResult(res);
+            }
+        }
+    }
+
 
     @Override
     public Tbunit getTbunit() {
