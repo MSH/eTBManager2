@@ -557,4 +557,88 @@
         </sql>
     </changeSet>
 
+    <changeSet id="13.22" author="msantos" context="BD">
+        <addColumn tableName="tbcasebd" >
+            <column name="PATIENTREFTO_ID" type="int" />
+            <column name="REF_TO_DATE" type="date" />
+            <column name="referredToUnitName" type="varchar(100)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="13.23" author="msantos" context="BD">
+        <sql>
+            update tbcasebd c
+            set PATIENTREFTO_ID = (select e.PATIENTREFTO_ID
+            from medicalexamination e
+            where e.case_id = c.id and
+            e.id = (select min(e2.id)
+            from medicalexamination e2
+            where e2.case_id = e.case_id
+            and e2.EVENT_DATE = (select min(e3.EVENT_DATE)
+            from medicalexamination e3
+            where e3.case_id = e2.case_id)))
+            where PATIENTREFTO_ID is null;
+
+            update tbcasebd c
+            set REF_TO_DATE = (select e.REF_TO_DATE
+            from medicalexamination e
+            where e.case_id = c.id and
+            e.id = (select min(e2.id)
+            from medicalexamination e2
+            where e2.case_id = e.case_id
+            and e2.EVENT_DATE = (select min(e3.EVENT_DATE)
+            from medicalexamination e3
+            where e3.case_id = e2.case_id)))
+            where REF_TO_DATE is null;
+
+            update tbcasebd c
+            set referredToUnitName = (select e.referredToUnitName
+            from medicalexamination e
+            where e.case_id = c.id and
+            e.id = (select min(e2.id)
+            from medicalexamination e2
+            where e2.case_id = e.case_id
+            and e2.EVENT_DATE = (select min(e3.EVENT_DATE)
+            from medicalexamination e3
+            where e3.case_id = e2.case_id)))
+            where referredToUnitName is null or referredToUnitName like '';
+
+            update tbcasebd c
+            set PATIENTREFTO_ID = (select e.PATIENTREFTO_ID
+            from medicalexamination e
+            where e.case_id = c.id and
+            e.id = (select max(e2.id)
+            from medicalexamination e2
+            where e2.case_id = e.case_id
+            and e2.EVENT_DATE = (select max(e3.EVENT_DATE)
+            from medicalexamination e3
+            where e3.case_id = e2.case_id)))
+            where PATIENTREFTO_ID is null;
+
+            update tbcasebd c
+            set REF_TO_DATE = (select e.REF_TO_DATE
+            from medicalexamination e
+            where e.case_id = c.id and
+            e.id = (select max(e2.id)
+            from medicalexamination e2
+            where e2.case_id = e.case_id
+            and e2.EVENT_DATE = (select max(e3.EVENT_DATE)
+            from medicalexamination e3
+            where e3.case_id = e2.case_id)))
+            where REF_TO_DATE is null;
+
+            update tbcasebd c
+            set referredToUnitName = (select e.referredToUnitName
+            from medicalexamination e
+            where e.case_id = c.id and
+            e.id = (select max(e2.id)
+            from medicalexamination e2
+            where e2.case_id = e.case_id
+            and e2.EVENT_DATE = (select max(e3.EVENT_DATE)
+            from medicalexamination e3
+            where e3.case_id = e2.case_id)))
+            where referredToUnitName is null or referredToUnitName like '';
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

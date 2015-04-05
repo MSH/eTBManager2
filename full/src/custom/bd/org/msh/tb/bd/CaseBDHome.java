@@ -45,6 +45,7 @@ public class CaseBDHome {
 		String ret = caseEditingHome.saveNew();
 
         validatePulmonaryTypes();
+        validateRefToFields();
 
 		if(ret.equals("error"))
 			return "error";
@@ -59,8 +60,15 @@ public class CaseBDHome {
             getTbCaseBD().setPulmonaryType(null);
             getTbCaseBD().setPulmonaryTypesBD(null);
         } else if(getTbCaseBD().getInfectionSite() != null && getTbCaseBD().getInfectionSite().equals(InfectionSite.PULMONARY)
-                    && getTbCaseBD().getPulmonaryTypesBD() != null && getTbCaseBD().getPulmonaryTypesBD().equals(PulmonaryTypesBD.POSITIVE)){
+                && getTbCaseBD().getPulmonaryTypesBD() != null && getTbCaseBD().getPulmonaryTypesBD().equals(PulmonaryTypesBD.POSITIVE)){
             getTbCaseBD().setPulmonaryType(null);
+        }
+    }
+
+    private void validateRefToFields(){
+        if(getTbCaseBD().getPatientRefToFv() == null){
+            getTbCaseBD().setRefToDate(null);
+            getTbCaseBD().setReferredToUnitName(null);
         }
     }
 

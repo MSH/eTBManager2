@@ -224,6 +224,20 @@
     		#{messages[tbcase.patientType.key]}
 		</s:decorate>
 		</s:fragment>
+
+        <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.patientRefToFv.name.name1}">
+            <ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
+            #{tbcasebd.patientRefToFv.name.name1}
+
+            <h:outputText rendered="#{not empty tbcasebd.referredToUnitName}">
+                <br/>
+                <b>#{messages['MedicalExamination.RefToUnit']}: </b>#{tbcasebd.referredToUnitName}
+            </h:outputText>
+            <h:outputText rendered="#{not empty tbcasebd.refToDate}">
+                <br/>
+                <b>#{messages['MedicalExamination.RefToDate']}: </b><h:outputText value="#{tbcasebd.refToDate}" converter="localeDateConverter"/>
+            </h:outputText>
+        </s:decorate>
 		
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
 		<h2>#{messages['cases.prevtreat']}</h2>

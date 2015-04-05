@@ -357,7 +357,44 @@ else jQuery('#pulmonary2').hide(500);
 
 		</s:fragment>		
 		</td></tr></table>
-	</div>
+
+    <s:decorate template="/layout/edit.xhtml" id="refToUnitdec">
+        <ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
+        <h:selectOneMenu id="cbrefto" required="true" value="#{tbcasebd.patientRefToFv}" style="margin-right:4px;" onchange="checkClick(this.selectedIndex!=0, '#refToUnit')">
+            <s:selectItems var="it" value="#{fieldsQuery.refToTypes}" noSelectionLabel="-" label="#{it}" />
+            <s:convertEntity />
+        </h:selectOneMenu>
+
+        <div id="refToFields">
+            <s:decorate template="/layout/edit.xhtml" >
+                <ui:define name="label">#{messages['MedicalExamination.RefToUnit']}:</ui:define>
+                <ui:param name="labelstyle" value="width:auto; text-align:left" />
+                <h:inputText value="#{tbcasebd.referredToUnitName}" style=" width : 340px;" maxlength="100"/>
+            </s:decorate>
+
+            <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+                <ui:define name="label">#{messages['MedicalExamination.RefToDate']}:</ui:define>
+                <ui:param name="labelstyle" value="width:auto; text-align:left" />
+                <ui:param name="required" value="false" />
+                <ui:param name="future" value="true" />
+                <ui:param name="datefield" value="#{tbcasebd.refToDate}" />
+            </s:decorate>
+        </div>
+
+    </s:decorate>
+
+    <rich:jQuery selector="#cbrefto" query="change(function(){showRefToFields(this); })" />
+    <rich:jQuery selector="#cbrefto" query="each(function(){ if (this.selectedIndex==0) jQuery('#refToFields').hide(); })" />
+
+    <script type="text/javascript">
+        function showRefToFields(ashow) {
+            if (ashow.selectedIndex != 0)
+                jQuery('#refToFields').show(500);
+            else jQuery('#refToFields').hide(500);
+        }
+    </script>
+
+    </div>
 
 
 	<div class="form-content">

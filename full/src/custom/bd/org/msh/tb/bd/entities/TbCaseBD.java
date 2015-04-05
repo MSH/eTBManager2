@@ -7,9 +7,10 @@ import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.transactionlog.PropertyLog;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -28,9 +29,44 @@ public class TbCaseBD extends TbCase{
 	private SalaryRange salary;
 	
 	private PulmonaryTypesBD pulmonaryTypesBD;
-	
 
-	public SalaryRange getSalary() {
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="PATIENTREFTO_ID")
+    @PropertyLog(messageKey="MedicalExamination.ReferredTo")
+    private FieldValue patientRefToFv;
+
+    @Column(length=100)
+    private String referredToUnitName;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name="REF_TO_DATE")
+    private Date refToDate;
+
+    public FieldValue getPatientRefToFv() {
+        return patientRefToFv;
+    }
+
+    public void setPatientRefToFv(FieldValue patientRefToFv) {
+        this.patientRefToFv = patientRefToFv;
+    }
+
+    public String getReferredToUnitName() {
+        return referredToUnitName;
+    }
+
+    public void setReferredToUnitName(String referredToUnitName) {
+        this.referredToUnitName = referredToUnitName;
+    }
+
+    public Date getRefToDate() {
+        return refToDate;
+    }
+
+    public void setRefToDate(Date refToDate) {
+        this.refToDate = refToDate;
+    }
+
+    public SalaryRange getSalary() {
 		return salary;
 	}
 
@@ -54,7 +90,7 @@ public class TbCaseBD extends TbCase{
 		this.bcgScar = bcgScar;
 	}
 
-	/**
+    /**
 	 * Search for side effect data by the side effect
 	 * @param sideEffect - FieldValue object representing the side effect
 	 * @return - CaseSideEffect instance containing side effect data of the case, or null if there is no side effect data
