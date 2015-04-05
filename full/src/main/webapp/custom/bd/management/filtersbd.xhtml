@@ -116,14 +116,21 @@ function handleContextClick(comp) {
 	</td></tr>
 	<tr><td>
 
-	<s:decorate template="/layout/edit.xhtml">
-		<ui:define name="label">
-			#{messages['PatientType']}:
-		</ui:define>
-		<h:selectOneMenu value="#{indicatorFilters.patientType}" disabled="#{empty disablePatientType ? false : disablePatientType}">
-			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
-		</h:selectOneMenu>
-	</s:decorate>
+    <s:decorate template="/layout/edit.xhtml">
+        <ui:define name="label">
+            #{messages['PatientType']}:
+        </ui:define>
+        <h:selectOneMenu id="patType" value="#{indicatorFilters.patientType}" disabled="#{empty disablePatientType ? false : disablePatientType}">
+            <s:selectItems var="it" value="#{patientTypesALL}" noSelectionLabel="#{messages['form.noselection']}" label="#{messages[it.key]}"/>
+        </h:selectOneMenu>
+        <div id="prevTreatType" style="#{indicatorFilters.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+            <h:selectOneMenu value="#{indicatorFilters.previouslyTreatedType}" disabled="#{empty disablePatientType ? false : disablePatientType}">
+                <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+        </div>
+    </s:decorate>
+        <rich:jQuery selector="#patType" query="change(function(){ showPrevTreatType(this); })" />
 
 	</td><td>
 
@@ -285,5 +292,18 @@ function handleContextClick(comp) {
 
 	</table>
 	</div>
+    <script type="text/javascript">
+        <!--
 
+        function isPatientTypePrevTreat(cb) {
+            return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'PREVIOUSLY_TREATED'));
+        }
+        function showPrevTreatType(cb) {
+            if (isPatientTypePrevTreat(cb))
+                jQuery('#prevTreatType').show(500);
+            else jQuery('#prevTreatType').hide(500);
+        }
+
+        -->
+    </script>
 </ui:composition>

@@ -55,10 +55,11 @@ public class CaseBDHome {
 	}
 
     private void validatePulmonaryTypes(){
-        if(getTbCaseBD().getInfectionSite().equals(InfectionSite.EXTRAPULMONARY)){
+        if(getTbCaseBD().getInfectionSite() != null && getTbCaseBD().getInfectionSite().equals(InfectionSite.EXTRAPULMONARY)){
             getTbCaseBD().setPulmonaryType(null);
             getTbCaseBD().setPulmonaryTypesBD(null);
-        } else if(getTbCaseBD().getInfectionSite().equals(InfectionSite.PULMONARY) && getTbCaseBD().getPulmonaryTypesBD().equals(PulmonaryTypesBD.POSITIVE)){
+        } else if(getTbCaseBD().getInfectionSite() != null && getTbCaseBD().getInfectionSite().equals(InfectionSite.PULMONARY)
+                    && getTbCaseBD().getPulmonaryTypesBD() != null && getTbCaseBD().getPulmonaryTypesBD().equals(PulmonaryTypesBD.POSITIVE)){
             getTbCaseBD().setPulmonaryType(null);
         }
     }
