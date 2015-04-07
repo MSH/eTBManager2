@@ -13,13 +13,13 @@
                 <th align="left"><a:commandLink value="#{messages['Patient']}" onclick="changeOrder#{idList}(1);return false;" styleClass="link-header-sr"/></th>
                 <s:fragment rendered="#{suspects}">
                     <th align="left"><a:commandLink value="#{messages['TbCase.registrationDate']}" onclick="changeOrder#{idList}(4);return false;" styleClass="link-header-sr"/></th>
-                    <th align="left">
+                    <th align="center">
                         #{messages['cases.examxpert']}
                     </th>
-                    <th align="left">
+                    <th align="center">
                         #{messages['cases.exammicroscopy']}
                     </th>
-                    <th align="left">
+                    <th align="center">
                         #{messages['cases.examculture']}
                     </th>
                 </s:fragment>
@@ -43,14 +43,22 @@
                         <td>
                             <h:outputText value="#{it.registrationDate}" converter="localeDateConverter"/>
                         </td>
-                        <td>
-                            #{it.xpertResult}
+                        <td align="center">
+                            <h:outputText value="#{messages[it.xpertResult.key]}" styleClass="badge #{it.xpertResult=='TB_DETECTED'?'color-danger':'color-success'}" rendered="#{not empty it.xpertResult}"/>
+                            <div style="margin-top:4px">
+                                <h:outputText value="#{messages[it.xpertRifResult.key]}"
+                                              rendered="#{it.xpertResult=='TB_DETECTED'}"
+                                              styleClass="badge #{it.xpertRifResult == 'RIF_DETECTED'?'color-danger': (it.xpertRifResult == 'RIF_NOT_DETECTED'? 'color-success':'color-warning')}"/>
+                            </div>
                         </td>
-                        <td>
-                            #{it.microscopyResult}
+                        <td align="center">
+                            <h:outputText value="#{messages[it.microscopyResult.key]}" rendered="#{not empty it.microscopyResult}"
+                                          styleClass="badge #{it.microscopyResult=='NEGATIVE'? 'color-success': 'color-danger'}"/>
                         </td>
-                        <td>
-                            #{it.cultureResult}
+                        <td align="center">
+                            <h:outputText value="#{messages[it.cultureResult.key]}"
+                                          styleClass="badge #{r.result=='NEGATIVE'? 'color-success': 'color-danger'}"
+                                          rendered="#{not empty it.cultureResult}" />
                         </td>
                     </s:fragment>
                     <s:fragment rendered="#{not suspects}">

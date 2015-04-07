@@ -14,7 +14,7 @@
         <module>nigeria</module>
         <module>cambodia</module>
         <module>bangladesh</module>
-		<module>vietnam</module>
+		<module>moldova</module>
 	</modules>
 
 	<properties>
@@ -58,6 +58,7 @@
             <id>test</id>
             <properties>
                 <app.datasource>mdrtbDatasource-test${workspace-context}</app.datasource>
+				<app.development>false</app.development>
             </properties>
         </profile>
 	</profiles>

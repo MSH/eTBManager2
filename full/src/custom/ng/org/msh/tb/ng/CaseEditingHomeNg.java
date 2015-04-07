@@ -132,6 +132,35 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         return tbCaseValidationError;
     }
 
+
+    /**
+     * Register the notification of a new DR-TB case
+     * @return
+     */
+    private String saveNewDRTBcase() {
+
+        if(examMicroscopyHome.getInstance() != null && examMicroscopyHome.getInstance().getResult() != null
+                && !examMicroscopyHome.persist().equals("persisted"))
+            return "error";
+
+        if(examXpertHome.getInstance() != null && examXpertHome.getInstance().getResult() != null
+                && !examXpertHome.persist().equals("persisted"))
+            return "error";
+
+        if(examCultureHome.getInstance() != null && examCultureHome.getInstance().getResult() != null
+                && !examCultureHome.persist().equals("persisted"))
+            return "error";
+
+        facesMessages.clear();
+        facesMessages.addFromResourceBundle(StatusMessage.Severity.INFO, "default.entity_created" , null);
+
+        return "persisted";
+    }
+
+    /**
+     * Save the notification of a new suspect case
+     * @return
+     */
     private String saveNewSuspect(){
         if(!validateSuspectData())
             return "error";
@@ -197,7 +226,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         return s;
     }
 
-    private String saveNewTbCase(){
+    private String saveNewTBcase(){
         if(!validateTbCaseData())
             return "error";
         //TODO
@@ -269,34 +298,26 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     public String saveNew() {
         String result;
 
-        if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.SUSPECT))
+        DiagnosisType diagType = caseHome.getInstance().getDiagnosisType();
+        CaseClassification cla = caseHome.getInstance().getClassification();
+
+        // is a suspect case ?
+        if (diagType == DiagnosisType.SUSPECT) {
             result = saveNewSuspect();
-        else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.TB))
-            result = saveNewTbCase();
-        else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.DRTB))
-            result = "TODO MY FRIEND";
-        else
-            result = "error";
+        }
 
-        if(!result.equals("persisted"))
-            return "error";
+        // is a TB case ?
+        if (cla == CaseClassification.TB) {
+            return saveNewTBcase();
+        }
 
-        if(examMicroscopyHome.getInstance() != null && examMicroscopyHome.getInstance().getResult() != null
-                && !examMicroscopyHome.persist().equals("persisted"))
-            return "error";
+        // is a DR-TB case ?
+        if (cla == CaseClassification.DRTB) {
+            return saveNewDRTBcase();
+        }
 
-        if(examXpertHome.getInstance() != null && examXpertHome.getInstance().getResult() != null
-                && !examXpertHome.persist().equals("persisted"))
-            return "error";
-
-        if(examCultureHome.getInstance() != null && examCultureHome.getInstance().getResult() != null
-                && !examCultureHome.persist().equals("persisted"))
-            return "error";
-
-        facesMessages.clear();
-        facesMessages.addFromResourceBundle(StatusMessage.Severity.INFO, "default.entity_created" , null);
-
-        return result;
+        // when the situation is not handled
+        return "undefined";
     }
 
     /**

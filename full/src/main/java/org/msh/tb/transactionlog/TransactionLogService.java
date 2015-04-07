@@ -38,9 +38,8 @@ public class TransactionLogService {
 	
 	/**
 	 * Store temporary information about a property value of an entity
-	 * @param entity
-	 * @param prop
-	 * @param value
+	 * @param oper
+	 * @param values
 	 * @return
 	 */
 	private Item addItem(Operation oper, List<PropertyValue> values) {

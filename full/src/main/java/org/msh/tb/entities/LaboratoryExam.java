@@ -8,6 +8,7 @@ import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 import javax.persistence.*;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
@@ -32,6 +33,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 
 	@Temporal(TemporalType.DATE)
 	@NotNull
+	@Past
 	@PropertyLog(messageKey="PatientSample.dateCollected", operations={Operation.NEW, Operation.DELETE})
 	private Date dateCollected;
 	
@@ -58,6 +60,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CASE_ID")
 	@PropertyLog(ignore=true)
+	@NotNull
 	private TbCase tbcase;
 
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -67,6 +70,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 
 	@Temporal(TemporalType.DATE)
 	@PropertyLog(messageKey="cases.exams.dateRelease", operations={Operation.NEW})
+	@Past
 	private Date dateRelease;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
