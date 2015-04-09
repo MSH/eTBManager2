@@ -1,11 +1,12 @@
 package org.msh.test.validators.fixtures;
 
 
+import org.hibernate.validator.Future;
+import org.hibernate.validator.NotNull;
+import org.hibernate.validator.Past;
+import org.hibernate.validator.Size;
+
 import javax.persistence.Column;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
