@@ -1,8 +1,8 @@
 package org.msh.tb.ng.entities;
 
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbContact;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 

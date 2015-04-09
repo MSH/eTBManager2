@@ -2,8 +2,8 @@ package org.msh.tb.cases.exams;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamXRay;
-import org.msh.tb.transactionlog.LogInfo;
 
 
 @Name("examXRayHome")

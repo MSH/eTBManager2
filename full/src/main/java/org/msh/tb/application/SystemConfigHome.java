@@ -5,13 +5,12 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.international.LocaleSelector;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.entities.SystemConfig;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserProfile;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.TransactionLogService;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -28,7 +27,9 @@ public class SystemConfigHome {
     private Workspace pubdsWorkspace;
 	private List<Tbunit> units;
 	private List<UserProfile> profiles;
-	private TransactionLogService logService;
+
+	private ActionTX atx;
+//	private TransactionLogService logService;
 
 	/**
 	 * Return the system configuration
@@ -59,11 +60,21 @@ public class SystemConfigHome {
 		
 		entityManager.persist(systemConfig);
 		entityManager.flush();
-		
+
+		// record transaction
+		if (atx != null) {
+			atx.setDescription(null)
+					.setEntityId(null)
+					.setEntityClass(null)
+					.end();
+		}
+
+/*
 		if (logService != null) {
 			logService.save("SYSSETUP", RoleAction.EDIT, null, null, null, null);
 		}
-		
+*/
+
 		etbmanagerApp.setConfiguration(systemConfig);
 		
 		return "success";
@@ -121,8 +132,10 @@ public class SystemConfigHome {
 		if (workspace == null) {
 			workspace = getSystemConfig().getWorkspace();
             pubdsWorkspace = getSystemConfig().getPubDashboardWorkspace();
-			logService = new TransactionLogService();
-			logService.recordEntityState(getSystemConfig(), Operation.EDIT);
+
+			atx = ActionTX.begin("SYSSETUP", getSystemConfig(), RoleAction.EDIT);
+//			logService = new TransactionLogService();
+//			logService.recordEntityState(getSystemConfig(), Operation.EDIT);
 		}
 	}
 

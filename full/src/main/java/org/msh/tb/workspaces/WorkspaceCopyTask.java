@@ -4,10 +4,11 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.international.Messages;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.application.tasks.DbBatchTask;
 import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.test.dbgen.TokenReaderException;
-import org.msh.tb.transactionlog.TransactionLogService;
 
 import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
@@ -56,8 +57,9 @@ public class WorkspaceCopyTask extends DbBatchTask {
 	private Map<Object, Object> loop;
 	
 	private List<String> propsToIgnore;
-	
-	private TransactionLog transactionLog;
+
+	// represents the transaction action of the batch movement
+	private ActionTX atx;
 
 
 	/* (non-Javadoc)
@@ -80,9 +82,12 @@ public class WorkspaceCopyTask extends DbBatchTask {
 		propsToIgnore.add("createTransaction");
 
 		// transaction log that will be assigned to the new entities
-		TransactionLogService srv = new TransactionLogService(); 
-		Workspace ws = getEntityManager().merge( targetWorkspace );
-		transactionLog = srv.saveExecuteTransaction("WSCOPY", ws.toString(), ws.getId(), ws.getClass().getSimpleName(), ws);
+//		TransactionLogService srv = new TransactionLogService();
+		Workspace ws = getEntityManager().merge(targetWorkspace);
+
+//		transactionLog = srv.saveExecuteTransaction("WSCOPY", ws.toString(), ws.getId(), ws.getClass().getSimpleName(), ws);
+		atx = ActionTX.begin("WSCOPY", ws, RoleAction.EXEC);
+		atx.end();
 	}
 	
 	
@@ -230,8 +235,7 @@ public class WorkspaceCopyTask extends DbBatchTask {
 			
 			if (dest instanceof WSObject) {
 				WSObject wsobj = (WSObject)dest;
-				transactionLog = em.merge(transactionLog);
-				wsobj.setLastTransaction(transactionLog);
+				wsobj.setLastTransaction( em.merge(atx.getTransactionLog()) );
 			}
 			
 			return dest;
@@ -500,23 +504,27 @@ public class WorkspaceCopyTask extends DbBatchTask {
 	 * Save in the transaction log the workspace copy procedure
 	 */
 	protected void saveTransactionLog() {
+		if (atx == null) {
+			return;
+		}
+
 		// check if anything was imported
 		if (entityCount.keySet().size() == 0) {
 			// if nothing was done, so remove the transaction log
 			getEntityManager().createQuery("delete from TransactionLog where id = :id")
-				.setParameter("id", transactionLog.getId())
+				.setParameter("id", atx.getTransactionLog().getId())
 				.executeUpdate();
 		}
-		
-		TransactionLogService logService = new TransactionLogService();
 		
 		for (Class entityClass: entityCount.keySet()) {
 			String name = Messages.instance().get(entityClass.getSimpleName());
 			String s = Integer.toString(entityCount.get(entityClass)) + " " + Messages.instance().get("form.resultlist");
-			logService.addTableRow(name, s);
+			atx.getDetailWriter().addTableRow(name, s);
 		}
 
-		logService.appendTransaction(transactionLog.getId());
+		// update the transaction
+		atx.update();
+//		logService.appendTransaction(transactionLog.getId());
 //		Workspace ws = getEntityManager().merge( targetWorkspace );
 //		logService.saveExecuteTransaction("WSCOPY", ws.toString(), ws.getId(), ws.getClass().getSimpleName(), ws);
 	}

@@ -1,8 +1,8 @@
 package org.msh.tb.entities;
 
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RegimenPhase;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 import java.io.Serializable;

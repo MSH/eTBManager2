@@ -1,16 +1,11 @@
 package org.msh.etbm.services.commons;
 
-import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.tb.application.App;
-import org.msh.tb.entities.LaboratoryExam;
 import org.msh.validators.BeanValidator;
 import org.msh.validators.MessagesList;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 
 /**
  * Created by rmemoria on 6/4/15.
@@ -66,6 +61,10 @@ public abstract class DAOServices<E> {
         em.flush();
     }
 
+    /**
+     * Delete an entity by its ID
+     * @param id
+     */
     @Transactional
     protected void deleteById(Object id) {
         EntityManager em = App.getEntityManager();
@@ -91,7 +90,7 @@ public abstract class DAOServices<E> {
      * @param id the entity ID
      * @return the entity
      */
-    public E getEntity(Object id) {
+    public E find(Object id) {
         return App.getEntityManager().find(getEntityClass(), id);
     }
 }

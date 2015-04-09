@@ -7,6 +7,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.SourceGroup;
 import org.msh.tb.entities.*;
@@ -18,7 +19,6 @@ import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.MedicineStockSelection;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.tbunits.TBUnitType;
-import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 
 import java.util.*;
@@ -155,12 +155,19 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		movementHome.savePreparedMovements();
 
 		// register transfer in the log system
+		ActionTX.begin("NEW_TRANSFER", transfer, RoleAction.EXEC)
+				.addRow(".unitFrom", transfer.getUnitFrom())
+				.addRow(".unitTo", transfer.getUnitTo())
+				.addRow(".shippingDate", transfer.getShippingDate())
+				.end();
+/*
 		TransactionLogService log = getLogService();
 		log.addTableRow(".unitFrom", transfer.getUnitFrom());
 		log.addTableRow(".unitTo", transfer.getUnitTo());
 		log.addTableRow(".shippingDate", transfer.getShippingDate());
 		log.save("NEW_TRANSFER", RoleAction.EXEC, transfer);
-		
+*/
+
 		Events.instance().raiseEvent("medicine-new-transfer");
 		
 		return persist();
@@ -216,11 +223,19 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		getEntityManager().flush();
 
 		// register transfer in the log system
+		ActionTX.begin("TRANSF_REC", transfer, RoleAction.EXEC)
+				.addRow(".unitFrom", transfer.getUnitFrom())
+				.addRow(".unitTo", transfer.getUnitTo())
+				.addRow(".receivingDate", transfer.getReceivingDate())
+				.end();
+
+/*
 		TransactionLogService log = getLogService();
 		log.addTableRow(".unitFrom", transfer.getUnitFrom());
 		log.addTableRow(".unitTo", transfer.getUnitTo());
 		log.addTableRow(".receivingDate", transfer.getReceivingDate());
 		log.save("TRANSF_REC", RoleAction.EXEC, transfer);
+*/
 
 		return "received";
 	}
@@ -321,10 +336,13 @@ public class TransferHome extends EntityHomeEx<Transfer> {
 		getEntityManager().persist(transfer);
 		
 
+		ActionTX.begin("TRANSF_CANCEL", transfer, RoleAction.EXEC).end();
 		// register transfer in the log system
+/*
 		TransactionLogService log = getLogService();
 		log.save("TRANSF_CANCEL", RoleAction.EXEC, transfer);
-		
+*/
+
 		facesMessages.addFromResourceBundle("meds.orders.cancelsuccess");
 		return "canceled";
 	}

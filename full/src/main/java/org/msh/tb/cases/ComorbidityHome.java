@@ -3,13 +3,13 @@ package org.msh.tb.cases;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseComorbidity;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.misc.FieldsQuery;
-import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.ItemSelectHelper;
 
@@ -137,24 +137,34 @@ public class ComorbidityHome {
 	 * @param newComorbidities
 	 */
 	public void registerLog(List<CaseComorbidity> newComorbidities) {
-		TransactionLogService logService = new TransactionLogService();
+//		TransactionLogService logService = new TransactionLogService();
 		
 		TbCase tbcase = caseHome.getInstance();
 
+		ActionTX atx = ActionTX.begin("COMORBIDITIES");
+
 		// check new comorbidities
 		for (CaseComorbidity fld: newComorbidities) {
-			if (!tbcase.getComorbidities().contains(fld))
-				logService.addTableRow("RoleAction.NEW", fld.getComorbidity());
+			if (!tbcase.getComorbidities().contains(fld)) {
+				atx.getDetailWriter().addTableRow("RoleAction.NEW", fld.getComorbidity());
+			}
 		}
 
 		// check removed comorbidities
 		for (CaseComorbidity fld: tbcase.getComorbidities()) {
 			if (!newComorbidities.contains(fld))
-				logService.addTableRow("RoleAction.DELETE", fld.getComorbidity());
+				atx.getDetailWriter().addTableRow("RoleAction.DELETE", fld.getComorbidity());
 		}
 		
 //		logService.setCaseClassification(tbcase.getClassification());
-		logService.save("COMORBIDITIES", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
+
+		atx.setRoleAction( RoleAction.EDIT)
+				.setEntityClass( TbCase.class.getSimpleName() )
+				.setDescription( tbcase.toString() )
+				.setEntity( tbcase )
+				.setEntityId( tbcase.getId() )
+				.end();
+//		logService.save("COMORBIDITIES", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
 

@@ -306,4 +306,5 @@ public class TransactionLog {
 	public void setEntityClass(String entityClass) {
 		this.entityClass = entityClass;
 	}
+
 }

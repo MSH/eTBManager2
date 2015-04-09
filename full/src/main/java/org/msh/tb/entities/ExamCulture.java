@@ -1,9 +1,9 @@
 package org.msh.tb.entities;
 
+import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.SampleType;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;

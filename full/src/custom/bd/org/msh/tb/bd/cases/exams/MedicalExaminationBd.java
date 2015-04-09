@@ -1,9 +1,9 @@
 package org.msh.tb.bd.cases.exams;
 
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.bd.entities.enums.DotProvider;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.MedicalExamination;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 /**

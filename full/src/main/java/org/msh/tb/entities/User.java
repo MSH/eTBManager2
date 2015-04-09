@@ -11,9 +11,9 @@ package org.msh.tb.entities;
 
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
+import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.UserState;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 import java.util.ArrayList;

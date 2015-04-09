@@ -3,6 +3,7 @@ package org.msh.tb.md.symetb;
 import org.apache.axis.message.MessageElement;
 import org.jboss.seam.Component;
 import org.jboss.seam.contexts.Contexts;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.application.tasks.DbBatchTask;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;
@@ -85,7 +86,13 @@ public class SymetaImportTask extends DbBatchTask {
 		// save result in a log file
 		TransactionLogService service = new TransactionLogService();
 		service.getDetailWriter().addText(log.toString());
-		service.save("TASK", RoleAction.EXEC, "SYMETB Integration", null, null, null);
+		ActionTX.begin("TASK")
+				.setRoleAction(RoleAction.EXEC)
+				.setDescription("SYMETB Integration")
+				.end();
+
+//		service.save("TASK", RoleAction.EXEC, "SYMETB Integration", null, null, null);
+
 		commitTransaction();
 	}
 
@@ -269,7 +276,6 @@ public class SymetaImportTask extends DbBatchTask {
 	 * Update information about the progress of the importing
 	 * @param total
 	 * @param index
-	 * @param offset
 	 */
 	protected void updateProgress(int total, int index) {
 		float dx = 1F / (float)batchBlockCount;

@@ -4,7 +4,6 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.msh.etbm.services.cases.exams.ExamMicroscopyServices;
 import org.msh.etbm.services.commons.DAOServices;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
@@ -41,10 +40,10 @@ public class ServiceDiscovery {
 
         // register the services by entity
         daoservices.put(TbCase.class, "caseServices");
-        daoservices.put(ExamMicroscopy.class, "examMicroscopyServices");
-        daoservices.put(ExamCulture.class, "examCultureServices");
-        daoservices.put(ExamDST.class, "examDSTServices");
-        daoservices.put(ExamXpert.class, "examXpertServices");
+        daoservices.put(ExamMicroscopy.class, "microscopyServices");
+        daoservices.put(ExamCulture.class, "cultureServices");
+        daoservices.put(ExamDST.class, "dstServices");
+        daoservices.put(ExamXpert.class, "xpertServices");
     }
 
     /**
@@ -53,13 +52,30 @@ public class ServiceDiscovery {
      * @param entityClass entity class
      * @return instance of DAO service
      */
-    DAOServices getByEntity(Class entityClass) {
+    public DAOServices getByEntityClass(Class entityClass) {
         String compname = daoservices.get(ExamMicroscopy.class);
 
+        // component was found ?
         if (compname == null) {
-            throw new RuntimeException("No DAO service registered for class " + compname);
+
+            // try to find by service implemented to super class
+            for (Class clazz: daoservices.keySet()) {
+                if (clazz.isAssignableFrom(entityClass)) {
+                    compname = daoservices.get(clazz);
+                    break;
+                }
+            }
+
+            if (compname == null) {
+                throw new RuntimeException("No DAO service registered for class " + compname);
+            }
         }
 
-        return (DAOServices) App.getComponent(compname);
+        DAOServices comp = (DAOServices) App.getComponent(compname);
+        if (comp == null) {
+            throw new RuntimeException("No component found with name " + comp);
+        }
+
+        return comp;
     }
 }

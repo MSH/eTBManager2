@@ -1,7 +1,7 @@
 package org.msh.tb.entities;
 
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.PropertyLog;
+import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 
 import javax.persistence.*;
 import java.io.Serializable;

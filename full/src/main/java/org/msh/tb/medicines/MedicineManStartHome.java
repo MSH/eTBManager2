@@ -3,6 +3,7 @@ package org.msh.tb.medicines;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.Transactional;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.SourceGroup;
 import org.msh.tb.SourcesQuery;
@@ -73,7 +74,7 @@ public class MedicineManStartHome {
 
 	/**
 	 * Start new batch form for UI processing
-	 * @param medicine
+	 * @param medicineInfo
 	 */
 	public void startNewBatch(MedicineInfo medicineInfo) {
 		batchInfo = new BatchInfo();
@@ -87,7 +88,7 @@ public class MedicineManStartHome {
 	/**
 	 * Start editing of an existing batch for UI processing
 	 * @param medInfo
-	 * @param batch
+	 * @param batchInfo
 	 */
 	public void startBatchEdit(MedicineInfo medInfo, BatchInfo batchInfo) {
 		this.batchInfo = batchInfo;
@@ -100,7 +101,7 @@ public class MedicineManStartHome {
 	/**
 	 * Delete a batch from one specific medicine entered by the user
 	 * @param medInfo
-	 * @param batch
+	 * @param batchInfo
 	 */
 	public void deleteBatch(MedicineInfo medInfo, BatchInfo batchInfo) {
 		medInfo.getBatches().remove(batchInfo);
@@ -241,10 +242,11 @@ public class MedicineManStartHome {
 	 * Register in the logging system the starting of the unit in the medicine management control
 	 */
 	public void registerStartManLog() {
-		TransactionLogService logService = new TransactionLogService();
+		ActionTX atx = ActionTX.begin("MED_UNIT");
+
 		Tbunit unit = userSession.getTbunit();
 		
-		logService.addTableRow("Tbunit.medManStartDate", unit.getMedManStartDate());
+		atx.getDetailWriter().addTableRow("Tbunit.medManStartDate", unit.getMedManStartDate());
 		for (SourceInfo si: sourcesInfo) {
 			String meds = "";
 			for (MedicineInfo medInfo: si.getItems()) {
@@ -256,10 +258,16 @@ public class MedicineManStartHome {
 			}
 			if (!meds.isEmpty()) {
 				meds = si.getSource().getAbbrevName() + " [" + meds + "]";
-				logService.addTableRow("form.selectedmeds", meds);
+				atx.getDetailWriter().addTableRow("form.selectedmeds", meds);
 			}
 		}
-		logService.saveExecuteTransaction("MED_INIT", unit.toString(), unit.getId(), unit.getClass().getSimpleName(), unit);
+
+		atx.setDescription( unit.toString() )
+				.setEntityClass( unit.getClass().getSimpleName() )
+				.setEntity( unit )
+				.end();
+
+//		logService.saveExecuteTransaction("MED_INIT", unit.toString(), unit.getId(), unit.getClass().getSimpleName(), unit);
 	}
 
 
@@ -272,35 +280,42 @@ public class MedicineManStartHome {
 		
 		unit = entityManager.merge(unit);
 
-		logService.saveExecuteTransaction("MED_INIT_REM", unit.toString(), unit.getId(), unit.getClass().getSimpleName(), unit);
-	}
-	
-	public void verifyBatch(){
-		if(batchInfo != null && batchInfo.getBatch() != null && batchInfo.getBatch().getBatchNumber() != null && 
-				!batchInfo.getBatch().getBatchNumber().equals("") && medicineInfo.getMedicine() != null){	
-	
-		ArrayList<Batch> b = (ArrayList<Batch>) entityManager.createQuery("from Batch b " +
-																		  "where b.batchNumber = :batchNumber and " +
-																		  "b.manufacturer = :manufacturer and " +
-																		  "b.medicine.id = :medicineId")
-																			.setParameter("batchNumber", batchInfo.getBatch().getBatchNumber())
-																			.setParameter("manufacturer", batchInfo.getBatch().getManufacturer())
-																			.setParameter("medicineId", medicineInfo.getMedicine().getId())
-																			.getResultList();
+		ActionTX.begin("MED_INIT_REM")
+				.setEntity( unit )
+				.setEntityClass( unit.getClass().getSimpleName() )
+				.setDescription( unit.toString() )
+				.setEntityId( unit.getId() )
+				.end();
 
-		if(b!=null && b.size() > 0){
-			batchInfo.setBatch(b.get(0));
-			batchInfo.setQuantity(0);
-		}else{
-			Batch ba = new Batch();
-			ba.setMedicine(medicineInfo.getMedicine());
-			ba.setManufacturer(batchInfo.getBatch().getManufacturer());
-			ba.setBatchNumber(batchInfo.getBatch().getBatchNumber());
-			batchInfo.setBatch(ba);
+//		logService.saveExecuteTransaction("MED_INIT_REM", unit.toString(), unit.getId(), unit.getClass().getSimpleName(), unit);
+	}
+
+	public void verifyBatch(){
+		if(batchInfo != null && batchInfo.getBatch() != null && batchInfo.getBatch().getBatchNumber() != null &&
+				!batchInfo.getBatch().getBatchNumber().equals("") && medicineInfo.getMedicine() != null){
+
+			ArrayList<Batch> b = (ArrayList<Batch>) entityManager.createQuery("from Batch b " +
+					"where b.batchNumber = :batchNumber and " +
+					"b.manufacturer = :manufacturer and " +
+					"b.medicine.id = :medicineId")
+					.setParameter("batchNumber", batchInfo.getBatch().getBatchNumber())
+					.setParameter("manufacturer", batchInfo.getBatch().getManufacturer())
+					.setParameter("medicineId", medicineInfo.getMedicine().getId())
+					.getResultList();
+
+			if(b!=null && b.size() > 0){
+				batchInfo.setBatch(b.get(0));
+				batchInfo.setQuantity(0);
+			}else{
+				Batch ba = new Batch();
+				ba.setMedicine(medicineInfo.getMedicine());
+				ba.setManufacturer(batchInfo.getBatch().getManufacturer());
+				ba.setBatchNumber(batchInfo.getBatch().getBatchNumber());
+				batchInfo.setBatch(ba);
+			}
 		}
 	}
-}
-	
+
 	
 
 /*	*//**

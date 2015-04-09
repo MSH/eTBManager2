@@ -11,7 +11,10 @@ import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.exams.ExamXpertHome;
-import org.msh.tb.entities.*;
+import org.msh.tb.entities.ExamCulture;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.ExamXpert;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.*;
 import org.msh.tb.ng.entities.TbCaseNG;
 import org.msh.tb.ng.entities.enums.HIVPosition;
@@ -152,7 +155,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
             return "error";
 
         facesMessages.clear();
-        facesMessages.addFromResourceBundle(StatusMessage.Severity.INFO, "default.entity_created" , null);
+        facesMessages.addFromResourceBundle(StatusMessage.Severity.INFO, "default.entity_created");
 
         return "persisted";
     }

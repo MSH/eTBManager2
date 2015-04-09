@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class TestForm {
 
+    private static final long serialVersionUID = 1514632458011926044L;
+
     @NotNull
     @Column(length = 20)
     private String email;

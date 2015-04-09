@@ -6,6 +6,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.SubstancesQuery;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
@@ -13,7 +14,6 @@ import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.resistpattern.ResistancePatternService;
-import org.msh.tb.transactionlog.LogInfo;
 
 import javax.persistence.Query;
 import java.util.ArrayList;

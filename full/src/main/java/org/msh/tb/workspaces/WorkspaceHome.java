@@ -5,14 +5,13 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.adminunits.CountryStructuresQuery;
 import org.msh.tb.application.ViewService;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.*;
-import org.msh.tb.transactionlog.LogInfo;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.EntityQuery;
 
 import javax.faces.model.SelectItem;
@@ -236,7 +235,7 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 			return null;
 		
 		if (!defaultWorkspace.getId().equals(getId())) {
-			setId(defaultWorkspace.getId());
+			setIdWithLog(defaultWorkspace.getId());
 		}
 		
 		return getInstance();
@@ -250,13 +249,16 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	public String saveDefaultworkspace() {
 		if (!persist().equals("persisted"))
 			return "error";
-		
-		TransactionLogService logService = new TransactionLogService();
+
+		// register transaction log
+		getActionTX()
+				.setEventName("SETUPWS")
+				.end();
+//		TransactionLogService logService = new TransactionLogService();
 		defaultWorkspace.setUsers(null);
-		logService.recordEntityState(defaultWorkspace, Operation.EDIT);
-		logService.save("SETUPWS", RoleAction.EDIT, getInstance());
-//		logService.saveEntityDifferences(defaultWorkspace, getInstance(), "SETUPWS");
-		
+//		logService.recordEntityState(defaultWorkspace, Operation.EDIT);
+//		logService.save("SETUPWS", RoleAction.EDIT, getInstance());
+
 		defaultWorkspace = getInstance();
 		
 		return "defaultws-persisted";
@@ -309,7 +311,6 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 
 	/**
 	 * Include a new user in the workspace
-	 * @param usu
 	 */
 	public void addUser() {
 		if (userId == null)
@@ -438,17 +439,20 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 		removeUsers();
 		
 		// register in log the users changed
-		TransactionLogService logService = new TransactionLogService();
+//		TransactionLogService logService = new TransactionLogService();
+		ActionTX atx = ActionTX.begin("WSADDREMUSER", getInstance(), RoleAction.EXEC);
 		
 		if (addedUsers != null) {
 			for (User user: addedUsers)
-				logService.addTableRow("admin.workspaces.addeduser", user.getLogin() + " - " + user.getName());
+				atx.getDetailWriter().addTableRow("admin.workspaces.addeduser", user.getLogin() + " - " + user.getName());
 		}
 		if (removedUsers != null) {
 			for (UserWorkspace uw: removedUsers)
-				logService.addTableRow("admin.workspaces.removeduser", uw.getUser().getLogin() + " - " + uw.getUser().getName());
+				atx.getDetailWriter().addTableRow("admin.workspaces.removeduser", uw.getUser().getLogin() + " - " + uw.getUser().getName());
 		}
-		logService.saveExecuteTransaction("WSADDREMUSER", getInstance().toString(), getInstance().getId(), getInstance().getClass().getSimpleName(), getInstance());
+
+		atx.end();
+		//logService.saveExecuteTransaction("WSADDREMUSER", getInstance().toString(), getInstance().getId(), getInstance().getClass().getSimpleName(), getInstance());
 		
 		return persist();
 	}

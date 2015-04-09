@@ -1,6 +1,5 @@
 package org.msh.tb.client.ui;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 

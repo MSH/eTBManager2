@@ -515,7 +515,7 @@ public class CaseEditingHome {
         if(tbcase.getClassification().equals(CaseClassification.DRTB)){
             if(tbcase.getLastBmuDateTbRegister() != null && tbcase.getRegistrationDate() != null
                     && tbcase.getLastBmuDateTbRegister().after(tbcase.getRegistrationDate())){
-                facesMessages.addToControlFromResourceBundle("bmudateInputDate", StatusMessage.Severity.FATAL ,"cases.details.valerror2", null);
+                facesMessages.addToControlFromResourceBundle("bmudateInputDate", StatusMessage.Severity.FATAL ,"cases.details.valerror2");
                 return false;
             }
         }

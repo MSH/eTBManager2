@@ -6,14 +6,15 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.entities.enums.UserState;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.laboratories.LaboratorySelection;
 import org.msh.tb.misc.DmSystemHome;
 import org.msh.tb.tbunits.TBUnitSelection;
-import org.msh.tb.transactionlog.LogInfo;
 import org.msh.tb.userprofile.UserProfilesQuery;
 import org.msh.utils.UserUtils;
 
@@ -198,7 +199,14 @@ public class UserHome extends EntityHomeEx<User> {
 		Contexts.getEventContext().set("password", senha);
 
 		User user = getUserInstance();
-		getLogService().saveExecuteTransaction("NEWPWD", user.getName(), user.getId(), User.class.getSimpleName(), user);
+		if (initTransactionLog(RoleAction.EXEC)) {
+			getActionTX()
+					.setEventName("NEWPWD")
+					.setDescription( user.getName() )
+					.end();
+		}
+
+//		getLogService().saveExecuteTransaction("NEWPWD", user.getName(), user.getId(), User.class.getSimpleName(), user);
 		
 		if (!sendEmail)
 			return "mail.success";

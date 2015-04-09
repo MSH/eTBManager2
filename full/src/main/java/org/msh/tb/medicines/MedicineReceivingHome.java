@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
@@ -11,8 +12,6 @@ import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
 import org.msh.tb.medicines.movs.MovementHome;
-import org.msh.tb.transactionlog.LogInfo;
-import org.msh.tb.transactionlog.Operation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,9 +113,6 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		getLogDetailWriter().addTableRow("Source", rec.getSource());
 		getLogDetailWriter().addTableRow(".receivingDate", rec.getReceivingDate());
 		getLogDetailWriter().addTableRow("global.totalPrice", rec.getTotalPrice());
-
-		if (isManaged())
-			getLogService().recordEntityState(getInstance(), Operation.EDIT);
 
 		// save all batches
 		sourceTree.traverse(new SourceMedicineTree.ItemTraversing<Batch>() {

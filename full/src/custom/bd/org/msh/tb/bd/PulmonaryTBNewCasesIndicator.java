@@ -7,7 +7,8 @@ import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.utils.date.DateUtils;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 /**

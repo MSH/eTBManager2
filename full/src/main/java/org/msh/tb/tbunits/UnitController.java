@@ -9,10 +9,11 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Conversation;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.tbunits.UnitServices.StatisticItem;
-import org.msh.tb.transactionlog.TransactionLogService;
 
 import java.util.List;
 import java.util.Map;
@@ -86,11 +87,13 @@ public class UnitController {
 			roleAlias = "UNIT_USERSTRANS";
 		}
 		executed = true;
-		
-		TransactionLogService log = TransactionLogService.instance();
-		log.addTableRow("meds.movs.from", tbunitHome.getInstance().getName().toString());
-		log.addTableRow("meds.movs.to", destUnit.getName().toString());
-		log.saveExecuteTransaction(roleAlias, tbunitHome.getInstance());
+
+		// register the transaction log
+		ActionTX atx = ActionTX.begin(roleAlias, tbunitHome.getInstance(), RoleAction.EXEC);
+		atx.getDetailWriter().addTableRow("meds.movs.from", tbunitHome.getInstance().getName().toString());
+		atx.getDetailWriter().addTableRow("meds.movs.to", destUnit.getName().toString());
+		atx.end();
+
 		Conversation.instance().end();
 		
 		return "success";

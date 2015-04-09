@@ -8,12 +8,12 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.ETB;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.*;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.transactionlog.LogInfo;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -535,12 +535,20 @@ public class CaseHome extends WsEntityHome<TbCase>{
 	 * @see org.msh.tb.EntityHomeEx#saveTransactionLog(org.msh.tb.entities.enums.RoleAction)
 	 */
 	@Override
-	protected void saveTransactionLog(RoleAction action) {
-		if (action == RoleAction.NEW) {
-			String s = "#{" + getInstance().getClassification().getKey() + "}";
-			getLogService().setTitleSuffix(s);
+	protected void saveTransactionLog() {
+		if (!isTransactionLogActive()) {
+			return;
 		}
-		super.saveTransactionLog(action);
+
+		if (getActionTX() == null) {
+			initTransactionLog(RoleAction.EXEC);
+		}
+
+		if (getActionTX().getRoleAction() == RoleAction.NEW) {
+			String s = "#{" + getInstance().getClassification().getKey() + "}";
+			getActionTX().setTitleSuffix(s);
+		}
+		super.saveTransactionLog();
 	}
 
 

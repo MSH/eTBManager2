@@ -1,11 +1,11 @@
 package org.msh.tb.medicines.orders;
 
-import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.entities.Order;
-import org.msh.tb.transactionlog.TransactionLogService;
+import org.msh.tb.entities.enums.RoleAction;
 
 /**
  * Responsible for registering in the log system the transactions performed in the system
@@ -17,7 +17,7 @@ public class OrderTransactionLog {
 	
 	@In OrderHome orderHome;
 
-	private TransactionLogService logService = (TransactionLogService)Component.getInstance("transactionLogService", true);
+	//private TransactionLogService logService = (TransactionLogService)Component.getInstance("transactionLogService", true);
 
 	
 	/**
@@ -27,10 +27,15 @@ public class OrderTransactionLog {
 	public void newOrder() {
 		Order order = orderHome.getInstance();
 
+		ActionTX atx = ActionTX.begin("NEW_ORDER", order, RoleAction.EXEC);
+
 		// register log about new order
-		logService.addTableRow("Order.unitFrom", order.getUnitFrom().toString());
-		logService.addTableRow("Order.unitTo", order.getUnitTo().toString());
-		logService.saveExecuteTransaction("NEW_ORDER", order);
+		atx.getDetailWriter().addTableRow("Order.unitFrom", order.getUnitFrom().toString());
+		atx.getDetailWriter().addTableRow("Order.unitTo", order.getUnitTo().toString());
+
+		atx.end();
+
+//		logService.saveExecuteTransaction("NEW_ORDER", order);
 	}
 	
 	
@@ -41,10 +46,14 @@ public class OrderTransactionLog {
 	public void orderCanceled() {
 		Order order = orderHome.getInstance();
 
-		logService.addTableRow("Order.unitFrom", order.getUnitFrom().toString());
-		logService.addTableRow("Order.unitTo", order.getUnitTo().toString());
-		logService.addTableRow("Order.cancelReason", order.getCancelReason());
-		logService.saveExecuteTransaction("ORDER_CANC", order);
+		ActionTX atx = ActionTX.begin("ORDER_CANC", order, RoleAction.EXEC);
+
+		atx.getDetailWriter().addTableRow("Order.unitFrom", order.getUnitFrom().toString());
+		atx.getDetailWriter().addTableRow("Order.unitTo", order.getUnitTo().toString());
+		atx.getDetailWriter().addTableRow("Order.cancelReason", order.getCancelReason());
+
+		atx.end();
+//		logService.saveExecuteTransaction("ORDER_CANC", order);
 	}
 
 	/**
@@ -54,10 +63,14 @@ public class OrderTransactionLog {
 	public void orderAuthorized() {
 		Order order = orderHome.getInstance();
 
-		logService.addTableRow("Tbunit.authorizerUnit", order.getAuthorizer().toString());
-		logService.addTableRow("Order.unitFrom", order.getUnitFrom().toString());
-		logService.addTableRow("Order.unitTo", order.getUnitTo().toString());
-		logService.saveExecuteTransaction("VAL_ORDER", order);
+		ActionTX atx = ActionTX.begin("VAL_ORDER", order, RoleAction.EXEC);
+
+		atx.getDetailWriter().addTableRow("Tbunit.authorizerUnit", order.getAuthorizer().toString());
+		atx.getDetailWriter().addTableRow("Order.unitFrom", order.getUnitFrom().toString());
+		atx.getDetailWriter().addTableRow("Order.unitTo", order.getUnitTo().toString());
+
+		atx.end();
+//		logService.saveExecuteTransaction("VAL_ORDER", order);
 	}
 
 	/**
@@ -67,10 +80,14 @@ public class OrderTransactionLog {
 	public void registerLogOrderShipped() {
 		Order order = orderHome.getInstance();
 
-		logService.addTableRow("Order.unitFrom", order.getUnitFrom().toString());
-		logService.addTableRow("Order.unitTo", order.getUnitTo().getName().toString());
-		logService.addTableRow("Order.shippingDate", order.getShippingDate());
-		logService.saveExecuteTransaction("SEND_ORDER", order);
+		ActionTX atx = ActionTX.begin("SEND_ORDER", order, RoleAction.EXEC);
+
+		atx.getDetailWriter().addTableRow("Order.unitFrom", order.getUnitFrom().toString());
+		atx.getDetailWriter().addTableRow("Order.unitTo", order.getUnitTo().getName().toString());
+		atx.getDetailWriter().addTableRow("Order.shippingDate", order.getShippingDate());
+
+		atx.end();
+//		logService.saveExecuteTransaction("SEND_ORDER", order);
 	}
 
 	/**
@@ -80,9 +97,13 @@ public class OrderTransactionLog {
 	public void registerLogOrderReceived() {
 		Order order = orderHome.getInstance();
 
-		logService.addTableRow("Order.unitFrom", order.getUnitFrom().toString());
-		logService.addTableRow("Order.unitTo", order.getUnitTo().getName().toString());
-		logService.addTableRow("Order.receivingDate", order.getReceivingDate());
-		logService.saveExecuteTransaction("RECEIV_ORDER", order);
+		ActionTX atx = ActionTX.begin("RECEIV_ORDER", order, RoleAction.EXEC);
+
+		atx.getDetailWriter().addTableRow("Order.unitFrom", order.getUnitFrom().toString());
+		atx.getDetailWriter().addTableRow("Order.unitTo", order.getUnitTo().getName().toString());
+		atx.getDetailWriter().addTableRow("Order.receivingDate", order.getReceivingDate());
+
+		atx.end();
+//		logService.saveExecuteTransaction("RECEIV_ORDER", order);
 	}
 }

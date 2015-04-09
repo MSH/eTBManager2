@@ -1,10 +1,10 @@
 package org.msh.tb.entities;
 
+import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.XRayBaseline;
 import org.msh.tb.entities.enums.XRayEvolution;
 import org.msh.tb.entities.enums.XRayResult;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 

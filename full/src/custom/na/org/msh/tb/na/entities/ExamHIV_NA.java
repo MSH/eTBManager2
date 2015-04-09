@@ -1,8 +1,8 @@
 package org.msh.tb.na.entities;
 
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.ExamHIV;
 import org.msh.tb.entities.FieldValue;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 import java.util.Date;

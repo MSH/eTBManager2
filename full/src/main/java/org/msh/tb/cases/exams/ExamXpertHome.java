@@ -6,11 +6,11 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamXpert;
 import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.tb.resistpattern.ResistancePatternService;
-import org.msh.tb.transactionlog.LogInfo;
 
 @Name("examXpertHome")
 @LogInfo(roleName="EXAM_XPERT", entityClass=ExamXpert.class)

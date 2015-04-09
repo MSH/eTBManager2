@@ -4,10 +4,11 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.transactionlog.TransactionLogService;
+import org.msh.tb.entities.enums.RoleAction;
 
 import java.util.Date;
 
@@ -16,18 +17,33 @@ public class CaseLogService {
 
 	@In(required=true) CaseHome caseHome;
 	
-	private TransactionLogService logService = (TransactionLogService)Component.getInstance("transactionLogService", true);
+//	private TransactionLogService logService = (TransactionLogService)Component.getInstance("transactionLogService", true);
 
-	
+
+	/**
+	 * Begin a transaction
+	 * @param roleName
+	 * @param tbcase
+	 * @return
+	 */
+	protected ActionTX beginTX(String roleName, TbCase tbcase) {
+		return ActionTX
+				.begin(roleName, tbcase, RoleAction.EXEC)
+				.setEntityClass( TbCase.class.getSimpleName() );
+	}
+
+
 	/**
 	 * Helper function to save some typing 
 	 * @param roleName
 	 * @param tbcase
 	 */
+/*
 	protected void saveExecuteTransaction(String roleName, TbCase tbcase) {
 		logService.saveExecuteTransaction(roleName, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
-	
+*/
+
 	/**
 	 * Register case validation 
 	 */
@@ -35,7 +51,7 @@ public class CaseLogService {
 	public void logValidation() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		saveExecuteTransaction("CASE_VALIDATE", tbcase);
+		beginTX("CASE_VALIDATE", tbcase).end();
 	}
 
 
@@ -47,11 +63,13 @@ public class CaseLogService {
 		TbCase tbcase = caseHome.getInstance();
 		CaseMoveHome caseMoveHome = (CaseMoveHome)Component.getInstance("caseMoveHome");
 
-		logService.addTableRow("cases.movdate", caseMoveHome.getMoveDate());
-		logService.addTableRow("patients.desthu", caseMoveHome.getTbunitselection().getSelected().toString());
-		logService.addTableRow("AdministrativeUnit", caseMoveHome.getTbunitselection().getSelected().getAdminUnit().getFullDisplayName());
-		
-		saveExecuteTransaction("CASE_TRANSFEROUT", tbcase);
+		ActionTX atx = beginTX("CASE_TRANSFEROUT", tbcase);
+
+		atx.getDetailWriter().addTableRow("cases.movdate", caseMoveHome.getMoveDate());
+		atx.getDetailWriter().addTableRow("patients.desthu", caseMoveHome.getTbunitselection().getSelected().toString());
+		atx.getDetailWriter().addTableRow("AdministrativeUnit", caseMoveHome.getTbunitselection().getSelected().getAdminUnit().getFullDisplayName());
+
+		atx.end();
 	}
 	
 
@@ -62,12 +80,15 @@ public class CaseLogService {
 	public void logCaseTransferIn() {
 		TbCase tbcase = caseHome.getInstance();
 		CaseMoveHome caseMoveHome = (CaseMoveHome)Component.getInstance("caseMoveHome");
-		
-		logService.addTableRow("cases.movdate", caseMoveHome.getMoveDate());
-		logService.addTableRow("patients.desthu", tbcase.getOwnerUnit().getName().toString());
+
+		ActionTX atx = beginTX("CASE_TRANSFERIN", tbcase);
+
+		atx.getDetailWriter().addTableRow("cases.movdate", caseMoveHome.getMoveDate());
+		atx.getDetailWriter().addTableRow("patients.desthu", tbcase.getOwnerUnit().getName().toString());
 //		logService.addTableRow("AdministrativeUnit", caseMoveHome.getTbunitselection().getTbunit().getAdminUnit().getFullDisplayName());
-		
-		saveExecuteTransaction("CASE_TRANSFERIN", tbcase);
+
+		atx.end();
+		//saveExecuteTransaction("CASE_TRANSFERIN", tbcase);
 	}
 
 
@@ -80,12 +101,16 @@ public class CaseLogService {
 		
 		Date transferDate = (Date)Component.getInstance("transferdate");
 		Tbunit unit = (Tbunit)Component.getInstance("transferunit");
-		
-		logService.addTableRow("cases.movdate", transferDate);
-		logService.addTableRow("patients.desthu", unit.getName().toString());
-		logService.addTableRow("AdministrativeUnit", unit.getAdminUnit().getFullDisplayName());
-		
-		saveExecuteTransaction("CASE_TRANSFERCANCEL", tbcase);
+
+		ActionTX atx = beginTX("CASE_TRANSFERCANCEL", tbcase);
+
+		atx.getDetailWriter().addTableRow("cases.movdate", transferDate);
+		atx.getDetailWriter().addTableRow("patients.desthu", unit.getName().toString());
+		atx.getDetailWriter().addTableRow("AdministrativeUnit", unit.getAdminUnit().getFullDisplayName());
+
+		atx.end();
+
+		//saveExecuteTransaction("CASE_TRANSFERCANCEL", tbcase);
 	}
 	
 	
@@ -95,14 +120,18 @@ public class CaseLogService {
 	@Observer("case.close")
 	public void logCaseClose() {
 		TbCase tbcase = caseHome.getInstance();
-		
-		logService.addTableRow("TbCase.outcomeDate", tbcase.getOutcomeDate());
-		logService.addTableRow("cases.outcome", tbcase.getState());
 
-		if (tbcase.getState().equals(CaseState.OTHER))
-			logService.addTableRow("TbCase.otherOutcome", tbcase.getOtherOutcome());
+		ActionTX atx = beginTX("CASE_CLOSE", tbcase);
 		
-		saveExecuteTransaction("CASE_CLOSE", tbcase);
+		atx.getDetailWriter().addTableRow("TbCase.outcomeDate", tbcase.getOutcomeDate());
+		atx.getDetailWriter().addTableRow("cases.outcome", tbcase.getState());
+
+		if (tbcase.getState().equals(CaseState.OTHER)) {
+			atx.getDetailWriter().addTableRow("TbCase.otherOutcome", tbcase.getOtherOutcome());
+		}
+
+		atx.end();
+		//saveExecuteTransaction("CASE_CLOSE", tbcase);
 	}
 
 	
@@ -112,8 +141,9 @@ public class CaseLogService {
 	@Observer("case.reopen")
 	public void logCaseReopen() {
 		TbCase tbcase = caseHome.getInstance();
-		
-		saveExecuteTransaction("CASE_REOPEN", tbcase);
+
+		beginTX("CASE_REOPEN", tbcase).end();
+//		saveExecuteTransaction("CASE_REOPEN", tbcase);
 	}
 	
 	/**
@@ -122,8 +152,9 @@ public class CaseLogService {
 	@Observer("case.casenumbermodified")
 	public void logCaseNumberModified() {
 		TbCase tbcase = caseHome.getInstance();
-		
-		saveExecuteTransaction("CASE_CHANGENUMBER", tbcase);
+
+		beginTX("CASE_CHANGENUMBER", tbcase).end();
+//		saveExecuteTransaction("CASE_CHANGENUMBER", tbcase);
 	}
 	
 	@Observer("case.starttreatment")

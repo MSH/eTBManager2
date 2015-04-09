@@ -1,7 +1,7 @@
 package org.msh.tb.entities;
 
 import org.hibernate.validator.NotNull;
-import org.msh.tb.transactionlog.PropertyLog;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 
 import javax.persistence.*;
 

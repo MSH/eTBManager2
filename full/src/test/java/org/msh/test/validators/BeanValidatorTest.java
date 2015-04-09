@@ -1,16 +1,16 @@
 package org.msh.test.validators;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.msh.test.validators.fixtures.TestForm;
 import org.msh.utils.date.DateUtils;
 import org.msh.validators.BeanValidator;
 import org.msh.validators.MessagesList;
 import org.msh.validators.ValidationMessage;
-import org.msh.validators.impl.BeanValidatorImpl;
 
-import java.util.*;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 /**

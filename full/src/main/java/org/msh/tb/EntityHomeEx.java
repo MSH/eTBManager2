@@ -6,13 +6,14 @@ import org.jboss.seam.core.Expressions.ValueExpression;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.AuthorizationException;
+import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.transactionlog.DetailXMLWriter;
+import org.msh.etbm.transactionlog.TxLogServices;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.transactionlog.DetailXMLWriter;
-import org.msh.tb.transactionlog.LogInfo;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.EntityQuery;
 
 import javax.faces.application.FacesMessage;
@@ -24,28 +25,38 @@ import javax.faces.context.FacesContext;
 
 public class EntityHomeEx<E> extends EntityHome<E> {
 	private static final long serialVersionUID = 2466367489746346196L;
-	private boolean bNew = true;
+
+	private boolean bNew;
 	private ValueExpression deletedMessage;
 	private ValueExpression updatedMessage;
 	private ValueExpression createdMessage;
 	
-	private TransactionLogService logService;
+//	private TransactionLogService logService;
 	private boolean transactionLogActive = true;
 	private boolean displayMessage = true;
 	private boolean checkSecurityOnOpen = true;
 	private String roleName;
 	
 	private UserLogin userLogin;
+
+	// store information about then transaction log of the action
+	private ActionTX actionTX;
 	
 	
 	/**
 	 * Initiate transaction log service for this entityHome. The transaction will be saved on a update or persist call
 	 */
-	public void initTransactionLog() {
-		if ((!bNew) && (logService == null)) {
-			logService = new TransactionLogService();
-			logService.recordEntityState(getInstance(), isManaged()? Operation.EDIT: Operation.NEW);
+	public boolean initTransactionLog(RoleAction action) {
+		if (!transactionLogActive) {
+			return false;
 		}
+
+		if (actionTX == null) {
+			String evtName = getRoleName(action);
+			actionTX = ActionTX.begin(evtName, getInstance(), action);
+		}
+
+		return true;
 	}
 	
 	
@@ -57,6 +68,10 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		return getEntityManager().find(Workspace.class, getUserLogin().getDefaultWorkspace().getId());
 	}
 
+
+	public DetailXMLWriter getLogDetailWriter() {
+		return actionTX != null? actionTX.getDetailWriter(): null;
+	}
 	
 	/**
 	 * Return user information about the workspace in use
@@ -96,9 +111,14 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 				wsobj.setWorkspace(getWorkspace());
 		}
 
+		bNew = !isManaged();
+		if (bNew) {
+			initTransactionLog(RoleAction.NEW);
+		}
+
 		String ret = super.persist();
 		
-		saveTransactionLog(bNew? RoleAction.NEW: RoleAction.EDIT);
+		saveTransactionLog();
 		
 		return ret;
 	}
@@ -106,8 +126,13 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 
 	@Override
 	public String update() {
+		bNew = !isManaged();
+		if (bNew) {
+			initTransactionLog(RoleAction.NEW);
+		}
+
 		String ret = super.update();
-		saveTransactionLog(RoleAction.EDIT);
+		saveTransactionLog();
 		return ret;
 	}
 
@@ -117,8 +142,9 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		if (!isManaged())
 			return "error";
 
-		saveTransactionLog(RoleAction.DELETE);
-		
+		initTransactionLog(RoleAction.DELETE);
+		saveTransactionLog();
+
 		EntityQuery<E> entityQuery = getEntityQuery();
 		if (entityQuery != null)
 			entityQuery.getResultList().remove(getInstance());
@@ -215,21 +241,20 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	/**
 	 * Register transaction log for operation
 	 */
-	protected void saveTransactionLog(RoleAction action) {
-		if (!transactionLogActive)
+	protected void saveTransactionLog() {
+		if ((!transactionLogActive) || (actionTX == null))
 			return;
 
-		String roleName = getRoleName(action);
-		if (roleName == null)
-			return;
-		
-		// if the log service didn't map object state previously, so there is nothing to do
-		if ((logService == null) && (action == RoleAction.EDIT))
-			return;
-		
-		if (getLogService() == null)
-			return;
-		
+		TxLogServices logSrv = (TxLogServices)App.getComponent("txLogServices");
+
+		actionTX.setDescription( getLogDescription() )
+			.setEntityId(getLogEntityId())
+			.setEntityClass(getLogEntityClass())
+			.setEntity( getInstance() )
+			.end();
+
+/*
+
 		switch (action) {
 		case DELETE: logService.recordEntityState(getInstance(), Operation.DELETE);
 			break;
@@ -239,16 +264,14 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		}
 		
 		logService.save(roleName, action, getLogDescription(), getLogEntityId(), getLogEntityClass(), getInstance());
+*/
 	}
-	
 
+/*
 	public void saveExecuteTransaction(String roleName) {
 		saveTransactionLog(RoleAction.EXEC);
 	}
-	
-	public DetailXMLWriter getLogDetailWriter() {
-		return getLogService().getDetailWriter();
-	}
+*/
 
 	
 	/**
@@ -341,7 +364,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 			return;
 		
 		// check if is the same workspace
-		bNew = !isManaged();
+		boolean bNew = !isManaged();
 		if (!bNew) {
 			Workspace objWs = getInstanceWorkspace();
 			if (objWs != null) {
@@ -374,8 +397,8 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	public void setIdWithLog(Object id) {
 		setId(id);
 		checkCanOpen();
-		if (logService == null)
-			initTransactionLog();
+		if (actionTX == null)
+			initTransactionLog(RoleAction.EDIT);
 	}
 	
 	public Object getIdWithLog() {
@@ -384,17 +407,22 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 	
 	public void setTransactionLogActive(boolean value) {
 		transactionLogActive = value;
+		if (!transactionLogActive) {
+			actionTX = null;
+		}
 	}
 	
 	public boolean isTransactionLogActive() {
 		return transactionLogActive;
 	}
-	
-	public TransactionLogService getLogService() {
-		if (logService == null) {
-			logService = new TransactionLogService();
-		}
-		return logService;
+
+
+	/**
+	 * Return the transaction assigned to the action
+	 * @return
+	 */
+	public ActionTX getActionTX() {
+		return actionTX;
 	}
 
 	@Override

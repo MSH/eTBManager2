@@ -1,6 +1,8 @@
 package org.msh.tb.cases.treatment;
 
-import org.msh.tb.entities.enums.*;
+import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.PatientType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 

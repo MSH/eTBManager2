@@ -2,9 +2,9 @@ package org.msh.tb.entities;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
+import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.ExamStatus;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.PropertyLog;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 import javax.persistence.*;

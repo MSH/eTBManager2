@@ -2,9 +2,9 @@ package org.msh.tb.cases.exams;
 
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.enums.CultureResult;
-import org.msh.tb.transactionlog.LogInfo;
 
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;

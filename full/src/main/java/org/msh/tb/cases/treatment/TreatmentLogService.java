@@ -5,12 +5,12 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.msh.etbm.transactionlog.ActionTX;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.LocaleDateConverter;
 import org.msh.utils.date.Period;
 
@@ -27,7 +27,7 @@ import java.util.List;
 @Scope(ScopeType.CONVERSATION)
 public class TreatmentLogService {
 
-	@In(create=true) TransactionLogService transactionLogService;
+//	@In(create=true) TransactionLogService transactionLogService;
 	@In CaseHome caseHome;
 
 	private Period prevPeriod;
@@ -52,7 +52,9 @@ public class TreatmentLogService {
 	 */
 	@Observer("treatment-persist")
 	public void logTreatmentPersist() {
-		TransactionLogService log = transactionLogService;
+//		TransactionLogService log = transactionLogService;
+
+		ActionTX atx = ActionTX.begin("CASE_TREAT");
 
 		TbCase tbcase = caseHome.getInstance();
 
@@ -61,21 +63,21 @@ public class TreatmentLogService {
 		boolean changed = false;
 
 		if (!p.equals(prevPeriod)) {
-			log.addTableRow("TbCase.iniTreatmentDate", (prevPeriod != null? prevPeriod.getIniDate(): null), p.getIniDate());
-			log.addTableRow("TbCase.endTreatmentDate", (prevPeriod != null? prevPeriod.getEndDate(): null), p.getEndDate());
+			atx.addRow("TbCase.iniTreatmentDate", (prevPeriod != null? prevPeriod.getIniDate(): null), p.getIniDate());
+			atx.addRow("TbCase.endTreatmentDate", (prevPeriod != null? prevPeriod.getEndDate(): null), p.getEndDate());
 			changed = true;
 		}
 		
 		if ((prevIniContPhase == null) || ((prevIniContPhase != null) && (!prevIniContPhase.equals(tbcase.getIniContinuousPhase())))) {
-			log.addTableRow("RegimenPhase.CONTINUOUS", prevIniContPhase, tbcase.getIniContinuousPhase());
+			atx.addRow("RegimenPhase.CONTINUOUS", prevIniContPhase, tbcase.getIniContinuousPhase());
 			changed = true;
 		}
 
 		// log changes in the regimen
 		if (regimenChanged) {
 			if (tbcase.getRegimen() == null)
-				 transactionLogService.getDetailWriter().addMessage("regimens.individualized");
-			else transactionLogService.addTableRow("Regimen", tbcase.getRegimen());
+				 atx.getDetailWriter().addMessage("regimens.individualized");
+			else atx.addRow("Regimen", tbcase.getRegimen());
 			changed = true;
 		}
 
@@ -83,14 +85,14 @@ public class TreatmentLogService {
 		if (newMedicines != null) {
 			for (PrescribedMedicine pm: newMedicines) {
 				String s = getDisplayTextPrescribedMed(pm);
-				log.addTableRow("admin.meds.new", s);
+				atx.addRow("admin.meds.new", s);
 			}
 			changed = true;
 		}
 		
 		if (editedMedicines != null) {
 			for (PrescribedMedicine pm: editedMedicines)
-				log.addTableRow("form.edit", getDisplayTextPrescribedMed(pm));
+				atx.addRow("form.edit", getDisplayTextPrescribedMed(pm));
 			changed = true;
 		}
 		
@@ -100,13 +102,20 @@ public class TreatmentLogService {
 					" (" + LocaleDateConverter.getDisplayDate(rp.getPeriod().getIniDate(), false) +
 					"..." + LocaleDateConverter.getDisplayDate(rp.getPeriod().getEndDate(), false) + ")";
 
-				log.addTableRow("cases.treat.deletedperiod", s);
+				atx.addRow("cases.treat.deletedperiod", s);
 			}
 			changed = true;
 		}
 
-		if (changed)
-			log.save("CASE_TREAT", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
+		if (changed) {
+			atx.setEntityClass( TbCase.class.getSimpleName() )
+					.setEntityId( tbcase.getId() )
+					.setEntity( tbcase )
+					.setRoleAction( RoleAction.EDIT )
+					.setDescription( tbcase.toString() )
+					.end();
+		}
+//			log.save("CASE_TREAT", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
 	
@@ -173,18 +182,21 @@ public class TreatmentLogService {
 	@Observer("treatment-undone")
 	public void logTreatmentUndone() {
 		TbCase tbcase = caseHome.getInstance();
-		
+
+		ActionTX atx = ActionTX.begin("TREATMENT_UNDO", tbcase, RoleAction.EXEC);
+
 		if (tbcase.getRegimen() == null)
-			 transactionLogService.getDetailWriter().addMessage("regimens.individualized");
-		else transactionLogService.addTableRow("Regimen", tbcase.getRegimen());
+			 atx.getDetailWriter().addMessage("regimens.individualized");
+		else atx.addRow("Regimen", tbcase.getRegimen());
 
 		Period p = tbcase.getTreatmentPeriod();
 		if (p != null) {
-			transactionLogService.addTableRow("TbCase.iniTreatmentDate", p.getIniDate());
-			transactionLogService.addTableRow("TbCase.endTreatmentDate", p.getEndDate());
+			atx.addRow("TbCase.iniTreatmentDate", p.getIniDate());
+			atx.addRow("TbCase.endTreatmentDate", p.getEndDate());
 		}
-		
-		transactionLogService.saveExecuteTransaction("TREATMENT_UNDO", tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
+		atx.setEntityClass( TbCase.class.getSimpleName() )
+				.end();
+//		transactionLogService.saveExecuteTransaction("TREATMENT_UNDO", tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
 	
@@ -195,17 +207,21 @@ public class TreatmentLogService {
 	public void logTreatmentStart() {
 		TbCase tbcase = caseHome.getInstance();
 
+		ActionTX atx = ActionTX.begin("CASE_STARTTREAT", tbcase, RoleAction.EXEC);
+
 		if (tbcase.getRegimen() == null)
-			 transactionLogService.getDetailWriter().addMessage("regimens.individualized");
-		else transactionLogService.addTableRow("Regimen", tbcase.getRegimen());
+			 atx.getDetailWriter().addMessage("regimens.individualized");
+		else atx.addRow("Regimen", tbcase.getRegimen());
 
 		Period p = tbcase.getTreatmentPeriod();
 		if (p != null) {
-			transactionLogService.addTableRow("TbCase.iniTreatmentDate", p.getIniDate());
-			transactionLogService.addTableRow("TbCase.endTreatmentDate", p.getEndDate());
+			atx.addRow("TbCase.iniTreatmentDate", p.getIniDate());
+			atx.addRow("TbCase.endTreatmentDate", p.getEndDate());
 		}
-		
-		transactionLogService.saveExecuteTransaction("CASE_STARTTREAT", tbcase.getPatient().getFullName(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
+
+		atx.setEntityClass( TbCase.class.getSimpleName() )
+				.end();
+//		transactionLogService.saveExecuteTransaction("CASE_STARTTREAT", tbcase.getPatient().getFullName(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
 

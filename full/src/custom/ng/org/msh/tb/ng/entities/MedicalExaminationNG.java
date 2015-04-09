@@ -1,10 +1,10 @@
 package org.msh.tb.ng.entities;
 
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.MedicalExamination;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ng.entities.enums.Qualification;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 

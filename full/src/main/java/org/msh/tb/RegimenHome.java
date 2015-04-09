@@ -4,12 +4,12 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineRegimen;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.medicines.MedicineSelection;
-import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
 
 import javax.faces.model.SelectItem;

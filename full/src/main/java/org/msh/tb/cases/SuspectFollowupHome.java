@@ -11,6 +11,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.RoleAction;
 
 /**
  * Controller class to handle follow-up of suspect cases. Basically there are two
@@ -81,7 +82,9 @@ public class SuspectFollowupHome {
 		}
 		else dataModel.setDrugResistanceType(null);
 		
-		caseHome.initTransactionLog();
+		caseHome.initTransactionLog(RoleAction.EDIT);
+		caseHome.setTransactionLogActive(true);
+
 		TbCase tbcase = caseHome.getInstance();
 		tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 		tbcase.setClassification(dataModel.getClassification());
@@ -92,9 +95,9 @@ public class SuspectFollowupHome {
 		tbcase.setPulmonaryType(dataModel.getPulmonaryType());
 		tbcase.setExtrapulmonaryType(dataModel.getExtrapulmonaryType());
 		tbcase.setExtrapulmonaryType2(dataModel.getExtrapulmonaryType2());
-		
+
 		caseHome.setRoleName("SUSPECT_FOLLOWUP");
-		caseHome.setTransactionLogActive(true);
+
 		if ("persisted".equals(caseHome.persist()))
 			return "followup-registered";
 		else return "error";

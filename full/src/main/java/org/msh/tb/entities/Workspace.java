@@ -4,8 +4,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.jboss.seam.international.LocaleSelector;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.*;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 import java.io.Serializable;

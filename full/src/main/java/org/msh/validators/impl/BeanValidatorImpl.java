@@ -1,19 +1,16 @@
 package org.msh.validators.impl;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.jboss.seam.international.Messages;
-import org.msh.validators.*;
+import org.hibernate.validator.Future;
+import org.hibernate.validator.NotNull;
+import org.hibernate.validator.Past;
+import org.hibernate.validator.Size;
+import org.msh.validators.MessagesList;
 
 import javax.persistence.Column;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
 import java.lang.reflect.Field;
-import java.text.MessageFormat;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation of the bean validator
@@ -71,9 +68,17 @@ public class BeanValidatorImpl {
         String fname = field.getName();
         Object value = null;
         try {
-            value = PropertyUtils.getProperty(obj, fname);
-        } catch (Exception e) {
+            if (PropertyUtils.isReadable(obj, fname)) {
+                value = PropertyUtils.getProperty(obj, fname);
+            }
+        } catch (RuntimeException e) {
             throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
 
         if (!validateNotNull(field, value, msgs)) {

@@ -8,8 +8,8 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.transaction.Transaction;
 import org.jboss.seam.transaction.UserTransaction;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.Tag;
-import org.msh.tb.transactionlog.LogInfo;
 import org.msh.utils.EntityQuery;
 
 import javax.persistence.PersistenceException;

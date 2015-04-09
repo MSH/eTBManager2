@@ -5,9 +5,9 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.enums.MicroscopyResult;
-import org.msh.tb.transactionlog.LogInfo;
 
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;

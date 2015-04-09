@@ -8,13 +8,14 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
+import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.transactionlog.DetailXMLWriter;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.BatchSelection;
 import org.msh.tb.medicines.InventoryReport;
-import org.msh.tb.transactionlog.TransactionLogService;
 import org.msh.utils.date.DateUtils;
 
 import javax.persistence.EntityManager;
@@ -402,14 +403,19 @@ public class StockAdjustmentHome extends Controller {
 	 * @param batches
 	 */
 	private void saveLog(RoleAction roleAction, Map<Batch, Integer> batches) {
-		TransactionLogService logSrv = new TransactionLogService();
+		ActionTX atx = ActionTX.begin("STOCKPOS");
+
+		DetailXMLWriter writer = atx.getDetailWriter();
+
 		for (Batch batch: batches.keySet()) {
 			Integer qtd = batches.get(batch);
-			logSrv.addTableRow("Medicine", batch.getMedicine().toString());
-			logSrv.addTableRow("Batch", batch.getBatchNumber());
-			logSrv.addTableRow("Movement.quantity", qtd);
+			writer.addTableRow("Medicine", batch.getMedicine().toString());
+			writer.addTableRow("Batch", batch.getBatchNumber());
+			writer.addTableRow("Movement.quantity", qtd);
 		}
-		logSrv.save("STOCKPOS", roleAction, null, null, null, null);
+
+		atx.end();
+//		atx.save("STOCKPOS", roleAction, null, null, null, null);
 	}
 	
 	private Map<Batch, Integer> getBatchesMap(StockPositionItem it, boolean shpippedQtd) {

@@ -6,7 +6,7 @@
 		<restrict>#{caseHome.canEditExams}</restrict>
 		<begin-conversation join="true"/>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="examid" value="#{examMicroscopyHome.idWithLog}" converterId="javax.faces.Integer"/>
+		<param name="examid" value="#{microscopyActions.id}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if-outcome="canceled">
 				<end-conversation before-redirect="true"/>

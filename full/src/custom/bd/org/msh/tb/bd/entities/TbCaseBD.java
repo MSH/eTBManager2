@@ -1,5 +1,6 @@
 package org.msh.tb.bd.entities;
 
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.bd.entities.enums.Occupation;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.bd.entities.enums.SalaryRange;
@@ -7,7 +8,6 @@ import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.YesNoType;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 import java.util.Date;

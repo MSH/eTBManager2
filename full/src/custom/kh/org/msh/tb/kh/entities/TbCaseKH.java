@@ -1,9 +1,9 @@
 package org.msh.tb.kh.entities;
 
+import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.transactionlog.Operation;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 

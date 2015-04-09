@@ -3,11 +3,11 @@ package org.msh.tb.cases;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.cases.exams.ExamHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TbContact;
-import org.msh.tb.transactionlog.LogInfo;
 
 /**
  * Handle basic operations with a {@link TbContact} instance and its inherited entities

@@ -1,5 +1,6 @@
 package org.msh.tb.ng.entities;
 
+import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.FieldValueComponent;
 import org.msh.tb.entities.TbCase;
@@ -7,7 +8,6 @@ import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.ng.entities.enums.HIVPosition;
 import org.msh.tb.ng.entities.enums.HIVPositionDetail;
 import org.msh.tb.ng.entities.enums.IntakeAntiDrugsDuration;
-import org.msh.tb.transactionlog.PropertyLog;
 
 import javax.persistence.*;
 import java.util.ArrayList;

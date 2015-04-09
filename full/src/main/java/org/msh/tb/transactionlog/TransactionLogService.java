@@ -1,15 +1,14 @@
 package org.msh.tb.transactionlog;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.etbm.transactionlog.DetailXMLWriter;
+import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.transactionlog.PropertyValue;
 import org.msh.tb.entities.*;
-import org.msh.tb.entities.enums.RoleAction;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Name("transactionLogService")
@@ -25,15 +24,17 @@ public class TransactionLogService {
 	 * Capture the properties of the entity that are to be saved in a transaction
 	 * @param entity
 	 */
+/*
 	public void recordEntityState(Object entity, Operation oper) {
 		if (oper == Operation.ALL)
 			throw new IllegalArgumentException("Invalid Operation.ALL");
 
-		EntityLogMapping map = EntityLogManager.instance().getEntityMapping(entity);
+		EntityLogMapping map = EntityLogManager.instance().get(entity);
 		List<PropertyValue> values = map.describeEntity(entity, oper);
 
 		addItem(oper, values);
 	}
+*/
 
 	
 	/**
@@ -42,6 +43,7 @@ public class TransactionLogService {
 	 * @param values
 	 * @return
 	 */
+/*
 	private Item addItem(Operation oper, List<PropertyValue> values) {
 		Item item = new Item(oper, values);
 		if (items == null)
@@ -51,6 +53,7 @@ public class TransactionLogService {
 
 		return item;
 	}
+*/
 
 	/**
 	 * Save transaction log recovering entity data from entity
@@ -59,6 +62,7 @@ public class TransactionLogService {
 	 * @param entity
 	 * @return
 	 */
+/*
 	public TransactionLog save(String eventName, RoleAction action, Object entity) {
 		Integer id = null;
 
@@ -71,6 +75,7 @@ public class TransactionLogService {
 
 		return save(eventName, action, entity.toString(), id, entity.getClass().getSimpleName(), entity);
 	}
+*/
 
 
 	/**
@@ -78,6 +83,7 @@ public class TransactionLogService {
 	 * @param eventName is the short name of the event (user role)
 	 * @param action type of action related to this transaction (execution, new, edit, deleted)
 	 */
+/*
 	public TransactionLog save(String eventName, RoleAction action, String description, Integer entityId, String entityClass, Object entity) {
 		// check if there are changes
 		if ((!checkEntityValues()) && (action == RoleAction.EDIT))
@@ -129,6 +135,7 @@ public class TransactionLogService {
 
 		return log;
 	}
+*/
 
 	
 	/**
@@ -137,18 +144,22 @@ public class TransactionLogService {
 	 * @param description
 	 * @param entityId
 	 */
+/*
 	public TransactionLog saveExecuteTransaction(String userRole, String description, Integer entityId, String entityClass, Object entity) {
 		return save(userRole, RoleAction.EXEC, description, entityId, entityClass, entity);
 	}
+*/
 
 	/**
 	 * Save a transaction log of type execution using an entity to save its information
 	 * @param userRole
 	 * @param entity
 	 */
+/*
 	public TransactionLog saveExecuteTransaction(String userRole, Object entity) {
 		return save(userRole, RoleAction.EXEC, entity);
 	}
+*/
 
 	
 	/**
@@ -157,6 +168,7 @@ public class TransactionLogService {
 	 * will be included to the transaction later
 	 * @param id
 	 */
+/*
 	public TransactionLog appendTransaction(Integer id) {
 		EntityManager em = getEntityManager();
 		
@@ -180,7 +192,8 @@ public class TransactionLogService {
 		
 		return log;
 	}
-	
+*/
+
 	/**
 	 * Check if entity values changed since last time they were captured by the method <code>captureProperties</code>
 	 * 
