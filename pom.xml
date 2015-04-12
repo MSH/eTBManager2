@@ -45,6 +45,7 @@
 			<properties>
 				<app.development>true</app.development>
                 <app.datasource>mdrtbDatasource</app.datasource>
+				<app.webcontext>etbmanager</app.webcontext>
 			</properties>
 		</profile>
 		<profile>
@@ -52,6 +53,7 @@
 			<properties>
 				<app.development>false</app.development>
                 <app.datasource>mdrtbDatasource</app.datasource>
+				<app.webcontext>etbmanager</app.webcontext>
 			</properties>
 		</profile>
         <profile>
@@ -59,6 +61,7 @@
             <properties>
                 <app.datasource>mdrtbDatasource-test${workspace-context}</app.datasource>
 				<app.development>false</app.development>
+				<app.webcontext>etbmanager</app.webcontext>
             </properties>
         </profile>
 	</profiles>

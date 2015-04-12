@@ -19,6 +19,16 @@
 		<country-extension>ng</country-extension>
 	</properties>
 
+
+	<profiles>
+		<profile>
+			<id>test</id>
+			<properties>
+				<app.webcontext>etbmanagerng</app.webcontext>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<finalName>${war.filename}</finalName>
 
@@ -81,6 +91,7 @@
 							<includes>
 								<include>**/web.xml</include>
 								<include>**/components.xml</include>
+								<include>**/jboss-web.xml</include>
 							</includes>
 						</resource>
 						<resource>
