@@ -140,6 +140,9 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome {
      */
     protected List<Object[]> getExamResults(String fields, String entity) {
         CaseGroup grp = getSuspectGroup();
+        if (grp.getTreatments().size() == 0) {
+            return null;
+        }
         String s = "";
         for (TreatmentInfo info: grp.getTreatments()) {
             TreatmentInfoNg item = (TreatmentInfoNg)info;
@@ -161,6 +164,10 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome {
     protected void loadXpertResults() {
         List<Object[]> lst = getExamResults("result, rifResult", "ExamXpert");
 
+        if (lst == null) {
+            return;
+        }
+
         for (Object[] vals: lst) {
             XpertResult res = (XpertResult)vals[0];
             XpertRifResult rif = (XpertRifResult)vals[1];
@@ -180,6 +187,10 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome {
     protected void loadCultureResults() {
         List<Object[]> lst = getExamResults("result", "ExamCulture");
 
+        if (lst == null) {
+            return;
+        }
+
         for (Object[] vals: lst) {
             CultureResult res = (CultureResult)vals[0];
             Integer caseId = (Integer)vals[1];
@@ -196,6 +207,10 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome {
      */
     protected void loadMicroscopyResults() {
         List<Object[]> lst = getExamResults("result", "ExamMicroscopy");
+
+        if (lst == null) {
+            return;
+        }
 
         for (Object[] vals: lst) {
             MicroscopyResult res = (MicroscopyResult)vals[0];
