@@ -5,7 +5,7 @@
 <jboss-web>  
     <class-loading java2ClassLoadingCompliance="false">
         <loader-repository>
-            seam.jboss.org:loader=etbmanager
+            seam.jboss.org:loader=${app.webcontext}
             <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
         </loader-repository>
     </class-loading>
