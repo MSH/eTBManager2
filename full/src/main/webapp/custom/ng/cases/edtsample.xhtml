@@ -16,7 +16,7 @@
     	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
     	<ui:param name="checkDeathDate" value="true" />
         <ui:param name="redasterisk" value="#{not empty redasteriskforreq ? redasteriskforreq : false}"/>
-        <ui:param name="edtid" value="#{}datecollected#{not empty idcompl ? idcompl : ''}"/>
+        <ui:param name="edtid" value="#{ctrlprefix}datecollected"/>
     </s:decorate>
     </div>
 
@@ -24,7 +24,7 @@
     <s:decorate template="/layout/edit.xhtml" rendered="#{not empty hassampletype ? hassampletype : false}">
     	<ui:define name="label">#{messages['PatientSample.sampleType']}:</ui:define>
         <ui:param name="redasterisk" value="#{not empty redasteriskforreq ? redasteriskforreq : false}"/>
-    	<h:selectOneMenu id="sampletype#{not empty idcompl ? idcompl : ''}" value="#{examHome.instance.sampleType}" required="#{not empty fieldsrequired ? fieldsrequired : true}">
+    	<h:selectOneMenu id="#{ctrlprefix}sampletype" value="#{examHome.instance.sampleType}" required="#{not empty fieldsrequired ? fieldsrequired : true}">
     		<s:selectItems value="#{sampletypes_ng}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -32,7 +32,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
-    	<h:inputText value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
+    	<h:inputText id="#{ctrlprefix}sample" value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
     </s:decorate>
     </div>
 
