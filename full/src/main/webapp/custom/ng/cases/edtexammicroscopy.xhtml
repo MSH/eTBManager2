@@ -15,7 +15,6 @@
 	<ui:param name="maskedit" value="1" />
 	<ui:param name="topmenu" value="0" />
 	<ui:param name="acts" value="#{microscopyActions}" />
-	<ui:param name="examType" value="#{examMicroscopyHome.examMicroscopy}" />
 	<ui:param name="left" value="0" />
 
 
@@ -40,14 +39,14 @@
 
 					<s:decorate template="/layout/edit.xhtml" >
 						<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-						<h:selectOneMenu id="cbres" value="#{acts.instance.result}" required="true">
+						<h:selectOneMenu id="micres" value="#{acts.instance.result}" required="true">
 							<s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
 							<s:convertEnum />
 						</h:selectOneMenu>
 					</s:decorate>
 
-					<rich:jQuery selector="#cbres" query="change( function(){ examResultChanged(this); })" />
-					<rich:jQuery selector="#cbres" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
+					<rich:jQuery selector="#micres" query="change( function(){ examResultChanged(this); })" />
+					<rich:jQuery selector="#micres" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
 
 					<div style="display:block;width:600px;">
 						<div id="pnlrespositive">

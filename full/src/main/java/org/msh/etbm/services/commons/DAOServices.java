@@ -46,7 +46,25 @@ public abstract class DAOServices<E> {
         em.persist(entity);
         em.flush();
 
+        afterSaved(entity);
+
         return null;
+    }
+
+    /**
+     * Called after the entity is successfully saved
+     * @param entity
+     */
+    protected void afterSaved(E entity) {
+        // do nothing
+    }
+
+    /**
+     * Called after the entity is successfully deleted
+     * @param entity
+     */
+    protected void afterDeleted(E entity) {
+        // do nothing
     }
 
     /**
@@ -54,11 +72,13 @@ public abstract class DAOServices<E> {
      * @param entity
      */
     @Transactional
-    public void delete(Object entity) {
+    public void delete(E entity) {
         EntityManager em = App.getEntityManager();
         entity = em.merge(entity);
         em.remove(entity);
         em.flush();
+
+        afterDeleted(entity);
     }
 
     /**
@@ -69,8 +89,7 @@ public abstract class DAOServices<E> {
     protected void deleteById(Object id) {
         EntityManager em = App.getEntityManager();
         E entity = em.find(getEntityClass(), id);
-        em.remove(entity);
-        em.flush();
+        delete(entity);
     }
 
 

@@ -16,7 +16,7 @@
     	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
     	<ui:param name="checkDeathDate" value="true" />
         <ui:param name="redasterisk" value="#{not empty redasteriskforreq ? redasteriskforreq : false}"/>
-        <ui:param name="edtid" value="datecollected#{not empty idcompl ? idcompl : ''}"/>
+        <ui:param name="edtid" value="#{}datecollected#{not empty idcompl ? idcompl : ''}"/>
     </s:decorate>
     </div>
 

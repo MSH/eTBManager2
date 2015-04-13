@@ -23,7 +23,8 @@
         <buildDate>${maven.build.timestamp}</buildDate>
         <workspace-context></workspace-context>
         <war.filename>etbmanager</war.filename>
-    </properties>
+		<country-extension></country-extension>
+	</properties>
 
 	<developers>
 		<developer>
@@ -61,7 +62,7 @@
             <properties>
                 <app.datasource>mdrtbDatasource-test${workspace-context}</app.datasource>
 				<app.development>false</app.development>
-				<app.webcontext>etbmanager</app.webcontext>
+				<app.webcontext>etbmanager-test${country-extension}</app.webcontext>
             </properties>
         </profile>
 	</profiles>
@@ -318,13 +319,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.5.8</version>
-            <scope>compile</scope>
+            <scope>provided,test</scope>
         </dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.8</version>
-			<scope>compile</scope>
+			<scope>provided,test</scope>
 		</dependency>
 
 		<dependency>

@@ -32,6 +32,13 @@ public interface MessagesList {
     ValidationMessage add(String field, String msg, Object[] args);
 
     /**
+     * Add a "Value required" message to an specific field
+     * @param field the name of the field
+     * @return instance of ValidationMessage
+     */
+    ValidationMessage addRequired(String field);
+
+    /**
      * Return the list of messages in the container
      * @return list of messages, or null if there is no message
      */

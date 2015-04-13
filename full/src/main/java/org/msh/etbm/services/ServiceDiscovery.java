@@ -53,7 +53,7 @@ public class ServiceDiscovery {
      * @return instance of DAO service
      */
     public DAOServices getByEntityClass(Class entityClass) {
-        String compname = daoservices.get(ExamMicroscopy.class);
+        String compname = daoservices.get(entityClass);
 
         // component was found ?
         if (compname == null) {

@@ -35,6 +35,11 @@ public class MessagesListImpl implements MessagesList {
         return msg;
     }
 
+    @Override
+    public ValidationMessage addRequired(String field)  {
+        return add(field, "javax.faces.component.UIInput.REQUIRED");
+    }
+
 
     @Override
     public List<ValidationMessage> getMessages() {

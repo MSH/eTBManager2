@@ -80,7 +80,7 @@
 			<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
             <ui:param name="redasterisk" value="#{true}" />
             <ui:param name="idcompl" value="mic"/>
-			<h:selectOneMenu id="cbres" value="#{examMicroscopy.result}">
+			<h:selectOneMenu id="micres" value="#{examMicroscopy.result}">
 				<s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="#{messages['global.notdone']}" label="#{messages[it.key]}" />
 				<s:convertEnum />
 			</h:selectOneMenu>

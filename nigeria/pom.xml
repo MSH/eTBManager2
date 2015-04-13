@@ -20,15 +20,6 @@
 	</properties>
 
 
-	<profiles>
-		<profile>
-			<id>test</id>
-			<properties>
-				<app.webcontext>etbmanagerng</app.webcontext>
-			</properties>
-		</profile>
-	</profiles>
-
 	<build>
 		<finalName>${war.filename}</finalName>
 
@@ -98,6 +89,8 @@
 							<directory>../full/src/main/webapp</directory>
 							<excludes>
 								<exclude>**/web.xml</exclude>
+								<exclude>**/components.xml</exclude>
+								<exclude>**/jboss-web.xml</exclude>
 								<exclude>custom/**/*</exclude>
 							</excludes>
 							<includes>

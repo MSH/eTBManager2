@@ -1,5 +1,6 @@
 package org.msh.tb.entities;
 
+import org.hibernate.validator.NotNull;
 import org.msh.etbm.transactionlog.Operation;
 import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.CultureResult;
@@ -18,6 +19,7 @@ public class ExamCulture extends LaboratoryExam implements Serializable {
 	private static final long serialVersionUID = 1470269499087718301L;
 
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
+	@NotNull
 	private CultureResult result;
 
 	@PropertyLog(operations={Operation.NEW})

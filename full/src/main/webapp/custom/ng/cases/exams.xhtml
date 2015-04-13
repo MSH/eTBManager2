@@ -99,7 +99,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/custom/ng/cases/edtexammicroscopy.xhtml " propagation="none" enabled="#{caseHome.canEditExams}" >
+				<s:link view="/custom/ng/cases/edtexammicroscopy.xhtml " propagation="none" disabled="#{not caseHome.canEditExams}" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
@@ -128,7 +128,7 @@
 				</f:facet>
 				<div class="#{r.result=='NEGATIVE'? 'result-negative': 'result-positive'}">#{messages[r.result.key]}</div>
 				<h:outputText value="#{r.dateRelease}" converter="localeDateConverter" title="#{messages['cases.exams.dateRelease']}" style="display:block;"/>
-				<s:fragment rendered="#{not empty r.numberOfAFB}" style="display:block;clear:both;">
+				<s:fragment rendered="#{not empty r.numberOfAFB}">
 					<h:outputText value="#{messages['cases.exams.afb']}"/>: #{r.numberOfAFB}
 				</s:fragment>
 			</h:column>
@@ -157,7 +157,7 @@
 	<div class="spacer" />
 
 	<h:panelGroup id="pnlgenexpert">
-	<s:link view="/cases/edtexamgenexpert.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
+	<s:link view="/custom/ng/cases/edtexamgenexpert.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" 
 		styleClass="button-alt" onclick="disableButton(this)">
 		<f:param name="id" value="#{tbcase.id}"/>
 		<f:param name="examid" value="#{null}"/>
@@ -173,7 +173,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/cases/edtexamgenexpert.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/custom/ng/cases/edtexamgenexpert.xhtml" propagation="none" disabled="#{not caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
@@ -245,7 +245,7 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.exams.date']}" styleClass="collh" />
 				</f:facet>
-				<s:link view="/custom/ng/cases/edtexamculture.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/custom/ng/cases/edtexamculture.xhtml" propagation="none" disabled="#{not caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
@@ -305,7 +305,7 @@
 	<div class="spacer" />
 	<h:panelGroup id="pnldst">	
 	
-			<s:link view="/cases/edtexamdst.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
+			<s:link view="/custom/ng/cases/edtexamdst.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 				<span>#{messages['cases.details.newresult']}</span>
@@ -340,7 +340,7 @@
 		<a:repeat value="#{examDSTTable.allResults}" var="r">
 		<tr>
 			<td>
-				<s:link view="/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
+				<s:link view="/custom/ng/cases/edtexamdst.xhtml" propagation="none" enabled="#{caseHome.canEditExams}">
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.examResult.id}"/>
 					<h:outputFormat value="#{messages[r.examResult.monthDisplay]}" >
@@ -394,7 +394,7 @@
 	<div class="spacer" />
 	<h:panelGroup id="pnlXRay">	
 	
-			<s:link view="/cases/edtexamxray.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" >
+			<s:link view="/custom/ng/cases/edtexamxray.xhtml" style="float:right;" rendered="#{caseHome.canEditExams}" >
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="examid" value="#{null}"/>
 				<span>#{messages['cases.details.newresult']}</span>
@@ -408,7 +408,7 @@
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
-				<s:link view="/cases/edtexamxray.xhtml" propagation="none" >
+				<s:link view="/custom/ng/cases/edtexamxray.xhtml" propagation="none" >
 					<f:param name="id" value="#{tbcase.id}"/>
 					<f:param name="examid" value="#{r.id}"/>
 					<h:outputFormat value="#{messages[r.monthDisplay]}" >
@@ -455,7 +455,7 @@
 	<a:actionparam name="param1" assignTo="#{examXRayHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
-	<s:decorate template="/cases/comments.xhtml">
+	<s:decorate template="/custom/ng/cases/comments.xhtml">
 		<ui:param name="panel" value="data" />
 	</s:decorate>
 	

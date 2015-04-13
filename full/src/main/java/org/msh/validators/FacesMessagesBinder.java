@@ -60,7 +60,8 @@ public class FacesMessagesBinder {
      */
     public String controlByField(String field) {
         for (String ctrl: controls.keySet()) {
-            if (ctrl.equals(field)) {
+            String f = controls.get(ctrl);
+            if (f.equals(field)) {
                 return ctrl;
             }
         }
