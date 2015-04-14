@@ -189,7 +189,7 @@
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		#{messages[tbcase.patientType.key]}
-            <h:outputText rendered="#{tbcase.patientType == 'PREVIOUSLY_TREATED'}" value=" - #{messages[tbcase.previouslyTreatedType.key]} "/>
+            <h:outputText rendered="#{tbcase.patientType == 'PREVIOUSLY_TREATED' and not empty tbcase.previouslyTreatedType}" value=" - #{messages[tbcase.previouslyTreatedType.key]} "/>
 		</s:decorate>
         <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null}">
             <ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
