@@ -18,92 +18,86 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
         initializeInterfaceTableRows();
 
         // Pulmonary TB cases WITH treatment registered - Bacteriologically confirmed
-        query = "select c.patientType, p.gender, count(*), "
-                + getHQLSelectSubQLastHivResult() + " as hivresult, "
+        query = "select c.patientType, p.gender, count(*), hiv.result, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamMicroscopy", "exm") + " as micresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult "
-                + " from TbCase c join c.patient p "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null "
-                + " and c.patientType is not null and p.gender is not null "
-                + " group by c.patientType, p.gender, col_3_0_ "
-                + " having (col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5) and col_3_0_ is not null ";
+                + " from TbCaseBD c join c.patient p join c.resHIV hiv "
+                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
+                + " group by c.patientType, p.gender, hiv.result "
+                + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "1");
 
         // Pulmonary TB cases WITHOUT treatment registered - Bacteriologically confirmed
-        query = "select c.patientType, p.gender, count(*), "
-                + getHQLSelectSubQLastHivResult() + " as hivresult, "
+        query = "select c.patientType, p.gender, count(*), hiv.result, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamMicroscopy", "exm") + " as micresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamXpert", "exe") + " as expresult "
-                + " from TbCase c join c.patient p "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null "
-                + " and c.patientType is not null and p.gender is not null "
-                + " group by c.patientType, p.gender, col_3_0_ "
-                + " having (col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5) and col_3_0_ is not null ";
+                + " from TbCaseBD c join c.patient p join c.resHIV hiv "
+                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
+                + " group by c.patientType, p.gender, hiv.result "
+                + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "1");
 
         // Pulmonary TB cases WITH treatment registered - Clinically confirmed
-        query = "select c.patientType, p.gender, count(*), "
-                + getHQLSelectSubQLastHivResult() + " as hivresult, "
+        query = "select c.patientType, p.gender, count(*), hiv.result, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamMicroscopy", "exm") + " as micresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreatXray() + " as xrayresult "
-                + " from TbCase c join c.patient p "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null "
-                + " and c.patientType is not null and p.gender is not null "
-                + " group by c.patientType, p.gender, col_3_0_ "
+                + " from TbCaseBD c join c.patient p join c.resHIV hiv "
+                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
+                + " group by c.patientType, p.gender, hiv.result "
                 + " having (col_4_0_ not in (1,2,3,4,5) or col_4_0_ is null) and (col_5_0_ not in (1,2,3,4,5) or col_5_0_ is null) and (col_6_0_ != 5 or col_6_0_ is null) "
-                + " and col_7_0_ like '1' and col_3_0_ is not null ";
+                + " and col_7_0_ like '1' ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "2");
 
         // Pulmonary TB cases WITHOUT treatment registered - Clinically confirmed
-        query = "select c.patientType, p.gender, count(*), "
-                + getHQLSelectSubQLastHivResult() + " as hivresult, "
+        query = "select c.patientType, p.gender, count(*), hiv.result, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamMicroscopy", "exm") + " as micresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTRXray() + " as xrayresult "
-                + " from TbCase c join c.patient p "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null "
-                + " and c.patientType is not null and p.gender is not null "
-                + " group by c.patientType, p.gender, col_3_0_ "
+                + " from TbCaseBD c join c.patient p join c.resHIV hiv "
+                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
+                + " group by c.patientType, p.gender, hiv.result "
                 + " having (col_4_0_ not in (1,2,3,4,5) or col_4_0_ is null) and (col_5_0_ not in (1,2,3,4,5) or col_5_0_ is null) and (col_6_0_ != 5 or col_6_0_ is null) "
-                + " and col_7_0_ like '1' and col_3_0_ is not null ";
+                + " and col_7_0_ like '1' ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "2");
 
         // Extrapulmonary TB cases WITH treatment registered - Bacteriologically or Clinically confirmed
-        query = "select c.patientType, p.gender, count(*), "
-                + getHQLSelectSubQLastHivResult() + " as hivresult, "
+        query = "select c.patientType, p.gender, count(*), hiv.result, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamMicroscopy", "exm") + " as micresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreatXray() + " as xrayresult "
-                + " from TbCase c join c.patient p "
-                + getHQLWhereBlock5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is not null "
-                + " and c.patientType is not null and p.gender is not null "
-                + " group by c.patientType, p.gender, col_3_0_ "
-                + " having (col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 or col_7_0_ like '1') and col_3_0_ is not null  ";
+                + " from TbCaseBD c join c.patient p join c.resHIV hiv "
+                + getHQLWhereBlock5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
+                + " group by c.patientType, p.gender, hiv.result "
+                + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 or col_7_0_ like '1'";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "3");
 
         // Extrapulmonary TB cases WITHOUT treatment registered - Bacteriologically or Clinically confirmed
-        query = "select c.patientType, p.gender, count(*), "
-                + getHQLSelectSubQLastHivResult() + " as hivresult, "
+        query = "select c.patientType, p.gender, count(*), hiv.result, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamMicroscopy", "exm") + " as micresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTRXray() + " as xrayresult "
-                + " from TbCase c join c.patient p "
-                + getHQLWhereBlock5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is null "
-                + " and c.patientType is not null and p.gender is not null "
-                + " group by c.patientType, p.gender, col_3_0_ "
-                + " having (col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 or col_7_0_ like '1') and col_3_0_ is not null ";
+                + " from TbCaseBD c join c.patient p join c.resHIV hiv "
+                + getHQLWhereBlock5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
+                + " group by c.patientType, p.gender, hiv.result "
+                + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 or col_7_0_ like '1' ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "3");
 	}

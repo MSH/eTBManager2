@@ -55,7 +55,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
      */
     protected String getHQLWhereBlock_3_4(){
         // cases has to be Tb and suspect - do not consider filters and has to be one of type of patients considered on TB 10
-        return " where c.classification = 0 and c.diagnosisType = 0 ";
+        return " where c.classification = 0 and c.diagnosisType = 0 and p.workspace.id = " + getWorkspace().getId();
     }
 
     /**
@@ -64,7 +64,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
      */
     protected String getHQLWhereBlock5(){
         // cases has to be Tb and confirmed and has to be one of type of patients considered on TB 10
-        return super.getHQLWhere() + getWhereClausePatientTypes() + " and c.classification = 0 and c.diagnosisType = 1 ";
+        return " where c.classification = 0 and c.diagnosisType = 1 and p.workspace.id = " + getWorkspace().getId() + getWhereClausePatientTypes();
     }
 
     /**
@@ -137,7 +137,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
     protected String getHQLSelectSubQLastHivResult(){
         return " (select hiv.result from ExamHIV hiv where hiv.tbcase.id = c.id "+
                 " and hiv.id = (select max (hiv2.id) from ExamHIV hiv2 where hiv2.tbcase.id = hiv.tbcase.id and hiv2.date = " +
-                "(select max(hiv3.date) from ExamHIV hiv3 where hiv3.tbcase.id = hiv2.tbcase.id))) ";
+                " (select max(hiv3.date) from ExamHIV hiv3 where hiv3.tbcase.id = hiv2.tbcase.id and (hiv3.date between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate})))) ";
     }
 
     /**
