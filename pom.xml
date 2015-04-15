@@ -489,6 +489,11 @@
 						<goals>
 							<goal>jmeter</goal>
 						</goals>
+						<configuration>
+							<propertiesUser>
+								<appname>${app.webcontext}</appname>
+							</propertiesUser>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
