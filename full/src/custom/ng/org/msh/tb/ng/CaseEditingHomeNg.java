@@ -6,11 +6,11 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseEditingHome;
-import org.msh.tb.cases.exams.ExamCultureHome;
-import org.msh.tb.cases.exams.ExamMicroscopyHome;
-import org.msh.tb.cases.exams.ExamXpertHome;
+import org.msh.tb.cases.exams.*;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.ExamXpert;
@@ -18,6 +18,9 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.*;
 import org.msh.tb.ng.entities.TbCaseNG;
 import org.msh.tb.ng.entities.enums.HIVPosition;
+import org.msh.validators.BeanValidator;
+import org.msh.validators.FacesMessagesBinder;
+import org.msh.validators.MessagesList;
 
 
 /**
@@ -29,9 +32,9 @@ import org.msh.tb.ng.entities.enums.HIVPosition;
 @Scope(ScopeType.CONVERSATION)
 public class CaseEditingHomeNg extends CaseEditingHome {
 
-    @In(create = true) ExamMicroscopyHome examMicroscopyHome;
-    @In(create = true) ExamXpertHome examXpertHome;
-    @In(create = true) ExamCultureHome examCultureHome;
+    @In(create = true) MicroscopyActions microscopyActions;
+    @In(create = true) XpertActions xpertActions;
+    @In(create = true) CultureActions cultureActions;
 
     boolean suspectValidationError;
     boolean tbCaseValidationError;
@@ -72,54 +75,81 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     * Validates suspect data, checking required fields and other rules
     */
     private boolean validateSuspectData(){
-        suspectValidationError = true;
         TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
-        ExamMicroscopy examMicroscopy = examMicroscopyHome.getInstance();
-        ExamXpert examXpert = examXpertHome.getInstance();
-        ExamCulture examCulture= examCultureHome.getInstance();
+
+//        ExamMicroscopy examMicroscopy = examMicroscopyHome.getInstance();
+//        ExamXpert examXpert = examXpertHome.getInstance();
+//        ExamCulture examCulture= examCultureHome.getInstance();
+
+        boolean valid = true;
+
+        if (microscopyActions.getInstance().getResult() != null) {
+            microscopyActions.getInstance().setTbcase(caseHome.getInstance());
+            valid = valid && microscopyActions.validate();
+        }
+
+        if (cultureActions.getInstance().getResult() != null) {
+            cultureActions.getInstance().setTbcase(caseHome.getInstance());
+            valid = valid && cultureActions.validate();
+        }
+
+        if (xpertActions.getInstance().getResult() != null) {
+            xpertActions.getInstance().setTbcase(caseHome.getInstance());
+            valid = valid && xpertActions.validate();
+        }
 
         //Validates Required fields - begin
         //patient and case data
+/*
         if(!validateRequired(tbcase.getPatient().getName(), "name")) suspectValidationError = false;
         if(!validateRequired(tbcase.getAge(), "edtage")) suspectValidationError = false;
         if(!validateRequired(tbcase.getPatient().getGender(), "gender")) suspectValidationError = false;
         if(!validateRequired(tbcase.getRegistrationDate(), "edtregdate")) suspectValidationError = false;
         if(!validateRequired(super.getTbunitselection().getAuselection().getSelectedUnit(), "cbselau")) suspectValidationError = false;
         if(!validateRequired(super.getTbunitselection().getSelected(), "cbunits")) suspectValidationError = false;
+*/
 
         //microscopy data
+/*
         if(examMicroscopy != null && examMicroscopy.getResult() != null) {
             if(!validateRequired(examMicroscopy.getDateCollected(), "datecollectedmic")) suspectValidationError = false;
             if(!validateRequired(examMicroscopy.getSampleType(), "sampletypemic")) suspectValidationError = false;
             if(!validateRequired(examMicroscopy.getDateRelease(), "datereleasemic")) suspectValidationError = false;
         }
+*/
 
         //expert data
+/*
         if(examXpert != null && examXpert.getResult() != null) {
             if(examXpert.getResult().equals(XpertResult.TB_DETECTED))
                 if(!validateRequired(examXpert.getRifResult(), "cbres2")) suspectValidationError = false;
 
             if(!validateRequired(examXpert.getDateCollected(), "datecollectedxpert")) suspectValidationError = false;
         }
+*/
 
         //culture data
+/*
         if(examCulture != null && examCulture.getResult() != null) {
             if(!validateRequired(examCulture.getDateCollected(), "datecollectedculture")) suspectValidationError = false;
             if(!validateRequired(examCulture.getSampleType(), "sampletypeculture")) suspectValidationError = false;
             if(!validateRequired(examCulture.getDateRelease(), "datereleaseculture")) suspectValidationError = false;
         }
+*/
 
         //HIV
+/*
         if(!validateRequired(tbcase.getHivPosition(), "hivresult")) suspectValidationError = false;
         if(tbcase.getHivPosition() != null && tbcase.getHivPosition().equals(HIVPosition.POSITIVE))
-            if(!validateRequired(tbcase.getHivPositionDetail(), "hivdetail")) suspectValidationError = false;
+            if(!validateRequired(tbcase.getHivPositionDetail(), "hivdetail")) valid = false;
         //Validates Required fields - end
 
         //Protect hiv data
         if(tbcase.getHivPosition() != null && (!tbcase.getHivPosition().equals(HIVPosition.POSITIVE)))
             tbcase.setHivPositionDetail(null);
+*/
 
-        return suspectValidationError;
+        return valid;
     }
 
     /*
@@ -142,6 +172,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
      */
     private String saveNewDRTBcase() {
 
+/*
         if(examMicroscopyHome.getInstance() != null && examMicroscopyHome.getInstance().getResult() != null
                 && !examMicroscopyHome.persist().equals("persisted"))
             return "error";
@@ -153,6 +184,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         if(examCultureHome.getInstance() != null && examCultureHome.getInstance().getResult() != null
                 && !examCultureHome.persist().equals("persisted"))
             return "error";
+*/
 
         facesMessages.clear();
         facesMessages.addFromResourceBundle(StatusMessage.Severity.INFO, "default.entity_created");
@@ -173,6 +205,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         tbcase.setSuspectClassification(tbcase.getClassification());
 
         // save the patient's data
+        patientHome.setTransactionLogActive(false);
         patientHome.persist();
 
         // get notification unit
@@ -194,6 +227,18 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         if (!caseHome.persist().equals("persisted"))
             return "error";
 
+        // save exams results
+        if (cultureActions.getInstance().getResult() != null) {
+            cultureActions.save();
+        }
+        if (microscopyActions.getInstance().getResult() != null) {
+            microscopyActions.save();
+        }
+
+        if (xpertActions.getInstance().getResult() != null) {
+            xpertActions.save();
+        }
+
         caseHome.setTransactionLogActive(false);
 
         caseHome.updateCaseTags();
@@ -209,7 +254,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         if (!validateSuspectData())
             return "error";
 
-        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+        TbCaseNG tbcase = (TbCaseNG) caseHome.getInstance();
 
         tbcase.setNotificationUnit(getTbunitselection().getSelected());
         tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
@@ -274,7 +319,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         if (!validateTbCaseData())
             return "error";
         //TODO
-        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+        TbCaseNG tbcase = (TbCaseNG) caseHome.getInstance();
 
         tbcase.setNotificationUnit(getTbunitselection().getSelected());
         tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
@@ -299,14 +344,12 @@ public class CaseEditingHomeNg extends CaseEditingHome {
      */
     @Transactional
     public String saveNew() {
-        String result;
-
         DiagnosisType diagType = caseHome.getInstance().getDiagnosisType();
         CaseClassification cla = caseHome.getInstance().getClassification();
 
         // is a suspect case ?
         if (diagType == DiagnosisType.SUSPECT) {
-            result = saveNewSuspect();
+            return saveNewSuspect();
         }
 
         // is a TB case ?
@@ -342,6 +385,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         if(!result.equals("persisted"))
             return "error";
 
+/*
         if(examMicroscopyHome.getInstance() != null && examMicroscopyHome.getInstance().getResult() != null
                 && !examMicroscopyHome.persist().equals("persisted"))
             return "error";
@@ -353,6 +397,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         if(examCultureHome.getInstance() != null && examCultureHome.getInstance().getResult() != null
                 && !examCultureHome.persist().equals("persisted"))
             return "error";
+*/
 
         facesMessages.clear();
         facesMessages.addFromResourceBundle(StatusMessage.Severity.INFO, "default.entity_created" , null);

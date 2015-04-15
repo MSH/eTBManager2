@@ -276,9 +276,21 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	 */
 	@Override
 	public String toString() {
-		Locale locale = LocaleSelector.instance().getLocale();
-		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-		return dateFormat.format(getDateCollected()) + " - " + getTbcase().getPatient().getFullName();
+		Date dt = getDateCollected();
+		TbCase tbcase = getTbcase();
+		String s = tbcase != null? tbcase.getPatient().getFullName() : null;
+
+		if (s == null) {
+			return super.toString();
+		}
+
+		if (dt != null) {
+			Locale locale = LocaleSelector.instance().getLocale();
+			DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+			s = dateFormat.format(dt) + " - " + s;
+		}
+
+		return s;
 	}
 
 	public TbCase getTbcase() {

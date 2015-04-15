@@ -2,7 +2,6 @@ package org.msh.tb.cases.exams;
 
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.LaboratoryExam;
 import org.msh.tb.laboratories.LaboratorySelection;
 import org.msh.tb.misc.EntityActions;

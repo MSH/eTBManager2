@@ -14,8 +14,6 @@ import org.msh.tb.entities.enums.RoleAction;
 import org.msh.validators.FacesMessagesBinder;
 import org.msh.validators.MessagesList;
 
-import javax.persistence.EntityManager;
-
 /**
  * Abstract class used by many action classes to handle entity operations in the
  * JSF used interface
@@ -182,15 +180,14 @@ public abstract class EntityActions<E> {
     public String save() {
         boolean bnew = !isManaged();
 
+        if (!validate()) {
+            return "validation-error";
+        }
+
         // if not created, it'll be created automatically (example, new entities)
         beginTxLog();
 
-        MessagesList lst = getServices().save(getInstance());
-
-        if (lst != null) {
-            bindFields().publish(lst.getMessages());
-            return "validation-error";
-        }
+        getServices().save(getInstance());
 
         // save the transaction log
         endTxLog();
@@ -204,6 +201,23 @@ public abstract class EntityActions<E> {
         }
 
         return "saved";
+    }
+
+
+    /**
+     * Validate the object being handled by the entity action
+     * @return true if there is no validation error
+     */
+    public boolean validate() {
+        MessagesList lst = getServices().validate(getInstance());
+
+        if (lst.size() == 0) {
+            return true;
+        }
+
+        bindFields().publish(lst.getMessages());
+
+        return false;
     }
 
     /**

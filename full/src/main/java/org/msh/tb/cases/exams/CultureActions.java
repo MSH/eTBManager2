@@ -3,7 +3,6 @@ package org.msh.tb.cases.exams;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamCulture;
-import org.msh.tb.misc.EntityActions;
 import org.msh.validators.FacesMessagesBinder;
 
 import javax.faces.model.SelectItem;

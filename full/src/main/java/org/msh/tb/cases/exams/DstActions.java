@@ -8,7 +8,6 @@ import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DstResult;
-import org.msh.tb.misc.EntityActions;
 import org.msh.validators.FacesMessagesBinder;
 
 import java.util.ArrayList;

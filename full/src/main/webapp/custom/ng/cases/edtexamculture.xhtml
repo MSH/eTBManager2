@@ -26,6 +26,10 @@
     
 <div class="form-content">
 		<s:decorate template="/custom/ng/cases/edtsample.xhtml">
+			<ui:param name="examHome" value="#{cultureActions}" />
+			<ui:param name="fieldsrequired" value="false"/>
+			<ui:param name="redasteriskforreq" value="true"/>
+			<ui:param name="ctrlprefix" value="cul"/>
 		</s:decorate>
 
 	<div class="paragraph">#{messages['cases.exams.results']}</div>
