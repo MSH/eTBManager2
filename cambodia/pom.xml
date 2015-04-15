@@ -15,8 +15,8 @@
 
 	<properties>
 		<workspace-context>KH</workspace-context>
-		<war.filename>etbmanager-kh</war.filename>
-		<country-extension>kh</country-extension>
+		<app.country>kh</app.country>
+		<app.country-extension>-kh</app.country-extension>
 	</properties>
 
 	<build>
@@ -57,7 +57,7 @@
 							<sources>
 								<source>../full/src/main/java</source>
 								<source>../full/src/client/java</source>
-								<source>../full/src/custom/${country-extension}</source>
+								<source>../full/src/custom/${app.country}</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -99,7 +99,7 @@
 						<resource>
 							<directory>../full/src/main/webapp</directory>
 							<includes>
-								<include>custom/${country-extension}/**/*</include>
+								<include>custom/${app.country}/**/*</include>
 							</includes>
 						</resource>
 					</webResources>

@@ -23,7 +23,7 @@
         <buildDate>${maven.build.timestamp}</buildDate>
         <workspace-context></workspace-context>
         <war.filename>etbmanager</war.filename>
-		<country-extension></country-extension>
+		<app.country-extension></app.country-extension>
 	</properties>
 
 	<developers>
@@ -47,6 +47,7 @@
 				<app.development>true</app.development>
                 <app.datasource>mdrtbDatasource</app.datasource>
 				<app.webcontext>etbmanager</app.webcontext>
+				<war.filename>etbmanager${app.country-extension}</war.filename>
 			</properties>
 		</profile>
 		<profile>
@@ -55,14 +56,17 @@
 				<app.development>false</app.development>
                 <app.datasource>mdrtbDatasource</app.datasource>
 				<app.webcontext>etbmanager</app.webcontext>
+				<war.filename>etbmanager${app.country-extension}</war.filename>
 			</properties>
 		</profile>
         <profile>
             <id>test</id>
             <properties>
+				<app.development>false</app.development>
                 <app.datasource>mdrtbDatasource-test${workspace-context}</app.datasource>
 				<app.development>false</app.development>
-				<app.webcontext>etbmanager-test${country-extension}</app.webcontext>
+				<app.webcontext>etbmanager-test${app.country-extension}</app.webcontext>
+				<war.filename>etbmanager-test${app.country-extension}</war.filename>
             </properties>
         </profile>
 	</profiles>
@@ -472,7 +476,7 @@
                 </configuration>
             </plugin>
 
-        </plugins>
+		</plugins>
 
 	</build>
 	<url>https://www.etbmanager.org</url>
