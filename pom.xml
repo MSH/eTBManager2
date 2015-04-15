@@ -490,6 +490,10 @@
 							<goal>jmeter</goal>
 						</goals>
 						<configuration>
+							<testResultsTimestamp>false</testResultsTimestamp>
+							<overrideRootLogLevel>DEBUG</overrideRootLogLevel>
+							<suppressJMeterOutput>false</suppressJMeterOutput>
+							<ignoreResultFailures>true</ignoreResultFailures>
 							<propertiesUser>
 								<appname>${app.webcontext}</appname>
 							</propertiesUser>
