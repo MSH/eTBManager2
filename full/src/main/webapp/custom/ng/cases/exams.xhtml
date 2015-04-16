@@ -312,7 +312,6 @@
 		</s:link>
 		<h2>#{messages['cases.examdst']}</h2>
 
-
 		<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examDSTTable.allResults}" />
 		<s:fragment rendered="#{not empty examDSTTable.allResults}">
 
@@ -382,14 +381,13 @@
 					</s:fragment>
 				</a:repeat>
 			</table>
-
 		</s:fragment>
-
 	</h:panelGroup>
 
 	<a:jsFunction name="remExamDST" action="#{examDSTHome.remove}" reRender="pnldst" ajaxSingle="true"  rendered="#{caseHome.canEditExams}">
 		<a:actionparam name="param1" assignTo="#{examDSTHome.id}" converter="javax.faces.Integer"/>
 	</a:jsFunction>
+
 
 	<div class="spacer" />
 	<h:panelGroup id="pnlXRay">
