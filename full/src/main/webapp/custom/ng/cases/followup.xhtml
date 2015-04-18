@@ -184,10 +184,10 @@
 	</s:link>
 	<h:panelGroup id="pnlmicroscopy">
 	<h2>#{messages['cases.exammicroscopy']}</h2>	
-		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResults}"><div class="content">
+		<s:div styleClass="region3" rendered="#{empty examMicroscopyHome.allResultsChronologicallyOrdered}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<h:dataTable value="#{examMicroscopyHome.allResults}" var="r" rendered="#{not empty examMicroscopyHome.allResults}" 
+		<h:dataTable value="#{examMicroscopyHome.allResultsChronologicallyOrdered}" var="r" rendered="#{not empty examMicroscopyHome.allResults}"
 			width="100%" styleClass="table1" columnClasses="colb,colb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
@@ -268,10 +268,10 @@
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 	<h2>#{messages['cases.examxpert']}</h2>
-		<s:div styleClass="region3" rendered="#{empty examXpertHome.allResults}"><div class="content">
+		<s:div styleClass="region3" rendered="#{empty examXpertHome.allResultsChronologicallyOrdered}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<h:dataTable value="#{examXpertHome.allResults}" var="r" rendered="#{not empty examXpertHome.allResults}" width="100%" 
+		<h:dataTable value="#{examXpertHome.allResultsChronologicallyOrdered}" var="r" rendered="#{not empty examXpertHome.allResults}" width="100%"
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">
@@ -343,10 +343,10 @@
 		<span>#{messages['cases.details.newresult']}</span>
 	</s:link>
 	<h2>#{messages['cases.examculture']}</h2>
-		<s:div styleClass="region3" rendered="#{empty examCultureHome.allResults}"><div class="content">
+		<s:div styleClass="region3" rendered="#{empty examCultureHome.allResultsChronologicallyOrdered}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
+		<h:dataTable value="#{examCultureHome.allResultsChronologicallyOrdered}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%"
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">
@@ -420,10 +420,10 @@
 		</s:link>
 		<h2>#{messages['cases.examdst']}</h2>
 		
-		<s:div styleClass="region3" rendered="#{empty examDSTTable.allResults}"><div class="content">
+		<s:div styleClass="region3" rendered="#{empty examDSTTable.resultsCronologicallyOrdered}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<s:fragment rendered="#{not empty examDSTTable.allResults}">
+		<s:fragment rendered="#{not empty examDSTTable.resultsCronologicallyOrdered}">
 		<div>
 		<table class="table1" width="100%">
 		<tr>
@@ -512,10 +512,10 @@
 		</s:link>
 		<h2>#{messages['cases.examxray']}</h2>
 		
-		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResults}"><div class="content">
+		<s:div styleClass="region3" rendered="#{empty examXRayHome.allResultsChronologicallyOrdered}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<h:dataTable value="#{examXRayHome.allResults}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%" 
+		<h:dataTable value="#{examXRayHome.allResultsChronologicallyOrdered}" var="r" rendered="#{not empty examXRayHome.allResults}" width="100%"
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">#{messages['global.month']}</f:facet>
@@ -571,10 +571,10 @@
 	</s:link>
 	#{messages['cases.examhiv']}</h2>
 	<h:panelGroup id="pnlhiv">
-		<s:div styleClass="region3" rendered="#{empty examHIVHome.allResults}"><div class="content">
+		<s:div styleClass="region3" rendered="#{empty examHIVHome.allResultsChronologicallyOrdered}"><div class="content">
 			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn"  />
 		</div></s:div>
-		<h:dataTable value="#{examHIVHome.allResults}" var="r" rendered="#{not empty examHIVHome.allResults}" 
+		<h:dataTable value="#{examHIVHome.allResultsChronologicallyOrdered}" var="r" rendered="#{not empty examHIVHome.allResults}"
 			width="100%" styleClass="table1" columnClasses="colcb,colcb,colb,colb,colb">
 			<h:column>
 				<f:facet name="header">
@@ -626,7 +626,7 @@
 
 	<div class="spacer" />
 
-	<s:link view="/custom/ng/cases/sideeffectsedt.xhtml" styleClass="button-alt"
+	<s:link view="/cases/sideeffectsedt.xhtml" styleClass="button-alt"
 			style="float:right;" rendered="#{caseHome.canEditCaseData}" onclick="disableButton(this)">
 		<f:param name="id" value="#{caseHome.id}" />
 		<span>#{messages['form.new']}</span>
@@ -640,7 +640,7 @@
 			<f:facet name="header">
 				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
 			</f:facet>
-			<s:link value="#{it.sideEffect.value.name}" view="/custom/br/cases/sideeffectsedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
+			<s:link value="#{it.sideEffect.value.name}" view="/cases/sideeffectsedt.xhtml" propagation="none" style="margin-right:20px;" rendered="#{caseHome.canEditCaseData}">
 				<f:param name="id" value="#{tbcase.id}"/>
 				<f:param name="idSideEffect" value="#{it.id}"/>
 			</s:link>

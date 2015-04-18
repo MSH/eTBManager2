@@ -54,6 +54,17 @@ public class ExamDSTTable {
 		return results;
 	}
 
+	public List<ResultItem> getResultsCronologicallyOrdered() {
+		List<ResultItem> lst = getAllResults();
+		Collections.sort(lst, new Comparator<ResultItem>() {
+			@Override
+			public int compare(ResultItem o1, ResultItem o2) {
+				return o1.getExamResult().getDateCollected().compareTo(o2.getExamResult().getDateCollected());
+			}
+		});
+
+		return lst;
+	}
 
 	/**
 	 * Return all results

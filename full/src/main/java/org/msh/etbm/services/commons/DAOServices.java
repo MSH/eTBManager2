@@ -6,6 +6,7 @@ import org.msh.validators.BeanValidator;
 import org.msh.validators.MessagesList;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Created by rmemoria on 6/4/15.
@@ -111,5 +112,13 @@ public abstract class DAOServices<E> {
      */
     public E find(Object id) {
         return App.getEntityManager().find(getEntityClass(), id);
+    }
+
+    /**
+     * Create query object to return a list of entities
+     * @return instance of {@link EntityQuery}
+     */
+    public EntityQuery createQuery() {
+        return new EntityQuery(getEntityClass());
     }
 }

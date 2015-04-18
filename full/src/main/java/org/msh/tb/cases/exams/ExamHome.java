@@ -10,7 +10,7 @@ import org.msh.tb.entities.TbCase;
 
 import java.util.List;
 
-public class ExamHome<E> extends WsEntityHome<E> {
+public abstract class ExamHome<E> extends WsEntityHome<E> {
 	private static final long serialVersionUID = -3507272066511042267L;
 	
 	private boolean orderByDateDec = true;
