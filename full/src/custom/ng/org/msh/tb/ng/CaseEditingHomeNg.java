@@ -59,6 +59,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         initialized = true;
     }
 
+
     /**
      * Initialize the caseHome object for editing
      */
@@ -71,15 +72,13 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         }
     }
 
-    /*
-    * Validates suspect data, checking required fields and other rules
-    */
-    private boolean validateSuspectData(){
-        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
 
-//        ExamMicroscopy examMicroscopy = examMicroscopyHome.getInstance();
-//        ExamXpert examXpert = examXpertHome.getInstance();
-//        ExamCulture examCulture= examCultureHome.getInstance();
+    /**
+     * Validate the exams declared in the form
+     * @return
+     */
+    private boolean validateExams() {
+        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
 
         boolean valid = true;
 
@@ -97,6 +96,31 @@ public class CaseEditingHomeNg extends CaseEditingHome {
             xpertActions.getInstance().setTbcase(caseHome.getInstance());
             valid = valid && xpertActions.validate();
         }
+
+        return valid;
+    }
+
+
+    /*
+    * Validates suspect data, checking required fields and other rules
+    */
+    private boolean validateSuspectData(){
+        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+
+        boolean valid = validateExams();
+
+        MessagesList lst = BeanValidator.validate(tbcase);
+        FacesMessagesBinder caseBinder = new FacesMessagesBinder();
+        caseBinder.bind("pacname", "name")
+                .bind("edtsecnumber", "securityNumber")
+                .bind("edtage", "age")
+                .bind("edtgender", "gender")
+                .bind("cbselau", "")
+                .bind("edtaddr", "notifAddress.address")
+                .bind("edtzip", "notifAddress.zipCode")
+                .bind("edtphone", "edtmob")
+                .bind("edtoccupation", "occupation")
+                .bind("edtmaritalstatus", "maritalStatus");
 
         //Validates Required fields - begin
         //patient and case data

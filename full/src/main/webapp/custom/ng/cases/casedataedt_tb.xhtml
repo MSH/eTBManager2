@@ -20,7 +20,7 @@
         <tr><td colspan="2">
             <s:decorate template="/layout/edit.xhtml">
                 <ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-                <h:inputText value="#{tbcaseng.patient.securityNumber}" style="width:120px;" maxlength="10"></h:inputText>
+                <h:inputText id="edtsecnumber" value="#{tbcaseng.patient.securityNumber}" style="width:120px;" maxlength="10"></h:inputText>
             </s:decorate>
         </td></tr>
         <tr><td>
@@ -35,7 +35,7 @@
             <s:decorate template="/layout/edit.xhtml">
                 <ui:define name="label">#{messages['Gender']}:</ui:define>
                 <ui:param name="redasterisk" value="#{true}" />
-                <h:selectOneMenu id="gender" value="#{tbcaseng.patient.gender}">
+                <h:selectOneMenu id="edtgender" value="#{tbcaseng.patient.gender}">
                     <s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
                     <s:convertEnum />
                 </h:selectOneMenu>
@@ -50,7 +50,7 @@
             <s:decorate template="/layout/edit.xhtml">
                 <ui:define name="label">#{messages['Address.completeAddress']}:</ui:define>
                 <ui:param name="redasterisk" value="true"/>
-                <h:inputTextarea id="address" value="#{tbcaseng.notifAddress.address}" style="width:300px;height:100px" maxlength="200"/>
+                <h:inputTextarea id="edtaddr" value="#{tbcaseng.notifAddress.address}" style="width:300px;height:100px" />
             </s:decorate>
         </td></tr>
 
@@ -64,7 +64,7 @@
         <tr><td>
             <s:decorate template="/layout/edit.xhtml">
                 <ui:define name="label">#{messages['Address.zipCode']}</ui:define>
-                <h:inputText value="#{tbcaseng.notifAddress.zipCode}" maxlength="20" />
+                <h:inputText id="edtzip" value="#{tbcaseng.notifAddress.zipCode}" maxlength="20" />
             </s:decorate>
         </td></tr>
 
@@ -105,25 +105,25 @@
         <tr><td>
             <s:decorate template="/layout/edit.xhtml">
                 <ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
-                <h:inputText value="#{tbcaseng.phoneNumber}" />
+                <h:inputText id="edtphone" value="#{tbcaseng.phoneNumber}" />
             </s:decorate>
         </td><td>
             <s:decorate template="/layout/edit.xhtml">
                 <ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
-                <h:inputText value="#{tbcaseng.mobileNumber}" />
+                <h:inputText id="edtmob" value="#{tbcaseng.mobileNumber}" />
             </s:decorate>
         </td></tr>
         <tr><td>
             <s:decorate template="/layout/editfield.xhtml" >
                 <ui:define name="label">#{messages['TbField.OCCUPATION']}:</ui:define>
-                <ui:param name="id" value="occupation" />
+                <ui:param name="id" value="edtoccupation" />
                 <ui:param name="field" value="#{tbcaseng.occupation}" />
                 <ui:param name="list" value="#{fieldsQuery.occupations}" />
             </s:decorate>
         </td><td>
             <s:decorate template="/layout/editfield.xhtml" >
                 <ui:define name="label">#{messages['TbField.MARITAL_STATUS']}:</ui:define>
-                <ui:param name="id" value="maritalstatus" />
+                <ui:param name="id" value="edtmaritalstatus" />
                 <ui:param name="field" value="#{tbcaseng.maritalStatus}" />
                 <ui:param name="list" value="#{fieldsQuery.maritalStatus}" />
             </s:decorate>

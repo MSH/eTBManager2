@@ -5,6 +5,7 @@ import org.hibernate.validator.Future;
 import org.hibernate.validator.NotNull;
 import org.hibernate.validator.Past;
 import org.hibernate.validator.Size;
+import org.msh.validators.InnerValidation;
 import org.msh.validators.MessagesList;
 
 import javax.persistence.Column;
@@ -34,7 +35,7 @@ public class BeanValidatorImpl {
 
         MessagesList msgs = new MessagesListImpl();
 
-        validateFields(clazz, obj, msgs);
+        validateFields(clazz, obj, msgs, "");
 
         return msgs;
     }
@@ -45,16 +46,16 @@ public class BeanValidatorImpl {
      * @param obj the object containing the data to validate
      * @param msgs the list of validation messages
      */
-    private void validateFields(Class clazz, Object obj, MessagesList msgs) {
+    private void validateFields(Class clazz, Object obj, MessagesList msgs, String prefix) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field: fields) {
-            validateField(field, obj, msgs);
+            validateField(field, obj, msgs, prefix);
         }
         clazz = clazz.getSuperclass();
 
         // if there are parent classes, then check constraints there
         if ((clazz != null) && (clazz != Object.class)) {
-            validateFields(clazz, obj, msgs);
+            validateFields(clazz, obj, msgs, prefix);
         }
     }
 
@@ -64,7 +65,7 @@ public class BeanValidatorImpl {
      * @param obj
      * @param msgs
      */
-    private void validateField(Field field, Object obj, MessagesList msgs) {
+    private void validateField(Field field, Object obj, MessagesList msgs, String prefix) {
         String fname = field.getName();
         Object value = null;
         try {
@@ -81,22 +82,49 @@ public class BeanValidatorImpl {
             e.printStackTrace();
         }
 
-        if (!validateNotNull(field, value, msgs)) {
+        if (!validateNotNull(field, value, msgs, prefix)) {
             return;
         }
 
-        if (!validateSize(field, value, msgs)) {
+        if (!validateSize(field, value, msgs, prefix)) {
             return;
         }
 
-        if (!validateColumn(field, value, msgs)) {
+        if (!validateColumn(field, value, msgs, prefix)) {
             return;
         }
 
-        if (!validatePast(field, value, msgs)) {
+        if (!validatePast(field, value, msgs, prefix)) {
             return;
         }
-        validateFuture(field, value, msgs);
+        if (!validateFuture(field, value, msgs, prefix)) {
+            return;
+        }
+
+        checkInnerValidation(field, value, msgs, prefix);
+    }
+
+    /**
+     * Check if field is annotated with the {@link org.msh.validators.InnerValidation} annotation.
+     * If so, validate its properties too
+     * @param field
+     * @param value
+     * @param msgs
+     */
+    protected void checkInnerValidation(Field field, Object value, MessagesList msgs, String prefix) {
+        InnerValidation innerValidation = field.getAnnotation(InnerValidation.class);
+        if (innerValidation == null) {
+            return;
+        }
+
+        if (field.getClass().isPrimitive() || field.isEnumConstant()) {
+            return;
+        }
+
+        Class clazz = value.getClass();
+
+        String fpref = prefix + field.getName() + ".";
+        validateFields(clazz, value, msgs, fpref);
     }
 
     /**
@@ -106,14 +134,14 @@ public class BeanValidatorImpl {
      * @param msgs
      * @return
      */
-    protected boolean validateNotNull(Field field, Object value, MessagesList msgs) {
+    protected boolean validateNotNull(Field field, Object value, MessagesList msgs, String prefix) {
         NotNull notNull = field.getAnnotation(NotNull.class);
         if (notNull == null) {
             return true;
         }
 
         if (value == null) {
-            msgs.add(field.getName(), "javax.faces.component.UIInput.REQUIRED");
+            msgs.add(prefix + field.getName(), "javax.faces.component.UIInput.REQUIRED");
             return false;
         }
         return true;
@@ -126,7 +154,7 @@ public class BeanValidatorImpl {
      * @param msgs
      * @return
      */
-    protected boolean validateSize(Field field, Object value, MessagesList msgs) {
+    protected boolean validateSize(Field field, Object value, MessagesList msgs, String prefix) {
         if (value == null) {
             return true;
         }
@@ -143,7 +171,7 @@ public class BeanValidatorImpl {
                 String msg = "javax.faces.validator.LengthValidator.MINIMUM";
                 Object[] args = new Object[1];
                 args[0] = size.min();
-                msgs.add(field.getName(), msg, args);
+                msgs.add(prefix + field.getName(), msg, args);
                 return false;
             }
 
@@ -152,7 +180,7 @@ public class BeanValidatorImpl {
                 String msg = "javax.faces.validator.LengthValidator.MAXIMUM";
                 Object[] args = new Object[1];
                 args[0] = size.max();
-                msgs.add(field.getName(), msg, args);
+                msgs.add(prefix + field.getName(), msg, args);
                 return false;
             }
         }
@@ -167,7 +195,7 @@ public class BeanValidatorImpl {
      * @param msgs
      * @return
      */
-    protected boolean validateColumn(Field field, Object value, MessagesList msgs) {
+    protected boolean validateColumn(Field field, Object value, MessagesList msgs, String prefix) {
         if (value == null) {
             return true;
         }
@@ -182,7 +210,7 @@ public class BeanValidatorImpl {
                 String msg = "javax.faces.validator.LengthValidator.MAXIMUM";
                 Object[] args = new Object[1];
                 args[0] = col.length();
-                msgs.add(field.getName(), msg, args);
+                msgs.add(prefix + field.getName(), msg, args);
                 return false;
             }
         }
@@ -198,7 +226,7 @@ public class BeanValidatorImpl {
      * @param msgs
      * @return
      */
-    protected boolean validatePast(Field field, Object value, MessagesList msgs) {
+    protected boolean validatePast(Field field, Object value, MessagesList msgs, String prefix) {
         if (value == null) {
             return true;
         }
@@ -215,7 +243,7 @@ public class BeanValidatorImpl {
         Date dt = (Date) value;
 
         if (!(dt.before(new Date()))) {
-            msgs.add(field.getName(), "validator.past");
+            msgs.add(prefix + field.getName(), "validator.past");
             return false;
         }
 
@@ -229,7 +257,7 @@ public class BeanValidatorImpl {
      * @param msgs
      * @return
      */
-    protected boolean validateFuture(Field field, Object value, MessagesList msgs) {
+    protected boolean validateFuture(Field field, Object value, MessagesList msgs, String prefix) {
         if (value == null) {
             return true;
         }
@@ -246,7 +274,7 @@ public class BeanValidatorImpl {
         Date dt = (Date) value;
 
         if (!(dt.after(new Date()))) {
-            msgs.add(field.getName(), "validator.future");
+            msgs.add(prefix + field.getName(), "validator.future");
             return false;
         }
 

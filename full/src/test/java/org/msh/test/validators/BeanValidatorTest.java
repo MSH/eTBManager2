@@ -1,6 +1,7 @@
 package org.msh.test.validators;
 
 import org.junit.Test;
+import org.msh.test.validators.fixtures.Container;
 import org.msh.test.validators.fixtures.TestForm;
 import org.msh.utils.date.DateUtils;
 import org.msh.validators.BeanValidator;
@@ -11,6 +12,7 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -67,4 +69,35 @@ public class BeanValidatorTest {
         assertEquals("javax.faces.validator.LengthValidator.MAXIMUM", msg.getMessage());
     }
 
+
+    /**
+     * Test validation of objects inside objects using the @InnerValidation annotation
+     */
+    @Test
+    public void innerTest() {
+        Container c = new Container();
+        c.setId("myid");
+        MessagesList lst = BeanValidator.validate(c);
+        assertNotNull(lst);
+        assertEquals(1, lst.size());
+        ValidationMessage msg = lst.getByField("form");
+        assertNotNull(msg);
+
+        TestForm frm = new TestForm();
+        c.setForm(frm);
+        lst = BeanValidator.validate(c);
+        assertNotNull(lst);
+        assertEquals(1, lst.size());
+
+        msg = lst.getByField("form.email");
+        assertNotNull(msg);
+        assertEquals("form.email", msg.getField());
+
+        frm.setFutureDate(new Date());
+        lst = BeanValidator.validate(c);
+        assertNotNull(lst);
+        assertEquals(2, lst.size());
+        msg = lst.getByField("form.futureDate");
+        assertEquals("form.futureDate", msg.getField());
+    }
 }
