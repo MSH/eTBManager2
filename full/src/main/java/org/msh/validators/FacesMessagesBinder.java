@@ -29,6 +29,14 @@ public class FacesMessagesBinder {
     }
 
     /**
+     * Simple helper method to publish(List<ValidationMessage> msg)
+     * @param msgs
+     */
+    public void publish(MessagesList msgs) {
+        publish(msgs.getMessages());
+    }
+
+    /**
      * Publish the respective message to the control related to a field.
      * The message will be displayed to the control, if found
      * @param msgs

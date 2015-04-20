@@ -29,7 +29,7 @@
 		<s:decorate template="/layout/edit.xhtml">
 			<ui:define name="label">#{messages['Gender']}:</ui:define>
             <ui:param name="redasterisk" value="#{true}" />
-			<h:selectOneMenu id="gender" value="#{tbcase.patient.gender}" required="true">
+			<h:selectOneMenu id="edtgender" value="#{tbcase.patient.gender}" 	>
 				<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
 				<s:convertEnum />
 			</h:selectOneMenu>
@@ -47,7 +47,7 @@
 	<tr><td style="padding-bottom:10px;">
 		<s:decorate template="/layout/editfield.xhtml" >
 			<ui:define name="label">#{messages['TbField.SOURCE_REFERRAL']}:</ui:define>
-			<ui:param name="id" value="sr" />
+			<ui:param name="id" value="edtsr" />
 			<ui:param name="field" value="#{tbcase.sourceReferral}" />
 			<ui:param name="list" value="#{fieldsQuery.sourcesReferral}" />
 		</s:decorate>
@@ -62,9 +62,12 @@
         </s:decorate>
 
 		<div class="paragraph"><b>#{messages['TbCase.notificationUnit']}</b></div>
+
 		<s:decorate template="/layout/tbselection.xhtml" >
 			<ui:param name="tbunitselection" value="#{caseEditingHomeNg.tbunitselection}" />
             <ui:param name="redasterisk" value="true" />
+			<ui:param name="idcbunits" value="cbnotifunit" />
+			<ui:param name="required" value="true" />
 		</s:decorate>
 
 	</td></tr></table>
@@ -90,7 +93,6 @@
 		<div id="micdata" style="#{empty microscopyActions.instance.result? 'display:none': ''}">
 			<s:decorate template="/custom/ng/cases/edtsample.xhtml">
 				<ui:param name="examHome" value="#{microscopyActions}" />
-                <ui:param name="fieldsrequired" value="false"/>
                 <ui:param name="redasteriskforreq" value="true"/>
                 <ui:param name="ctrlprefix" value="mic"/>
                 <ui:param name="hassampletype" value="true" />
@@ -99,10 +101,10 @@
 			<div class="paragraph">#{messages['cases.exams.results']}</div>
 			<s:decorate template="/layout/dateedit.xhtml" >
 				<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
-				<ui:param name="redasterisk" value="true" />
 				<ui:param name="future" value="false" />
 				<ui:param name="datefield" value="#{microscopyActions.instance.dateRelease}" />
                 <ui:param name="edtid" value="micdtrelease"/>
+				<ui:param name="required" value="false" />
 			</s:decorate>
 
 			<div id="divmicafb">
@@ -131,7 +133,7 @@
             <ui:param name="redasterisk" value="#{true}" />
 
 			<h:selectOneMenu id="xpres" value="#{xpertActions.instance.result}"
-							 onchange="examResultChanged(this);xpertResultChanged2(this);">
+							 onchange="examResultChanged(this, 'xpertdata');xpertResultChanged2(this);">
 				<s:selectItems value="#{xpertActions.genexpertResults}"
 							   var="it"
 							   noSelectionLabel="#{messages['global.notdone']}"

@@ -7,6 +7,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.validators.MessagesList;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,9 +33,23 @@ public abstract class LabExamServices<E> extends DAOServices<E> {
             lst.add("dateRelease", "cases.exams.datereleasebeforecol");
         }
 
+        // by default, laboratory is required, but not marked in the model since
+        // it may not be desirable in some exams
+        if (isLaboratoryRequired() && exam.getLaboratory() == null) {
+            lst.addRequired("laboratory");
+        }
+
         return lst;
     }
 
+
+    /**
+     * Return true if the laboratory is a required field and must be validated
+     * @return
+     */
+    protected boolean isLaboratoryRequired() {
+        return true;
+    }
 
     /**
      * Return the results of the laboratory exam of a given case

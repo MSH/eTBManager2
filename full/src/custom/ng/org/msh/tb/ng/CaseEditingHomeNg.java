@@ -36,13 +36,11 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     @In(create = true) XpertActions xpertActions;
     @In(create = true) CultureActions cultureActions;
 
-    boolean suspectValidationError;
-    boolean tbCaseValidationError;
 
     /**
      * Initialize the caseHome object for editing
      */
-    public void initializeSuspectEditing() {
+    public void initializeEditing() {
         TbCase tbcase = caseHome.getInstance();
 
         if (getTbunitselection().getSelected() == null)
@@ -60,47 +58,6 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     }
 
 
-    /**
-     * Initialize the caseHome object for editing
-     */
-    public void initializeEditing() {
-        if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.SUSPECT))
-            initializeSuspectEditing();
-        else {
-            //TODO MY FRIEND
-            super.initializeEditing();
-        }
-    }
-
-
-    /**
-     * Validate the exams declared in the form
-     * @return
-     */
-    private boolean validateExams() {
-        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
-
-        boolean valid = true;
-
-        if (microscopyActions.getInstance().getResult() != null) {
-            microscopyActions.getInstance().setTbcase(caseHome.getInstance());
-            valid = valid && microscopyActions.validate();
-        }
-
-        if (cultureActions.getInstance().getResult() != null) {
-            cultureActions.getInstance().setTbcase(caseHome.getInstance());
-            valid = valid && cultureActions.validate();
-        }
-
-        if (xpertActions.getInstance().getResult() != null) {
-            xpertActions.getInstance().setTbcase(caseHome.getInstance());
-            valid = valid && xpertActions.validate();
-        }
-
-        return valid;
-    }
-
-
     /*
     * Validates suspect data, checking required fields and other rules
     */
@@ -110,17 +67,27 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         boolean valid = validateExams();
 
         MessagesList lst = BeanValidator.validate(tbcase);
-        FacesMessagesBinder caseBinder = new FacesMessagesBinder();
-        caseBinder.bind("pacname", "name")
-                .bind("edtsecnumber", "securityNumber")
-                .bind("edtage", "age")
-                .bind("edtgender", "gender")
-                .bind("cbselau", "")
-                .bind("edtaddr", "notifAddress.address")
-                .bind("edtzip", "notifAddress.zipCode")
-                .bind("edtphone", "edtmob")
-                .bind("edtoccupation", "occupation")
-                .bind("edtmaritalstatus", "maritalStatus");
+
+        // check age manually
+        if (tbcase.getAge() == null) {
+            lst.addRequired("age");
+        }
+
+        // check HIV result
+        if (tbcase.getHivPosition() == null) {
+            lst.addRequired("hivPosition");
+        }
+        else {
+            if ((tbcase.getHivPosition() != HIVPosition.UNKNOWN) && (tbcase.getHivPositionDetail() == null)) {
+                lst.addRequired("hivPositionDetail");
+            }
+        }
+
+        valid = valid && lst.size() == 0;
+
+        if (lst.size() > 0) {
+            createBinder().publish(lst);
+        }
 
         //Validates Required fields - begin
         //patient and case data
@@ -176,17 +143,47 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         return valid;
     }
 
+    /**
+     * Create object that will bind field messages to controls
+     * @return
+     */
+    protected FacesMessagesBinder createBinder() {
+        FacesMessagesBinder caseBinder = new FacesMessagesBinder();
+        caseBinder.bind("pacname", "patient.name")
+                .bind("edtsecnumber", "patient.securityNumber")
+                .bind("edtage", "age")
+                .bind("edtgender", "patient.gender")
+                .bind("edtregdate", "registrationDate")
+                .bind("cbnotifunit", "notificationUnit")
+                .bind("edtaddr", "notifAddress.address")
+                .bind("edtzip", "notifAddress.zipCode")
+                .bind("edtphone", "edtmob")
+                .bind("edtoccupation", "occupation")
+                .bind("edtsr", "sourceReferral")
+                .bind("edtmaritalstatus", "maritalStatus")
+                .bind("hivresult", "hivPosition")
+                .bind("hivdetail", "hivPositionDetail");
+
+        return caseBinder;
+    }
+
+
     /*
     * Validates TB case data, checking required fields and other rules
     */
     private boolean validateTbCaseData(){
-        tbCaseValidationError = validateSuspectData();
-        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+        boolean valid = validateExams();
 
-        if(!validateRequired(tbcase.getNotifAddress().getAddress(), "address")) tbCaseValidationError = false;
-        //TODO: falta verificar quais campos são required
+        TbCase tbcase = caseHome.getInstance();
 
-        return tbCaseValidationError;
+        MessagesList lst = BeanValidator.validate(tbcase);
+        valid = valid && lst.size() == 0;
+        if (lst.size() > 0) {
+            createBinder().publish(lst);
+            return false;
+        }
+
+        return valid;
     }
 
 
@@ -195,6 +192,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
      * @return
      */
     private String saveNewDRTBcase() {
+
 
 /*
         if(examMicroscopyHome.getInstance() != null && examMicroscopyHome.getInstance().getResult() != null
@@ -221,16 +219,9 @@ public class CaseEditingHomeNg extends CaseEditingHome {
      * @return
      */
     private String saveNewSuspect(){
-        if(!validateSuspectData())
-            return "error";
 
         TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
-
         tbcase.setSuspectClassification(tbcase.getClassification());
-
-        // save the patient's data
-        patientHome.setTransactionLogActive(false);
-        patientHome.persist();
 
         // get notification unit
         tbcase.setNotificationUnit(getTbunitselection().getSelected());
@@ -244,7 +235,17 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         if (tbcase.getState() == null)
             tbcase.setState(CaseState.WAITING_TREATMENT);
 
+        tbcase.getPatient().setWorkspace(caseHome.getWorkspace());
+
         updatePatientAge();
+
+        // validate data
+        if(!validateSuspectData())
+            return "error";
+
+        // save the patient's data
+        patientHome.setTransactionLogActive(false);
+        patientHome.persist();
 
         // treatment was defined ?
         caseHome.setTransactionLogActive(true);
@@ -432,6 +433,7 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     /**
      * set error to false if a validation error occours
      */
+/*
     public boolean validateRequired(Object o, String fieldid){
         if(o == null){
             facesMessages.addToControlFromResourceBundle(fieldid, "javax.faces.component.UIInput.REQUIRED");
@@ -445,4 +447,58 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         }
         return true;
     }
+*/
+
+    /**
+     * Validate the exams declared in the form
+     * @return
+     */
+    private boolean validateExams() {
+        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
+
+        boolean valid = true;
+
+        if (microscopyActions.getInstance().getResult() != null) {
+            microscopyActions.getInstance().setTbcase(caseHome.getInstance());
+            valid = microscopyActions.validate() && valid;
+        }
+
+        if (cultureActions.getInstance().getResult() != null) {
+            cultureActions.getInstance().setTbcase(caseHome.getInstance());
+            valid = cultureActions.validate() && valid;
+        }
+
+        if (xpertActions.getInstance().getResult() != null) {
+            xpertActions.getInstance().setTbcase(caseHome.getInstance());
+            valid = xpertActions.validate() && valid;
+        }
+
+        return valid;
+    }
+
+
+    /**
+     * Save exams, if result available. Before saving, the exams must be validated,
+     * otherwise an exception will be thrown
+     */
+    private void saveExams() {
+        if (microscopyActions.getInstance().getResult() != null) {
+            microscopyActions.getInstance().setTbcase(caseHome.getInstance());
+            microscopyActions.setShowMessages(false);
+            microscopyActions.save();
+        }
+
+        if (cultureActions.getInstance().getResult() != null) {
+            cultureActions.getInstance().setTbcase(caseHome.getInstance());
+            cultureActions.setShowMessages(false);
+            cultureActions.save();
+        }
+
+        if (xpertActions.getInstance().getResult() != null) {
+            xpertActions.getInstance().setTbcase(caseHome.getInstance());
+            xpertActions.setShowMessages(false);
+            xpertActions.save();
+        }
+    }
+
 }

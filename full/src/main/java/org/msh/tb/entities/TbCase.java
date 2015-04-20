@@ -7,6 +7,7 @@ import org.msh.etbm.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.*;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
+import org.msh.validators.InnerValidation;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -52,6 +53,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	@JoinColumn(name="PATIENT_ID")
 	@NotNull
 	@PropertyLog(logEntityFields=true)
+	@InnerValidation
 	private Patient patient;
 	
 	private Integer age;
@@ -90,6 +92,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="OWNER_UNIT_ID")
+	@NotNull
 	private Tbunit ownerUnit ;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
@@ -185,6 +188,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="NOTIF_ADMINUNIT_ID"))
 	})
 	@PropertyLog(messageKey="cases.details.addressnotif", operations={Operation.NEW})
+	@InnerValidation
 	private Address notifAddress;
 	
 	@Embedded
@@ -198,6 +202,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 		@AssociationOverride(name="adminUnit", joinColumns=@JoinColumn(name="CURR_ADMINUNIT_ID"))
 	})
 	@PropertyLog(messageKey="cases.details.addresscurr")
+	@InnerValidation
 	private Address currentAddress;
 	
 	@Column(length=50)

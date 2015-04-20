@@ -11,8 +11,7 @@
     <div id="divdtcollected">
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['PatientSample.dateCollected']}:</ui:define>
-    	<ui:param name="required" value="#{not empty fieldsrequired ? fieldsrequired : true}" />
-    	<ui:param name="future" value="true" /> 
+    	<ui:param name="future" value="true" />
     	<ui:param name="datefield" value="#{examHome.instance.dateCollected}" /> 
     	<ui:param name="checkDeathDate" value="true" />
         <ui:param name="redasterisk" value="#{not empty redasteriskforreq ? redasteriskforreq : false}"/>
@@ -23,8 +22,7 @@
 	<div id="divsample">
     <s:decorate template="/layout/edit.xhtml" rendered="#{not empty hassampletype ? hassampletype : false}">
     	<ui:define name="label">#{messages['PatientSample.sampleType']}:</ui:define>
-        <ui:param name="redasterisk" value="#{not empty redasteriskforreq ? redasteriskforreq : false}"/>
-    	<h:selectOneMenu id="#{ctrlprefix}sampletype" value="#{examHome.instance.sampleType}" required="#{not empty fieldsrequired ? fieldsrequired : true}">
+    	<h:selectOneMenu id="#{ctrlprefix}sampletype" value="#{examHome.instance.sampleType}" >
     		<s:selectItems value="#{sampletypes_ng}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -37,8 +35,10 @@
     </div>
 
     <s:decorate template="/layout/labselection.xhtml" >
-    	<ui:param name="required" value="#{not empty fieldsrequired ? fieldsrequired : true}" />
+    	<ui:param name="required" value="false" />
+        <ui:param name="redasterisk" value="true" />
     	<ui:param name="labselection" value="#{examHome.labselection}" />
+        <ui:param name="edtid" value="#{ctrlprefix}lab" />
     </s:decorate>
 
 

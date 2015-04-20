@@ -1,5 +1,6 @@
 package org.msh.tb.cases.exams;
 
+import org.msh.etbm.services.cases.exams.LabExamServices;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.LaboratoryExam;
@@ -25,7 +26,19 @@ public abstract class LabExamActions<E extends LaboratoryExam> extends EntityAct
         }
     }
 
+    /**
+     * Return the prefix used in the JSF controls
+     * @return
+     */
     public abstract String getControlPrefix();
+
+    @Override
+    public boolean validate() {
+        if (labselection != null) {
+            getInstance().setLaboratory(labselection.getSelected());
+        }
+        return super.validate();
+    }
 
     /**
      * Save the content of the form
@@ -72,7 +85,8 @@ public abstract class LabExamActions<E extends LaboratoryExam> extends EntityAct
      */
     public LaboratorySelection getLabselection() {
         if (labselection == null) {
-            labselection = new LaboratorySelection("miclabid");
+            String pre = getControlPrefix();
+            labselection = new LaboratorySelection(pre + "labid");
         }
         return labselection;
     }
