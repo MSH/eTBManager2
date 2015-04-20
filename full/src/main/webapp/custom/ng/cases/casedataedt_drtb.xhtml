@@ -404,7 +404,8 @@ function isPulmonary(cb) {
 	</div>
 	</s:fragment>
 
-<rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
+	<rich:jQuery selector="#addrChanged" query="change(function(){ showCurrAddress(this); })" />
+	<rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
 <script type="text/javascript">
 function showCurrAddress(cb) {
   if (cb.selectedIndex == 0)
@@ -412,7 +413,6 @@ function showCurrAddress(cb) {
   else jQuery('#curraddr').show(500);
 }
 </script>
-<rich:jQuery selector="#addrChanged" query="each(function(){ if (this.selectedIndex==0) jQuery('#curraddr').hide(); })" />
 
 		
 </ui:composition>
