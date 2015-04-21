@@ -31,6 +31,11 @@
 				<param name="id" value="#{caseHome.id}"/>
 			</redirect>
 		</rule>
+		<rule if-outcome="case-closed">
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}" />
+			</redirect>
+		</rule>
 		<rule if-outcome="cancelcaseediting">
 			<redirect view-id="/cases/casedata.xhtml">
 				<param name="id" value="#{caseHome.id}"/>

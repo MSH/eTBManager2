@@ -19,6 +19,11 @@
 				<param name="id" value="#{caseHome.id}" />
 			</redirect>
 		</rule>
+		<rule if-outcome="case-closed">
+			<redirect view-id="/cases/casedata.xhtml">
+				<param name="id" value="#{caseHome.id}" />
+			</redirect>
+		</rule>
 		<rule if-outcome="validated">
 			<redirect view-id="/custom/ng/cases/casedata.xhtml">
 				<message>#{messages['cases.validate.success']}</message>

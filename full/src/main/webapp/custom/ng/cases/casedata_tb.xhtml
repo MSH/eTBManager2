@@ -65,7 +65,7 @@
 					</h:panelGroup>
 				</rich:tab>
 
-				<rich:tab label="#{messages['cases.outcome']}" id="tab7" ontabenter="updateTab(7)">
+				<rich:tab label="#{messages['cases.outcome']}" id="tab7" ontabenter="updateTab(7)" rendered="#{caseHome.canClose}">
 					<h:panelGroup id="pnltab7">
 						<s:decorate template="/custom/ng/cases/outcome.xhtml" rendered="#{caseFilters.caseTab==7}"/>
 					</h:panelGroup>
