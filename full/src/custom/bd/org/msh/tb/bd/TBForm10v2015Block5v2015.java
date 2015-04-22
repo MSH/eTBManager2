@@ -54,7 +54,7 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having (col_4_0_ not in (1,2,3,4,5) or col_4_0_ is null) and (col_5_0_ not in (1,2,3,4,5) or col_5_0_ is null) and (col_6_0_ != 5 or col_6_0_ is null) "
-                + " and col_7_0_ like '1' ";
+                + " and (col_7_0_ like '1' or col_7_0_ like '3' or col_7_0_ like '4') ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "2");
 
@@ -69,7 +69,7 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having (col_4_0_ not in (1,2,3,4,5) or col_4_0_ is null) and (col_5_0_ not in (1,2,3,4,5) or col_5_0_ is null) and (col_6_0_ != 5 or col_6_0_ is null) "
-                + " and col_7_0_ like '1' ";
+                + " and (col_7_0_ like '1' or col_7_0_ like '3' or col_7_0_ like '4') ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "2");
 
