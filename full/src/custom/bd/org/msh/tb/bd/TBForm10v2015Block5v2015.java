@@ -23,7 +23,7 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult "
                 + " from TbCaseBD c join c.patient p join c.resHIV hiv "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereBlock_2_5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 ";
@@ -36,7 +36,7 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamXpert", "exe") + " as expresult "
                 + " from TbCaseBD c join c.patient p join c.resHIV hiv "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereBlock_2_5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 ";
@@ -50,7 +50,7 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreatXray() + " as xrayresult "
                 + " from TbCaseBD c join c.patient p join c.resHIV hiv "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereBlock_2_5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having (col_4_0_ not in (1,2,3,4,5) or col_4_0_ is null) and (col_5_0_ not in (1,2,3,4,5) or col_5_0_ is null) and (col_6_0_ != 5 or col_6_0_ is null) "
@@ -65,7 +65,7 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTRXray() + " as xrayresult "
                 + " from TbCaseBD c join c.patient p join c.resHIV hiv "
-                + getHQLWhereBlock5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereBlock_2_5() + " and c.infectionSite = 0 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having (col_4_0_ not in (1,2,3,4,5) or col_4_0_ is null) and (col_5_0_ not in (1,2,3,4,5) or col_5_0_ is null) and (col_6_0_ != 5 or col_6_0_ is null) "
@@ -73,6 +73,8 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "2");
 
+        /*AFTER A CONFERENCE CALL WITH bd TEAM THEY SAID THAT ON THE EXTRA-PULMONARY SECTION I DON'T NEED TO CHECK THE RULES
+        FOR CLINICALLY DIAG OR BACTERIOLOGICALLY CONFIRMED
         // Extrapulmonary TB cases WITH treatment registered - Bacteriologically or Clinically confirmed
         query = "select c.patientType, p.gender, count(*), hiv.result, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamMicroscopy", "exm") + " as micresult, "
@@ -80,7 +82,7 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreatXray() + " as xrayresult "
                 + " from TbCaseBD c join c.patient p join c.resHIV hiv "
-                + getHQLWhereBlock5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereBlock_2_5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is not null and c.patientType is not null and p.gender is not null "
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 or col_7_0_ like '1'";
@@ -94,10 +96,20 @@ public class TBForm10v2015Block5v2015 extends TBForm10v2015 {
                 + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedNTRXray() + " as xrayresult "
                 + " from TbCaseBD c join c.patient p join c.resHIV hiv "
-                + getHQLWhereBlock5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
+                + getHQLWhereBlock_2_5() + " and c.infectionSite = 1 and c.treatmentPeriod.iniDate is null and c.patientType is not null and p.gender is not null "
                 + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
                 + " group by c.patientType, p.gender, hiv.result "
                 + " having col_4_0_ in (1,2,3,4,5) or col_5_0_ in (1,2,3,4,5) or col_6_0_ = 5 or col_7_0_ like '1' ";
+        result = entityManager.createQuery(query).getResultList();
+        allocateValuesOnFields(result, "3");
+        */
+
+        // Extrapulmonary TB cases
+        query = "select c.patientType, p.gender, count(*), hiv.result "
+                + " from TbCaseBD c join c.patient p join c.resHIV hiv "
+                + getHQLWhereBlock_2_5() + " and c.infectionSite = 1 and c.patientType is not null and p.gender is not null "
+                + getHQLWhereExamClause("ExamHIV", "hiv", "date") + " and hiv.result is not null "
+                + " group by c.patientType, p.gender, hiv.result ";
         result = entityManager.createQuery(query).getResultList();
         allocateValuesOnFields(result, "3");
 	}

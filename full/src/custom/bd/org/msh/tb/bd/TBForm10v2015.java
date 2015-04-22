@@ -40,10 +40,10 @@ public abstract class TBForm10v2015 extends Indicator2D{
     };
 
     /**
-     * This HQL where clause is used in many queries in blocks 1 and 2, so it was encapsulated on a method.
-     * @return HQL where clause for block 1 and 2
+     * This HQL where clause is used in many queries in block 1, so it was encapsulated on a method.
+     * @return HQL where clause for block 1
      */
-    protected String getHQLWhereBlock_1_2(){
+    protected String getHQLWhereBlock1(){
         // cases has to be Tb and confirmed and has to be one of type of patients considered on TB 10
         return super.getHQLWhere() + getWhereClausePatientTypes() + " and ar.workspace.id = " + getWorkspace().getId().toString() +
                 " and (c.age >= ar.iniAge and c.age <= ar.endAge) and c.classification = 0 and c.diagnosisType = 1 ";
@@ -59,12 +59,12 @@ public abstract class TBForm10v2015 extends Indicator2D{
     }
 
     /**
-     * This HQL where clause is used in many queries in block 5, so it was encapsulated on a method.
-     * @return HQL where clause for block 5
+     * This HQL where clause is used in many queries in blocks 1 and 2, so it was encapsulated on a method.
+     * @return HQL where clause for block 2 and 5
      */
-    protected String getHQLWhereBlock5(){
+    protected String getHQLWhereBlock_2_5(){
         // cases has to be Tb and confirmed and has to be one of type of patients considered on TB 10
-        return " where c.classification = 0 and c.diagnosisType = 1 and p.workspace.id = " + getWorkspace().getId() + getWhereClausePatientTypes();
+        return super.getHQLWhere() + " and c.classification = 0 and c.diagnosisType = 1 " + getWhereClausePatientTypes();
     }
 
     /**
