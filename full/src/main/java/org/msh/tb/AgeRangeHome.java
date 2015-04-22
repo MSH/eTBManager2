@@ -46,7 +46,7 @@ public class AgeRangeHome extends EntityHomeEx<AgeRange> {
 		AgeRange range = getInstance();
 		
 		// check ranges
-		if (range.getIniAge() >= range.getEndAge()) {
+		if (range.getIniAge() != 0 && range.getEndAge() != 0 && range.getIniAge() >= range.getEndAge()) {
 			facesMessages.addToControlFromResourceBundle("iniage", "admin.ageranges.msgerror1");
 			return "error";
 		}
@@ -68,7 +68,7 @@ public class AgeRangeHome extends EntityHomeEx<AgeRange> {
 		
 		String ret = super.persist();
 		if ((ret.equals("persisted")) && (newInstance) && (items != null))
-			items.add(instance);
+			createItems();
 		
 		return ret;
 	}
@@ -97,6 +97,7 @@ public class AgeRangeHome extends EntityHomeEx<AgeRange> {
 				if ((range.getIniAge() >= instance.getIniAge()) && 
 					(range.getEndAge() <= instance.getEndAge())) {
 					getEntityManager().remove(range);
+                    ages.remove(range);
 					index--;
 				}
 				else
@@ -108,6 +109,7 @@ public class AgeRangeHome extends EntityHomeEx<AgeRange> {
 					AgeRange aux = new AgeRange();
 					aux.setIniAge(instance.getEndAge() + 1);
 					aux.setEndAge(end);
+                    aux.setWorkspace(getWorkspace());
 					getEntityManager().persist(aux);
 					ages.add(aux);
 				}
