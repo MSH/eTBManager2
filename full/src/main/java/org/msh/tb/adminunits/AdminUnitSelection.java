@@ -76,6 +76,9 @@ public class AdminUnitSelection {
 
 	protected void initializeAddrLevel() {
 		Workspace defaultWorkspace = (Workspace)Component.getInstance("defaultWorkspace", true);
+		if (defaultWorkspace == null) {
+			throw new RuntimeException("No default workspace found");
+		}
 		patientAddrRequiredLevels = defaultWorkspace.getPatientAddrRequiredLevels(); 		
 	}
 

@@ -50,7 +50,6 @@ public class CaseRegimenHome {
 	 * used to indicate if any outer period of treatment will be preserved or erased
 	 * @param iniDate initial date of the regimen to be applied to the case
 	 * @param endDate final date of the regimen. If not informed, the end of the regimen will be considered
-	 * @param useDefaultDoses if true, the default doses specified in the regimen will be used
 	 */
 	public void applyRegimen(Date iniDate, Date endDate) {
 		if (regimen == null)
