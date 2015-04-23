@@ -38,11 +38,11 @@ public class TBForm10v2015Block3v2015 extends TBForm10v2015 {
             }
         }
 
-        // TB suspects with POSITIVE microscopy exams registered - consider dateRelease
+        // TB suspects with POSITIVE microscopy exams registered - consider dateCollected
         query = "select p.gender, count(*) "
                 + " from TbCaseBD c join c.patient p join c.examsMicroscopy exm "
                 + getHQLWhereBlock_3_4()
-                + getHQLWhereExamClause("ExamMicroscopy", "exm", "dateRelease")
+                + getHQLWhereExamClause("ExamMicroscopy", "exm", "dateCollected")
                 + " and exm.result in (1,2,3,4,5) "
                 + " group by p.gender ";
         result = entityManager.createQuery(query).getResultList();
