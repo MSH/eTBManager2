@@ -26,7 +26,7 @@ public class TBForm10v2015Block2v2015 extends TBForm10v2015 {
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamCulture", "exc") + " as culresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult, "
                 + getHQLSelectSubQBacteriologicallyConfirmedWithTreatXray() + " as xrayresult "
-                + " from TbCaseBD c, AgeRange ar join c.patient p "
+                + " from TbCaseBD c join c.patient p "
                 + getHQLWhereBlock_2_5() + " and c.treatmentPeriod.iniDate is not null and c.infectionSite = 0 "
                 + " and c.patientType is not null and p.gender is not null " //Block 1 is considering only cases with this fields not null. Need to maintain this condition to the total values be the same
                 + " group by c.patientRefToFv "
