@@ -19,7 +19,6 @@ public class ExamCulture extends LaboratoryExam implements Serializable {
 	private static final long serialVersionUID = 1470269499087718301L;
 
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
-	@NotNull
 	private CultureResult result;
 
 	@PropertyLog(operations={Operation.NEW})

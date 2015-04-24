@@ -28,7 +28,8 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['cases.details.result']}:
     	</ui:define>
-    	<h:selectOneMenu id="cbres" value="#{examGenexpert.result}" required="true" onchange="examResultChanged(this)">
+        <ui:param name="redasterisk" value="#{true}"/>
+    	<h:selectOneMenu id="resultfield" value="#{examGenexpert.result}" required="false" onchange="examResultChanged(this)">
     		<s:selectItems value="#{examXpertHome.genexpertResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
     	</h:selectOneMenu>

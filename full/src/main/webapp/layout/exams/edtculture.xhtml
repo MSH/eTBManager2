@@ -25,7 +25,8 @@
 
         <s:decorate template="/layout/edit.xhtml" >
             <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
-            <h:selectOneMenu id="cbres" value="#{examCulture.result}" required="true" onchange="examResultChanged(this);">
+            <ui:param name="redasterisk" value="#{true}" />
+            <h:selectOneMenu id="resultfield" value="#{examCulture.result}" required="false" onchange="examResultChanged(this);">
                 <s:selectItems value="#{cultureResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
                 <s:convertEnum />
             </h:selectOneMenu>

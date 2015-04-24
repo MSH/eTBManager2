@@ -13,6 +13,7 @@ import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.entities.enums.ExamStatus;
 import org.msh.tb.resistpattern.ResistancePatternService;
 
 import javax.persistence.Query;
@@ -179,7 +180,16 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	@Override
 	@End(beforeRedirect=true)
 	public String persist() {
-		
+
+        if(!getInstance().getStatus().equals(ExamStatus.PERFORMED)){
+            getInstance().setComments(null);
+            getInstance().setDateRelease(null);
+            getInstance().setMethod(null);
+            getInstance().setResults(new ArrayList<ExamDSTResult>());
+
+            return persistWithoutValidation();
+        }
+
 		if(!validateAndPrepareFields())
 			return "error";
 		

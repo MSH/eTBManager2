@@ -1,10 +1,13 @@
 package org.msh.tb.cases.exams;
 
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.faces.FacesMessages;
 import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.enums.CultureResult;
+import org.msh.tb.entities.enums.ExamStatus;
 
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
@@ -17,7 +20,9 @@ public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 	private static final long serialVersionUID = -5720233346817646475L;
 
 	private List<SelectItem> numColonies;
-	
+    @In
+    FacesMessages facesMessages;
+
 	@Factory("examCulture")
 	public ExamCulture getExamCulture() {
 		return getInstance();
@@ -29,7 +34,18 @@ public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 		ExamCulture exam = getInstance();
 		if (exam.getResult() != CultureResult.POSITIVE)
 			exam.setNumberOfColonies(null);
-		
+
+        if(exam.getStatus().equals(ExamStatus.PERFORMED) && exam.getResult() == null){
+            facesMessages.addToControlFromResourceBundle("resultfield", "javax.faces.component.UIInput.REQUIRED");
+            return "error";
+        }else if(!exam.getStatus().equals(ExamStatus.PERFORMED)){
+            exam.setResult(null);
+            exam.setMethod(null);
+            exam.setDateRelease(null);
+            exam.setComments(null);
+            exam.setNumberOfColonies(null);
+        }
+
 		return super.persist();
 	}
 

@@ -3,11 +3,13 @@ package org.msh.tb.cases.exams;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.etbm.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamXpert;
+import org.msh.tb.entities.enums.ExamStatus;
 import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.entities.enums.XpertRifResult;
 import org.msh.tb.resistpattern.ResistancePatternService;
@@ -17,6 +19,9 @@ import org.msh.tb.resistpattern.ResistancePatternService;
 @Scope(ScopeType.EVENT)
 public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 	private static final long serialVersionUID = -1014269108674534236L;
+
+    @In
+    FacesMessages facesMessages;
 
 	private static final XpertResult results[] = {
         XpertResult.TB_DETECTED,
@@ -35,7 +40,17 @@ public class ExamXpertHome extends LaboratoryExamHome<ExamXpert> {
 	@Override
 	public String persist() {
 		ExamXpert exam = getInstance();
-		
+
+        if(exam.getStatus().equals(ExamStatus.PERFORMED) && exam.getResult() == null){
+            facesMessages.addToControlFromResourceBundle("resultfield", "javax.faces.component.UIInput.REQUIRED");
+            return "error";
+        }else if(!exam.getStatus().equals(ExamStatus.PERFORMED)){
+            exam.setResult(null);
+            exam.setDateRelease(null);
+            exam.setComments(null);
+            exam.setRifResult(null);
+        }
+
 		if (!XpertResult.TB_DETECTED.equals( exam.getResult() ))
 			exam.setRifResult(null);
 		else {
