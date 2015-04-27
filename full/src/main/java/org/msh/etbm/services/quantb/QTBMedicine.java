@@ -1,4 +1,4 @@
-package org.msh.tb.webservices.quantb;
+package org.msh.etbm.services.quantb;
 
 /**
  * Created by ricardo on 09/12/14.

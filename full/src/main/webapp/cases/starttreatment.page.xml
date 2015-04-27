@@ -10,7 +10,7 @@
 		<rule if="#{not caseHome.managed}">
 			<redirect view-id="/cases/index.xhtml" />
 		</rule>
-		
+
 		<rule if="#{not caseHome.canStartTreatment}">
 			<end-conversation/>
 			<redirect view-id="/cases/casedata.xhtml">

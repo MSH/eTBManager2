@@ -79,7 +79,7 @@ public class AdminUnitSelection {
 		if (defaultWorkspace == null) {
 			throw new RuntimeException("No default workspace found");
 		}
-		patientAddrRequiredLevels = defaultWorkspace.getPatientAddrRequiredLevels(); 		
+		patientAddrRequiredLevels = defaultWorkspace.getPatientAddrRequiredLevels();
 	}
 
 	/**

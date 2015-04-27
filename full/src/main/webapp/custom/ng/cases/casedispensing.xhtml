@@ -41,6 +41,19 @@
     </s:decorate>
     
 	<h:outputText value="#{messages['cases.disp.types']}" />
+		<div style="float:right">
+			<h:outputText value="#{messages['form.selectall']}:" />
+			<a href="#" style="background:#f0f0f0;border:1px solid #c0c0c0;padding-left:6px;padding-right:6px;width:50px;margin:1px;" onclick="selectAll('X'); return false;">X</a>
+			<a href="#" style="background:#f0f0f0;border:1px solid #c0c0c0;padding-left:6px;padding-right:6px;width:50px;margin:1px;" onclick="selectAll('N'); return false;">N</a>
+			<a href="#" style="background:#f0f0f0;border:1px solid #c0c0c0;padding-left:6px;padding-right:6px;width:50px;margin:1px;" onclick="selectAll('O'); return false;">O</a>
+		</div>
+		<script type="text/javascript">
+			<!--
+			function selectAll(value) {
+				jQuery("#tbldays select").each(function(){ jQuery(this).val(value) });
+			}
+			-->
+		</script>
 
     <h:panelGroup id="pnlcalend">
     <table id="tbldays" width="450px" class="table1">

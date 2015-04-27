@@ -192,7 +192,6 @@ public class ForecastingCalculation {
 
 	/**
 	 * Calculate the forecasting for an specific month of the year
-	 * @param monthIndex
 	 */
 	protected void calculate() {
 		createPeriods();

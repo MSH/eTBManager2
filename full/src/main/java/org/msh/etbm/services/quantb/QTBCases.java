@@ -1,4 +1,4 @@
-package org.msh.tb.webservices.quantb;
+package org.msh.etbm.services.quantb;
 
 /**
  * Created by ricardo on 09/12/14.
@@ -7,6 +7,7 @@ public class QTBCases {
     private int month;
     private int year;
     private Integer regimenId;
+    private Integer medicineId;
     private int numCases;
 
     public int getMonth() {
@@ -39,5 +40,13 @@ public class QTBCases {
 
     public void setNumCases(int numCases) {
         this.numCases = numCases;
+    }
+
+    public Integer getMedicineId() {
+        return medicineId;
+    }
+
+    public void setMedicineId(Integer medicineId) {
+        this.medicineId = medicineId;
     }
 }

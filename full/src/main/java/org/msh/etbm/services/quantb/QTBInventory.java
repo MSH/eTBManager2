@@ -1,4 +1,4 @@
-package org.msh.tb.webservices.quantb;
+package org.msh.etbm.services.quantb;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +12,6 @@ public class QTBInventory {
     private String manufacturer;
     private Date expiryDate;
     private Integer quantity;
-    private List<QTBOrder> orders;
 
 
     public Integer getMedicineId() {
@@ -53,13 +52,5 @@ public class QTBInventory {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public List<QTBOrder> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<QTBOrder> orders) {
-        this.orders = orders;
     }
 }

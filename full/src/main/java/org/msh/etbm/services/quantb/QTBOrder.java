@@ -1,4 +1,4 @@
-package org.msh.tb.webservices.quantb;
+package org.msh.etbm.services.quantb;
 
 import java.util.Date;
 

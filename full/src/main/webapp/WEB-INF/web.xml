@@ -76,7 +76,7 @@
 
     <servlet>
         <servlet-name>QuantbService</servlet-name>
-        <servlet-class>org.msh.tb.webservices.quantb.QuantbService</servlet-class>
+        <servlet-class>org.msh.etbm.services.quantb.QuantbServices</servlet-class>
     </servlet>
 
     <servlet-mapping>

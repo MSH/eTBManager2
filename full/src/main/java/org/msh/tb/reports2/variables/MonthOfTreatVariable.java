@@ -30,6 +30,9 @@ public class MonthOfTreatVariable extends VariableImpl {
 	 */
 	@Override
 	public Object createKey(Object values) {
+		if (values == null) {
+			return 0L;
+		}
 		Long val = ((Long)values) + 1;
 		if (val > 36)
 			val = 37L;

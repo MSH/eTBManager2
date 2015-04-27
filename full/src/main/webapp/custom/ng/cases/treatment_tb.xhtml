@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+				xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+		<s:div rendered="#{not caseHome.inTreatment}" style="margin-left:30px;margin-bottom: 20px;margin-top:20px;">
+
+			<div id="tnotstarted" >
+				<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" />
+				<div style="padding-top:20px;">
+					<s:link onclick="toggleStartTreatPanel(true);return false;"
+							rendered="#{caseHome.canEditTreatment}"
+							styleClass="button-alt">
+						<f:param name="id" value="#{caseHome.id}" />
+						<span>#{messages['cases.details.starttreatment']}</span>
+					</s:link>
+				</div>
+			</div>
+
+			<div id="seltttype" style="display:none;">
+				<h:form id="formtreat">
+
+					<h:panelGroup id="pnlstarttreat">
+						<div class="header">
+							<h1>#{messages['cases.details.starttreatment']}</h1>
+						</div>
+						<div class="content" style="padding:20px 0">
+							<ui:param name="labelstyle" value="width:200px" />
+
+							<s:decorate template="/layout/dateedit.xhtml" >
+								<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+								<ui:param name="required" value="true" />
+								<ui:param name="future" value="true" />
+								<ui:param name="datefield" value="#{startTreatmentNG.startDate}" />
+								<ui:param name="edtid" value="inidateedt" />
+								<ui:param name="checkDeathDate" value="true" />
+							</s:decorate>
+
+							<s:decorate template="/layout/edit.xhtml">
+								<ui:define name="label">#{messages['regimens.standard']}:</ui:define>
+								<h:selectOneMenu value="#{startTreatmentNG.regimen}" required="true">
+									<s:selectItems value="#{caseRegimenHome.availableRegimens}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+									<s:convertEntity />
+								</h:selectOneMenu>
+							</s:decorate>
+						</div>
+						<div class="footer">
+							<a:commandLink action="#{startTreatmentNG.startTreatment}" styleClass="button"
+										   reRender="pnlstarttreat,messages"
+										   onclick="if (!disableButton(this)) return false;"  >
+								<span>#{messages['form.save']}</span>
+							</a:commandLink>
+
+							<a href="#" class="button-alt" onclick="toggleStartTreatPanel(false)"><span>#{messages['form.cancel']}</span></a>
+						</div>
+					</h:panelGroup>
+				</h:form>
+			</div>
+		</s:div>
+
+		<s:fragment rendered="#{caseHome.inTreatment}">
+
+			<h:panelGroup id="pnltreatment">
+				<rich:dropDownMenu style="width:auto;float:right;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING') and not printing}"
+								   styleClass="dropdown-link" >
+
+					<f:facet name="label">#{messages['form.options']}</f:facet>
+					<rich:menuItem submitMode="client"
+								   value="#{messages['form.edit']}"
+								   onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'"
+								   rendered="#{prescriptionTable.valid}">
+					</rich:menuItem>
+					<rich:menuItem  rendered="#{caseHome.canTransferOut and prescriptionTable.valid}" submitMode="client">
+						<s:link value="#{messages['cases.move']}" view="/custom/ng/cases/casemove.xhtml" styleClass="rich-menu-item-label">
+							<f:param name="id" value="#{caseHome.id}" />
+						</s:link>
+					</rich:menuItem>
+					<rich:menuItem value="#{messages['cases.move.cancel']}"
+								   onclick="if (!confirm('#{messages['cases.move.cancel-confirm']}')) return false"
+								   action="#{caseMoveHome.rollbackTransferOut}"
+								   reRender="main,leftmenu,messages"
+								   rendered="#{prescriptionTable.transferredCase}" >
+						<f:param name="name" value="#{prescriptionTable.lastHealthUnit.tbunit.name}"/>
+					</rich:menuItem>
+					<rich:menuItem value="#{messages['cases.treat.undo']}"
+								   onclick="if (!confirm('#{messages['cases.treat.undo.confirm']}')) return false;"
+								   action="#{treatmentHome.undoTreatment}"
+								   reRender="main,messages">
+					</rich:menuItem>
+				</rich:dropDownMenu>
+
+				<s:decorate template="/cases/treattable.xhtml">
+					<ui:param name="editing" value="false" />
+				</s:decorate>
+
+
+				<a:repeat value="#{treatmentCalendarHome_Ng.phases}" var="phase">
+					<h3>
+						<h:outputText value="#{messages['cases.treat.intphase']}" rendered="#{phase.intensivePhase}"/>
+						<h:outputText value="#{messages['cases.treat.contphase']}" rendered="#{phase.continuousPhase}"/>
+					</h3>
+					<ui:decorate template="/custom/ng/cases/calendartreat.xhtml" >
+						<ui:param name="list" value="#{phase.months}" />
+					</ui:decorate>
+				</a:repeat>
+
+			</h:panelGroup>
+
+
+		</s:fragment>
+
+		<s:decorate template="/cases/comments.xhtml">
+			<ui:param name="panel" value="data" />
+		</s:decorate>
+
+		<script type="text/javascript">
+			<!--
+			function toggleStartTreatPanel(show) {
+				if (show) {
+					jQuery("#tnotstarted").slideUp(500);
+					jQuery("#seltttype").slideDown(500);
+				}
+				else {
+					jQuery("#tnotstarted").slideDown(500);
+					jQuery("#seltttype").slideUp(500);
+				}
+			}
+			-->
+		</script>
+
+</ui:composition>

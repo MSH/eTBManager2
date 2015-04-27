@@ -622,7 +622,6 @@ public class ForecastingView {
 	
 	/**
 	 * Get the label used to display the date of the review period when the stock-out date is undefined   
-	 * @param fm
 	 * @return
 	 */
 	public String getNoNextProcurrementMessage() {
@@ -750,8 +749,6 @@ public class ForecastingView {
 
 	/**
 	 * Initialize result to be displayed
-	 * @param medicineId
-	 * @param monthIndex
 	 */
 	public void initializeResult() {
 		if ((medicineId == null) || (monthIndex == null))
