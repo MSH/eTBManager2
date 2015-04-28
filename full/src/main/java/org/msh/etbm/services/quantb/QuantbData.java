@@ -5,9 +5,12 @@ import org.msh.tb.webservices.Response;
 import java.util.List;
 
 /**
+ * Data to be returned to QuanTB (or any other service) with information to generate
+ * a new forecasting
+ *
  * Created by ricardo on 09/12/14.
  */
-public class QuantbData extends Response {
+public class QuantbData {
     private List<QTBMedicine> medicines;
     private List<QTBRegimen> regimens;
 

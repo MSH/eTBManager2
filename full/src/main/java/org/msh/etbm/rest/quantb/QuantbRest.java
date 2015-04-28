@@ -25,15 +25,10 @@ public class QuantbRest {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @POST
     public StandardResult export() {
-        try {
-            QuantbServices srv = (QuantbServices) App.getComponent("quantbServices");
-            QuantbData data = srv.export();
+        QuantbServices srv = (QuantbServices) App.getComponent("quantbServices");
+        QuantbData data = srv.export();
 
-            return new StandardResult(true, data);
-        }
-        catch (Exception e) {
-            return new StandardResult(false, e.getMessage());
-        }
+        return new StandardResult(true, data);
     }
 
 }
