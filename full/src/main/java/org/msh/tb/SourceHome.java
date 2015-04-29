@@ -3,7 +3,7 @@ package org.msh.tb;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
-import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.Source;
 import org.msh.utils.EntityQuery;
 

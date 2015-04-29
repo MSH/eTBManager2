@@ -188,7 +188,7 @@
 
     <servlet-mapping>
         <servlet-name>freemarker</servlet-name>
-        <url-pattern>*.html</url-pattern>
+        <url-pattern>*.fm.html</url-pattern>
     </servlet-mapping>
 
 

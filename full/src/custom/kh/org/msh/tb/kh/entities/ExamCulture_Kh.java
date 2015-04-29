@@ -1,6 +1,6 @@
 package org.msh.tb.kh.entities;
 
-import org.msh.etbm.transactionlog.mapping.PropertyLog;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.FieldValue;
 

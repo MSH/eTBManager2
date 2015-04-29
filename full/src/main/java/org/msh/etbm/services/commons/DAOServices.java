@@ -6,7 +6,6 @@ import org.msh.validators.BeanValidator;
 import org.msh.validators.MessagesList;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 /**
  * Created by rmemoria on 6/4/15.

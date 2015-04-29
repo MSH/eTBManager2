@@ -7,7 +7,6 @@ import org.msh.tb.entities.TbCase;
 import org.msh.validators.MessagesList;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

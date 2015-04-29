@@ -1,4 +1,4 @@
-package org.msh.etbm.transactionlog;
+package org.msh.etbm.commons.transactionlog;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;

@@ -3,8 +3,8 @@ package org.msh.tb.entities;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Table;
-import org.msh.etbm.transactionlog.Operation;
-import org.msh.etbm.transactionlog.mapping.PropertyLog;
+import org.msh.etbm.commons.transactionlog.Operation;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 
 import javax.persistence.*;
 import java.util.ArrayList;

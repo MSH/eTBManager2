@@ -7,7 +7,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
-import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.SourceGroup;
 import org.msh.tb.entities.*;

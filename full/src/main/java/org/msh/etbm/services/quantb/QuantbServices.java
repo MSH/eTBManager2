@@ -10,13 +10,8 @@ import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineRegimen;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.webservices.RemoteActionHandler;
 import org.msh.utils.date.DateUtils;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;

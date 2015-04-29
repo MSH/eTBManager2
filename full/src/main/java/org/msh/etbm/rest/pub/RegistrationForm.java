@@ -1,5 +1,8 @@
 package org.msh.etbm.rest.pub;
 
+
+import org.msh.etbm.commons.apidoc.annotations.ApiDocField;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -10,15 +13,19 @@ import javax.validation.constraints.NotNull;
 public class RegistrationForm {
 
     @NotNull
+    @ApiDocField(description = "The full name of the user")
     private String name;
 
     @NotNull
+    @ApiDocField(description = "The user login name (required during authentication)")
     private String login;
 
     @NotNull
+    @ApiDocField(description = "The user e-mail address (Password will be sent to this address)")
     private String email;
 
     @NotNull
+    @ApiDocField(description = "The user's organization name")
     private String organization;
 
 

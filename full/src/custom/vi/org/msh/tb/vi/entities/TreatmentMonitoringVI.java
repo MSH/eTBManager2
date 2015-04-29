@@ -3,8 +3,8 @@
  */
 package org.msh.tb.vi.entities;
 
-import org.msh.etbm.transactionlog.Operation;
-import org.msh.etbm.transactionlog.mapping.PropertyLog;
+import org.msh.etbm.commons.transactionlog.Operation;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.TreatmentMonitoring;
 
 import javax.persistence.Entity;

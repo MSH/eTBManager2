@@ -1,6 +1,6 @@
 package org.msh.tb.bd.entities;
 
-import org.msh.etbm.transactionlog.mapping.PropertyLog;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.bd.entities.enums.Occupation;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.bd.entities.enums.SalaryRange;

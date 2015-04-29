@@ -1,7 +1,7 @@
 package org.msh.tb.cases.exams;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.validators.FacesMessagesBinder;
 

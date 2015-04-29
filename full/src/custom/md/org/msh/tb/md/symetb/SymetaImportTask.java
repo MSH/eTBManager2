@@ -3,7 +3,7 @@ package org.msh.tb.md.symetb;
 import org.apache.axis.message.MessageElement;
 import org.jboss.seam.Component;
 import org.jboss.seam.contexts.Contexts;
-import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.application.tasks.DbBatchTask;
 import org.msh.tb.entities.User;
 import org.msh.tb.entities.UserLogin;

@@ -1,4 +1,4 @@
-package org.msh.etbm.transactionlog;
+package org.msh.etbm.commons.transactionlog;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.dom4j.Document;

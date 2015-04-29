@@ -8,7 +8,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.international.Messages;
 import org.jboss.seam.security.Identity;
-import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.ETB;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.*;

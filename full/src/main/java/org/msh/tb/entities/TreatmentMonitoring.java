@@ -5,7 +5,7 @@ package org.msh.tb.entities;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.validator.NotNull;
-import org.msh.etbm.transactionlog.mapping.PropertyLog;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.TreatmentDayOption;
 
 import javax.persistence.*;

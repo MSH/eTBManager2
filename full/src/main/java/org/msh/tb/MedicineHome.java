@@ -4,7 +4,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.MedicineComponent;
 import org.msh.tb.entities.Substance;

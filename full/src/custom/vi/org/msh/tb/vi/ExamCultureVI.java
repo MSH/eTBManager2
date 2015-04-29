@@ -2,7 +2,7 @@ package org.msh.tb.vi;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.entities.ExamCulture;

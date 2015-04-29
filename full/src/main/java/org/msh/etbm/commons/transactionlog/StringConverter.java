@@ -1,4 +1,4 @@
-package org.msh.etbm.transactionlog;
+package org.msh.etbm.commons.transactionlog;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;

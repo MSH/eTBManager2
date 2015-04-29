@@ -3,6 +3,7 @@ package org.msh.tb.application;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
+import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
@@ -27,6 +28,11 @@ import java.util.Properties;
 @BypassInterceptors
 @AutoCreate
 public class EtbmanagerApp {
+
+    /**
+     * Indicate if component was initialized
+     */
+    private boolean initialized;
 
 	/**
 	 * e-TB Manager global configuration 
@@ -85,7 +91,11 @@ public class EtbmanagerApp {
 	/**
 	 * Initialize instance of the application object
 	 */
+    @Create
 	public void initializeInstance() {
+        if (initialized) {
+            return;
+        }
 		String value = ServletLifecycle.getServletContext().getInitParameter("etbmanager.DEVELOPMENT");
 		developmentMode = ((value != null) && ( ("true".compareToIgnoreCase(value) == 0) || ("1".equals(value)) ));
 		
@@ -99,6 +109,7 @@ public class EtbmanagerApp {
 		log.info(key + "Implementation Version = " + implementationVersion);
 		log.info(key + "Country code = " + countryCode);
 		log.info(key + "Build Date = " + buildDate);
+        initialized = true;
 	}
 
 

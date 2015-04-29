@@ -1,4 +1,4 @@
-package org.msh.etbm.transactionlog.mapping;
+package org.msh.etbm.commons.transactionlog.mapping;
 
 
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package org.msh.etbm.rest.quantb;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.rest.StandardResult;
-import org.msh.etbm.rest.pub.AuthenticationForm;
 import org.msh.etbm.services.quantb.QuantbData;
 import org.msh.etbm.services.quantb.QuantbServices;
 import org.msh.tb.application.App;

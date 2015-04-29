@@ -1,7 +1,7 @@
 package org.msh.tb.cases.exams;
 
 import org.jboss.seam.annotations.Name;
-import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamXpert;
 import org.msh.tb.entities.enums.XpertResult;
 import org.msh.tb.entities.enums.XpertRifResult;

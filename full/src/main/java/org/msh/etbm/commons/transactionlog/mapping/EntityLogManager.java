@@ -1,4 +1,4 @@
-package org.msh.etbm.transactionlog.mapping;
+package org.msh.etbm.commons.transactionlog.mapping;
 
 import org.hibernate.Hibernate;
 import org.jboss.seam.Component;
@@ -7,8 +7,8 @@ import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.msh.etbm.transactionlog.Operation;
-import org.msh.etbm.transactionlog.PropertyValue;
+import org.msh.etbm.commons.transactionlog.Operation;
+import org.msh.etbm.commons.transactionlog.PropertyValue;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -8,6 +8,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.etbm.transactionlog.mapping.LogInfo;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.entities.ExamMicroscopy;
 import org.msh.tb.entities.enums.ExamStatus;
 import org.msh.tb.entities.enums.MicroscopyResult;

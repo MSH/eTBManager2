@@ -1,7 +1,5 @@
 package org.msh.etbm.services.quantb;
 
-import org.msh.tb.webservices.Response;
-
 import java.util.List;
 
 /**

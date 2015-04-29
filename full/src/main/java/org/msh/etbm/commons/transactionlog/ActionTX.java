@@ -1,9 +1,9 @@
-package org.msh.etbm.transactionlog;
+package org.msh.etbm.commons.transactionlog;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.msh.etbm.transactionlog.mapping.EntityLogManager;
-import org.msh.etbm.transactionlog.mapping.EntityLogMapping;
-import org.msh.etbm.transactionlog.mapping.PropertyMapping;
+import org.msh.etbm.commons.transactionlog.mapping.EntityLogManager;
+import org.msh.etbm.commons.transactionlog.mapping.EntityLogMapping;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyMapping;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.enums.RoleAction;

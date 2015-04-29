@@ -1,6 +1,8 @@
 package org.msh.etbm.rest.pub;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.pub.SendNewPasswordService;
 import org.msh.etbm.services.pub.UserRegistrationService;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.MediaType;
  *
  * Created by ricardo on 24/11/14.
  */
+@ApiDoc(description = "public api for GUI supporting. No authentication required", group = "public")
 @Name("publicRest")
 @Path("/pub")
 public class PublicRest {
@@ -25,6 +28,7 @@ public class PublicRest {
      * @param email the user's e-mail address assigned to its account in the system
      * @return StandardResult containing the success or error (in case the e-mail is invalid)
      */
+    @ApiDocMethod(description = "Send a new password to an user from the e-mail address assigned to its account")
     @Path("/newpassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -43,6 +47,7 @@ public class PublicRest {
     }
 
 
+    @ApiDocMethod(description = "Self registration of a user, if configured in the system to accept it")
     @Path("/registeruser")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -60,8 +65,8 @@ public class PublicRest {
     }
 
 
+    @ApiDocMethod(description="Return information about the running instance")
     @Path("/about")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     public AboutResult about() {

@@ -1,4 +1,4 @@
-package org.msh.etbm.transactionlog;
+package org.msh.etbm.commons.transactionlog;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;

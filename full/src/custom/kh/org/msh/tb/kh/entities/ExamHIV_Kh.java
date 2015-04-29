@@ -5,7 +5,7 @@ package org.msh.tb.kh.entities;
  * Records information about an HIV result during the treatment for Cambodian Workspace
  */
 
-import org.msh.etbm.transactionlog.mapping.PropertyLog;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.ExamHIV;
 import org.msh.tb.entities.FieldValue;
 

@@ -5,7 +5,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
-import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.PrescribedMedicine;

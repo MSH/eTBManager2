@@ -1,6 +1,6 @@
-package org.msh.etbm.transactionlog.mapping;
+package org.msh.etbm.commons.transactionlog.mapping;
 
-import org.msh.etbm.transactionlog.Operation;
+import org.msh.etbm.commons.transactionlog.Operation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

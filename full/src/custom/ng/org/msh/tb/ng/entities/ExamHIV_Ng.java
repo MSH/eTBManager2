@@ -1,6 +1,6 @@
 package org.msh.tb.ng.entities;
 
-import org.msh.etbm.transactionlog.mapping.PropertyLog;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.ExamHIV;
 import org.msh.tb.entities.FieldValue;
 

@@ -4,7 +4,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.international.Messages;
-import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.application.tasks.DbBatchTask;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;

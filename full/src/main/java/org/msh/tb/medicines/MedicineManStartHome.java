@@ -3,7 +3,7 @@ package org.msh.tb.medicines;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.Transactional;
-import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.SourceGroup;
 import org.msh.tb.SourcesQuery;

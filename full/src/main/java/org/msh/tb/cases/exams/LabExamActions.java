@@ -1,6 +1,5 @@
 package org.msh.tb.cases.exams;
 
-import org.msh.etbm.services.cases.exams.LabExamServices;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.LaboratoryExam;

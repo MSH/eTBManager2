@@ -1,7 +1,6 @@
 package org.msh.etbm.services.quantb;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ricardo on 09/12/14.

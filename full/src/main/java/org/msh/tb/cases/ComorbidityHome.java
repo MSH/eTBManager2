@@ -3,7 +3,7 @@ package org.msh.tb.cases;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.etbm.transactionlog.ActionTX;
+import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseComorbidity;
 import org.msh.tb.entities.FieldValue;
