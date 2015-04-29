@@ -5,4 +5,7 @@ package org.msh.etbm.commons.apidoc.model;
  */
 public class ApiGroup {
 
+    private String description;
+    private String name;
+
 }
