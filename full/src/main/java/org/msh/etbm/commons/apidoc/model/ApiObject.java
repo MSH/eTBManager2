@@ -1,17 +1,20 @@
 package org.msh.etbm.commons.apidoc.model;
 
-import java.lang.reflect.Field;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.List;
 
 /**
  * Created by rmemoria on 29/4/15.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApiObject {
     private String name;
     private String type;
     private boolean notNull;
     private String description;
     private List<ApiObject> properties;
+    private List<String> options;
 
     public String getName() {
         return name;
@@ -51,5 +54,13 @@ public class ApiObject {
 
     public void setProperties(List<ApiObject> properties) {
         this.properties = properties;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
     }
 }

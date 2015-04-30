@@ -31,9 +31,7 @@ public class ObjSchemaGenerator {
 
         ApiObject schema = new ApiObject();
 
-        // check if it's a primitive type
-        if (!isComplexObject(clazz)) {
-            schema.setType(clazz.getSimpleName());
+        if (handlePrimitive(clazz, schema)) {
             return schema;
         }
 
@@ -60,7 +58,8 @@ public class ObjSchemaGenerator {
                 Number.class.isAssignableFrom(clazz) ||
                 Date.class.isAssignableFrom(clazz) ||
                 String.class.isAssignableFrom(clazz) ||
-                Boolean.class.isAssignableFrom(clazz)) {
+                Boolean.class.isAssignableFrom(clazz) ||
+                clazz.isEnum()) {
             return false;
         }
 
@@ -112,21 +111,21 @@ public class ObjSchemaGenerator {
             try {
                 field = clazz.getDeclaredField(pname);
             } catch (NoSuchFieldException e) {
-                System.out.println("No field found for property " + pname);
+                System.out.println("No field found for property " + prop.toString());
             }
 
-            String type = prop.getPropertyType().getSimpleName();
 
             ApiObject doc = new ApiObject();
             doc.setName(pname);
-            doc.setType(type);
 
             // try to find information about the field
             if (field != null) {
                 checkFieldAnnotations(field, doc);
 
-                // check if type is list, map or another object
-                checkComplexTypes(prop, field, doc);
+                if (!handlePrimitive(prop.getPropertyType(), doc)) {
+                    // check if type is list, map or another object
+                    checkComplexTypes(prop, field, doc);
+                }
             }
 
             properties.add(doc);
@@ -218,5 +217,33 @@ public class ObjSchemaGenerator {
 
     protected void scanMap(PropertyDescriptor prop, Field field, ApiObject schema) {
         schema.setType("Map");
+    }
+
+    protected boolean handlePrimitive(Class clazz, ApiObject schema) {
+        if (isComplexObject(clazz)) {
+            return false;
+        }
+
+        if (clazz.isEnum()) {
+            handleEnumType(clazz, schema);
+        }
+        else {
+            schema.setType(clazz.getSimpleName());
+        }
+
+        return true;
+    }
+
+    protected void handleEnumType(Class clazz, ApiObject schema) {
+        Object[] vals = clazz.getEnumConstants();
+        if (vals == null) {
+            return;
+        }
+
+        List<String> options = new ArrayList<String>();
+        for (Object val: vals) {
+            options.add(val.toString());
+        }
+        schema.setOptions(options);
     }
 }

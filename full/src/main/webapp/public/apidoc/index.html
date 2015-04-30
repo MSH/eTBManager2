@@ -27,6 +27,11 @@
         .bg-PUT {
             background-color: #a01cd7;
         }
+        .json-model {
+            background-color: #163139;
+            font-size: 0.85em;
+            color:#ffffff;
+        }
 
         @media (min-width: 767px) {
             .api-route-table {
@@ -128,6 +133,14 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr ng-show="it.inputObject">
+                                        <th>
+                                            Consumed data:
+                                        </th>
+                                        <td>
+                                            <pre class="json-model">{{it.inputObject | json}}</pre>
+                                        </td>
+                                    </tr>
                                     <tr ng-show="it.queryParams">
                                         <th>
                                             Query params:
@@ -148,6 +161,14 @@
                                             <div ng-repeat="p in it.produces">
                                                 {{p}}
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="it.returnObject">
+                                        <th>
+                                            Produced data:
+                                        </th>
+                                        <td>
+                                           <pre class="json-model">{{it.returnObject | json}}</pre>
                                         </td>
                                     </tr>
                                     <tr ng-show="(it.returnCodes !== null) && (it.returnCodes.length > 0)">
