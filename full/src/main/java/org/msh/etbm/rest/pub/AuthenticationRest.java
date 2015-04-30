@@ -34,8 +34,8 @@ public class AuthenticationRest {
      * @return the token ID inside the standard result
      */
     @Path("/login")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     @POST
     @ApiDocMethod(description = "Authenticate a valid user name and password in a given workspace")
     public StandardResult login(AuthenticationForm form) {
@@ -46,8 +46,8 @@ public class AuthenticationRest {
 
 
     @Path("/workspaces")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     @POST
     @ApiDocMethod(description = "Return the list of workspaces available for a valid user name and password")
     public StandardResult getWorkspaces(AuthenticationForm form) {

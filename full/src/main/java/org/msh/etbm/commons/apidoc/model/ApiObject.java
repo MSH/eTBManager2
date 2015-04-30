@@ -12,24 +12,6 @@ public class ApiObject {
     private boolean notNull;
     private String description;
     private List<ApiObject> properties;
-    private Class clazz;
-    private Field field;
-
-    public Class getClazz() {
-        return clazz;
-    }
-
-    public void setClazz(Class clazz) {
-        this.clazz = clazz;
-    }
-
-    public Field getField() {
-        return field;
-    }
-
-    public void setField(Field field) {
-        this.field = field;
-    }
 
     public String getName() {
         return name;

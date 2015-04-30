@@ -16,28 +16,36 @@ import java.util.List;
 public class ApiDocScannerImpl implements ApiDocBuilder {
 
     private ApiDocument doc;
+    private String groupname;
+    private boolean detailed;
 
-    public ApiDocument scan(String packagename) {
+    /**
+     * Scan a package looking for classes that implement REST APIs
+     * @param packagename
+     * @param detailed
+     * @param groupname
+     * @return
+     */
+    public ApiDocument scan(String packagename, boolean detailed, String groupname) {
         ImmutableSet<ClassPath.ClassInfo> lst = getClasses(packagename);
 
+        this.groupname = groupname;
+        this.detailed = detailed;
         doc = new ApiDocument();
-
-//        generateTestData();
 
         for (ClassPath.ClassInfo ci: lst) {
             scanClass(doc, ci);
         }
 
-
         return doc;
     }
 
 
-    public void generateTestData() {
-        ApiGroup grp = addGroup("TEST");
-        ApiRoute route = addRoute(grp, "info", ApiRoute.MethodType.GET);
-    }
-
+    /**
+     * Search for REST API implementations in the given package
+     * @param packagename
+     * @return
+     */
     protected ImmutableSet<ClassPath.ClassInfo> getClasses(String packagename) {
         ImmutableSet<ClassPath.ClassInfo> lst = (ImmutableSet<ClassPath.ClassInfo>) DataStore.get("packages");
         if (lst != null) {
@@ -56,11 +64,16 @@ public class ApiDocScannerImpl implements ApiDocBuilder {
     }
 
 
+    /**
+     * Scan a given class searching for REST API
+     * @param doc the object that will receive REST API information
+     * @param ci the information about the class to be evaluated
+     */
     protected void scanClass(ApiDocument doc, ClassPath.ClassInfo ci) {
         Class clazz = ci.load();
 
         RestEasyRoute routeScan = new RestEasyRoute();
-        routeScan.scan(this, clazz);
+        routeScan.scan(this, clazz, groupname, detailed);
     }
 
 

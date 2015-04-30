@@ -4,15 +4,19 @@ angular.module('docapp', [])
         $scope.user = 'Ricardo';
 
         // initialization
-        $http.get('/etbmanager/resources/api/pub/apidoc')
+        $http.get('/etbmanager/resources/api/pub/apidoc/groups')
             .success(function (data) {
                 $scope.doc = data;
             })
 
 
         $scope.groupClick = function (grp) {
-            console.log(grp);
+            $http.get('/etbmanager/resources/api/pub/apidoc/routes?grp=' + grp.name)
+                .success(function(data) {
+                    $scope.group = data;
+                });
             $scope.group = grp;
+            $scope.routes = undefined;
         }
 
     });

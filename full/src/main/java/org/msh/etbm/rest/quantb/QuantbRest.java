@@ -29,11 +29,11 @@ public class QuantbRest {
     @Produces({MediaType.APPLICATION_JSON})
     @POST
     @ApiDocMethod(description = "Return data necessary to forecast medicine needs (medicines, regimens, cases and inventory). Authentication is required")
-    public StandardResult export() {
+    public QuantbData export() {
         QuantbServices srv = (QuantbServices) App.getComponent("quantbServices");
         QuantbData data = srv.export();
 
-        return new StandardResult(true, data);
+        return data;
     }
 
 }

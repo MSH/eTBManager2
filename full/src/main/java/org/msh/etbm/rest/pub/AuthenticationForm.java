@@ -1,13 +1,20 @@
 package org.msh.etbm.rest.pub;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Authentication form sent by the client to log a user into the system.
  *
  * Created by ricardo on 23/11/14.
  */
 public class AuthenticationForm {
+    @NotNull
     private String login;
+
+    @NotNull
     private String password;
+
+    @NotNull
     private Integer workspace;
 
     public String getLogin() {

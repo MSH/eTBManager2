@@ -4,10 +4,7 @@ import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocQueryParam;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
-import org.msh.etbm.commons.apidoc.model.ApiGroup;
-import org.msh.etbm.commons.apidoc.model.ApiQueryParam;
-import org.msh.etbm.commons.apidoc.model.ApiReturn;
-import org.msh.etbm.commons.apidoc.model.ApiRoute;
+import org.msh.etbm.commons.apidoc.model.*;
 
 import javax.management.Query;
 import javax.ws.rs.*;
@@ -25,9 +22,13 @@ public class RestEasyRoute {
 
     private ApiDocBuilder builder;
     private String classPath;
+    private boolean detailed;
+    private String groupname;
 
-    public void scan(ApiDocBuilder builder, Class clazz) {
+    public void scan(ApiDocBuilder builder, Class clazz, String groupname, boolean detailed) {
         this.builder = builder;
+        this.detailed = detailed;
+        this.groupname = groupname;
 
         Path path = (Path)clazz.getAnnotation(Path.class);
 
@@ -38,10 +39,17 @@ public class RestEasyRoute {
         classPath = path.value();
         ApiGroup grp = getGroup(clazz, classPath);
 
-        Method[] methods = clazz.getDeclaredMethods();
-        if (methods != null) {
-            for (Method met: methods) {
-                getRoute(grp, met);
+        // group found ?
+        if (grp == null) {
+            return;
+        }
+
+        if (detailed) {
+            Method[] methods = clazz.getDeclaredMethods();
+            if (methods != null) {
+                for (Method met: methods) {
+                    getRoute(grp, met);
+                }
             }
         }
     }
@@ -53,21 +61,26 @@ public class RestEasyRoute {
      * @return
      */
     protected ApiGroup getGroup(Class clazz, String path) {
-        String groupname;
+        String gname;
         String description;
 
         // get group information
         ApiDoc doc = (ApiDoc)clazz.getAnnotation(ApiDoc.class);
         if (doc != null) {
-            groupname = doc.group();
+            gname = doc.group();
             description = doc.description();
         }
         else {
-            groupname = "Unknown";
+            gname = "Unknown";
             description = null;
         }
 
-        ApiGroup grp = builder.addGroup(groupname);
+        // check if it's the group being searched
+        if ((this.groupname != null) && (!this.groupname.equals(gname))) {
+            return null;
+        }
+
+        ApiGroup grp = builder.addGroup(gname);
 
         if (description != null) {
             grp.setDescription(description);
@@ -146,7 +159,14 @@ public class RestEasyRoute {
             }
         }
 
-        checkQueryParams(method, route);
+        checkParams(method, route);
+
+        Class rtype = method.getReturnType();
+        if (rtype != Void.TYPE) {
+            ObjSchemaGenerator gen = new ObjSchemaGenerator();
+            ApiObject obj = gen.generate(rtype);
+            route.setReturnObject(obj);
+        }
 
         return route;
     }
@@ -186,7 +206,7 @@ public class RestEasyRoute {
      * @param met
      * @param route
      */
-    protected void checkQueryParams(Method met, ApiRoute route) {
+    protected void checkParams(Method met, ApiRoute route) {
         Class[] params = met.getParameterTypes();
 
         if (params == null || params.length == 0) {
@@ -217,6 +237,14 @@ public class RestEasyRoute {
 
             if (p.getName() != null) {
                 queries.add(p);
+            }
+            else {
+                // is a complex object
+                ObjSchemaGenerator gen = new ObjSchemaGenerator();
+                ApiObject objdoc = gen.generate(params[i]);
+                if (objdoc != null) {
+                    route.setInputObject(objdoc);
+                }
             }
         }
 

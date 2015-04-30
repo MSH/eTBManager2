@@ -97,73 +97,74 @@
                 </ul>
             </div>
             <div class="col-md-9">
-                <h2>{{group.name}}</h2>
-                <h4>{{group.description}}</h4>
-                <div ng-repeat="it in group.routes">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="label label-badge pull-left" ng-class="{
+                <div ng-hide="!group.routes">
+                    <h2>{{group.name}}</h2>
+                    <h4>{{group.description}}</h4>
+                    <div ng-repeat="it in group.routes">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="label label-badge pull-left" ng-class="{
                                 'bg-GET': it.type === 'GET',
                                 'bg-POST': it.type === 'POST',
                                 'bg-DELETE':  it.type === 'DELETE',
                                 'bg-PUT': it.type === 'PUT'
                             }">
-                                {{it.type}}
-                            </div>
-                            <div class="pull-left">
-                                <b>{{it.path}}</b>
-                            </div>
-                            <br/>
-                            {{it.description}}
+                                    {{it.type}}
+                                </div>
+                                <div class="pull-left">
+                                    <b>{{it.path}}</b>
+                                </div>
+                                <br/>
+                                {{it.description}}
 
-                            <table class="table-responsive table-bordered table-condensed api-route-table">
-                                <tr ng-show="it.consumes">
-                                    <th>
-                                        Consumes:
-                                    </th>
-                                    <td>
-                                        <div ng-repeat="p in it.consumes">
-                                            {{p}}
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr ng-show="it.queryParams">
-                                    <th>
-                                       Query params:
-                                    </th>
-                                    <td>
-                                        <div ng-repeat="p in it.queryParams">
-                                            <div class="pull-left"><b>{{p.name}}: </b></div>
-                                            <div class="badge pull-left space-left">{{p.type}}</div>
-                                            <div ng-show="it.description" class="pull-left text-muted space-left">{{p.description}}</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                       Produces:
-                                    </th>
-                                    <td>
-                                        <div ng-repeat="p in it.produces">
-                                            {{p}}
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr ng-show="(it.returnCodes !== null) && (it.returnCodes.length > 0)">
-                                    <th>
-                                        Return codes:
-                                    </th>
-                                    <td>
-                                        <div ng-repeat="r in it.returnCodes" class="clearfix">
-                                            <div class="badge pull-left">{{r.statusCode}}</div>
-                                            <div class="space-left pull-left">{{r.description}}</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
+                                <table class="table-responsive table-bordered table-condensed api-route-table">
+                                    <tr ng-show="it.consumes">
+                                        <th>
+                                            Consumes:
+                                        </th>
+                                        <td>
+                                            <div ng-repeat="p in it.consumes">
+                                                {{p}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="it.queryParams">
+                                        <th>
+                                            Query params:
+                                        </th>
+                                        <td>
+                                            <div ng-repeat="p in it.queryParams">
+                                                <div class="pull-left"><b>{{p.name}} </b></div>
+                                                <div class="badge pull-left space-left">{{p.type}}</div>
+                                                <div ng-show="it.description" class="pull-left text-muted space-left">{{p.description}}</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Produces:
+                                        </th>
+                                        <td>
+                                            <div ng-repeat="p in it.produces">
+                                                {{p}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="(it.returnCodes !== null) && (it.returnCodes.length > 0)">
+                                        <th>
+                                            Return codes:
+                                        </th>
+                                        <td>
+                                            <div ng-repeat="r in it.returnCodes" class="clearfix">
+                                                <div class="badge pull-left">{{r.statusCode}}</div>
+                                                <div class="space-left pull-left">{{r.description}}</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
