@@ -2,15 +2,20 @@ package org.msh.etbm.commons.apidoc.impl;
 
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocQueryParam;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
 import org.msh.etbm.commons.apidoc.model.ApiGroup;
+import org.msh.etbm.commons.apidoc.model.ApiQueryParam;
 import org.msh.etbm.commons.apidoc.model.ApiReturn;
 import org.msh.etbm.commons.apidoc.model.ApiRoute;
 
+import javax.management.Query;
 import javax.ws.rs.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Scan the class methods and extract information about the declared routes
@@ -141,6 +146,8 @@ public class RestEasyRoute {
             }
         }
 
+        checkQueryParams(method, route);
+
         return route;
     }
 
@@ -171,5 +178,50 @@ public class RestEasyRoute {
         }
 
         return null;
+    }
+
+
+    /**
+     * Check if there are query parameters used in the route
+     * @param met
+     * @param route
+     */
+    protected void checkQueryParams(Method met, ApiRoute route) {
+        Class[] params = met.getParameterTypes();
+
+        if (params == null || params.length == 0) {
+            return;
+        }
+
+        Annotation[][] anots = met.getParameterAnnotations();
+
+        List<ApiQueryParam> queries = new ArrayList<ApiQueryParam>();
+
+        for (int i = 0; i < params.length; i++) {
+            Annotation[] lst = anots[i];
+            ApiQueryParam p = new ApiQueryParam();
+
+            for (Annotation anot: lst) {
+                if (anot instanceof QueryParam) {
+                    QueryParam qparam = (QueryParam)anot;
+                    p.setName( qparam.value() );
+                    p.setType( params[i].getSimpleName() );
+                    continue;
+                }
+
+                if (anot instanceof ApiDocQueryParam) {
+                    ApiDocQueryParam doc = (ApiDocQueryParam)anot;
+                    p.setDescription(doc.value());
+                }
+            }
+
+            if (p.getName() != null) {
+                queries.add(p);
+            }
+        }
+
+        if (queries.size() > 0) {
+            route.setQueryParams(queries);
+        }
     }
 }

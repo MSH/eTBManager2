@@ -27,8 +27,14 @@
         .bg-PUT {
             background-color: #a01cd7;
         }
-        .api-route-table {
-            min-width: 500px;
+
+        @media (min-width: 767px) {
+            .api-route-table {
+                min-width: 100%;
+            }
+        }
+        .space-left {
+            margin-left:8px;
         }
     </style>
 </head>
@@ -86,7 +92,7 @@
                 <b>Groups</b>
                 <ul>
                     <li ng-repeat="grp in doc.groups">
-                        <a ng-click="groupClick(grp);">{{grp.name}}</a>
+                        <a href="#" ng-click="groupClick(grp);">{{grp.name}}</a>
                     </li>
                 </ul>
             </div>
@@ -121,6 +127,18 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr ng-show="it.queryParams">
+                                    <th>
+                                       Query params:
+                                    </th>
+                                    <td>
+                                        <div ng-repeat="p in it.queryParams">
+                                            <div class="pull-left"><b>{{p.name}}: </b></div>
+                                            <div class="badge pull-left space-left">{{p.type}}</div>
+                                            <div ng-show="it.description" class="pull-left text-muted space-left">{{p.description}}</div>
+                                        </div>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <th>
                                        Produces:
@@ -136,9 +154,9 @@
                                         Return codes:
                                     </th>
                                     <td>
-                                        <div ng-repeat="r in it.returnCodes">
+                                        <div ng-repeat="r in it.returnCodes" class="clearfix">
                                             <div class="badge pull-left">{{r.statusCode}}</div>
-                                            <div>{{r.description}}</div>
+                                            <div class="space-left pull-left">{{r.description}}</div>
                                         </div>
                                     </td>
                                 </tr>

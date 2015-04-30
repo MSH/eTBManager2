@@ -3,6 +3,8 @@ package org.msh.etbm.rest.pub;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.etbm.commons.apidoc.ApiDocGenerator;
+import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.commons.apidoc.model.ApiDocument;
 import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
@@ -22,6 +24,7 @@ import java.util.List;
 @Name("restDocRest")
 @BypassInterceptors
 @Path("/pub")
+@ApiDoc(group = "public - doc", description = "Routes to support the REST API on-line documentation. Also a way to discovery services")
 public class ApiDocRest {
 
     public ApiDocRest() {
@@ -30,6 +33,7 @@ public class ApiDocRest {
     @Path("/apidoc")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
+    @ApiDocMethod(description = "Return a JSON object containing information about all routes available in the system")
     public ApiDocument generateDoc() {
         EtbmanagerApp app = (EtbmanagerApp) App.getComponent("etbmanagerApp");
 

@@ -1,6 +1,8 @@
 package org.msh.etbm.rest.quantb;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.quantb.QuantbData;
 import org.msh.etbm.services.quantb.QuantbServices;
@@ -17,12 +19,16 @@ import javax.ws.rs.core.MediaType;
  */
 @Name("quantbRest")
 @Path("/quantb")
+@ApiDoc(
+        group = "auth - QuanTB",
+        description = "Support for QuanTB integration with e-TB Manager")
 public class QuantbRest {
 
     @Path("/export")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     @POST
+    @ApiDocMethod(description = "Return data necessary to forecast medicine needs (medicines, regimens, cases and inventory). Authentication is required")
     public StandardResult export() {
         QuantbServices srv = (QuantbServices) App.getComponent("quantbServices");
         QuantbData data = srv.export();

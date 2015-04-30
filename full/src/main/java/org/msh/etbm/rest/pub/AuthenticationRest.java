@@ -2,6 +2,8 @@ package org.msh.etbm.rest.pub;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.auth.AuthWorkspace;
 import org.msh.etbm.services.auth.AuthenticationService;
@@ -20,6 +22,7 @@ import java.util.List;
  */
 @Name("authenticationRest")
 @Path("/pub")
+@ApiDoc(group = "public - authentication", description = "Public routes used for authentication purposes")
 public class AuthenticationRest {
 
     @In AuthenticationService authenticationService;
@@ -34,6 +37,7 @@ public class AuthenticationRest {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @POST
+    @ApiDocMethod(description = "Authenticate a valid user name and password in a given workspace")
     public StandardResult login(AuthenticationForm form) {
         String token = authenticationService.login(form.getLogin(), form.getPassword(), form.getWorkspace());
 
@@ -45,6 +49,7 @@ public class AuthenticationRest {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @POST
+    @ApiDocMethod(description = "Return the list of workspaces available for a valid user name and password")
     public StandardResult getWorkspaces(AuthenticationForm form) {
         try {
             List<AuthWorkspace> lst = authenticationService.getWorkspaces(form.getLogin(), form.getPassword());

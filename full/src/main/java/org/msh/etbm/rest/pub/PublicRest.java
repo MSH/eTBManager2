@@ -3,6 +3,7 @@ package org.msh.etbm.rest.pub;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocQueryParam;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.pub.SendNewPasswordService;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.MediaType;
  *
  * Created by ricardo on 24/11/14.
  */
-@ApiDoc(description = "public api for GUI supporting. No authentication required", group = "public")
+@ApiDoc(description = "public api for GUI supporting. No authentication required", group = "public - general")
 @Name("publicRest")
 @Path("/pub")
 public class PublicRest {
@@ -35,10 +36,11 @@ public class PublicRest {
                 @ApiDocReturn(statusCode = "500", description = "Unexpected error")
         })
     @Path("/newpassword")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    public StandardResult sendNewPassword(@QueryParam("email") String email) {
+    public StandardResult sendNewPassword(
+            @ApiDocQueryParam("User's e-mail address assigned to his/her account")
+            @QueryParam("email") String email) {
         try {
             SendNewPasswordService srv = (SendNewPasswordService) App.getComponent("sendNewPasswordService");
 

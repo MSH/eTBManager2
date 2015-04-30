@@ -25,6 +25,7 @@ public class ApiRoute {
     private ApiObject inputObject;
     private ApiObject returnObject;
     private List<ApiReturn> returnCodes = new ArrayList<ApiReturn>();
+    private List<ApiQueryParam> queryParams;
 
     public String getPath() {
         return path;
@@ -88,5 +89,13 @@ public class ApiRoute {
 
     public void setReturnCodes(List<ApiReturn> returnCodes) {
         this.returnCodes = returnCodes;
+    }
+
+    public List<ApiQueryParam> getQueryParams() {
+        return queryParams;
+    }
+
+    public void setQueryParams(List<ApiQueryParam> queryParams) {
+        this.queryParams = queryParams;
     }
 }
