@@ -2,6 +2,9 @@ package org.msh.etbm.rest.pub;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.etbm.commons.apidoc.ApiDocGenerator;
+import org.msh.etbm.commons.apidoc.model.ApiDocument;
+import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 
 import javax.ws.rs.GET;
@@ -27,19 +30,19 @@ public class ApiDocRest {
     @Path("/apidoc")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    public Object generateDoc() {
-        return null;
-/*
-        EtbmanagerApp app = EtbmanagerApp.instance();
+    public ApiDocument generateDoc() {
+        EtbmanagerApp app = (EtbmanagerApp) App.getComponent("etbmanagerApp");
 
-        String version = app.getImplementationVersion();
-        String basePath = app.getConfiguration().getSystemURL() + "/resources/api";
-        List<String> packages = new ArrayList<String>();
-        packages.add("org.msh.etbm.rest");
-        boolean playgroundEnabled = true;
-        JSONDoc.MethodDisplay methodDisplay = JSONDoc.MethodDisplay.URI;
+        ApiDocGenerator gen = new ApiDocGenerator();
+        try {
+            ApiDocument doc = gen.generate("org.msh.etbm.rest", app.getConfiguration().getSystemURL(), app.getImplementationVersion());
 
-        return docScanner.getJSONDoc(version, basePath, packages, playgroundEnabled, methodDisplay);
-*/
+            return doc;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
     }
 }

@@ -1,8 +1,6 @@
 package org.msh.etbm.commons.apidoc.annotations;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Information about an API implemented in class level
@@ -11,7 +9,9 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ApiDoc {
     String group();
     String description();
+    ApiDocReturn[] returnCodes() default {};
 }

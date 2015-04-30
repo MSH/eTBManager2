@@ -3,6 +3,7 @@ package org.msh.etbm.rest.pub;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.pub.SendNewPasswordService;
 import org.msh.etbm.services.pub.UserRegistrationService;
@@ -28,7 +29,11 @@ public class PublicRest {
      * @param email the user's e-mail address assigned to its account in the system
      * @return StandardResult containing the success or error (in case the e-mail is invalid)
      */
-    @ApiDocMethod(description = "Send a new password to an user from the e-mail address assigned to its account")
+    @ApiDocMethod(description = "Send a new password to an user from the e-mail address assigned to its account",
+        returnCodes = {
+                @ApiDocReturn(statusCode = "200", description = "Successfully executed"),
+                @ApiDocReturn(statusCode = "500", description = "Unexpected error")
+        })
     @Path("/newpassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

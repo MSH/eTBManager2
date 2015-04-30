@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>e-TB Manager REST API documentation</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="e-TB Manager,REST API,TB Management">
+	<meta name="author" content="Ricardo Memoria">
+
+	<script src="../js/jquery-1.10.2.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/angular-1.3.15.min.js"></script>
+	<script src="apidoc.js"></script>
+
+	<link href="../bootstrap3/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../themes/public.css?v=3" rel="stylesheet">
+    <style type="text/css">
+        .bg-GET {
+            background-color: #0070a8;
+        }
+        .bg-POST {
+            background-color: #009b28;
+        }
+        .bg-DELETE {
+            background-color: #b92c28;
+        }
+        .bg-PUT {
+            background-color: #a01cd7;
+        }
+        .api-route-table {
+            min-width: 500px;
+        }
+    </style>
+</head>
+<body ng-app="docapp">
+<nav class="navbar navbar-inverse navbar-fixed-top app-header" role="navigation">
+	<div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand header-logo" href="#"><img src="/etbmanager/public/images/logo_64x64.png" class="img-logo">
+				<span class="title">e-TB Manager</span>
+				<span class="subtitle hidden-xs">TB Management Information System</span>
+			</a>
+		</div>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<form id="j_id10" name="j_id10" method="post" action="/etbmanager/login.seam" target="">
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<div class="navbar-form">
+					<b>REST API Rerefence</b>
+				</div>
+			</ul>
+		</div>
+	</form>
+		</div>
+</nav>
+
+<div ng-controller="docController">
+    <div class="container-fluid" style="padding-top:50px;background-color:white;" ng-controller="docController">
+        <div class="row" style="background-color: white;">
+            <div class="col-md-1">
+                <b>Base path:</b>
+            </div>
+            <div class="col-md-5">
+                {{doc.basePath}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <b>Version:</b>
+            </div>
+            <div class="col-md-5">
+                {{doc.version}}
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="margin-top:10px">
+        <div class="row">
+            <div class="col-md-3" style="background-color: white">
+                <b>Groups</b>
+                <ul>
+                    <li ng-repeat="grp in doc.groups">
+                        <a ng-click="groupClick(grp);">{{grp.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <h2>{{group.name}}</h2>
+                <h4>{{group.description}}</h4>
+                <div ng-repeat="it in group.routes">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="label label-badge pull-left" ng-class="{
+                                'bg-GET': it.type === 'GET',
+                                'bg-POST': it.type === 'POST',
+                                'bg-DELETE':  it.type === 'DELETE',
+                                'bg-PUT': it.type === 'PUT'
+                            }">
+                                {{it.type}}
+                            </div>
+                            <div class="pull-left">
+                                <b>{{it.path}}</b>
+                            </div>
+                            <br/>
+                            {{it.description}}
+
+                            <table class="table-responsive table-bordered table-condensed api-route-table">
+                                <tr ng-show="it.consumes">
+                                    <th>
+                                        Consumes:
+                                    </th>
+                                    <td>
+                                        <div ng-repeat="p in it.consumes">
+                                            {{p}}
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                       Produces:
+                                    </th>
+                                    <td>
+                                        <div ng-repeat="p in it.produces">
+                                            {{p}}
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr ng-show="(it.returnCodes !== null) && (it.returnCodes.length > 0)">
+                                    <th>
+                                        Return codes:
+                                    </th>
+                                    <td>
+                                        <div ng-repeat="r in it.returnCodes">
+                                            <div class="badge pull-left">{{r.statusCode}}</div>
+                                            <div>{{r.description}}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

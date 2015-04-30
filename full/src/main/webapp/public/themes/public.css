@@ -5,12 +5,13 @@ body {
 .app-header {
     background-color: #f8f8f8;
     border-bottom: 1px solid #e5e5e5;
+    margin:0px;
 }
 
 .header-logo {
     min-width: 280px;
     color: #000000;
-    padding:15px 5px !important;
+    padding:10px 5px !important;
 }
 
 .header-logo .title {
@@ -29,7 +30,7 @@ body {
 .img-logo {
     float: left;
     padding-right: 4px;
-    width:32px;
+    width:24px;
     height:auto;
 }
 
@@ -73,24 +74,25 @@ body {
     .header-logo {
         min-width: 350px;
         color: #000000;
-        padding:15px 5px !important;
+        padding:5px 5px !important;
     }
     .img-logo {
         float: left;
         padding-right: 4px;
-        width: 64px;
+        width: 40px;
         height: auto;
     }
     .header-logo .title {
-        font-size: 30px;
+        font-size: 20px;
+        font-weight: bold;
         color: #000000;
         display: block;
-        margin-top: 10px;
-        margin-bottom: 4px;
+        margin-top: 1px;
+        margin-bottom: 0px;
     }
 
     .header-logo .subtitle {
-        font-size:14px;
+        font-size:11px;
         color: #909090;
     }
     #content {
@@ -123,4 +125,15 @@ body {
 }
 #footer li {
     display: block;
+}
+
+
+@media (min-width: 767px) {
+    #navigation{
+        position: fixed;
+    }
+}
+
+.label-badge {
+    border-radius: 1em;
 }
