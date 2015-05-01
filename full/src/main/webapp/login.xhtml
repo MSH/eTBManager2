@@ -23,31 +23,29 @@
 	<h:messages layout="list" />
 	</s:div>
 	</h:panelGroup>
-	<div class="form-group">
-	    <label for="user" class="col-sm-4 control-label">#{messages['login.user_login']}:</label>
-    	<div class="input-group col-sm-5">
-       		<span class="input-group-addon"><i class="icon-user" /></span>
-		    <h:inputText id="user" value="#{credentials.username}" styleClass="form-control" />
-   		</div>
-  	</div>
-	<div class="form-group">
-    	<label class="col-sm-4 control-label" for="pwd">#{messages['User.password']}:</label>
-    		<div class="col-sm-5">
-    	<div class="input-group">
-       		<span class="input-group-addon"><i class="icon-key" /></span>
-      		<h:inputSecret id="pwd" value="#{credentials.password}" styleClass="form-control"/>
-      		</div>
-  		</div>
-	</div>	
-	<div class="form-group">	
-		<div class="col-sm-offset-4">
-    	<div class="input-group col-sm-7">
-       		<label class="checkbox">
-       			<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
-       		</label>
-  		</div>
-  		</div>
-  	</div>
+		<div class="form-group">
+			<label for="user" class="col-sm-4 control-label">#{messages['login.user_login']}:</label>
+			<div class="input-group col-sm-5">
+				<span class="input-group-addon"><i class="icon-user" /></span>
+				<h:inputText id="user" value="#{credentials.username}" styleClass="form-control" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-4 control-label" for="pwd">#{messages['User.password']}:</label>
+			<div class="input-group col-sm-5">
+				<span class="input-group-addon"><i class="icon-key" /></span>
+				<h:inputSecret id="pwd" value="#{credentials.password}" styleClass="form-control"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-4">
+				<div class="input-group col-sm-7">
+					<label class="checkbox">
+						<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>#{messages['login.rememberme']}
+					</label>
+				</div>
+			</div>
+		</div>
 	<div class="form-group">
 		<div class="col-sm-offset-4">
     	<div class="input-group col-sm-7 col-xs-12">

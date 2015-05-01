@@ -13,8 +13,7 @@ public class AboutResult {
     @ApiDocField(description = "System build number")
     private String buildNumber;
 
-    @ApiDocField(description = "Country code in use. Null if it's a generic version, " +
-            "or using a two-letter code representing the country. Example: br, us, etc")
+    @ApiDocField(description = "Null if it's a generic version, or country code in the format ZZ")
     private String countryCode;
 
     @ApiDocField(description = "Implementation version, in the format x.x.x.x")

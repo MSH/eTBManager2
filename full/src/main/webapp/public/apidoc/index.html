@@ -7,13 +7,12 @@
 	<meta name="keywords" content="e-TB Manager,REST API,TB Management">
 	<meta name="author" content="Ricardo Memoria">
 
-	<script src="../js/jquery-1.10.2.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/angular-1.3.15.min.js"></script>
-	<script src="apidoc.js"></script>
+	<script src="../js/angular-custom.js"></script>
+	<script src="apidoc.js?v=1"></script>
 
 	<link href="../bootstrap3/css/bootstrap.min.css" rel="stylesheet">
-	<link href="../themes/public.css?v=3" rel="stylesheet">
+	<link href="../themes/public.css?v=4" rel="stylesheet">
     <style type="text/css">
         .bg-GET {
             background-color: #0070a8;
@@ -40,6 +39,17 @@
         }
         .space-left {
             margin-left:8px;
+        }
+        .md-item {
+            padding-left:10px;
+            margin-top:2px;
+        }
+        .md-rem {
+            color:#909090;
+            word-wrap: break-word !important;
+        }
+        a {
+            cursor:pointer;
         }
     </style>
 </head>
@@ -97,7 +107,7 @@
                 <b>Groups</b>
                 <ul>
                     <li ng-repeat="grp in doc.groups">
-                        <a href="#" ng-click="groupClick(grp);">{{grp.name}}</a>
+                        <a ng-click="groupClick(grp);">{{grp.name}}</a>
                     </li>
                 </ul>
             </div>
@@ -105,6 +115,7 @@
                 <div ng-hide="!group.routes">
                     <h2>{{group.name}}</h2>
                     <h4>{{group.description}}</h4>
+                    <div ng-bind-html="group.example"></div>
                     <div ng-repeat="it in group.routes">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -117,12 +128,14 @@
                                     {{it.type}}
                                 </div>
                                 <div class="pull-left">
-                                    <b>{{it.path}}</b>
+                                    <a ng-click="toggleDetail(it)">
+                                        <b>{{it.path}}</b>
+                                    </a>
                                 </div>
                                 <br/>
                                 {{it.description}}
 
-                                <table class="table-responsive table-bordered table-condensed api-route-table">
+                                <table class="table-responsive table-bordered table-condensed api-route-table" ng-show="it.showDetail">
                                     <tr ng-show="it.consumes">
                                         <th>
                                             Consumes:
@@ -138,7 +151,16 @@
                                             Consumed data:
                                         </th>
                                         <td>
-                                            <pre class="json-model">{{it.inputObject | json}}</pre>
+                                            <a ng-click="showInputObj(it)"
+                                               class="btn btn-default btn-xs">Model</a>
+                                            <a ng-click="showInputmd(it)"
+                                               class="btn btn-default btn-xs">Model structure</a>
+
+                                            <pre class="json-model"
+                                                 ng-show="it.inputmd">{{it.inputObject | json}}</pre>
+                                            <pre class="json-model"
+                                                 ng-hide="it.inputmd"
+                                                 ng-bind-html="it.inputObjectHTML"></pre>
                                         </td>
                                     </tr>
                                     <tr ng-show="it.queryParams">
@@ -168,7 +190,16 @@
                                             Produced data:
                                         </th>
                                         <td>
-                                           <pre class="json-model">{{it.returnObject | json}}</pre>
+                                            <button ng-click="showRetObj(it)"
+                                               class="btn btn-default btn-xs">Model</button>
+                                            <button
+                                               ng-click="showRetmd(it)"
+                                               class="btn btn-default btn-xs">Model structure</button>
+                                            <pre class="json-model"
+                                                 ng-show="it.retmd">{{it.returnObject | json}}</pre>
+                                            <pre class="json-model"
+                                                 ng-hide="it.retmd"
+                                                 ng-bind-html="it.returnObjectHTML"></pre>
                                         </td>
                                     </tr>
                                     <tr ng-show="(it.returnCodes !== null) && (it.returnCodes.length > 0)">

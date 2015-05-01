@@ -1,5 +1,7 @@
 package org.msh.etbm.services.quantb;
 
+import org.msh.etbm.commons.apidoc.annotations.ApiDocField;
+
 import java.util.List;
 
 /**
@@ -9,10 +11,16 @@ import java.util.List;
  * Created by ricardo on 09/12/14.
  */
 public class QuantbData {
+    @ApiDocField(description = "List of medicines registered in the workspace")
     private List<QTBMedicine> medicines;
+
+    @ApiDocField(description = "List of treatment regimens registered in the workspace")
     private List<QTBRegimen> regimens;
 
+    @ApiDocField(description = "Consolidated number of cases on treatment by month and regimen")
     private List<QTBCases> cases;
+
+    @ApiDocField(description = "Available quantity of medicines in the workspace")
     private List<QTBInventory> inventory;
 
     public List<QTBMedicine> getMedicines() {

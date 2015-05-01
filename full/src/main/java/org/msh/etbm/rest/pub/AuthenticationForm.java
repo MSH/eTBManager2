@@ -1,5 +1,7 @@
 package org.msh.etbm.rest.pub;
 
+import org.msh.etbm.commons.apidoc.annotations.ApiDocField;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -8,12 +10,15 @@ import javax.validation.constraints.NotNull;
  * Created by ricardo on 23/11/14.
  */
 public class AuthenticationForm {
+    @ApiDocField(description = "User's login")
     @NotNull
     private String login;
 
+    @ApiDocField(description = "User's password")
     @NotNull
     private String password;
 
+    @ApiDocField(description = "Workspace ID that user is part of")
     @NotNull
     private Integer workspace;
 

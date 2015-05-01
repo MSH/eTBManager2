@@ -135,6 +135,7 @@ public class ObjSchemaGenerator {
         if (superclass != Object.class) {
             scanClass(superclass, properties, false);
         }
+        scannedClasses.remove(clazz);
     }
 
     /**
@@ -192,6 +193,13 @@ public class ObjSchemaGenerator {
 
         scanClass(ptype, props, true);
 
+        Collections.sort(props, new Comparator<ApiObject>() {
+            @Override
+            public int compare(ApiObject o1, ApiObject o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
         return true;
     }
 
@@ -209,9 +217,11 @@ public class ObjSchemaGenerator {
         schema.setType("Array");
 
         List<ApiObject> props = new ArrayList<ApiObject>();
-        schema.setProperties(props);
 
         scanClass(listType, props, true);
+        if (props.size() > 0) {
+            schema.setProperties(props);
+        }
     }
 
 
