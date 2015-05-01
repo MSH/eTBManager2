@@ -1,17 +1,20 @@
 package org.msh.etbm.commons.apidoc.model;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by rmemoria on 28/4/15.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApiGroup {
 
     private String description;
     private String name;
-    private List<ApiRoute> routes = new ArrayList<ApiRoute>();
-    private List<ApiReturn> returnCodes = new ArrayList<ApiReturn>();
+    private List<ApiRoute> routes;
+    private List<ApiReturn> returnCodes;
 
 
     public String getDescription() {

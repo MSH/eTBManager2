@@ -7,12 +7,12 @@ angular.module('docapp', ['ngSanitize'])
         $http.get('/etbmanager/resources/api/pub/apidoc/groups')
             .success(function (data) {
                 $scope.doc = data;
-            })
-
+            });
 
         $scope.groupClick = function (grp) {
             $http.get('/etbmanager/resources/api/pub/apidoc/routes?grp=' + grp.name)
                 .success(function(data) {
+                    $scope.loadingRoutes = false;
                     $scope.group = data;
                     var routes = $scope.group.routes;
                     if (routes) {
@@ -21,8 +21,8 @@ angular.module('docapp', ['ngSanitize'])
                         });
                     }
                 });
+            $scope.loadingRoutes = true;
             $scope.group = grp;
-            $scope.routes = undefined;
         }
 
 

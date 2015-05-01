@@ -37,7 +37,7 @@ public class RestEasyRoute {
         }
 
         classPath = path.value();
-        ApiGroup grp = getGroup(clazz, classPath);
+        ApiGroup grp = getGroup(clazz, classPath, detailed);
 
         // group found ?
         if (grp == null) {
@@ -45,6 +45,7 @@ public class RestEasyRoute {
         }
 
         if (detailed) {
+            grp.setRoutes( new ArrayList<ApiRoute>() );
             Method[] methods = clazz.getDeclaredMethods();
             if (methods != null) {
                 for (Method met: methods) {
@@ -60,7 +61,7 @@ public class RestEasyRoute {
      * @param path
      * @return
      */
-    protected ApiGroup getGroup(Class clazz, String path) {
+    protected ApiGroup getGroup(Class clazz, String path, boolean detailed) {
         String gname;
         String description;
 
@@ -86,15 +87,19 @@ public class RestEasyRoute {
             grp.setDescription(description);
         }
 
-        // get default return codes
-        if (doc != null && doc.returnCodes() != null) {
+        if (detailed) {
+            // get default return codes
+            if (doc != null && doc.returnCodes() != null) {
 
-            for (ApiDocReturn ret: doc.returnCodes()) {
-                ApiReturn resp = new ApiReturn();
-                resp.setDescription(ret.description());
-                resp.setStatusCode(ret.statusCode());
+                for (ApiDocReturn ret: doc.returnCodes()) {
+                    grp.setReturnCodes( new ArrayList<ApiReturn>() );
 
-                grp.getReturnCodes().add(resp);
+                    ApiReturn resp = new ApiReturn();
+                    resp.setDescription(ret.description());
+                    resp.setStatusCode(ret.statusCode());
+
+                    grp.getReturnCodes().add(resp);
+                }
             }
         }
 
