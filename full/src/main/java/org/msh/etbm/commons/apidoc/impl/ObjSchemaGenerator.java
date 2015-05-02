@@ -26,18 +26,35 @@ public class ObjSchemaGenerator {
      * @param clazz
      * @return
      */
-    public ApiObject generate(Class clazz) {
+    public ApiObject generate(Type clazz) {
         scannedClasses.clear();
 
         ApiObject schema = new ApiObject();
 
-        if (handlePrimitive(clazz, schema)) {
+        if (clazz instanceof Class) {
+            System.out.println(clazz);
+        }
+        if (clazz instanceof ParameterizedType) {
+            ParameterizedType ptp = (ParameterizedType)clazz;
+            Type raw = ptp.getRawType();
+            if ((raw instanceof Class) && (Collection.class.isAssignableFrom((Class)ptp.getRawType()))) {
+                scanCollection(clazz, schema);
+                return schema;
+            }
+        }
+        // is a list ?
+        if (Collection.class.isAssignableFrom((Class)clazz)) {
+            scanCollection(clazz, schema);
+            return schema;
+        }
+
+        if (handlePrimitive((Class)clazz, schema)) {
             return schema;
         }
 
         List<ApiObject> properties = new ArrayList<ApiObject>();
 
-        scanClass(clazz, properties, true);
+        scanClass((Class)clazz, properties, true);
 
         schema.setType("Object");
         if (properties.size() > 0) {
@@ -171,7 +188,7 @@ public class ObjSchemaGenerator {
         Class ptype = prop.getPropertyType();
 
         if (Collection.class.isAssignableFrom(ptype)) {
-            scanCollection(prop, field, schema);
+            scanCollection(field.getGenericType(), schema);
             return true;
         }
 
@@ -203,9 +220,8 @@ public class ObjSchemaGenerator {
         return true;
     }
 
-    protected void scanCollection(PropertyDescriptor prop, Field field, ApiObject schema) {
+    protected void scanCollection(Type tp, ApiObject schema) {
         // try to find the type handled by the collection
-        Type tp = field.getGenericType();
         if (!(tp instanceof ParameterizedType)) {
             schema.setType("Unknown");
             return;

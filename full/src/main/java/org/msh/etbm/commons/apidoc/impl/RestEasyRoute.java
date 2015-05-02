@@ -11,7 +11,9 @@ import javax.ws.rs.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -166,8 +168,11 @@ public class RestEasyRoute {
 
         checkParams(method, route);
 
-        Class rtype = method.getReturnType();
+        Type rtype = method.getReturnType();
         if (rtype != Void.TYPE) {
+            if (Collection.class.isAssignableFrom((Class)rtype)) {
+                rtype = method.getGenericReturnType();
+            }
             ObjSchemaGenerator gen = new ObjSchemaGenerator();
             ApiObject obj = gen.generate(rtype);
             route.setReturnObject(obj);

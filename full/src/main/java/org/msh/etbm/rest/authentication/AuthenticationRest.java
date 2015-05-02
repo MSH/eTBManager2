@@ -1,10 +1,9 @@
-package org.msh.etbm.rest.pub;
+package org.msh.etbm.rest.authentication;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
-import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.auth.AuthWorkspace;
 import org.msh.etbm.services.auth.AuthenticationService;
 
@@ -38,10 +37,10 @@ public class AuthenticationRest {
     @Produces({MediaType.APPLICATION_JSON})
     @POST
     @ApiDocMethod(description = "Authenticate a valid user name and password in a given workspace")
-    public StandardResult login(AuthenticationForm form) {
+    public String login(AuthenticationForm form) {
         String token = authenticationService.login(form.getLogin(), form.getPassword(), form.getWorkspace());
 
-        return new StandardResult(token != null, token);
+        return token;
     }
 
 
@@ -50,14 +49,7 @@ public class AuthenticationRest {
     @Produces({MediaType.APPLICATION_JSON})
     @POST
     @ApiDocMethod(description = "Return the list of workspaces available for a valid user name and password")
-    public StandardResult getWorkspaces(AuthenticationForm form) {
-        try {
-            List<AuthWorkspace> lst = authenticationService.getWorkspaces(form.getLogin(), form.getPassword());
-
-            return new StandardResult(true, lst);
-        }
-        catch (Exception e) {
-            return new StandardResult(false, e.getMessage());
-        }
+    public List<AuthWorkspace> getWorkspaces(AuthenticationForm form) {
+        return authenticationService.getWorkspaces(form.getLogin(), form.getPassword());
     }
 }

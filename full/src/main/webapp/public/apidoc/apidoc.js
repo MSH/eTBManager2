@@ -86,7 +86,8 @@ function genObjectSchema(schema, showname) {
 
 function genSchemaArray(sc) {
     var s = addComment(sc);
-    s += sc.name + ': [';
+    s += sc.name? sc.name + ': ': '';
+    s += '[';
     if (sc.properties) {
         s += genObjectSchema(sc, false);
     }
@@ -96,7 +97,8 @@ function genSchemaArray(sc) {
 
 function genSchemaType(sc) {
     var s = addComment(sc);
-    s += sc.name + ': <span class="badge">' + sc.type + '</span>';
+    s += sc.name? sc.name + ': ': '';
+    s += '<span class="badge">' + sc.type + '</span>';
     return s;
 }
 

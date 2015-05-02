@@ -1,4 +1,4 @@
-package org.msh.etbm.rest.pub;
+package org.msh.etbm.rest.authentication;
 
 import org.msh.etbm.commons.apidoc.annotations.ApiDocField;
 
