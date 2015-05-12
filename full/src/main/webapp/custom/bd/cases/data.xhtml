@@ -219,11 +219,17 @@
     		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
 		</s:decorate>
 
+        <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.caseDefinition!=null}">
+            <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
+            #{messages[tbcase.caseDefinition.key]}
+        </s:decorate>
+
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		#{messages[tbcase.patientType.key]}
             <h:outputText rendered="#{tbcase.patientType == 'PREVIOUSLY_TREATED' and not empty tbcase.previouslyTreatedType}" value=" - #{messages[tbcase.previouslyTreatedType.key]} "/>
 		</s:decorate>
+
 		</s:fragment>
 
         <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcasebd.patientRefToFv.name.name1}">

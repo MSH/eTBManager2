@@ -1,16 +1,16 @@
 package org.msh.tb.cases.exams;
 
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.AuthorizationException;
 import org.msh.tb.application.App;
 import org.msh.tb.application.ViewService;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.Laboratory;
-import org.msh.tb.entities.LaboratoryExam;
-import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.*;
 import org.msh.tb.laboratories.ExamRequestHome;
 import org.msh.tb.laboratories.LaboratorySelection;
+import org.msh.tb.misc.EntityEvent;
 
 import java.util.Date;
 import java.util.List;
@@ -95,6 +95,8 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 		}
 
         persistSample();
+
+        raiseEvent((isManaged() ? EntityEvent.EventType.EDIT : EntityEvent.EventType.NEW));
 
 		// save data
 		return super.persist();
@@ -223,6 +225,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	@Override
 	public String remove() {
 		super.remove();
+        raiseEvent(EntityEvent.EventType.DELETE);
 		return "exam-removed";
 	}
 
@@ -237,4 +240,10 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 		}
 		return labselection;
 	}
+
+    private void raiseEvent(EntityEvent.EventType type){
+        LaboratoryExam exam = (LaboratoryExam) getInstance();
+        String entityName = "entity." + exam.getClass().getSimpleName();
+        Events.instance().raiseEvent(entityName, new EntityEvent(type, exam));
+    }
 }
