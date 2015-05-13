@@ -3,6 +3,8 @@ package org.msh.etbm.rest.pub;
 
 import org.msh.etbm.commons.apidoc.annotations.ApiDocField;
 
+import java.util.List;
+
 /**
  * Created by ricardo on 15/12/14.
  */
@@ -21,6 +23,12 @@ public class AboutResult {
 
     @ApiDocField(description = "Implementation title, usually the full system name")
     private String implementationTitle;
+
+    @ApiDocField(description = "Base bath including server name and initial path")
+    private String basePath;
+
+    @ApiDocField(description = "List of supported languages (ISO format)")
+    private List<LocaleInfo> suportedLocales;
 
     public String getBuildDate() {
         return buildDate;
@@ -60,5 +68,21 @@ public class AboutResult {
 
     public void setImplementationTitle(String implementationTitle) {
         this.implementationTitle = implementationTitle;
+    }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
+    }
+
+    public List<LocaleInfo> getSuportedLocales() {
+        return suportedLocales;
+    }
+
+    public void setSuportedLocales(List<LocaleInfo> suportedLocales) {
+        this.suportedLocales = suportedLocales;
     }
 }

@@ -177,7 +177,7 @@ public class IndicatorReport {
             if (user.getView() == UserView.ADMINUNIT) {
                 AdministrativeUnit au = user.getAdminUnit();
                 if (au != null) {
-                    TableJoin join = sqlBuilder.join("tbunit", "tbcase.owner_unit_id").join("administrativeunit", "tbunit.id");
+                    TableJoin join = sqlBuilder.join("tbunit.id", "tbcase.owner_unit_id").join("adminunit_id", "administrativeunit.id");
                     sqlBuilder.addRestriction("administrativeunit.code like :code_1");
                     sqlBuilder.addParameter("code_1", au.getCode() + "%");
                 }

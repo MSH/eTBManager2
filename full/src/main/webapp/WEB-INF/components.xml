@@ -86,4 +86,30 @@
 
     <international:locale-selector cookie-enabled="true"/>
 
+    <component name="supportedLocales" auto-create="true">
+        <property name="defaultLocaleCode" type="java.lang.String">en</property>
+        <property name="localeCodes" type="java.util.ArrayList">
+            <value>en</value>
+            <value>en_PH</value>
+            <value>en_KE</value>
+            <value>en_BD</value>
+            <value>en_NA</value>
+            <value>en_NG</value>
+            <value>en_KH</value>
+            <value>km</value>
+            <value>pt_BR</value>
+            <value>hy_AM</value>
+            <value>es</value>
+            <value>fr</value>
+            <value>ro</value>
+            <value>ru</value>
+            <value>zh</value>
+            <value>vi</value>
+            <value>in</value>
+            <value>uk_UA</value>
+            <value>az_AZ</value>
+            <value>uz</value>
+        </property>
+    </component>
+
 </components>

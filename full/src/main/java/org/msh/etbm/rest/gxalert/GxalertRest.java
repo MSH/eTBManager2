@@ -4,6 +4,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.rest.StandardResult;
+import org.msh.etbm.rest.authentication.Authenticated;
 import org.msh.etbm.services.gxalert.GxalertService;
 import org.msh.tb.entities.GxalertData;
 
@@ -20,6 +21,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Name("gxalertRest")
 @Path("/gxalert")
+@Authenticated
 public class GxalertRest {
 
     /**

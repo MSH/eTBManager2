@@ -12,6 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ApiDoc {
     String group();
-    String description();
+    String summary();
+    String description() default "";
     ApiDocReturn[] returnCodes() default {};
 }

@@ -26,7 +26,8 @@ import java.util.List;
 @Name("restDocRest")
 @BypassInterceptors
 @Path("/pub")
-@ApiDoc(group = "public - doc", description = "Routes to support the REST API on-line documentation. Also a way to discovery services")
+@ApiDoc(group = "public.doc",
+        summary = "Routes to support the REST API on-line documentation. Also a way to discovery services")
 public class ApiDocRest {
 
     public ApiDocRest() {
@@ -35,7 +36,7 @@ public class ApiDocRest {
     @Path("/apidoc/groups")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    @ApiDocMethod(description = "Return a JSON object containing information about all routes available in the system")
+    @ApiDocMethod(summary = "Return a JSON object containing information about all routes available in the system")
     public ApiDocument returnGroups() {
         EtbmanagerApp app = (EtbmanagerApp) App.getComponent("etbmanagerApp");
 
@@ -55,7 +56,7 @@ public class ApiDocRest {
     @Path("/apidoc/routes")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    @ApiDocMethod(description = "Return the methods of a given group name (in JSON format)")
+    @ApiDocMethod(summary = "Return the methods of a given group name (in JSON format)")
     public ApiGroup getMethodsGroup(@QueryParam("grp") String groupname) {
         ApiDocGenerator gen = new ApiDocGenerator();
 

@@ -11,6 +11,7 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ApiGroup {
 
+    private String summary;
     private String description;
     private String name;
     private List<ApiRoute> routes;
@@ -47,5 +48,13 @@ public class ApiGroup {
 
     public void setReturnCodes(List<ApiReturn> returnCodes) {
         this.returnCodes = returnCodes;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

@@ -31,9 +31,6 @@ public class ObjSchemaGenerator {
 
         ApiObject schema = new ApiObject();
 
-        if (clazz instanceof Class) {
-            System.out.println(clazz);
-        }
         if (clazz instanceof ParameterizedType) {
             ParameterizedType ptp = (ParameterizedType)clazz;
             Type raw = ptp.getRawType();

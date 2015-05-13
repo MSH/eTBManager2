@@ -80,4 +80,10 @@
         </sql>
     </changeSet>
 
+    <changeSet id="2.2.4" author="rmemoria" context="NG">
+        <sql>
+            update examxpert set discriminator='gen' where discriminator is null
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

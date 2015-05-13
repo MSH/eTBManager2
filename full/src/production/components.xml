@@ -81,5 +81,5 @@
 	<international:locale-selector cookie-enabled="true"/>
 
    <async:quartz-dispatcher/>
-   
+
 </components>

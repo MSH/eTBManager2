@@ -5,6 +5,7 @@ import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocQueryParam;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
 import org.msh.etbm.commons.apidoc.model.*;
+import org.msh.etbm.rest.authentication.Authenticated;
 
 import javax.management.Query;
 import javax.ws.rs.*;
@@ -26,6 +27,8 @@ public class RestEasyRoute {
     private String classPath;
     private boolean detailed;
     private String groupname;
+    // indicates if all routes must be authenticated before execution
+    private boolean authenticated;
 
     public void scan(ApiDocBuilder builder, Class clazz, String groupname, boolean detailed) {
         this.builder = builder;
@@ -47,6 +50,8 @@ public class RestEasyRoute {
         }
 
         if (detailed) {
+            authenticated = clazz.getAnnotation(Authenticated.class) != null;
+
             grp.setRoutes( new ArrayList<ApiRoute>() );
             Method[] methods = clazz.getDeclaredMethods();
             if (methods != null) {
@@ -66,16 +71,19 @@ public class RestEasyRoute {
     protected ApiGroup getGroup(Class clazz, String path, boolean detailed) {
         String gname;
         String description;
+        String summary;
 
         // get group information
         ApiDoc doc = (ApiDoc)clazz.getAnnotation(ApiDoc.class);
         if (doc != null) {
             gname = doc.group();
+            summary = doc.summary();
             description = doc.description();
         }
         else {
             gname = "Unknown";
             description = null;
+            summary = null;
         }
 
         // check if it's the group being searched
@@ -84,6 +92,10 @@ public class RestEasyRoute {
         }
 
         ApiGroup grp = builder.addGroup(gname);
+
+        if (summary != null  &&  !"".equals(summary)) {
+            grp.setSummary(summary);
+        }
 
         if (description != null) {
             grp.setDescription(description);
@@ -128,9 +140,12 @@ public class RestEasyRoute {
 
         ApiRoute route = builder.addRoute(grp, methodPath, type);
 
+        route.setAuthRequired(authenticated);
+
         // get method documentation
         ApiDocMethod doc = (ApiDocMethod)method.getAnnotation(ApiDocMethod.class);
         if (doc != null) {
+            route.setSummary(doc.summary());
             route.setDescription(doc.description());
 
             if (doc.returnCodes() != null) {

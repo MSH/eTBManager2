@@ -6,8 +6,7 @@ import org.msh.etbm.commons.apidoc.model.ApiDocument;
 import org.msh.etbm.commons.apidoc.model.ApiGroup;
 import org.msh.etbm.commons.apidoc.model.ApiRoute;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -36,6 +35,13 @@ public class ApiDocScannerImpl implements ApiDocBuilder {
         for (ClassPath.ClassInfo ci: lst) {
             scanClass(doc, ci);
         }
+
+        Collections.sort(doc.getGroups(), new Comparator<ApiGroup>() {
+            @Override
+            public int compare(ApiGroup o1, ApiGroup o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
 
         return doc;
     }

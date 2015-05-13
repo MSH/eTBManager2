@@ -1,4 +1,4 @@
-package org.msh.etbm.rest.interceptors;
+package org.msh.etbm.rest.authentication;
 
 import org.jboss.resteasy.annotations.interception.ServerInterceptor;
 import org.jboss.resteasy.core.Headers;
@@ -14,6 +14,7 @@ import org.msh.etbm.services.auth.AuthenticationService;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.ext.Provider;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -30,12 +31,23 @@ public class AuthenticatorInterceptor implements PreProcessInterceptor {
 
     @Override
     public ServerResponse preProcess(HttpRequest req, ResourceMethod resourceMethod) throws Failure, WebApplicationException {
-        String path = req.getPreprocessedPath();
+        // check if route is authenticated
+        Method method = resourceMethod.getMethod();
+        boolean authenticated = method.getAnnotation(Authenticated.class) != null;
+
+        if (!authenticated) {
+            authenticated = method.getDeclaringClass().getAnnotation(Authenticated.class) != null;
+            if (!authenticated) {
+                return null;
+            }
+        }
 
         // check if authentication is required
+/*
         if ((Identity.instance().isLoggedIn()) || (path.startsWith("/pub/"))) {
             return null;
         }
+*/
 
         // get auth token
         String authToken = null;

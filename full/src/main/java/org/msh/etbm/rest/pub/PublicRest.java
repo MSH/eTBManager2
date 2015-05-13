@@ -1,26 +1,31 @@
 package org.msh.etbm.rest.pub;
 
+import com.google.gwt.i18n.client.LocalizableResource;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.international.LocaleSelector;
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocQueryParam;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.pub.SendNewPasswordService;
+import org.msh.etbm.services.pub.SupportedLocales;
 import org.msh.etbm.services.pub.UserRegistrationService;
 import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 
+import javax.faces.context.FacesContext;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.*;
 
 /**
  * Set of pub rest api
  *
  * Created by ricardo on 24/11/14.
  */
-@ApiDoc(description = "public api for GUI supporting. No authentication required", group = "public - general")
+@ApiDoc(summary = "public api for GUI supporting. No authentication required", group = "public")
 @Name("publicRest")
 @Path("/pub")
 public class PublicRest {
@@ -30,11 +35,7 @@ public class PublicRest {
      * @param email the user's e-mail address assigned to its account in the system
      * @return StandardResult containing the success or error (in case the e-mail is invalid)
      */
-    @ApiDocMethod(description = "Send a new password to an user from the e-mail address assigned to its account",
-        returnCodes = {
-                @ApiDocReturn(statusCode = "200", description = "Successfully executed"),
-                @ApiDocReturn(statusCode = "500", description = "Unexpected error")
-        })
+    @ApiDocMethod(summary = "Send a new password to an user from the e-mail address assigned to its account")
     @Path("/newpassword")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
@@ -54,7 +55,11 @@ public class PublicRest {
     }
 
 
-    @ApiDocMethod(description = "Self registration of a user, if configured in the system to accept it")
+    @ApiDocMethod(summary = "Register a new user by assigning default configurations",
+    description = "The availability of this API depends on system configurations and may not be available for security reasons. " +
+            "This API is mostly used to allow an user to self-register based on default system configurations, like workspace," +
+            " health facility and user profile. Once registered, the system will send an e-mail with the user's temporary password" +
+            " to enter in the system.")
     @Path("/registeruser")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -72,7 +77,7 @@ public class PublicRest {
     }
 
 
-    @ApiDocMethod(description="Return information about the running instance")
+    @ApiDocMethod(summary="Return information about the running instance" )
     @Path("/about")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
@@ -80,11 +85,26 @@ public class PublicRest {
         EtbmanagerApp app = EtbmanagerApp.instance();
         AboutResult res = new AboutResult();
 
+        res.setBasePath(app.getConfiguration().getPageRootURL());
         res.setBuildDate(app.getBuildDate());
         res.setBuildNumber(app.getBuildNumber());
         res.setCountryCode(app.getCountryCode());
         res.setImplementationTitle(app.getImplementationTitle());
         res.setImplementationVersion(app.getImplementationVersion());
+
+        SupportedLocales locales = (SupportedLocales)App.getComponent("supportedLocales");
+        List<LocaleInfo> lst = new ArrayList<LocaleInfo>();
+        for (Locale locale: locales.getLocales()) {
+            LocaleInfo inf = new LocaleInfo();
+            inf.setId(locale.getLanguage());
+            inf.setName(locale.getDisplayName());
+            lst.add(inf);
+        }
+
+        if (lst.size() > 0) {
+            res.setSuportedLocales(lst);
+        }
+
         return res;
     }
 

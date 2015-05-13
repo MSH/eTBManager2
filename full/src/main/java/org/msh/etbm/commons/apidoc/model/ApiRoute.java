@@ -18,6 +18,7 @@ public class ApiRoute {
     }
 
     private String path;
+    private String summary;
     private String description;
     private MethodType type;
     private List<String> consumes;
@@ -26,6 +27,7 @@ public class ApiRoute {
     private ApiObject returnObject;
     private List<ApiReturn> returnCodes = new ArrayList<ApiReturn>();
     private List<ApiQueryParam> queryParams;
+    private boolean authRequired;
 
     public String getPath() {
         return path;
@@ -97,5 +99,21 @@ public class ApiRoute {
 
     public void setQueryParams(List<ApiQueryParam> queryParams) {
         this.queryParams = queryParams;
+    }
+
+    public boolean isAuthRequired() {
+        return authRequired;
+    }
+
+    public void setAuthRequired(boolean authRequired) {
+        this.authRequired = authRequired;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

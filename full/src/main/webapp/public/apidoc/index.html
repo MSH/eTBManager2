@@ -101,6 +101,17 @@
             }
         }
 
+        #circle {
+            width: 16px;
+            height: 16px;
+            background: red;
+            -moz-border-radius: 8px;
+            -webkit-border-radius: 8px;
+            border-radius: 8px;
+            margin-right:4px;
+        }
+
+
     </style>
 </head>
 <body ng-app="docapp">
@@ -168,11 +179,15 @@
                 <div ng-show="!group.routes && group" class="spinner"></div>
                 <div ng-show="group.routes">
                     <h2>{{group.name}}</h2>
-                    <h4>{{group.description}}</h4>
+                    <h4>{{group.summary}}</h4>
                     <div ng-bind-html="group.example"></div>
                     <div ng-repeat="it in group.routes">
                         <div class="panel panel-default">
                             <div class="panel-body">
+                                <div ng-show="it.authRequired" class="pull-right">
+                                    <div id="circle" class="pull-left"></div>
+                                    <b>Authentication required</b>
+                                </div>
                                 <div class="label label-badge pull-left" ng-class="{
                                 'bg-GET': it.type === 'GET',
                                 'bg-POST': it.type === 'POST',
@@ -187,87 +202,90 @@
                                     </a>
                                 </div>
                                 <br/>
-                                {{it.description}}
-
-                                <table class="table-responsive table-bordered table-condensed api-route-table" ng-show="it.showDetail">
-                                    <tr ng-show="it.consumes">
-                                        <th>
-                                            Consumes:
-                                        </th>
-                                        <td>
-                                            <div ng-repeat="p in it.consumes">
-                                                {{p}}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr ng-show="it.inputObject">
-                                        <th>
-                                            Consumed data:
-                                        </th>
-                                        <td>
-                                            <a ng-click="showInputObj(it)"
-                                               class="btn btn-default btn-xs">Model</a>
-                                            <a ng-click="showInputmd(it)"
-                                               class="btn btn-default btn-xs">Model structure</a>
+                                {{it.summary}}
+                                <div ng-show="it.showDetail">
+                                    <p ng-show="it.description" ng-bind-html="it.description">
+                                    </p>
+                                    <table class="table-responsive table-bordered table-condensed api-route-table" ng-show="it.showDetail">
+                                        <tr ng-show="it.consumes">
+                                            <th>
+                                                Consumes:
+                                            </th>
+                                            <td>
+                                                <div ng-repeat="p in it.consumes">
+                                                    {{p}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr ng-show="it.inputObject">
+                                            <th>
+                                                Consumed data:
+                                            </th>
+                                            <td>
+                                                <a ng-click="showInputObj(it)"
+                                                   class="btn btn-default btn-xs">Model</a>
+                                                <a ng-click="showInputmd(it)"
+                                                   class="btn btn-default btn-xs">Model structure</a>
 
                                             <pre class="json-model"
                                                  ng-show="it.inputmd">{{it.inputObject | json}}</pre>
                                             <pre class="json-model"
                                                  ng-hide="it.inputmd"
                                                  ng-bind-html="it.inputObjectHTML"></pre>
-                                        </td>
-                                    </tr>
-                                    <tr ng-show="it.queryParams">
-                                        <th>
-                                            Query params:
-                                        </th>
-                                        <td>
-                                            <div ng-repeat="p in it.queryParams">
-                                                <div class="pull-left"><b>{{p.name}} </b></div>
-                                                <div class="badge pull-left space-left">{{p.type}}</div>
-                                                <div ng-show="it.description" class="pull-left text-muted space-left">{{p.description}}</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            Produces:
-                                        </th>
-                                        <td>
-                                            <div ng-repeat="p in it.produces">
-                                                {{p}}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr ng-show="it.returnObject">
-                                        <th>
-                                            Produced data:
-                                        </th>
-                                        <td>
-                                            <button ng-click="showRetObj(it)"
-                                               class="btn btn-default btn-xs">Model</button>
-                                            <button
-                                               ng-click="showRetmd(it)"
-                                               class="btn btn-default btn-xs">Model structure</button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-show="it.queryParams">
+                                            <th>
+                                                Query params:
+                                            </th>
+                                            <td>
+                                                <div ng-repeat="p in it.queryParams">
+                                                    <div class="pull-left"><b>{{p.name}} </b></div>
+                                                    <div class="badge pull-left space-left">{{p.type}}</div>
+                                                    <div ng-show="it.description" class="pull-left text-muted space-left">{{p.description}}</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Produces:
+                                            </th>
+                                            <td>
+                                                <div ng-repeat="p in it.produces">
+                                                    {{p}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr ng-show="it.returnObject">
+                                            <th>
+                                                Produced data:
+                                            </th>
+                                            <td>
+                                                <button ng-click="showRetObj(it)"
+                                                        class="btn btn-default btn-xs">Model</button>
+                                                <button
+                                                        ng-click="showRetmd(it)"
+                                                        class="btn btn-default btn-xs">Model structure</button>
                                             <pre class="json-model"
                                                  ng-show="it.retmd">{{it.returnObject | json}}</pre>
                                             <pre class="json-model"
                                                  ng-hide="it.retmd"
                                                  ng-bind-html="it.returnObjectHTML"></pre>
-                                        </td>
-                                    </tr>
-                                    <tr ng-show="(it.returnCodes !== null) && (it.returnCodes.length > 0)">
-                                        <th>
-                                            Return codes:
-                                        </th>
-                                        <td>
-                                            <div ng-repeat="r in it.returnCodes" class="clearfix">
-                                                <div class="badge pull-left">{{r.statusCode}}</div>
-                                                <div class="space-left pull-left">{{r.description}}</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr ng-show="(it.returnCodes !== null) && (it.returnCodes.length > 0)">
+                                            <th>
+                                                Return codes:
+                                            </th>
+                                            <td>
+                                                <div ng-repeat="r in it.returnCodes" class="clearfix">
+                                                    <div class="badge pull-left">{{r.statusCode}}</div>
+                                                    <div class="space-left pull-left">{{r.description}}</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
