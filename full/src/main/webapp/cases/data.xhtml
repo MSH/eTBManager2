@@ -57,15 +57,15 @@
 	    <s:fragment rendered="#{not tbcase.notifAddress.emptyy}">
 	    <tr><td colspan="2">
     		<h2>#{messages['cases.details.addressnotif']}</h2>
-	
-			<s:decorate template="/layout/display.xhtml">
-    			<ui:define name="label">#{messages['Address.address']}:</ui:define>
-    			#{tbcase.notifAddress.address}
-	    		<h:outputText value="" rendered="#{not empty tbcase.notifAddress.complement}">
-	    			<br/>
-	    			#{tbcase.notifAddress.complement}
-	    		</h:outputText>
-			</s:decorate>
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages['Address.address']}:</ui:define>
+                #{tbcase.notifAddress.address}
+            </s:decorate>
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.notifAddress.complement}">
+                <ui:define name="label">#{messages['Address.complement']}:</ui:define>
+                #{tbcase.notifAddress.complement}
+            </s:decorate>
 			<s:decorate template="/layout/audisplay.xhtml">
 				<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
 			</s:decorate>
