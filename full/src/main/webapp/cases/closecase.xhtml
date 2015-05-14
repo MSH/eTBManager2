@@ -37,6 +37,10 @@
                         </h:selectOneRadio>
                     </s:decorate>
 
+                    <s:decorate template="/layout/edit.xhtml" >
+                        <h:selectBooleanCheckbox id="movedToSecondLine" value="#{tbcase.movedSecondLineTreatment}"/>#{messages['CaseState.MOVED_SECONDLINE']}
+                    </s:decorate>
+
                     <div id="comments" style="display:block;clear:both;" >
                         <s:decorate template="/layout/edit.xhtml" >
                             <ui:define name="label">#{messages['TbCase.otherOutcome']}:</ui:define>
