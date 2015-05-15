@@ -167,8 +167,6 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
     private boolean tbContact;
 
-    private boolean rifampcinResistance;
-
     private boolean movedSecondLineTreatment;
 	
 	@Column(length=100)
@@ -1388,14 +1386,6 @@ public class TbCase implements Serializable, Transactional, SyncKey {
     public void setSecDrugsReceived(SecDrugsReceived secDrugsReceived) {this.secDrugsReceived = secDrugsReceived;}
 
     public SecDrugsReceived getSecDrugsReceived(){return this.secDrugsReceived;}
-
-    public boolean isRifampcinResistance() {
-        return rifampcinResistance;
-    }
-
-    public void setRifampcinResistance(boolean rifampcinResistance) {
-        this.rifampcinResistance = rifampcinResistance;
-    }
 
    public PatientType getPreviouslyTreatedType() {
         return previouslyTreatedType;

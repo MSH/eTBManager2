@@ -160,12 +160,6 @@
 			#{messages[tbcase.drugResistanceType.key]}
 		</s:decorate>
 
-        <s:decorate template="/layout/display.xhtml" rendered="#{(tbcase.classification=='DRTB')}">
-            <ui:define name="label">#{messages['DrugResistanceType.RIF_RESISTANCE']}:</ui:define>
-            <h:outputText rendered="#{tbcase.rifampcinResistance}">#{messages['global.yes']}</h:outputText>
-            <h:outputText rendered="#{not tbcase.rifampcinResistance}">#{messages['global.no']}</h:outputText>
-        </s:decorate>
-
         <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.caseDefinition}">
             <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
             #{messages[tbcase.caseDefinition.key]}
