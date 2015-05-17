@@ -33,6 +33,7 @@ public class TBForm11v2015Table1 extends TBForm11v2015 {
         result += " and p.gender is not null ";
         result += " and c.state is not null ";
         result += " and c.classification = " + CaseClassification.TB.ordinal();
+        result += " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
         result += " and c.infectionSite = " + InfectionSite.PULMONARY.ordinal();
         result += " and c.caseDefinition = " + CaseDefinition.BACTERIOLOGICALLY_CONFIRMED.ordinal();
 

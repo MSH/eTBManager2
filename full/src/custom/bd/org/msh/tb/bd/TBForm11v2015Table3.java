@@ -3,6 +3,7 @@ package org.msh.tb.bd;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.CaseDefinition;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.InfectionSite;
 
 
@@ -21,6 +22,7 @@ public class TBForm11v2015Table3 extends TBForm11v2015 {
         result += " and p.gender is not null ";
         result += " and c.state is not null ";
         result += " and c.classification = " + CaseClassification.TB.ordinal();
+        result += " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal();
         result += " and c.infectionSite = " + InfectionSite.EXTRAPULMONARY.ordinal();
 
         result = result + " ";
