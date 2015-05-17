@@ -6,4 +6,6 @@
 		<param name="useregdate" value="#{indicatorFilters.useRegistrationDate}"/>
 		<param name="useinitreatmentdate" value="#{indicatorFilters.useIniTreatmentDate}"/>
 
+    <action execute="#{tBForm11v2015Table1.initialize()}"/>
+
 </page>

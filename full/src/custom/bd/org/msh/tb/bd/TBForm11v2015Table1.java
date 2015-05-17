@@ -18,6 +18,14 @@ import java.util.Map;
 @Name("tBForm11v2015Table1")
 public class TBForm11v2015Table1 extends TBForm11v2015 {
 
+    /**
+     * To guarantee that the conditions for period will be applied on registration date atributte
+     */
+    public void initialize(){
+        this.getIndicatorFilters().setUseIniTreatmentDate(false);
+        this.getIndicatorFilters().setUseRegistrationDate(true);
+    }
+
     protected String getHQLWhereForQuery(){
         String result = super.getHQLWhere();
 
