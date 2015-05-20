@@ -96,10 +96,12 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 
         persistSample();
 
+        String s = super.persist();
+
         raiseEvent((isManaged() ? EntityEvent.EventType.EDIT : EntityEvent.EventType.NEW));
 
 		// save data
-		return super.persist();
+		return s;
 	}
 
 

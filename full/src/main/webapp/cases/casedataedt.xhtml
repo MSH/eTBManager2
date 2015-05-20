@@ -212,19 +212,24 @@
             }
         </script>
 
-        <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}">
+        <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}" id="patType1Dec">
             <ui:define name="label">#{messages['PatientType']}:</ui:define>
             <h:selectOneMenu id="patType1" value="#{tbcase.patientType}" required="#{tbcase.validated}" onchange="checkPrevTreatType()">
                 <s:selectItems var="it" value="#{patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
                 <s:convertEnum />
             </h:selectOneMenu>
-            <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
-                <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" id="previouslyTreatedType">
-                    <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
-                    <s:convertEnum />
-                </h:selectOneMenu>
-            </div>
         </s:decorate>
+
+        <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+            <s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
+                <ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
+                <ui:param name="redasterisk" value="#{tbcase.validated}"/>
+                    <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" id="previouslyTreatedType">
+                        <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                        <s:convertEnum />
+                    </h:selectOneMenu>
+            </s:decorate>
+        </div>
 
         <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
             <ui:define name="label">#{messages['PatientType']}:</ui:define>
@@ -238,27 +243,19 @@
         <rich:jQuery selector="#patType2" query="change(function(){ showPatientTypeOther(this); })" />
 
 		<div id="patientTypeOther" style="#{tbcase.patientType != 'OTHER' ? 'display:none' : ''}">
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" id="patientTypeOtherDec">
 			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
-    		<h:inputText value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
+    		<h:inputText id="patientTypeOtherInput" value="#{tbcase.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
 		</div>
 
     <s:decorate template="/layout/edit.xhtml">
-        <ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
-        <h:selectOneMenu id="secDrugsRec" value="#{tbcase.secDrugsReceived}" required="#{tbcase.validated}">
-            <s:selectItems var="it" value="#{secDrugsRec}" noSelectionLabel="-" label="#{messages[it.key]}" />
+        <ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+        <h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
+            <s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
             <s:convertEnum />
         </h:selectOneMenu>
     </s:decorate>
-
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		<h:selectOneMenu id="infectsite" value="#{tbcase.infectionSite}" required="#{tbcase.validated}">
-    			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-		</s:decorate>
 
 <rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
 <script type="text/javascript">
@@ -272,12 +269,18 @@ function isPatientTypePrevTreat(cb) {
 function showPatientTypeOther(cb) {
     if (isPatientTypeOther(cb))
         jQuery('#patientTypeOther').show(500);
-    else jQuery('#patientTypeOther').hide(500);
+    else{
+        document.getElementById('main:patientTypeOtherDec:patientTypeOtherInput').value = '';
+        jQuery('#patientTypeOther').hide(500);
+    }
 }
 function showPrevTreatType(cb) {
     if (isPatientTypePrevTreat(cb))
         jQuery('#prevTreatType').show(500);
-    else jQuery('#prevTreatType').hide(500);
+    else{
+        document.getElementById('main:prevTreatTypeDec:previouslyTreatedType').options[0].selected = "true";
+        jQuery('#prevTreatType').hide(500);
+    }
 }
 function showExtrapulmonary(cb) {
   if (isExtrapulmonary(cb))
@@ -336,6 +339,7 @@ function isPulmonary(cb) {
 			<ui:define name="label">
 				#{messages['cases.prevtreat.numprev']}:
 			</ui:define>
+            <ui:param name="labelstyle" value="width:245px"/>
 			<h:selectOneMenu value="#{prevTBTreatmentHome.numTreatments}">
 				<f:selectItems value="#{prevTBTreatmentHome.numTreatmentsOptions}"/>
 				<a:support event="onchange" ajaxSingle="true" reRender="prevtreats"/>
@@ -343,16 +347,8 @@ function isPulmonary(cb) {
 		</s:decorate>
 
 		<h:panelGroup id="prevtreats">
-         <s:div id="slAlertMessage" styleClass="medalertmsg" style="width:600px;margin-bottom:8px">
-             <span style="margin-left:6px;margin-right:6px">
-                 <h:outputText value="#{messages['SystemSugest.msg1']} "/>
-                 <h:outputText rendered="#{prevTBTreatmentHome.usedSecondLineDrugs()}" value="#{messages['SystemSugest']} #{messages['global.yes']}"/>
-                 <h:outputText rendered="#{prevTBTreatmentHome.usedAnyDrugs() and (not prevTBTreatmentHome.usedSecondLineDrugs())}" value="#{messages['SystemSugest']} #{messages['global.no']}"/>
-                 <h:outputText rendered="#{(not prevTBTreatmentHome.usedAnyDrugs())}" value="#{messages['SystemSugest']} #{messages['manag.ind.interim.unknown']}"/>
-            </span>
-         </s:div>
-         <br/>
 		<s:fragment rendered="#{prevTBTreatmentHome.numTreatments>0}">
+        <br/>
 		<table width="98%" class="table1 small">
 			<tr>
 				<th rowspan="2">#{messages['cases.prevtreat.num']}
@@ -405,7 +401,26 @@ function isPulmonary(cb) {
 			</tr>
 		</a:repeat>
 		</table>
+        <br/>
 		</s:fragment>
+
+        <s:decorate template="/layout/edit.xhtml">
+            <ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
+            <ui:param name="labelstyle" value="width:270px"/>
+            <h:selectOneMenu id="secDrugsRec" value="#{tbcase.secDrugsReceived}">
+                <s:selectItems var="it" value="#{secDrugsRec}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+            <s:span id="slAlertMessage" styleClass="medalertmsg" style="width:515px;margin-bottom:8px">
+                <span style="margin-left:6px;margin-right:6px">
+                     <h:outputText value="#{messages['SystemSugest.msg1']} "/>
+                     <h:outputText rendered="#{prevTBTreatmentHome.usedSecondLineDrugs()}" value="#{messages['SystemSugest']} #{messages['global.yes']}"/>
+                     <h:outputText rendered="#{prevTBTreatmentHome.usedAnyDrugs() and (not prevTBTreatmentHome.usedSecondLineDrugs())}" value="#{messages['SystemSugest']} #{messages['global.no']}"/>
+                     <h:outputText rendered="#{(not prevTBTreatmentHome.usedAnyDrugs())}" value="#{messages['SystemSugest']} #{messages['manag.ind.interim.unknown']}"/>
+                </span>
+            </s:span>
+        </s:decorate>
+
 		</h:panelGroup>
 		
 		</td></tr></table>

@@ -522,11 +522,10 @@ public class CaseEditingHome {
 
         if(tbcase.getClassification().equals(CaseClassification.TB) && tbcase.getPatientType() != null && tbcase.getPatientType().equals(PatientType.PREVIOUSLY_TREATED)
                 && tbcase.isValidated() && tbcase.getPreviouslyTreatedType() == null){
-            facesMessages.addToControlFromResourceBundle("patType1", "javax.faces.component.UIInput.REQUIRED");
+            facesMessages.addToControlFromResourceBundle("previouslyTreatedType", "javax.faces.component.UIInput.REQUIRED");
             return false;
         }
 
-		
 		return true;
 	}
 	

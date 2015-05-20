@@ -51,44 +51,44 @@ public class CaseDefinitionFieldIntelligence {
         TbCase tbcase = caseHome.getInstance();
         Workspace ws = tbcase.getPatient().getWorkspace();
 
-        // Only for Bangladesh
-        if(ws.getExtension() != null && (!ws.getExtension().isEmpty()) && ws.getExtension().equals("bd")) {
+        CaseDefinition value = null;
 
-            CaseDefinition value = null;
-
-            //If it is a suspect the case is not confirmed as a TB or DRTB or NMT case, so, no case definition for  this case.
-            if (tbcase.getDiagnosisType().equals(DiagnosisType.SUSPECT)) {
-                tbcase.setCaseDefinition(value);
-                entityManager.merge(tbcase);
-                entityManager.flush();
-                return;
-            }
-
-            value = CaseDefinition.CLINICALLY_DIAGNOSED;
-
-            //Check if positive on microscopy exam
-            ExamMicroscopy examMic = (ExamMicroscopy) getLastExam(tbcase, "ExamMicroscopy");
-            if (examMic != null && examMic.getResult() != null && examMic.getResult().isPositive())
-                value = CaseDefinition.BACTERIOLOGICALLY_CONFIRMED;
-
-            if (value.equals(CaseDefinition.CLINICALLY_DIAGNOSED)) {
-                //Check if positive on culture exam
-                ExamCulture examCul = (ExamCulture) getLastExam(tbcase, "ExamCulture");
-                if (examCul != null && examCul.getResult() != null && examCul.getResult().isPositive())
-                    value = CaseDefinition.BACTERIOLOGICALLY_CONFIRMED;
-            }
-
-            if (value.equals(CaseDefinition.CLINICALLY_DIAGNOSED)) {
-                //Check if positive on culture exam
-                ExamXpert examX = (ExamXpert) getLastExam(tbcase, "ExamXpert");
-                if (examX != null && examX.getResult() != null && examX.getResult().equals(XpertResult.TB_DETECTED))
-                    value = CaseDefinition.BACTERIOLOGICALLY_CONFIRMED;
-            }
-
+        //If it is a suspect (presumptive), the case is not confirmed as a TB or DRTB or NMT case, so, no case definition for  this case.
+        if (tbcase.getDiagnosisType().equals(DiagnosisType.SUSPECT)) {
             tbcase.setCaseDefinition(value);
-            entityManager.merge(tbcase);
+            entityManager.persist(tbcase);
             entityManager.flush();
+            return;
         }
+
+        value = CaseDefinition.CLINICALLY_DIAGNOSED;
+
+        //Check if positive on microscopy exam
+        ExamMicroscopy examMic = (ExamMicroscopy) getLastExam(tbcase, "ExamMicroscopy");
+        if (examMic != null && examMic.getResult() != null && examMic.getResult().isPositive())
+            value = CaseDefinition.BACTERIOLOGICALLY_CONFIRMED;
+
+        if (value.equals(CaseDefinition.CLINICALLY_DIAGNOSED)) {
+            //Check if positive on culture exam
+            ExamCulture examCul = (ExamCulture) getLastExam(tbcase, "ExamCulture");
+            if (examCul != null && examCul.getResult() != null && examCul.getResult().isPositive())
+                value = CaseDefinition.BACTERIOLOGICALLY_CONFIRMED;
+        }
+
+        if (value.equals(CaseDefinition.CLINICALLY_DIAGNOSED)) {
+            //Check if positive on culture exam
+            ExamXpert examX = (ExamXpert) getLastExam(tbcase, "ExamXpert");
+            if (examX != null && examX.getResult() != null && examX.getResult().equals(XpertResult.TB_DETECTED))
+                value = CaseDefinition.BACTERIOLOGICALLY_CONFIRMED;
+        }
+
+        if(!value.equals(tbcase.getCaseDefinition())) {
+            tbcase.setCaseDefinition(value);
+            entityManager.persist(tbcase);
+            entityManager.flush();
+            System.out.println("heyhey");
+        }
+
     }
 
     /**

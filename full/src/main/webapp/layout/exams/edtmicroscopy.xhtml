@@ -10,7 +10,7 @@
 <ui:param name="labelstyle" value="width:180px;" />
 <ui:param name="examHome" value="#{examMicroscopyHome}" />
 
-    <s:decorate template="#{examTemplateWrapper}">
+    <s:decorate template="#{examTemplateWrapper}" id="dec2">
         <ui:param name="examprefix" value="mic" />
 
         <ui:define name="afterdatecollected">
@@ -55,9 +55,9 @@
             </h:selectOneMenu>
         </s:decorate>
 
-        <div style="display:block;width:600px;" >
-            <div id="pnlrespositive">
-                <s:decorate template="/layout/edit.xhtml" >
+        <div id="afbdiv1" style="display:block;width:600px;" >
+            <div id="pnlrespositive" style="#{(not empty examMicroscopy.result) and examMicroscopy.result == 'POSITIVE' ? 'display:block' : 'display:none'}">
+                <s:decorate id="afbdec" template="/layout/edit.xhtml" >
                     <ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
                     <h:inputText id="micafb" value="#{examMicroscopy.numberOfAFB}"
                                  onkeypress="return numbersOnly(this,event, null);"
@@ -74,8 +74,11 @@
             function examResultChanged(cb, immediate) {
                 var s = cb.options[cb.selectedIndex].value;
                 if (s=='POSITIVE')
-                    jQuery('#pnlrespositive').show(immediate?0:500)
-                else jQuery('#pnlrespositive').hide(immediate?0:500);
+                    jQuery('#pnlrespositive').show(immediate?0:500);
+                else{
+                    document.getElementById('dec1:dec2:dec3:formexam:afbdec:micafb').value = '';
+                    jQuery('#pnlrespositive').hide(immediate?0:500);
+                }
             }
             -->
         </script>

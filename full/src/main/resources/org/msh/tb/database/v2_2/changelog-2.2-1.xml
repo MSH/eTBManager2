@@ -50,4 +50,124 @@
         <sql>ALTER TABLE tbcase DROP COLUMN rifampcinResistance</sql>
     </changeSet>
 
+    <!-- updates field case definition field according to exams -->
+    <changeSet id="2.2-1.4" author="msantos">
+        <sql>
+            update tbcase
+            set casedefinition = 1
+            where diagnosisType = 1;
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from exammicroscopy e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from exammicroscopy e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from exammicroscopy e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from exammicroscopy e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
+            );
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from examculture e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examculture e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from examculture e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examculture e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
+            );
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.id = (select max(id)
+            from examxpert e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examxpert e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.id = (select max(id)
+            from examxpert e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examxpert e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
+            );
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

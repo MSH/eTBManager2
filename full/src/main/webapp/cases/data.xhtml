@@ -38,7 +38,7 @@
 		</td><td>
 	
 			<s:decorate template="/layout/display.xhtml">
-		    	<ui:define name="label">#{messages['TbCase.patientAge']}:</ui:define>
+		    	<ui:define name="label">#{messages['TbCase.ageAtReg']}:</ui:define>
 		    	<h:outputText value="#{tbcase.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
 			</s:decorate>
 
@@ -184,6 +184,7 @@
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
     		#{messages[tbcase.patientType.key]}
             <h:outputText rendered="#{tbcase.patientType == 'PREVIOUSLY_TREATED' and not empty tbcase.previouslyTreatedType}" value=" - #{messages[tbcase.previouslyTreatedType.key]} "/>
+            <h:outputText rendered="#{tbcase.patientType == 'OTHER' and not empty tbcase.patientTypeOther}" value=" - #{tbcase.patientTypeOther} "/>
 		</s:decorate>
         <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null}">
             <ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>

@@ -229,19 +229,24 @@
     	</h:selectOneMenu>
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}" id="patType1Dec">
         <ui:define name="label">#{messages['PatientType']}:</ui:define>
         <h:selectOneMenu id="patType1" value="#{tbcase.patientType}" required="#{tbcase.validated}" onchange="checkPrevTreatType()">
             <s:selectItems var="it" value="#{patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
             <s:convertEnum />
         </h:selectOneMenu>
-        <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+    </s:decorate>
+
+    <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+        <s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
+            <ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
+            <ui:param name="redasterisk" value="#{tbcase.validated}"/>
             <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" id="previouslyTreatedType">
                 <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
                 <s:convertEnum />
             </h:selectOneMenu>
-        </div>
-    </s:decorate>
+        </s:decorate>
+    </div>
 
     <rich:jQuery selector="#patType1" query="change(function(){ showPrevTreatType(this); })" />
     <rich:jQuery selector="#patType2" query="change(function(){ showPatientTypeOther(this); })" />
@@ -286,7 +291,10 @@ function showPatientTypeOther(cb) {
 function showPrevTreatType(cb) {
     if (isPatientTypePrevTreat(cb))
         jQuery('#prevTreatType').show(500);
-    else jQuery('#prevTreatType').hide(500);
+    else{
+        document.getElementById('main:prevTreatTypeDec:previouslyTreatedType').options[0].selected = "true";
+        jQuery('#prevTreatType').hide(500);
+    }
 }
 function showExtrapulmonary(cb) {
   if (isExtrapulmonary(cb))
