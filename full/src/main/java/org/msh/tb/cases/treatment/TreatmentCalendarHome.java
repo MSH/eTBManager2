@@ -101,9 +101,8 @@ public class TreatmentCalendarHome {
 
 	/**
 	 * Create the list of months for the list according to the initial and final date
-	 * @param lst
-	 * @param ini
-	 * @param end
+	 * @param lst the list to be filled
+	 * @param period the period to create the months
 	 */
 	protected void createMonths(List<MonthInfo> lst, Period period) {
 		Calendar c = Calendar.getInstance();

@@ -3,6 +3,8 @@ package org.msh.etbm.rest.gxalert;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
+import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.rest.authentication.Authenticated;
 import org.msh.etbm.services.gxalert.GxalertService;
@@ -22,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 @Name("gxalertRest")
 @Path("/gxalert")
 @Authenticated
+@ApiDoc(group = "gxalert", summary = "Integration with the gxalert system")
 public class GxalertRest {
 
     /**
@@ -33,6 +36,7 @@ public class GxalertRest {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @POST
+    @ApiDocMethod(summary = "Include a new xpert exam result")
     public StandardResult add(GxalertForm form) {
         GxalertData data = new GxalertData();
 
