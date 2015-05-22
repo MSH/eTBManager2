@@ -185,14 +185,6 @@
     	<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml">
-        <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
-        <h:selectOneMenu value="#{tbcase.caseDefinition}" >
-            <s:selectItems var="it" value="#{caseDefinitions}" noSelectionLabel="-" label="#{messages[it.key]}" />
-            <s:convertEnum />
-        </h:selectOneMenu>
-    </s:decorate>
-
     <s:decorate id="resistancetype" template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<h:selectOneMenu value="#{tbcase.drugResistanceType}" onchange="checkRifampsinResistance(this)">
