@@ -6,10 +6,14 @@
 	<restrict>#{s:hasRole('EXPORT')}</restrict>
 	<navigation>
 		<rule if-outcome="download">
-			<end-conversation before-redirect="false"/>
-			<redirect view-id="/export/cases.xhtml">
+			<redirect view-id="/management/export.xhtml">
 			</redirect>
 		</rule>
+        <rule if-outcome="no-cases-found">
+            <redirect view-id="/management/export.xhtml">
+                <message>#{messages['form.norecordfound']}</message>
+            </redirect>
+        </rule>
 	</navigation>
 	
 </page>

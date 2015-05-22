@@ -23,8 +23,15 @@ public class CaseExamsExportHome extends CaseHQLBase{
 	/**
 	 * Create the excel file and send it to the client browser
 	 */
-	public void download() {
-		caseDataExport.download(getCasesId());
+	public String download() {
+        List<Integer> ids = getCasesId();
+
+        if(ids == null || ids.size()<1){
+            return "no-cases-found";
+        }
+
+		caseDataExport.download(ids);
+        return "download";
 	}
 
 	public List<Integer> getCasesId() {
