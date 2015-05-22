@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 /**
- * Generate indicator TB 11 form (first table)
+ * Generate indicator TB 11 form (first table - clinically diagnosed pulmonary TB cases)
  * @author Mauricio Santos
  *
  */

@@ -8,7 +8,7 @@ import org.msh.tb.entities.enums.InfectionSite;
 
 
 /**
- * Generate indicator TB 11 form (first table)
+ * Generate indicator TB 11 form (Third table - Extrapulmonary TB cases)
  * @author Mauricio Santos
  *
  */

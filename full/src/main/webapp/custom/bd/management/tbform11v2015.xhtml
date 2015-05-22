@@ -263,6 +263,55 @@
         </ui:repeat>
 
     </table>
+
+    <br/>
+
+    <!-- TB/HIV Activities -->
+    <table class="table1" align="left" style="float:none">
+
+        <tr>
+            <th colspan="1" rowspan="3">
+                <b>#{messages['manag.tbform112015.allTbCases']}</b>
+            </th>
+
+            <th colspan="2" >
+                #{messages['manag.tbform112015.hivcol1']}
+            </th>
+            <th colspan="2">
+                #{messages['manag.tbform112015.hivcol2']}
+            </th>
+        </tr>
+
+        <tr>
+            <ui:repeat value="#{tBForm11v2015HIVTable.table.columns}" var="col">
+                <th>
+                    #{col.titleDisplay}
+                </th>
+                <s:fragment rendered="#{col.highlight}">
+                    <th>
+                        #{messages['global.total']}
+                    </th>
+                    <th>
+                        #{col.title}
+                    </th>
+                </s:fragment>
+            </ui:repeat>
+        </tr>
+
+        <ui:repeat value="#{tBForm11v2015HIVTable.table.rows}" var="row">
+            <tr>
+                <ui:repeat value="#{row.cells}" var="val">
+                    <td class="colcb">
+                        <h:outputText value="#{val.value}" >
+                            <f:convertNumber pattern="#,###,##0"/>
+                        </h:outputText><h:outputText value="%" rendered="#{val.column.highlight}" />
+                    </td>
+                </ui:repeat>
+            </tr>
+        </ui:repeat>
+
+    </table>
+
     </s:fragment>
 
 </h:panelGroup>
