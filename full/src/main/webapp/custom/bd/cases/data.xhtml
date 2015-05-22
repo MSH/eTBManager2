@@ -198,6 +198,12 @@
 	<tr>
 	<td	colspan="2">
 		<s:fragment rendered="#{tbcasebd.diagnosisType == 'CONFIRMED'}">
+
+        <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.caseDefinition!=null}">
+            <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
+            #{messages[tbcase.caseDefinition.key]}
+        </s:decorate>
+
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
 			<ui:define name="label">#{messages['DrugResistanceType']}</ui:define>
 			#{messages[tbcase.drugResistanceType.key]}
@@ -218,11 +224,6 @@
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
     		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
 		</s:decorate>
-
-        <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.caseDefinition!=null}">
-            <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
-            #{messages[tbcase.caseDefinition.key]}
-        </s:decorate>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
     		<ui:define name="label">#{messages['PatientType']}:</ui:define>
