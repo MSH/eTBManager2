@@ -20,39 +20,10 @@ public class TBForm10v2015Block2v2015 extends TBForm10v2015 {
 
         includeAllRefByOnInterfaceTable();
 
-        // Pulmonary TB cases WITH treatment registered
-        query = "select c.patientRefToFv, count(*), "
-                + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamMicroscopy", "exm") + " as micresult, "
-                + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamCulture", "exc") + " as culresult, "
-                + getHQLSelectSubQBacteriologicallyConfirmedWithTreat("ExamXpert", "exe") + " as expresult, "
-                + getHQLSelectSubQBacteriologicallyConfirmedWithTreatXray() + " as xrayresult "
-                + " from TbCaseBD c join c.patient p "
-                + getHQLWhereBlock_2_5() + " and c.treatmentPeriod.iniDate is not null and c.infectionSite = 0 "
-                + " and c.patientType is not null and p.gender is not null " //Block 1 is considering only cases with this fields not null. Need to maintain this condition to the total values be the same
-                + " group by c.patientRefToFv "
-                + " having col_2_0_ in (1,2,3,4,5) or col_3_0_ in (1,2,3,4,5) or col_4_0_ = 5 or col_5_0_ like '1' or col_5_0_ like '3' or col_5_0_ like '4' ";
-        result = entityManager.createQuery(query).getResultList();
-        populateInfacetableRows(result);
-
-        // Pulmonary TB cases WITHOUT treatment registered
-        query = "select c.patientRefToFv, count(*), "
-                + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamMicroscopy", "exm") + " as micresult, "
-                + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamCulture", "exc") + " as culresult, "
-                + getHQLSelectSubQBacteriologicallyConfirmedNTR("ExamXpert", "exe") + " as expresult, "
-                + getHQLSelectSubQBacteriologicallyConfirmedNTRXray() + " as xrayresult "
-                + " from TbCaseBD c join c.patient p "
-                + getHQLWhereBlock_2_5() + " and c.treatmentPeriod.iniDate is null and c.infectionSite = 0 "
-                + " and c.patientType is not null and p.gender is not null " //Block 1 is considering only cases with this fields not null. Need to maintain this condition to the total values be the same
-                + " group by c.patientRefToFv "
-                + " having col_2_0_ in (1,2,3,4,5) or col_3_0_ in (1,2,3,4,5) or col_4_0_ = 5 or col_5_0_ like '1' or col_5_0_ like '3' or col_5_0_ like '4' ";
-        result = entityManager.createQuery(query).getResultList();
-        populateInfacetableRows(result);
-
-        // ExtraPulmonary TB cases
+        // Pulmonary and Extra-pulmonary
         query = "select c.patientRefToFv, count(*) "
                 + " from TbCaseBD c join c.patient p "
-                + getHQLWhereBlock_2_5() + " and c.infectionSite = 1 "
-                + " and c.patientType is not null and p.gender is not null " //Block 1 is considering only cases with this fields not null. Need to maintain this condition to the total values be the same
+                + getHQLWhereBlock_2_5() + " and c.infectionSite in (0,1) and c.caseDefinition in (0,1) " //Block 1 is considering only cases with caseDefinition defined as 0 or 1. Same for infectionSite
                 + " group by c.patientRefToFv ";
         result = entityManager.createQuery(query).getResultList();
         populateInfacetableRows(result);

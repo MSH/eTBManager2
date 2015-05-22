@@ -13,17 +13,6 @@ import java.util.Map;
  */
 public abstract class TBForm10v2015 extends Indicator2D{
 
-    /*
-    * TODO: a hack needed to be done on block 1, 2 and 5 so the query should work, check HAVING clause on queries on the respective classes.
-    * About the TO DO above: In SQL I used left join with conditions on the ON clause to select the last exam for cases without treatment and
-    * the last exam before treatment to cases with treatment, but in HQL ON clause doesn't exists. There is the WITH clause but in the version of
-    * Hibernate that is used in ETBMANAGER it has some bugs.
-    * The solution was writing sub queries on the SELECT clause (so the cases that doesn't have a certain exam should not be excluded from the result)
-    * and test it on HAVING clause, but another bug of Hibernate happened... Hibernate doesn't recognizes the alias for the subquery result in HQL,
-    * so I checked the alias generated on SQL log and putted it on HQL.
-    * Summarizing, the alias on HQL is hardcoded to the alias generated in SQL by Hibernate.
-    * */
-
 	@In(create=true) protected EntityManager entityManager;
     @In(create=true) protected Map<String, String> messages;
 
@@ -46,7 +35,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
     protected String getHQLWhereBlock1(){
         // cases has to be Tb and confirmed and has to be one of type of patients considered on TB 10
         return super.getHQLWhere() + getWhereClausePatientTypes() + " and ar.workspace.id = " + getWorkspace().getId().toString() +
-                " and (c.age >= ar.iniAge and c.age <= ar.endAge) and c.classification = 0 and c.diagnosisType = 1 ";
+                " and (c.age >= ar.iniAge and c.age <= ar.endAge) and c.classification = 0 and c.diagnosisType = 1 and c.patientType is not null and p.gender is not null ";
     }
 
     /**
@@ -64,57 +53,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
      */
     protected String getHQLWhereBlock_2_5(){
         // cases has to be Tb and confirmed and has to be one of type of patients considered on TB 10
-        return super.getHQLWhere() + " and c.classification = 0 and c.diagnosisType = 1 " + getWhereClausePatientTypes();
-    }
-
-    /**
-     * This HQL subquery is used in many queries in block 1, 2 and 5, so it was encapsulated on a method.
-     * @return HQL subquery to be appended on the select clause of an HQL. This subquery selects the last exam before the start treatment date.
-     * This subquery is for cases that has treatment registered.
-     * @param examEntity The exam that will be selected on subquery
-     * @param alias The alias of this exam on the main HQL
-     */
-    protected String getHQLSelectSubQBacteriologicallyConfirmedWithTreat(String examEntity, String alias){
-        return " (select "+alias+".result from "+examEntity+" "+alias+" where "+alias+".tbcase.id = c.id "+
-                " and "+alias+".id = (select max ("+alias+"2.id) from "+examEntity+" "+alias+"2 where "+alias+"2.tbcase.id = "+alias+".tbcase.id and "+alias+"2.dateRelease = " +
-                "(select max("+alias+"3.dateRelease) from "+examEntity+" "+alias+"3 where "+alias+"3.tbcase.id = "+alias+"2.tbcase.id and "+alias+"3.dateRelease < c.treatmentPeriod.iniDate))) ";
-    }
-
-    /**
-     * NTR = No treatment registered
-     * This HQL subquery is used in many queries in block 1, 2 and 5, so it was encapsulated on a method.
-     * @return HQL subquery to be appended on the select clause of an HQL. This subquery selects the last exam registered.
-     * This subquery is for cases that has no treatment registred.
-     * @param examEntity The exam that will be selected on subquery
-     * @param alias The alias of this exam on the main HQL
-     */
-    protected String getHQLSelectSubQBacteriologicallyConfirmedNTR(String examEntity, String alias){
-        return " (select "+alias+".result from "+examEntity+" "+alias+" where "+alias+".tbcase.id = c.id "+
-                " and "+alias+".id = (select max ("+alias+"2.id) from "+examEntity+" "+alias+"2 where "+alias+"2.tbcase.id = "+alias+".tbcase.id and "+alias+"2.dateRelease = " +
-                "(select max("+alias+"3.dateRelease) from "+examEntity+" "+alias+"3 where "+alias+"3.tbcase.id = "+alias+"2.tbcase.id))) ";
-    }
-
-    /**
-     * This HQL subquery is used in many queries in block 1, 2 and 5, so it was encapsulated on a method.
-     * @return HQL subquery to be appended on the select clause of an HQL. This subquery selects the last Xray exam registered before the start treatment date.
-     * This subquery is for cases that has treatment registered.
-     */
-    protected String getHQLSelectSubQBacteriologicallyConfirmedWithTreatXray(){
-        return " (select exxray.presentation.customId from ExamXRay exxray where exxray.tbcase.id = c.id "+
-                " and exxray.id = (select max (exxray2.id) from ExamXRay exxray2 where exxray2.tbcase.id = exxray.tbcase.id and exxray2.date = " +
-                "(select max(exxray3.date) from ExamXRay exxray3 where exxray3.tbcase.id = exxray2.tbcase.id and exxray3.date < c.treatmentPeriod.iniDate))) ";
-    }
-
-    /**
-     * NTR = No treatment registered
-     * This HQL subquery is used in many queries in block 1, 2 and 5, so it was encapsulated on a method.
-     * @return HQL subquery to be appended on the select clause of an HQL. This subquery selects the last Xray exam registered.
-     * This subquery is for cases that has no treatment registered.
-     */
-    protected String getHQLSelectSubQBacteriologicallyConfirmedNTRXray(){
-        return " (select exxray.presentation.customId from ExamXRay exxray where exxray.tbcase.id = c.id "+
-                " and exxray.id = (select max (exxray2.id) from ExamXRay exxray2 where exxray2.tbcase.id = exxray.tbcase.id and exxray2.date = " +
-                "(select max(exxray3.date) from ExamXRay exxray3 where exxray3.tbcase.id = exxray2.tbcase.id))) ";
+        return super.getHQLWhere() + " and c.patientType is not null and p.gender is not null and c.classification = 0 and c.diagnosisType = 1 " + getWhereClausePatientTypes();
     }
 
     /**
@@ -128,16 +67,6 @@ public abstract class TBForm10v2015 extends Indicator2D{
         return " and "+alias+".id = (select max ("+alias+"2.id) from "+examEntity+" "+alias+"2 where "+alias+"2.tbcase.id = "+alias+".tbcase.id and "+alias+"2."+dateParameter+" = " +
                 "(select max("+alias+"3."+dateParameter+") from "+examEntity+" "+alias+"3 where "+alias+"3.tbcase.id = "+alias+"2.tbcase.id " +
                 "and ("+alias+"3."+dateParameter+" between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate} ) ) ) ";
-    }
-
-    /**
-     * This HQL where conditions is used in many queries in block 3 and 4, so it was encapsulated on a method.
-     * @return HQL sub query to be included on HQL select clause to select the very last HIV exam for each case
-     */
-    protected String getHQLSelectSubQLastHivResult(){
-        return " (select hiv.result from ExamHIV hiv where hiv.tbcase.id = c.id "+
-                " and hiv.id = (select max (hiv2.id) from ExamHIV hiv2 where hiv2.tbcase.id = hiv.tbcase.id and hiv2.date = " +
-                " (select max(hiv3.date) from ExamHIV hiv3 where hiv3.tbcase.id = hiv2.tbcase.id and (hiv3.date between #{indicatorFilters.iniDate} and #{indicatorFilters.endDate})))) ";
     }
 
     /**
