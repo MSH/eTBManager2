@@ -403,7 +403,7 @@ function isPulmonary(cb) {
                 <s:selectItems var="it" value="#{secDrugsRec}" noSelectionLabel="-" label="#{messages[it.key]}" />
                 <s:convertEnum />
             </h:selectOneMenu>
-            <s:span id="slAlertMessage" styleClass="medalertmsg" style="width:515px;margin-bottom:8px">
+            <s:span id="slAlertMessage" styleClass="medalertmsg" style="width:315px;margin-bottom:8px">
                 <span style="margin-left:6px;margin-right:6px">
                      <h:outputText value="#{messages['SystemSugest.msg1']} "/>
                      <h:outputText rendered="#{prevTBTreatmentHome.usedSecondLineDrugs()}" value="#{messages['SystemSugest']} #{messages['global.yes']}"/>
