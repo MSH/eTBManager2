@@ -83,6 +83,7 @@ public class ReportResources {
 		add(grp, new AgeRangeVariable());
 		add(grp, new SideEffectVariable("sideeffect"));
 		add(grp, new ComorbiditiesVariable());
+        add(grp, new EnumFieldVariable("caseDef", "CaseDefinition", "tbcase.caseDefinition", CaseDefinition.class));
 		return grp;
 	}
 
