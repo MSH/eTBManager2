@@ -19,9 +19,11 @@
                     <th align="center">
                         #{messages['cases.exammicroscopy']}
                     </th>
-                    <th align="center">
-                        #{messages['cases.examculture']}
-                    </th>
+                    <s:fragment rendered="false">
+                        <th align="center">
+                            #{messages['cases.examculture']}
+                        </th>
+                    </s:fragment>
                 </s:fragment>
                 <s:fragment rendered="#{not suspects}">
                     <th align="left"><a:commandLink value="#{messages['PatientType']}" onclick="changeOrder#{idList}(2);return false;" styleClass="link-header-sr"/></th>
@@ -55,11 +57,13 @@
                             <h:outputText value="#{messages[it.microscopyResult.key]}" rendered="#{not empty it.microscopyResult}"
                                           styleClass="badge #{it.microscopyResult=='NEGATIVE'? 'color-success': 'color-danger'}"/>
                         </td>
-                        <td align="center">
-                            <h:outputText value="#{messages[it.cultureResult.key]}"
-                                          styleClass="badge #{r.result=='NEGATIVE'? 'color-success': 'color-danger'}"
-                                          rendered="#{not empty it.cultureResult}" />
-                        </td>
+                        <s:fragment rendered="false">
+                            <td align="center">
+                                <h:outputText value="#{messages[it.cultureResult.key]}"
+                                              styleClass="badge #{r.result=='NEGATIVE'? 'color-success': 'color-danger'}"
+                                              rendered="#{not empty it.cultureResult}" />
+                            </td>
+                        </s:fragment>
                     </s:fragment>
                     <s:fragment rendered="#{not suspects}">
                         <td>
