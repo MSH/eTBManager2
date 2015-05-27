@@ -59,6 +59,7 @@ public class ReportGenerator {
 				int index = 0;
 				for (Filter filter: repFilters) {
 					CFilter f = new CFilter(filter.getId(), filter.getLabel(), filter.getFilterType(), null);
+					f.setMultiSels(filter.isMultiSelection());
 					if (!filter.isFilterLazyInitialized())
 						f.setOptions(generateFilterOptions(filter, null));
 					// send options if they are not sent remotely

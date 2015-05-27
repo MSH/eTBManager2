@@ -128,9 +128,7 @@ public class ResistancePatternVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
-		if (KEY_NULL.equals(value))
-			return null;
-		return Integer.parseInt(value);
+		return convertIntFilter(value);
 	}
 
 

@@ -104,4 +104,8 @@ public class HivCptArtVariable extends VariableImpl {
 		return lst;
 	}
 
+	@Override
+	public boolean isMultiSelection() {
+		return false;
+	}
 }

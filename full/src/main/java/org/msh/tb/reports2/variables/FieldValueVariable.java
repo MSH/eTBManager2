@@ -103,6 +103,8 @@ public class FieldValueVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
+		return convertIntFilter(value);
+/*
 		if ((value == null) || (KEY_NULL.equals(value)))
 			return null;
 
@@ -120,6 +122,7 @@ public class FieldValueVariable extends VariableImpl {
         }
 
         return ids;
+*/
 	}
 	
 	

@@ -1,5 +1,7 @@
 package org.msh.tb.client.reports.filters;
 
+import org.msh.tb.client.shared.model.CFilter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,11 +34,11 @@ public class FilterFactory implements FilterConstructor{
 
 	/**
 	 * Create an instance of the filter by its type
-	 * @param type is the string representation of the filter
+	 * @param filter is the instance of the {@link CFilter} class
 	 * @return instance of the {@link FilterWidget} interface
 	 */
-	public static FilterWidget createFilter(String type) {
-		return instance.internalCreateFilter(type);
+	public static FilterWidget createFilter(CFilter filter) {
+		return instance.internalCreateFilter(filter);
 	}
 
 	
@@ -70,21 +72,22 @@ public class FilterFactory implements FilterConstructor{
 	/**
 	 * Private method that implements the static method to create a 
 	 * new filter widget
-	 * @param type
+	 * @param filter
 	 * @return
 	 */
-	private FilterWidget internalCreateFilter(String type) {
+	private FilterWidget internalCreateFilter(CFilter filter) {
 		FilterConstructor constructor;
-		if (type == null) {
+		if (filter.getType() == null) {
 			constructor = defaultFilterConstructor;
 		}
 		else {
-			constructor = filterConstructors.get(type);
+			constructor = filterConstructors.get(filter.getType());
 		}
-		if (constructor == null)
-			throwFilterNotFound(type);
 
-		return constructor.create(type);
+		if (constructor == null)
+			throwFilterNotFound(filter.getType());
+
+		return constructor.create(filter);
 	}
 
 
@@ -101,15 +104,16 @@ public class FilterFactory implements FilterConstructor{
 	 * @see org.msh.tb.client.org.msh.reports.filters.FilterConstructor#create(java.lang.String)
 	 */
 	@Override
-	public FilterWidget create(String ftype) {
+	public FilterWidget create(CFilter filter) {
+		String ftype = filter.getType();
 		if ((ftype == null) || ("options".equals(ftype)))
-			return new OptionsFilter();
+			return new OptionsFilter(filter.isMultiSels());
 		
 		if (FILTER_PERIOD.equals(ftype))
 			return new PeriodFilter();
 		
 		if (FILTER_REMOTE_OPTS.equals(ftype))
-			return new RemoteOptionsFilter();
+			return new RemoteOptionsFilter(filter.isMultiSels());
 
 		if (FILTER_TBUNIT.equals(ftype)) {
 			return new TbunitFilter();

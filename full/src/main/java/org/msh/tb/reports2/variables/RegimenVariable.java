@@ -91,9 +91,12 @@ public class RegimenVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
+		return convertIntFilter(value);
+/*
 		if (KEY_NULL.equals(value))
 			return null;
 		return Integer.parseInt(value);
+*/
 	}
 	
 }

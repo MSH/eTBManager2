@@ -17,33 +17,37 @@ import java.util.List;
  */
 public class OptionsFilter extends FilterWidget {
 
-//	private ListBox lbOptions;
+	private ListBox lbOptions;
     private MultiSelectionBox selbox;
+    private boolean multisel;
 
-	public OptionsFilter() {
-        selbox = new MultiSelectionBox();
-        selbox.setWidth("400px");
-        selbox.addChangeHandler(new MultiSelectionBox.ChangeHandler() {
-            @Override
-            public void onChange(MultiSelectionBox box) {
-                notifyFilterChange();
-            }
-        });
+	public OptionsFilter(boolean multisel) {
+        this.multisel = multisel;
 
-/*
-		lbOptions = new ListBox();
-		lbOptions.setVisibleItemCount(1);
-		lbOptions.setWidth("300px");
+        if (multisel) {
+            selbox = new MultiSelectionBox();
+            selbox.setWidth("400px");
+            selbox.addChangeHandler(new MultiSelectionBox.ChangeHandler() {
+                @Override
+                public void onChange(MultiSelectionBox box) {
+                    notifyFilterChange();
+                }
+            });
+            initWidget(selbox);
+        }
+        else {
+            lbOptions = new ListBox();
+            lbOptions.setVisibleItemCount(1);
+            lbOptions.setWidth("300px");
 
-        lbOptions.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                notifyFilterChange();
-            }
-        });
-		initWidget(lbOptions);
-*/
-        initWidget(selbox);
+            lbOptions.addChangeHandler(new ChangeHandler() {
+                @Override
+                public void onChange(ChangeEvent event) {
+                    notifyFilterChange();
+                }
+            });
+            initWidget(lbOptions);
+        }
 	}
 	
 	/* (non-Javadoc)
@@ -64,10 +68,14 @@ public class OptionsFilter extends FilterWidget {
 	 * @param options
 	 */
 	protected void fillOptions(List<CItem> options, String value) {
-		for (CItem item: options) {
-            selbox.add(item.getLabel(), item.getValue());
+        if (multisel) {
+            for (CItem item: options) {
+                selbox.add(item.getLabel(), item.getValue());
+            }
         }
-        //fillListOptions(lbOptions, options, value);
+        else {
+            fillListOptions(lbOptions, options, value);
+        }
 	}
 	
 	
@@ -76,31 +84,33 @@ public class OptionsFilter extends FilterWidget {
 	 */
 	@Override
 	public String getValue() {
-        List<Object> sels = selbox.getSelectedValues();
+        if (multisel) {
+            List<Object> sels = selbox.getSelectedValues();
 
-        if (sels.size() == 0) {
-            return null;
-        }
-
-        if (sels.size() == 1) {
-            return sels.get(0).toString();
-        }
-
-        String s = "";
-        for (Object val: sels) {
-            if (!s.isEmpty()) {
-                s += ";";
+            if (sels.size() == 0) {
+                return null;
             }
-            s += val.toString();
-        }
 
-        return s;
-/*
-		int index = lbOptions.getSelectedIndex();
-		if (index <= 0)
-			return null;
-		else return lbOptions.getValue(index);
-*/
+            if (sels.size() == 1) {
+                return sels.get(0).toString();
+            }
+
+            String s = "";
+            for (Object val: sels) {
+                if (!s.isEmpty()) {
+                    s += ";";
+                }
+                s += val.toString();
+            }
+
+            return s;
+        }
+        else {
+            int index = lbOptions.getSelectedIndex();
+            if (index <= 0)
+                return null;
+            else return lbOptions.getValue(index);
+        }
 	}
 
 	/* (non-Javadoc)
@@ -108,14 +118,29 @@ public class OptionsFilter extends FilterWidget {
 	 */
 	@Override
 	public void setValue(String value) {
-		if (value == null) {
-            selbox.clearSelection();
-			return;
-		}
+        if (multisel) {
+            if (value == null) {
+                selbox.clearSelection();
+                return;
+            }
 
-        String[] vals = value.split(";");
+            String[] vals = value.split(";");
 
-        selbox.selectValues(vals);
+            selbox.selectValues(vals);
+        }
+        else {
+            if (value == null) {
+                lbOptions.setSelectedIndex(0);
+                return;
+            }
+
+            for (int i = 0; i < lbOptions.getItemCount(); i++) {
+                if (lbOptions.getValue(i).equals(value)) {
+                    lbOptions.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
 	}
 	
 }

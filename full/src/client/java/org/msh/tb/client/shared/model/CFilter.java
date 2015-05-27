@@ -9,6 +9,8 @@ public class CFilter implements IsSerializable {
 	private String id;
 	private String name;
 	private String type;
+	private boolean multiSels;
+
 	private ArrayList<CItem> options;
 
 	/**
@@ -81,5 +83,13 @@ public class CFilter implements IsSerializable {
 	 */
 	public void setOptions(ArrayList<CItem> options) {
 		this.options = options;
+	}
+
+	public boolean isMultiSels() {
+		return multiSels;
+	}
+
+	public void setMultiSels(boolean multiSels) {
+		this.multiSels = multiSels;
 	}
 }

@@ -31,7 +31,7 @@ public class FilterBox extends HoverPanel {
 		add(label);
 		
 		// create filter widget
-		filterWidget = FilterFactory.createFilter(filter.getType());
+		filterWidget = FilterFactory.createFilter(filter);
 		
 		if (filterWidget != null) {
 			filterWidget.initialize(filter, value);

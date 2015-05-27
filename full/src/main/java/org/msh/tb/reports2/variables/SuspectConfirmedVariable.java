@@ -18,9 +18,9 @@ import java.util.List;
 public class SuspectConfirmedVariable extends VariableImpl {
 
 	// keys used in suspect and confirmed cases
-	private final Integer KEY_CONFIRMED = 1;
-	private final Integer KEY_SUSPECT = 0;
-	private final Integer KEY_CONFIRMED_SUSPECT = 2;
+	private final int KEY_CONFIRMED = 1;
+	private final int KEY_SUSPECT = 0;
+	private final int KEY_CONFIRMED_SUSPECT = 2;
 	
 	public SuspectConfirmedVariable() {
 		super("diagtype", "DiagnosisType", "registrationDate < diagnosisDate");
@@ -50,7 +50,7 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	public Object createKey(Object values) {
 		if (values == null)
 			return KEY_SUSPECT;
-		
+
 		if (((Integer)values) == 0)
 			return KEY_CONFIRMED;
 		
@@ -66,40 +66,55 @@ public class SuspectConfirmedVariable extends VariableImpl {
 		if ((value == null) || (KEY_NULL.equals(value)))
 			return;
 
-		if (KEY_CONFIRMED.equals(value))
-			 def.addRestriction("tbcase.registrationDate >= tbcase.diagnosisDate");
-		else
-		if (KEY_SUSPECT.equals(value))
-			def.addRestriction("tbcase.diagnosisDate is null");
-		else
-		if (KEY_CONFIRMED_SUSPECT.equals(value))
-			def.addRestriction("tbcase.registrationDate < tbcase.diagnosisDate");
+        if (value.getClass().isArray()) {
+            Integer[] vals = (Integer[])value;
+            String s = "";
+            for (Integer key: vals) {
+                if (!s.isEmpty()) {
+                    s += " or ";
+                }
+                s += "(" + getHqlRestriction(key) + ")";
+            }
+            def.addRestriction("(" + s + ")");
+        }
+        else {
+            def.addRestriction( getHqlRestriction((Integer)value));
+        }
 	}
+
+
+    protected String getHqlRestriction(int key) {
+        switch (key) {
+            case KEY_CONFIRMED: return "tbcase.registrationDate >= tbcase.diagnosisDate";
+            case KEY_SUSPECT: return "tbcase.diagnosisDate is null";
+            case KEY_CONFIRMED_SUSPECT: return "tbcase.registrationDate < tbcase.diagnosisDate";
+            default: throw new RuntimeException("Invalid key " + key);
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
-		return Integer.parseInt(value);
+        return convertIntFilter(value);
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#getDisplayText(java.lang.Object)
 	 */
 	@Override
 	public String getDisplayText(Object key) {
-		if (KEY_SUSPECT.equals(key)) 
-			 return Messages.instance().get("DiagnosisType.SUSPECT");
-		
-		if (KEY_CONFIRMED.equals(key))
-			return Messages.instance().get("DiagnosisType.CONFIRMED");
-		
-		if (KEY_CONFIRMED_SUSPECT.equals(key))
-			return Messages.instance().get("manag.reportgen.suspconf");
-		
+        switch ((Integer)key) {
+            case KEY_SUSPECT: return Messages.instance().get("DiagnosisType.SUSPECT");
+            case KEY_CONFIRMED: return Messages.instance().get("DiagnosisType.CONFIRMED");
+            case KEY_CONFIRMED_SUSPECT: return Messages.instance().get("manag.reportgen.suspconf");
+        }
+
 		return super.getDisplayText(key);
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#getFilterOptions(java.lang.Object)

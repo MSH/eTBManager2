@@ -40,4 +40,10 @@ public interface Filter extends ReportElement {
 	 * @return is the value converted from string
 	 */
 	Object filterValueFromString(String value);
+
+	/**
+	 * True if the filter accept multiple selection of values
+	 * @return boolean value
+	 */
+	boolean isMultiSelection();
 }

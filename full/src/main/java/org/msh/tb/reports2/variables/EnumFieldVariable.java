@@ -174,6 +174,7 @@ public class EnumFieldVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
+/*
 		if ((value == null) || (KEY_NULL.equals(value)))
 			return null;
 
@@ -198,7 +199,8 @@ public class EnumFieldVariable extends VariableImpl {
             i++;
         }
 
-        return enums;
+*/
+        return convertEnumFilter(value, enumClass);
 	}
 
 
@@ -249,6 +251,9 @@ public class EnumFieldVariable extends VariableImpl {
 		}
 		return values;
 */	}
-	
 
+	@Override
+	public boolean isMultiSelection() {
+		return enumClass.getEnumConstants().length > 2;
+	}
 }

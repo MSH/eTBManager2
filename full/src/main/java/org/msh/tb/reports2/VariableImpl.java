@@ -352,4 +352,67 @@ public class VariableImpl implements Variable, Filter {
 	public void setUnitType(UnitType unitType) {
 		this.unitType = unitType;
 	}
+
+    /**
+     * Convert a filter value in a string representation to an enum value, or an
+     * array of enums, if values are separated by semi-commas (;)
+     * @param value the string representation of the filter value
+     * @param enumClass
+     * @return
+     */
+	protected Object convertEnumFilter(String value, Class enumClass) {
+        if ((value == null) || (KEY_NULL.equals(value))) {
+            return null;
+        }
+
+        if (KEY_NULL.equals(value))
+            return KEY_NULL;
+
+        if (value.indexOf(";") == -1) {
+            Object[] vals = enumClass.getEnumConstants();
+            int index = Integer.parseInt(value);
+            return ((Enum)vals[index]);
+        }
+        else {
+            String[] vals = value.split(";");
+            Enum[] res = new Enum[vals.length];
+            for (int i = 0; i < vals.length; i++) {
+                res[i] = (Enum)convertEnumFilter(vals[i], enumClass);
+            }
+            return res;
+        }
+    }
+
+    /**
+     * Convert a string representation of a filter value into an integer
+     * or an array of integer (when values separated by semi-comma ';')
+     * @param s the filter value in string format
+     * @return
+     */
+    protected Object convertIntFilter(String s) {
+        if ((s == null) || (KEY_NULL.equals(s))) {
+            return null;
+        }
+
+        if (s.indexOf(";") == -1) {
+            return Integer.parseInt(s);
+        }
+        else {
+            String[] vals = s.split(";");
+            Integer[] res = new Integer[vals.length];
+            for (int i = 0; i < vals.length; i++) {
+                res[i] = (Integer)convertIntFilter(vals[i]);
+            }
+            return res;
+        }
+    }
+
+    /**
+     * Return true if filter accept multiple selection
+     * @return boolean value
+     */
+    @Override
+    public boolean isMultiSelection() {
+        return true;
+    }
 }

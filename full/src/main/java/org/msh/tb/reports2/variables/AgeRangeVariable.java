@@ -121,16 +121,36 @@ public class AgeRangeVariable extends VariableImpl {
 			return;
 		}
 
+        if (value.getClass().isArray()) {
+            Integer[] vals = (Integer[])value;
+            String s = "";
+            for (Integer id: vals) {
+                if (!s.isEmpty()) {
+                    s += " or ";
+                }
+                s += hqlRestriction(id);
+            }
+            def.addRestriction("(" + s + ")");
+        }
+        else {
+            String s = hqlRestriction((Integer)value);
+            def.addRestriction(s);
+        }
+	}
+
+    /**
+     * Create the restriction by age range
+     * @param id
+     * @return
+     */
+	private String hqlRestriction(Integer id) {
 		// search for age range
 		AgeRangeHome home = getAgeRangeHome();
-		AgeRange range = home.findRangeById((Integer)value);
+		AgeRange range = home.findRangeById(id);
 		if (range == null)
-			throw new IllegalArgumentException("Age range not found: " + value);
+			throw new IllegalArgumentException("Age range not found: " + id);
 
-		// apply restriction
-		def.addRestriction("tbcase.age between :age1 and :age2");
-		def.addParameter("age1", range.getIniAge());
-		def.addParameter("age2", range.getEndAge());
+		return "tbcase.age between " + range.getIniAge() + " and " + range.getEndAge();
 	}
 
 	/* (non-Javadoc)
@@ -138,10 +158,24 @@ public class AgeRangeVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
+        return convertIntFilter(value);
+/*
 		if ((KEY_NULL.equals(value)) || (value == null))
 			return null;
 
-		return Integer.parseInt(value);
+        String[] vals = value.split(";");
+
+        if (vals.length == 1) {
+            return Integer.parseInt(vals[0]);
+        }
+        else {
+            Integer[] res = new Integer[vals.length];
+            for (int i = 0; i < vals.length; i++) {
+                res[i] = Integer.parseInt(vals[i]);
+            }
+            return res;
+        }
+*/
 	}
 
 }

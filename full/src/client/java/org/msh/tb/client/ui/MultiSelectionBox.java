@@ -167,6 +167,7 @@ public class MultiSelectionBox extends Composite {
     protected void removeSelection(SelectionOption opt) {
         opt.setSelected(false);
         updateSelectedOptions();
+        notifyChangeEvent();
     }
 
     /**
@@ -188,6 +189,7 @@ public class MultiSelectionBox extends Composite {
         if (popup.isVisible()) {
             popup.showRelativeTo(this);
         }
+        notifyChangeEvent();
     }
 
     /**

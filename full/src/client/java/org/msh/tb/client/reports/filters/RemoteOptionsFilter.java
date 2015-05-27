@@ -9,6 +9,10 @@ import java.util.ArrayList;
 
 public class RemoteOptionsFilter extends OptionsFilter{
 
+	public RemoteOptionsFilter(boolean multisel) {
+		super(multisel);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.client.org.msh.reports.filters.FilterWidget#initialize(org.msh.tb.client.shared.model.CFilter)
 	 */
