@@ -27,17 +27,23 @@ public class CaseDefinitionFieldIntelligence {
     EntityManager entityManager;
 
     @Observer("entity.ExamMicroscopy")
-    public void examMicroscopyModifiedIncludedOrRemoved(EntityEvent entityEvent){
-        updateCaseDefinitionField(entityEvent);
-    }
+    public void examMicroscopyModifiedIncludedOrRemoved(EntityEvent entityEvent){ updateCaseDefinitionField(entityEvent);}
 
     @Observer("entity.ExamCulture")
-    public void examCultureModifiedIncludedOrRemoved(EntityEvent entityEvent){
-        updateCaseDefinitionField(entityEvent);
-    }
+    public void examCultureModifiedIncludedOrRemoved(EntityEvent entityEvent){ updateCaseDefinitionField(entityEvent);}
 
     @Observer("entity.ExamXpert")
     public void examXpertModifiedIncludedOrRemoved(EntityEvent entityEvent){
+        updateCaseDefinitionField(entityEvent);
+    }
+
+    @Observer("entity.TbCase")
+    public void tbCaseModifiedIncludedOrRemoved(EntityEvent entityEvent){
+        updateCaseDefinitionField(entityEvent);
+    }
+
+    @Observer("entity.TbCaseBD")
+    public void tbCaseBDModifiedIncludedOrRemoved(EntityEvent entityEvent){
         updateCaseDefinitionField(entityEvent);
     }
 
@@ -47,13 +53,15 @@ public class CaseDefinitionFieldIntelligence {
      * The details about the logic used are on the comments inside the method.
      */
     private void updateCaseDefinitionField(EntityEvent entityEvent){
-        LaboratoryExam exam = (LaboratoryExam) entityEvent.getEntity();
+        if(entityEvent.getType().equals(EntityEvent.EventType.DELETE) && entityEvent.getEntity() instanceof TbCase)
+            return;
+
         TbCase tbcase = caseHome.getInstance();
         Workspace ws = tbcase.getPatient().getWorkspace();
 
         CaseDefinition value = null;
 
-        //If it is a suspect (presumptive), the case is not confirmed as a TB or DRTB or NMT case, so, no case definition for  this case.
+        //If it is a suspect (presumptive), the case is not a confirmed case, so, no case definition for  this case.
         if (tbcase.getDiagnosisType().equals(DiagnosisType.SUSPECT)) {
             tbcase.setCaseDefinition(value);
             entityManager.persist(tbcase);

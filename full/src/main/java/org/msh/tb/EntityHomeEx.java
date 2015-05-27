@@ -1,6 +1,7 @@
 package org.msh.tb;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.core.Events;
 import org.jboss.seam.core.Expressions;
 import org.jboss.seam.core.Expressions.ValueExpression;
 import org.jboss.seam.framework.EntityHome;
@@ -14,6 +15,7 @@ import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.RoleAction;
+import org.msh.tb.misc.EntityEvent;
 import org.msh.utils.EntityQuery;
 
 import javax.faces.application.FacesMessage;
@@ -119,7 +121,9 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		String ret = super.persist();
 		
 		saveTransactionLog();
-		
+
+		raiseEvent((isManaged() ? EntityEvent.EventType.EDIT : EntityEvent.EventType.NEW));
+
 		return ret;
 	}
 
@@ -148,8 +152,12 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		EntityQuery<E> entityQuery = getEntityQuery();
 		if (entityQuery != null)
 			entityQuery.getResultList().remove(getInstance());
-		
-		return super.remove();
+
+		String ret = super.remove();
+
+		raiseEvent(EntityEvent.EventType.DELETE);
+
+		return ret;
 	}
 	
 	@Override
@@ -246,13 +254,13 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 			return;
 
 		TxLogServices logSrv = (TxLogServices)App.getComponent("txLogServices");
-
+/*
 		actionTX.setDescription( getLogDescription() )
 			.setEntityId(getLogEntityId())
 			.setEntityClass(getLogEntityClass())
 			.setEntity( getInstance() )
 			.end();
-
+*/
 /*
 
 		switch (action) {
@@ -443,6 +451,11 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 			super.updatedMessage();
 	}
 
+	private void raiseEvent(EntityEvent.EventType type){
+		Object o = getInstance();
+		String entityName = "entity." + o.getClass().getSimpleName();
+		Events.instance().raiseEvent(entityName, new EntityEvent(type, o));
+	}
 
 	/**
 	 * @return the displayMessage
