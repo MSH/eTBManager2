@@ -254,13 +254,13 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 			return;
 
 		TxLogServices logSrv = (TxLogServices)App.getComponent("txLogServices");
-/*
+
 		actionTX.setDescription( getLogDescription() )
 			.setEntityId(getLogEntityId())
 			.setEntityClass(getLogEntityClass())
 			.setEntity( getInstance() )
 			.end();
-*/
+
 /*
 
 		switch (action) {
