@@ -8,6 +8,7 @@ import org.msh.reports.filters.FilterOption;
 import org.msh.reports.query.SQLDefs;
 import org.msh.reports.variables.Variable;
 
+import java.lang.reflect.Array;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -115,24 +116,43 @@ public class VariableImpl implements Variable, Filter {
 			return;
 		}
 		
-		String s = fieldName.replace('.', '_');
-		
-		String soper;
-		switch (oper) {
-		case DIFFERENT: soper = "<>";
-			break;
-		case GREATER: soper = ">";
-			break;
-		case GREATER_EQUALS: soper = ">=";
-			break;
-		case LESS: soper = "<";
-			break;
-		case LESS_EQUALS: soper = "<=";
-			break;
-		default: soper = "=";
-		}
-		def.addRestriction(fieldName + soper + " :" + s);
-		def.addParameter(s, value);
+		if (value.getClass().isArray()) {
+            Object[] items = (Object[])value;
+            String s = "";
+            for (Object val: items) {
+                if (!s.isEmpty()) {
+                    s += ",";
+                }
+                if (val instanceof Enum) {
+                    s += Integer.toString(((Enum)val).ordinal());
+                }
+                else {
+                    s += val.toString();
+                }
+            }
+            s = fieldName + " in (" + s + ")";
+            def.addRestriction(s);
+        }
+        else {
+            String s = fieldName.replace('.', '_');
+
+            String soper;
+            switch (oper) {
+                case DIFFERENT: soper = "<>";
+                    break;
+                case GREATER: soper = ">";
+                    break;
+                case GREATER_EQUALS: soper = ">=";
+                    break;
+                case LESS: soper = "<";
+                    break;
+                case LESS_EQUALS: soper = "<=";
+                    break;
+                default: soper = "=";
+            }
+            def.addRestriction(fieldName + soper + " :" + s);
+            def.addParameter(s, value);
+        }
 	}
 
 	

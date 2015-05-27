@@ -105,7 +105,21 @@ public class FieldValueVariable extends VariableImpl {
 	public Object filterValueFromString(String value) {
 		if ((value == null) || (KEY_NULL.equals(value)))
 			return null;
-		return Integer.parseInt(value);
+
+		if (value.indexOf(';') == -1) {
+			return Integer.parseInt(value);
+		}
+
+        String[] vals = value.split(";");
+        Integer[] ids = new Integer[vals.length];
+
+        int i = 0;
+        for (String s: vals) {
+            ids[i] = Integer.parseInt(s);
+            i++;
+        }
+
+        return ids;
 	}
 	
 	
