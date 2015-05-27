@@ -177,12 +177,28 @@ public class EnumFieldVariable extends VariableImpl {
 		if ((value == null) || (KEY_NULL.equals(value)))
 			return null;
 
-		int val = Integer.parseInt(value);
-		
-		if (KEY_NULL.equals(val))
-			return KEY_NULL;
-		
-		return enumClass.getEnumConstants()[val];
+        // is a single value ?
+		if (value.indexOf(';') == -1) {
+            int val = Integer.parseInt(value);
+
+            if (KEY_NULL.equals(val))
+                return KEY_NULL;
+
+            return enumClass.getEnumConstants()[val];
+        }
+
+        String[] vals = value.split(";");
+        Enum[] enums = new Enum[vals.length];
+
+        int i = 0;
+        for (String s: vals) {
+            int index = Integer.parseInt(s);
+            Enum val = enumClass.getEnumConstants()[index];
+            enums[i] = val;
+            i++;
+        }
+
+        return enums;
 	}
 
 

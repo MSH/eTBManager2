@@ -2,9 +2,11 @@ package org.msh.tb.client.reports.filters;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ListBox;
 import org.msh.tb.client.shared.model.CFilter;
 import org.msh.tb.client.shared.model.CItem;
+import org.msh.tb.client.ui.MultiSelectionBox;
 
 import java.util.List;
 
@@ -15,12 +17,24 @@ import java.util.List;
  */
 public class OptionsFilter extends FilterWidget {
 
-	private ListBox lbOptions;
+//	private ListBox lbOptions;
+    private MultiSelectionBox selbox;
 
 	public OptionsFilter() {
+        selbox = new MultiSelectionBox();
+        selbox.setWidth("400px");
+        selbox.addChangeHandler(new MultiSelectionBox.ChangeHandler() {
+            @Override
+            public void onChange(MultiSelectionBox box) {
+                notifyFilterChange();
+            }
+        });
+
+/*
 		lbOptions = new ListBox();
 		lbOptions.setVisibleItemCount(1);
 		lbOptions.setWidth("300px");
+
         lbOptions.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
@@ -28,6 +42,8 @@ public class OptionsFilter extends FilterWidget {
             }
         });
 		initWidget(lbOptions);
+*/
+        initWidget(selbox);
 	}
 	
 	/* (non-Javadoc)
@@ -48,7 +64,10 @@ public class OptionsFilter extends FilterWidget {
 	 * @param options
 	 */
 	protected void fillOptions(List<CItem> options, String value) {
-		fillListOptions(lbOptions, options, value);
+		for (CItem item: options) {
+            selbox.add(item.getLabel(), item.getValue());
+        }
+        //fillListOptions(lbOptions, options, value);
 	}
 	
 	
@@ -57,10 +76,31 @@ public class OptionsFilter extends FilterWidget {
 	 */
 	@Override
 	public String getValue() {
+        List<Object> sels = selbox.getSelectedValues();
+
+        if (sels.size() == 0) {
+            return null;
+        }
+
+        if (sels.size() == 1) {
+            return sels.get(0).toString();
+        }
+
+        String s = "";
+        for (Object val: sels) {
+            if (!s.isEmpty()) {
+                s += ";";
+            }
+            s += val.toString();
+        }
+
+        return s;
+/*
 		int index = lbOptions.getSelectedIndex();
 		if (index <= 0)
 			return null;
 		else return lbOptions.getValue(index);
+*/
 	}
 
 	/* (non-Javadoc)
@@ -69,15 +109,13 @@ public class OptionsFilter extends FilterWidget {
 	@Override
 	public void setValue(String value) {
 		if (value == null) {
-			lbOptions.setSelectedIndex(0);
+            selbox.clearSelection();
 			return;
 		}
 
-		for (int i = 0; i < lbOptions.getItemCount(); i++)
-			if (lbOptions.getValue(i).equals(value)) {
-				lbOptions.setSelectedIndex(i);
-				break;
-			}
+        String[] vals = value.split(";");
+
+        selbox.selectValues(vals);
 	}
 	
 }

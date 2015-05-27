@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -46,7 +47,7 @@ public class VariableBox extends HoverPanel {
 		option.setStyleName("var-name");
 
 		// add button to display the options
-		Anchor lnk = new Anchor("...");
+		Anchor lnk = new Anchor(SafeHtmlUtils.fromTrustedString("<div class='caret-down'></div>"));
 		lnk.setStyleName("option-button");
 		lnk.addClickHandler(new ClickHandler() {
 			@Override

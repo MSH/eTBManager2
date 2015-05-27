@@ -44,7 +44,7 @@ html {
 	height:25px;
 }
 
-.var-panel .var-name {
+.var-panel .var-name, .msbox {
 	border:1px solid #8c9b8c;
 	min-height:18px;
 	padding:2px;
@@ -52,9 +52,9 @@ html {
 	background-color:white;
 }
 
-.var-panel .option-button {
+.option-button, .option-button {
 	float:right;
-	border:1px solid #8c9b8c;
+	border:1px solid #D4D4D4;
 	width:16px;
 	height:16px;
 	font-size:12px;
@@ -65,7 +65,7 @@ html {
 }
 
 /* Custom controls */
-.group-popup {
+.group-popup, .dropdown {
 	background-color:#ffffff;
 	border: 1px solid #7F9DB9;
 	box-shadow:3px 3px 10px #b0b0b0;
@@ -535,4 +535,47 @@ html {
     font-size:14px;
     line-height: 150%;
     margin-left: 4px;
+}
+
+
+.caret-down {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #585858;
+    margin: 6px 0 0 4px;
+}
+
+
+.sel-opt {
+    background-color: #EDEDED;
+    border-radius: 4px;
+    padding: 1px 4px 1px 4px;
+    margin: 2px;
+    display: inline-block;
+}
+
+.sel-opt-label {
+    float:left;
+}
+
+.close-btn {
+    color: #cdcdcd;
+    font-size:12px;
+    float:right;
+    margin:0 0 0 6px;
+    cursor: pointer;
+    right: 5px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.close-btn:hover {
+    color: #777;
+    text-decoration: none;
+}
+
+.close-btn:after {
+    content: '\2716';
 }
