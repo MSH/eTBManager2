@@ -8,122 +8,24 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 
-    <changeSet id="13.24" author="msantos" context="BD">
+    <changeSet id="13.25" author="msantos" context="BD">
         <sql>
-            update tbcase
-            set casedefinition = 1
-            where diagnosisType = 1;
+            <!-- TB cases selected as Other changes to Unknown previous TB treatment history -->
+            update tbcase set patientType = 48  where patientType = 5 and classification = 0;
 
+            <!-- TB cases selected as After default changes to PreviouslyTreated, and the
+                previouslytreated type changes to Treatment after loss to follow-up -->
+            update tbcase set previouslytreatedtype = 46  where patientType = 2 and classification = 0;
+            update tbcase set patientType = 44  where patientType = 2 and classification = 0;
 
-            update tbcase
-            set casedefinition = 0
-            where diagnosisType = 1 and
-            initreatmentdate is null and
-            exists (
-            select e.case_id
-            from exammicroscopy e
-            where
-            e.case_id = tbcase.id and
-            e.result in (1,2,3,4,5) and
-            e.id = (select max(id)
-            from exammicroscopy e1
-            where e1.case_id = e.case_id
-            and e1.datecollected = (select max(datecollected)
-            from exammicroscopy e2
-            where e2.case_id = e1.case_id))
-            );
+            <!-- TB cases selected as Failure 1st treatment or Failure re-treatment
+                changes to PreviouslyTreated, and the previouslytreated type changes to Treatment after failure -->
+            update tbcase set previouslytreatedtype = 45  where (patientType = 3 or patientType = 4) and classification = 0;
+            update tbcase set patientType = 44  where (patientType = 3 or patientType = 4) and classification = 0;
 
-            update tbcase
-            set casedefinition = 0
-            where diagnosisType = 1 and
-            initreatmentdate is not null and
-            exists (
-            select e.case_id
-            from exammicroscopy e
-            where
-            e.case_id = tbcase.id and
-            e.result in (1,2,3,4,5) and
-            e.id = (select max(id)
-            from exammicroscopy e1
-            where e1.case_id = e.case_id
-            and e1.datecollected = (select max(datecollected)
-            from exammicroscopy e2
-            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
-            );
-
-
-            update tbcase
-            set casedefinition = 0
-            where diagnosisType = 1 and
-            initreatmentdate is null and
-            exists (
-            select e.case_id
-            from examculture e
-            where
-            e.case_id = tbcase.id and
-            e.result in (1,2,3,4,5) and
-            e.id = (select max(id)
-            from examculture e1
-            where e1.case_id = e.case_id
-            and e1.datecollected = (select max(datecollected)
-            from examculture e2
-            where e2.case_id = e1.case_id))
-            );
-
-            update tbcase
-            set casedefinition = 0
-            where diagnosisType = 1 and
-            initreatmentdate is not null and
-            exists (
-            select e.case_id
-            from examculture e
-            where
-            e.case_id = tbcase.id and
-            e.result in (1,2,3,4,5) and
-            e.id = (select max(id)
-            from examculture e1
-            where e1.case_id = e.case_id
-            and e1.datecollected = (select max(datecollected)
-            from examculture e2
-            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
-            );
-
-
-            update tbcase
-            set casedefinition = 0
-            where diagnosisType = 1 and
-            initreatmentdate is null and
-            exists (
-            select e.case_id
-            from examxpert e
-            where
-            e.case_id = tbcase.id and
-            e.result in (5) and
-            e.id = (select max(id)
-            from examxpert e1
-            where e1.case_id = e.case_id
-            and e1.datecollected = (select max(datecollected)
-            from examxpert e2
-            where e2.case_id = e1.case_id))
-            );
-
-            update tbcase
-            set casedefinition = 0
-            where diagnosisType = 1 and
-            initreatmentdate is not null and
-            exists (
-            select e.case_id
-            from examxpert e
-            where
-            e.case_id = tbcase.id and
-            e.result in (5) and
-            e.id = (select max(id)
-            from examxpert e1
-            where e1.case_id = e.case_id
-            and e1.datecollected = (select max(datecollected)
-            from examxpert e2
-            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
-            );
+            <!-- TB cases selected as Relapse changes to PreviouslyTreated, and the previouslytreated type changes to Relapse -->
+            update tbcase set previouslytreatedtype = 1  where patientType = 1 and classification = 0;
+            update tbcase set patientType = 44  where patientType = 1 and classification = 0;
         </sql>
     </changeSet>
 

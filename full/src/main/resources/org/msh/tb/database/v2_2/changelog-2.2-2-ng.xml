@@ -28,7 +28,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="2.2.ng.4" author="rmemoria" context="NG">
+    <changeSet id="2.2.ng.4" author="rmemoria">
         <addColumn tableName="examxpert">
             <column name="discriminator" type="varchar(250)"></column>
         </addColumn>
