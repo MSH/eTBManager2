@@ -18,7 +18,7 @@ public class TBForm11v2015Table3 extends TBForm11v2015 {
     protected String getHQLWhereForQuery(){
         String result = super.getHQLWhere();
 
-        result += " and (c.patientType in ("+PATIENT_TYPES_ORDINAL_ROWS+") or c.previouslyTreatedType in ("+PATIENT_TYPES_PRE_TREAT_ORDINAL_ROWS+")) ";
+        result += " and (c.patientType in ("+PATIENT_TYPES_ORDINAL_ROWS+") and (c.previouslyTreatedType is null or c.previouslyTreatedType in ("+PATIENT_TYPES_PRE_TREAT_ORDINAL_ROWS+"))) ";
         result += " and p.gender is not null ";
         result += " and c.state is not null ";
         result += " and c.classification = " + CaseClassification.TB.ordinal();
