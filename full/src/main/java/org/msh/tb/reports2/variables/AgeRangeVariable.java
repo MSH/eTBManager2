@@ -4,6 +4,8 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.Component;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorInt;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.AgeRangeHome;
 import org.msh.tb.entities.AgeRange;
@@ -96,6 +98,7 @@ public class AgeRangeVariable extends VariableImpl {
 		return lst;
 	}
 
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#compareValues(java.lang.Object, java.lang.Object)
 	 */
@@ -110,33 +113,22 @@ public class AgeRangeVariable extends VariableImpl {
 		return super.compareValues(val1, val2);
 	}
 
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
-		if ((value == null) || (KEY_NULL.equals(value))) {
-			def.addRestriction("tbcase.age is null");
-			return;
-		}
-
-        if (value.getClass().isArray()) {
-            Integer[] vals = (Integer[])value;
-            String s = "";
-            for (Integer id: vals) {
-                if (!s.isEmpty()) {
-                    s += " or ";
-                }
-                s += hqlRestriction(id);
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+		String sql = value.mapSqlOR(new ValueIteratorInt() {
+            @Override
+            public String iterateInt(Integer value, int index) {
+                return hqlRestriction(value);
             }
-            def.addRestriction("(" + s + ")");
-        }
-        else {
-            String s = hqlRestriction((Integer)value);
-            def.addRestriction(s);
-        }
-	}
+        });
+
+        def.addRestriction(sql);
+    }
+
 
     /**
      * Create the restriction by age range
@@ -151,31 +143,6 @@ public class AgeRangeVariable extends VariableImpl {
 			throw new IllegalArgumentException("Age range not found: " + id);
 
 		return "tbcase.age between " + range.getIniAge() + " and " + range.getEndAge();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
-	 */
-	@Override
-	public Object filterValueFromString(String value) {
-        return convertIntFilter(value);
-/*
-		if ((KEY_NULL.equals(value)) || (value == null))
-			return null;
-
-        String[] vals = value.split(";");
-
-        if (vals.length == 1) {
-            return Integer.parseInt(vals[0]);
-        }
-        else {
-            Integer[] res = new Integer[vals.length];
-            for (int i = 0; i < vals.length; i++) {
-                res[i] = Integer.parseInt(vals[i]);
-            }
-            return res;
-        }
-*/
 	}
 
 }

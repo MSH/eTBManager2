@@ -3,6 +3,8 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.Component;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorInt;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.reports2.FilterType;
@@ -48,11 +50,36 @@ public class PrescMedicineVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
-		def.addRestriction("exists(select * from prescribedmedicine pm1 where pm1.medicine_id = :prescmed " +
-				"and pm1.case_id =" + def.getMasterTable().getAlias() + ".id)");
-		Integer id = Integer.parseInt(value.toString());
-		def.addParameter("prescmed", id);
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+        // generate the sql IN
+        String sql = value.mapSqlIN(new ValueIteratorInt() {
+            @Override
+            public String iterateInt(Integer value, int index) {
+                return value != null? value.toString(): null;
+            }
+        });
+
+/*
+        String sql;
+		if (value.getClass().isArray()) {
+            String[] lst = (String[])value;
+            sql = "";
+            for (String s: lst) {
+                if (!sql.isEmpty()) {
+                    sql += ",";
+                }
+                sql += s;
+            }
+            sql = " in (" + sql + ")";
+		}
+        else {
+            sql = "= :prescmed ";
+            Integer id = Integer.parseInt(value.toString());
+            def.addParameter("prescmed", id);
+        }
+*/
+        def.addRestriction("exists(select * from prescribedmedicine pm1 where pm1.medicine_id " + sql +
+                " and pm1.case_id =" + def.getMasterTable().getAlias() + ".id)");
 	}
 	
 

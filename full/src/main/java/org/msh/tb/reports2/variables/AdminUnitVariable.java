@@ -3,6 +3,7 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.Component;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.reports2.FilterType;
@@ -100,24 +101,52 @@ public class AdminUnitVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
+	public void prepareFilterQuery(final SQLDefs def, FilterOperation oper, ValueHandler value) {
 
-//		String s[] = getFieldName().split("\\.");
+		final String alias = def.join("administrativeunit.id", getFieldName()).getAlias();
+        final String p = getFieldName().replace('.', '_');
 
-		String alias = def.join("administrativeunit.id", getFieldName()).getAlias();
-		
-//		String alias = def.table(s[0]).join(s[1], "administrativeunit.id").getAlias();
-		
-		String p = getFieldName().replace('.', '_');
-		def.addRestriction(alias + ".code like :" + p);
-		def.addParameter(p, value + "%");
-		
-/*		TableJoin join = def.addJoin("administrativeunit", "id", s[0], s[1]);
-		String p = getFieldName().replace('.', '_');
-		def.addRestriction(join.getAlias() + ".code  like :" + p);
-		def.addParameter(p, value + "%");
-*/	}
+        String s = value.mapSqlOR(new ValueHandler.ValueIterator() {
+            @Override
+            public String iterate(String value, int index) {
+                String pname = p + Integer.toString(index);
+                def.addParameter(pname, value + "%");
+                return "(" + alias + ".code like :" + pname + ")";
+            }
+        });
+
+        def.addRestriction(s);
+
+        // is an array ?
+/*
+		if (value.getClass().isArray()) {
+            String[] vals = (String[])value;
+
+            String sql = "";
+            int index = 1;
+            String p = getFieldName().replace('.', '_');
+
+            // create restriction
+            for (String code: vals) {
+                String pname = p + Integer.toString(index);
+                if (!sql.isEmpty()) {
+                    sql += " or ";
+                }
+                sql += "(" + alias + ".code like :" + pname + ")";
+                def.addParameter(pname, code + "%");
+                index++;
+            }
+
+            sql = "(" + sql + ")";
+            def.addRestriction(sql);
+        }
+        else {
+            String p = getFieldName().replace('.', '_');
+            def.addRestriction(alias + ".code like :" + p);
+            def.addParameter(p, value + "%");
+        }
+*/
+	}
 
 
 	/* (non-Javadoc)
@@ -134,7 +163,17 @@ public class AdminUnitVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
-		return value;
+        if (value == null) {
+            return null;
+        }
+
+        if (value.indexOf(";") >= 0) {
+            String[] vals = value.split(";");
+            return vals;
+        }
+        else {
+            return value;
+        }
 	}
 
 

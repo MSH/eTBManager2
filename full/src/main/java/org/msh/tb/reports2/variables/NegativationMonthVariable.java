@@ -3,6 +3,8 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorInt;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -80,34 +82,67 @@ public class NegativationMonthVariable extends VariableImpl {
 		return month.intValue();
 	}
 
+    protected String getTableName() {
+        return culture? "examculture": "exammicroscopy";
+    }
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
-		String tbl;
-		if (culture)
-			 tbl = "examculture";
-		else tbl = "exammicroscopy";
-		def.table("tbcase").join("id", tbl + ".case_id");
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+		def.table("tbcase").join("id", getTableName() + ".case_id");
 		def.addRestriction("tbcase.initreatmentdate is not null");
-		
-		String s = "timestampdiff(month, tbcase.initreatmentdate, " + tbl + ".dateCollected) ";
-		
-		if (value == null) {
-			s += " < 0";
-		}
-		else {
-			int num = (Integer)value;
 
-			if (num < 37)
-				 s += " = " + Integer.toString(num - 1);
-			else s += " >= " + Integer.toString(num - 1);
-		}
-		def.addRestriction(s);
+        String sql = value.mapSqlOR(new ValueIteratorInt() {
+            @Override
+            public String iterateInt(Integer value, int index) {
+                return sqlFilter(value);
+            }
+        });
+        def.addRestriction(sql);
+
+/*
+        if (value.getClass().isArray()) {
+            Integer[] values = (Integer[])value;
+            String s = "";
+            for (Integer val: values) {
+                if (!s.isEmpty()) {
+                    s += " or ";
+                }
+                s += sqlFilter(val);
+            }
+            def.addRestriction("(" + s + ")");
+        }
+        else {
+            String s = sqlFilter((Integer)value);
+            def.addRestriction(s);
+        }
+*/
+
         addCommonRestrictions(def);
 	}
+
+    /**
+     * Create filter for the negativation month
+     * @param month negativation month, or null if it's before treatment
+     * @return sql restriction
+     */
+    protected String sqlFilter(Integer month) {
+        String s = "timestampdiff(month, tbcase.initreatmentdate, " + getTableName() + ".dateCollected) ";
+
+        if (month == null) {
+            s += " < 0";
+        }
+        else {
+            int num = (Integer)month;
+
+            if (num < 37)
+                s += " = " + Integer.toString(num - 1);
+            else s += " >= " + Integer.toString(num - 1);
+        }
+        return "(" + s + ")";
+    }
 
 
     /**
@@ -134,9 +169,7 @@ public class NegativationMonthVariable extends VariableImpl {
 	 */
 	@Override
 	public Object filterValueFromString(String value) {
-		if (value == null)
-			return null;
-		return Integer.parseInt(value);
+		return convertIntFilter(value);
 	}
 
 	/* (non-Javadoc)

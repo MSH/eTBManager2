@@ -3,6 +3,8 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorInt;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -62,28 +64,22 @@ public class SuspectConfirmedVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		if ((value == null) || (KEY_NULL.equals(value)))
 			return;
 
-        if (value.getClass().isArray()) {
-            Integer[] vals = (Integer[])value;
-            String s = "";
-            for (Integer key: vals) {
-                if (!s.isEmpty()) {
-                    s += " or ";
-                }
-                s += "(" + getHqlRestriction(key) + ")";
+		String sql = value.mapSqlOR(new ValueIteratorInt() {
+            @Override
+            public String iterateInt(Integer value, int index) {
+                return getSqlRestriction(value);
             }
-            def.addRestriction("(" + s + ")");
-        }
-        else {
-            def.addRestriction( getHqlRestriction((Integer)value));
-        }
+        });
+
+        def.addRestriction(sql);
 	}
 
 
-    protected String getHqlRestriction(int key) {
+    protected String getSqlRestriction(int key) {
         switch (key) {
             case KEY_CONFIRMED: return "tbcase.registrationDate >= tbcase.diagnosisDate";
             case KEY_SUSPECT: return "tbcase.diagnosisDate is null";

@@ -5,10 +5,10 @@ import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.reports.variables.Variable;
 
-import java.lang.reflect.Array;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -110,13 +110,15 @@ public class VariableImpl implements Variable, Filter {
 	 * @see org.msh.reports.filters.Filter#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		if ((value == null) || (KEY_NULL.equals(value))) {
 			def.addRestriction(fieldName + " is null");
 			return;
 		}
 		
-		if (value.getClass().isArray()) {
+		if (value.isArray()) {
+            String s = value.mapSqlIN(null);
+/*
             Object[] items = (Object[])value;
             String s = "";
             for (Object val: items) {
@@ -130,7 +132,8 @@ public class VariableImpl implements Variable, Filter {
                     s += val.toString();
                 }
             }
-            s = fieldName + " in (" + s + ")";
+*/
+            s = fieldName + " " + s;
             def.addRestriction(s);
         }
         else {
@@ -151,7 +154,7 @@ public class VariableImpl implements Variable, Filter {
                 default: soper = "=";
             }
             def.addRestriction(fieldName + soper + " :" + s);
-            def.addParameter(s, value);
+            def.addParameter(s, value.asInteger());
         }
 	}
 
@@ -291,7 +294,13 @@ public class VariableImpl implements Variable, Filter {
 	 * @param value
 	 */
 	public Object filterValueFromString(String value) {
-		return value;
+		if (isMultiSelection() && value.indexOf(";") >= 0) {
+            String[] s = value.split(";");
+            return s.length > 1? s: s[0];
+        }
+        else {
+            return value;
+        }
 	}
 	
 	/**

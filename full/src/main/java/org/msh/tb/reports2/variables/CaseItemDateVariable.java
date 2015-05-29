@@ -1,6 +1,7 @@
 package org.msh.tb.reports2.variables;
 
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 
 public class CaseItemDateVariable extends DateFieldVariable {
@@ -25,12 +26,10 @@ public class CaseItemDateVariable extends DateFieldVariable {
 	 * @see org.msh.tb.reports2.variables.DateFieldVariable#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		String s[] = getFieldName().split("\\.");
 		
 		def.join(s[0] + ".case_id", "tbcase.id");
-//		def.addJoin(s[0], "case_id", "tbcase", "id");
 		super.prepareFilterQuery(def, oper, value);
 	}
 

@@ -7,9 +7,9 @@ public class FilterValue {
 
 	private Filter filter;
 	private FilterOperation comparator;
-	private Object value;
+	private String value;
 	
-	public FilterValue(Filter filter, FilterOperation comparator, Object value) {
+	public FilterValue(Filter filter, FilterOperation comparator, String value) {
 		super();
 		this.filter = filter;
 		this.comparator = comparator;
@@ -47,14 +47,14 @@ public class FilterValue {
 	/**
 	 * @return the value
 	 */
-	public Object getValue() {
+	public String getValue() {
 		return value;
 	}
 
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(Object value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 }

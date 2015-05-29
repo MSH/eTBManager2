@@ -6,6 +6,7 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -79,13 +80,13 @@ public class HivCptArtVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
+			ValueHandler value) {
 		
 		// get the right field
 		String field = getHivField();
 
 		// check the restriction
-		if (VAL_YES.equals(Integer.parseInt( (String)value ))) 
+		if (VAL_YES.equals(value.asInteger()))
 			 field += " is not null";
 		else field += " is null";
 

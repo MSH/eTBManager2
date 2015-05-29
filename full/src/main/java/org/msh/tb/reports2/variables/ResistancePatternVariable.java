@@ -4,6 +4,7 @@ import org.jboss.seam.Component;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.ResistancePattern;
 import org.msh.tb.reports2.FilterType;
@@ -108,7 +109,7 @@ public class ResistancePatternVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		def.table("tbcase").join("id", "caseresistancepattern.case_id");
 		def.addRestriction("caseresistancepattern.diagnosis = :" + getId());
 		def.addParameter(getId(), diagnosis);

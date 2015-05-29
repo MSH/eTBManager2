@@ -1,6 +1,8 @@
 package org.msh.tb.reports2.variables;
 
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorEnum;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.HIVResult;
 
@@ -52,26 +54,36 @@ public class HivResultVariable extends EnumFieldVariable {
 	protected void addCommonRestrictions(SQLDefs def, HIVResult res) {
 		String tbl = def.getMasterTable().getAlias();
 
+        String sql = sqlRestriction(def, res);
+        if (sql != null) {
+            def.addRestriction(sql);
+        }
+	}
+
+
+    /**
+     * generate sql restriction to be applied in the filter
+     * @param def Object containing information about the query to be generated
+     * @param res the kind of result to be restricted
+     * @return SQL restriction
+     */
+	protected String sqlRestriction(SQLDefs def, HIVResult res) {
+        String tbl = def.getMasterTable().getAlias();
 		switch (res) {
-		case POSITIVE: // POSITIVE
-			def.addRestriction("exists (select * from examhiv where examhiv.result=0 and examhiv.case_id=" + tbl + ".id)");
-			break;
+			case POSITIVE: // POSITIVE
+				return "exists (select * from examhiv where examhiv.result=0 and examhiv.case_id=" + tbl + ".id)";
 
-		case NEGATIVE: // NEGATIVE
-			def.addRestriction("exists (select * from examhiv where examhiv.result=1 and examhiv.case_id=" + tbl + ".id)");
-			def.addRestriction("not exists (select * from examhiv where examhiv.result=0 and examhiv.case_id=" + tbl + ".id)");
-			break;
+			case NEGATIVE: // NEGATIVE
+				return "exists (select * from examhiv where examhiv.result=1 and examhiv.case_id=" + tbl + ".id) and " +
+                        "not exists (select * from examhiv where examhiv.result=0 and examhiv.case_id=" + tbl + ".id)";
 
-		case NOTDONE: // NOT DONE
-			def.addRestriction("not exists (select * from examhiv where examhiv.result in (0, 1) and examhiv.case_id=" + tbl + ".id)");
-			break;
-			
-		case ONGOING:
-			break;
+			case NOTDONE: // NOT DONE
+				return "not exists (select * from examhiv where examhiv.result in (0, 1) and examhiv.case_id=" + tbl + ".id)";
 
-		default:
-			throw new RuntimeException("Not expected value " + res);
+			case ONGOING:
+                return null;
 		}
+        throw new RuntimeException("Not expected value " + res);
 	}
 	
 	
@@ -79,13 +91,36 @@ public class HivResultVariable extends EnumFieldVariable {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
+	public void prepareFilterQuery(final SQLDefs def, FilterOperation oper, ValueHandler value) {
+        value.mapSqlOR(new ValueIteratorEnum<HIVResult>() {
+            @Override
+            public String iterateEnum(HIVResult value, int index) {
+                return sqlRestriction(def, value);
+            }
+        });
+/*
 		if (value == null)
 			return;
 
-		addCommonRestrictions(def, (HIVResult)value);
-		
+        if (value.getClass().isArray()) {
+            Enum[] vals = (Enum[])value;
+            String s = "";
+            for (Enum res: vals) {
+                if (!s.isEmpty()) {
+                    s += " or ";
+                }
+                String restric = sqlRestriction(def, (HIVResult)res);
+                if (restric != null) {
+                    s += "(" + restric + ")";
+                }
+            }
+            def.addRestriction("(" + s + ")");
+        }
+        else {
+            addCommonRestrictions(def, (HIVResult)value);
+        }
+*/
+
 //		super.prepareFilterQuery(def, oper, value);
 	}
 

@@ -9,10 +9,11 @@ public interface Filter extends ReportElement {
 
 	/**
 	 * Prepare the query to apply the filters
-	 * @param def
+	 * @param def the object to enter SQL information
+	 * @param comp the filter operation
 	 * @param value the value to be applied to the filter
 	 */
-	void prepareFilterQuery(SQLDefs def, FilterOperation comp, Object value);
+	void prepareFilterQuery(SQLDefs def, FilterOperation comp, ValueHandler value);
 
 	/**
 	 * Return a String identification of the filter's type
@@ -34,13 +35,6 @@ public interface Filter extends ReportElement {
 	 */
 	boolean isFilterLazyInitialized();
 	
-	/**
-	 * Convert the given string to a value acceptable by the filter
-	 * @param value is the string containing the filter value
-	 * @return is the value converted from string
-	 */
-	Object filterValueFromString(String value);
-
 	/**
 	 * True if the filter accept multiple selection of values
 	 * @return boolean value

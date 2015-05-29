@@ -3,6 +3,7 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.PatientType;
@@ -49,50 +50,54 @@ public class TypeTBCaseVariable extends VariableImpl {
 		}
 		
 		def.select("'" + key + "'");
-		addRestrictions(def, key);
+		def.addRestriction(createRestrictions(key));
 	}
 
 	
 	/**
 	 * Add common restrictions to variables and filters
-	 * @param def
 	 * @param key
 	 */
-	protected void addRestrictions(SQLDefs def, String key) {
+	protected String createRestrictions(String key) {
 		// NEW PATIENT
 		if (KEY_NEW.equals(key)) {
-			def.addRestriction("tbcase.patientType = " + PatientType.NEW.ordinal());
-			return;
+			return "tbcase.patientType = " + PatientType.NEW.ordinal();
 		}
 
 		// PREVIOUSLY TREATED WITH 1ST LINE DRUGS
 		if (KEY_1LINE.equals(key)) {
-			def.addRestriction("tbcase.patientType != " + PatientType.NEW.ordinal());
-			def.addRestriction("not exists(select * from prevtbtreatment pv " +
+			return "tbcase.patientType != " + PatientType.NEW.ordinal() +
+					" and not exists(select * from prevtbtreatment pv " +
 					  "inner join res_prevtbtreatment d1 on d1.prevtbtreatment_id = pv.id " +
 					  "inner join substance c1 on c1.id = d1.substance_id " +
-					  "where c1.line = " + MedicineLine.SECOND_LINE.ordinal() + " and pv.case_id = tbcase.id)");
-			return;
+					  "where c1.line = " + MedicineLine.SECOND_LINE.ordinal() + " and pv.case_id = tbcase.id)";
 		}
 		
 		// PREVIOUSLY TREATED WITH 2ND LINE DRUGS
 		if (KEY_2LINE.equals(key)) {
-			def.addRestriction("tbcase.patientType <> " + PatientType.NEW.ordinal());
-			def.addRestriction("exists(select * from prevtbtreatment pv " +
+			return "tbcase.patientType <> " + PatientType.NEW.ordinal() +
+					" and exists(select * from prevtbtreatment pv " +
 					  "inner join res_prevtbtreatment d1 on d1.prevtbtreatment_id = pv.id " +
 					  "inner join substance c1 on c1.id = d1.substance_id " +
-					  "where c1.line = " + MedicineLine.SECOND_LINE.ordinal() + " and pv.case_id = tbcase.id)");
-			return;
+					  "where c1.line = " + MedicineLine.SECOND_LINE.ordinal() + " and pv.case_id = tbcase.id)";
 		}
+
+        throw new RuntimeException("Invalid key " + key);
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
-		addRestrictions(def, (String)value);
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+		String sql = value.mapSqlOR(new ValueHandler.ValueIterator() {
+			@Override
+			public String iterate(String value, int index) {
+				return createRestrictions(value);
+			}
+		});
+        def.addRestriction(sql);
+//		addRestrictions(def, (String) value);
 	}
 
 	/* (non-Javadoc)

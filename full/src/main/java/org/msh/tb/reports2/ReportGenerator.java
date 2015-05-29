@@ -247,8 +247,11 @@ public class ReportGenerator {
 				Filter filter = res.findFilterById(id);
 				if (filter != null) {
 					String value = reportData.getFilters().get(id);
+/*
 					Object filterValue = filter.filterValueFromString(value);
 					rep.addFilter(filter, filterValue);
+*/
+					rep.addFilter(filter, value);
 				}
 			}
 		}
@@ -305,7 +308,8 @@ public class ReportGenerator {
 				Filter var = res.findFilterById(id);
 				if (var != null) {
 					String value = filters.get(id);
-					rep.addFilter((Filter)var, var.filterValueFromString( value ));
+//					rep.addFilter((Filter)var, var.filterValueFromString( value ));
+                    rep.addFilter((Filter)var, value);
 				}
 			}
 		}

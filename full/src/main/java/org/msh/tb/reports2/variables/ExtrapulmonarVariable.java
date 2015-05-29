@@ -1,6 +1,8 @@
 package org.msh.tb.reports2.variables;
 
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorInt;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.entities.enums.TbField;
@@ -40,8 +42,18 @@ public class ExtrapulmonarVariable extends FieldValueVariable {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
-		def.addRestriction("(tbcase.extrapulmonary_id = " + value + " or tbcase.extrapulmonary2_id = " + value + ")");
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+        // generate the SQL IN instruction
+		String sql = value.mapSqlIN(new ValueIteratorInt() {
+            @Override
+            public String iterateInt(Integer value, int index) {
+                return value != null? value.toString(): null;
+            }
+        });
+
+        sql = "(tbcase.extrapulmonary_id " + sql + " or tbcase.extrapulmonary2_id " + sql + ")";
+        def.addRestriction(sql);
+//		def.addRestriction("(tbcase.extrapulmonary_id = " + value + " or tbcase.extrapulmonary2_id = " + value + ")");
 	}
 
 }

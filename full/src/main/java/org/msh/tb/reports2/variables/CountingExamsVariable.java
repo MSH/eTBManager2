@@ -2,6 +2,7 @@ package org.msh.tb.reports2.variables;
 
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 
 public class CountingExamsVariable extends CountingVariable {
@@ -98,8 +99,8 @@ public class CountingExamsVariable extends CountingVariable {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
-		int iteration = (Integer)value;
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+		int iteration = value.asInteger();
 		addCommonRestrictions(def, iteration);
 	}
 
@@ -111,5 +112,8 @@ public class CountingExamsVariable extends CountingVariable {
 		return Integer.parseInt(value);
 	}
 
-
+	@Override
+	public boolean isMultiSelection() {
+		return false;
+	}
 }

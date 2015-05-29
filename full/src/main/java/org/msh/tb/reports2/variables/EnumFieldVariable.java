@@ -4,6 +4,7 @@ import org.jboss.seam.core.Expressions;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.MessageKey;
 import org.msh.tb.reports2.VariableImpl;
@@ -172,43 +173,20 @@ public class EnumFieldVariable extends VariableImpl {
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#filterValueFromString(java.lang.String)
 	 */
+/*
 	@Override
 	public Object filterValueFromString(String value) {
-/*
-		if ((value == null) || (KEY_NULL.equals(value)))
-			return null;
-
-        // is a single value ?
-		if (value.indexOf(';') == -1) {
-            int val = Integer.parseInt(value);
-
-            if (KEY_NULL.equals(val))
-                return KEY_NULL;
-
-            return enumClass.getEnumConstants()[val];
-        }
-
-        String[] vals = value.split(";");
-        Enum[] enums = new Enum[vals.length];
-
-        int i = 0;
-        for (String s: vals) {
-            int index = Integer.parseInt(s);
-            Enum val = enumClass.getEnumConstants()[index];
-            enums[i] = val;
-            i++;
-        }
-
-*/
         return convertEnumFilter(value, enumClass);
 	}
+*/
 
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
+/*
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		if (value instanceof String)
 			value = filterValueFromString((String)value);
 		if (value instanceof Enum)
@@ -219,6 +197,7 @@ public class EnumFieldVariable extends VariableImpl {
 
 		super.prepareFilterQuery(def, oper, value);
 	}
+*/
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#compareValues(java.lang.Object, java.lang.Object)
@@ -254,6 +233,7 @@ public class EnumFieldVariable extends VariableImpl {
 
 	@Override
 	public boolean isMultiSelection() {
-		return enumClass.getEnumConstants().length > 2;
+        Enum[] options = getEnumValues();
+        return (options != null && options.length > 2);
 	}
 }

@@ -2,6 +2,7 @@ package org.msh.reports.query;
 
 import org.msh.reports.FilterValue;
 import org.msh.reports.filters.Filter;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.variables.Variable;
 
 import java.util.ArrayList;
@@ -150,7 +151,8 @@ public class SqlBuilder implements SQLDefs {
             if (filters != null) {
                 for (Filter filter: filters.keySet()) {
                     FilterValue fvalue = filters.get(filter);
-                    filter.prepareFilterQuery(this, fvalue.getComparator(), fvalue.getValue());
+                    ValueHandler fv = new ValueHandler(fvalue.getValue().toString(), filter.isMultiSelection());
+                    filter.prepareFilterQuery(this, fvalue.getComparator(), fv);
                 }
             }
 

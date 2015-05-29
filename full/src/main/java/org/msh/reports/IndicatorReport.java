@@ -5,6 +5,7 @@ import org.msh.reports.datatable.DataTable;
 import org.msh.reports.datatable.impl.DataTableImpl;
 import org.msh.reports.filters.Filter;
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.indicator.DataTableIndicator;
 import org.msh.reports.indicator.DataTableIndicatorImpl;
 import org.msh.reports.query.DataTableQuery;
@@ -90,7 +91,10 @@ public class IndicatorReport {
 
 		for (Filter filter: filters.keySet()) {
 			FilterValue fvalue = filters.get(filter);
-			filter.prepareFilterQuery(builder, fvalue.getComparator(), fvalue.getValue());
+            String val = fvalue.getValue() != null? fvalue.getValue().toString(): null;
+            ValueHandler handler = new ValueHandler(val, filter.isMultiSelection());
+
+			filter.prepareFilterQuery(builder, fvalue.getComparator(), handler);
 		}
 
 		// prepare to get counting
@@ -297,7 +301,7 @@ public class IndicatorReport {
 	 * @param value
 	 * @return
 	 */
-	public IndicatorReport addFilter(Filter filter, Object value) {
+	public IndicatorReport addFilter(Filter filter, String value) {
 		FilterValue val = new FilterValue(filter, FilterOperation.EQUALS, value);
 		filters.put(filter, val);
 		return this;
@@ -311,7 +315,7 @@ public class IndicatorReport {
 	 * @param value
 	 * @return
 	 */
-	public IndicatorReport addFilter(Filter filter, FilterOperation oper, Object value) {
+	public IndicatorReport addFilter(Filter filter, FilterOperation oper, String value) {
 		FilterValue val = new FilterValue(filter, oper, value);
 		filters.put(filter, val);
 		return this;

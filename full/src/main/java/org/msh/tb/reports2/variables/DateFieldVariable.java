@@ -3,6 +3,7 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 import org.msh.utils.date.DateUtils;
@@ -131,9 +132,11 @@ public class DateFieldVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
-		if (value instanceof Integer) {
-			int num = (Integer)value;
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+		Object v = filterValueFromString(value.asString());
+
+		if (v instanceof Integer) {
+			int num = (Integer)v;
 			if (num < 9999) {
 				def.addRestriction("year(" + getFieldName() + ") = " + num);
 			}
@@ -147,9 +150,9 @@ public class DateFieldVariable extends VariableImpl {
 		}
 		
 		Period p;
-		if (value instanceof String)
-			 p = stringToPeriod((String)value);
-		else p = (Period)value;
+		if (v instanceof String)
+			 p = stringToPeriod((String)v);
+		else p = (Period)v;
 		
 		if (p == null)
 			return;
@@ -230,7 +233,7 @@ public class DateFieldVariable extends VariableImpl {
 		return "period";
 	}
 
-	@Override
+
 	public Object filterValueFromString(String value) {
 		if (value == null)
 			return null;
@@ -282,7 +285,7 @@ public class DateFieldVariable extends VariableImpl {
 	/**
 	 * Convert a string containing the fixed period to its period.
 	 * The string contains an integer indicating the position of the {@link FixedPeriod} enumeration
-	 * @param vals string indicating a 0-index position of the {@link FixedPeriod} enumeration
+	 * @param s string indicating a 0-index position of the {@link FixedPeriod} enumeration
 	 * @return instance of {@link Period} containing the period
 	 */
 	protected Period fixedPeriodStringToPeriod(String s) {

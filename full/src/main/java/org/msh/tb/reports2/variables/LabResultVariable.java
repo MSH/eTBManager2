@@ -1,6 +1,7 @@
 package org.msh.tb.reports2.variables;
 
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 
 public class LabResultVariable extends EnumFieldVariable {
@@ -33,8 +34,7 @@ public class LabResultVariable extends EnumFieldVariable {
 	 * @see org.msh.tb.reports2.variables.EnumFieldVariable#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		super.prepareFilterQuery(def, oper, value);
 		prepareQuery(def);
 	}

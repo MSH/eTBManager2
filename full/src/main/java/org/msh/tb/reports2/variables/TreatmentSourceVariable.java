@@ -6,6 +6,8 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.Component;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorInt;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.Source;
 import org.msh.tb.reports2.FilterType;
@@ -58,16 +60,23 @@ public class TreatmentSourceVariable extends VariableImpl {
 		super.prepareVariableQuery(def, iteration);
 	}
 
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
-		def.addRestriction("exists(select * from prescribedmedicine pm1 where pm1.source_id = :sourceid " +
-				"and pm1.case_id =" + def.getMasterTable().getAlias() + ".id)");
-		Integer id = Integer.parseInt(value.toString());
-		def.addParameter("sourceid", id);
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+		String sql = value.mapSqlIN(new ValueIteratorInt() {
+			@Override
+			public String iterateInt(Integer value, int index) {
+				return value != null? value.toString(): null;
+			}
+		});
+
+		def.addRestriction("exists(select * from prescribedmedicine pm1 where pm1.source_id " + sql +
+				" and pm1.case_id =" + def.getMasterTable().getAlias() + ".id)");
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#getDisplayText(java.lang.Object)

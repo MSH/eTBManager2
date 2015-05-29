@@ -5,6 +5,7 @@ package org.msh.tb.reports2.variables;
 
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.reports.query.TableJoin;
 import org.msh.tb.application.App;
@@ -87,28 +88,26 @@ public class TbunitVariable extends VariableImpl {
 	/** {@inheritDoc}
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		adminUnitId = null;
-		if (value instanceof String) {
-			Key key = getKeysFromString((String)value);
+		Key key = getKeysFromString(value.asString());
 
-			// TB unit was defined ?
-			if (key.getTbunitId() != null) {
-				def.addRestriction(getFieldName() + " = :" + getId());
-				def.addParameter(getId(), key.getTbunitId());
-			}
-			else {
-				// administrative unit was defined ?
-				if (key.getAdminUnitId() != null) {
-					String[] s = getFieldName().split("\\.");
-					TableJoin tbl = def.table(s[0]).join(s[1], "tbunit.id").select("id");
-					adminUnitId = key.getAdminUnitId();
-					AdministrativeUnit au = App.getEntityManager().find(AdministrativeUnit.class, key.getAdminUnitId());
-					
-					tbl.join("adminunit_id", "administrativeunit.id");
-					def.addRestriction("administrativeunit.code like :codeau");
-					def.addParameter("codeau", au.getCode() + "%");
-				}
+		// TB unit was defined ?
+		if (key.getTbunitId() != null) {
+			def.addRestriction(getFieldName() + " = :" + getId());
+			def.addParameter(getId(), key.getTbunitId());
+		}
+		else {
+			// administrative unit was defined ?
+			if (key.getAdminUnitId() != null) {
+				String[] s = getFieldName().split("\\.");
+				TableJoin tbl = def.table(s[0]).join(s[1], "tbunit.id").select("id");
+				adminUnitId = key.getAdminUnitId();
+				AdministrativeUnit au = App.getEntityManager().find(AdministrativeUnit.class, key.getAdminUnitId());
+
+				tbl.join("adminunit_id", "administrativeunit.id");
+				def.addRestriction("administrativeunit.code like :codeau");
+				def.addParameter("codeau", au.getCode() + "%");
 			}
 		}
 	}

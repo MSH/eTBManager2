@@ -1,6 +1,7 @@
 package org.msh.tb.reports2.variables;
 
 import org.msh.reports.filters.FilterOperation;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.TbField;
 
@@ -28,7 +29,7 @@ public class ComorbiditiesVariable extends FieldValueVariable {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		def.join("casecomorbidity.case_id", "tbcase.id");
 //		def.addJoin("casecomorbidity", "case_id", "tbcase", "id");
 		super.prepareFilterQuery(def, oper, value);

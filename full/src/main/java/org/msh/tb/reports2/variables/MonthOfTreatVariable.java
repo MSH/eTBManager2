@@ -2,6 +2,8 @@ package org.msh.tb.reports2.variables;
 
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
+import org.msh.reports.filters.ValueIteratorInt;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
@@ -61,13 +63,46 @@ public class MonthOfTreatVariable extends VariableImpl {
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, Object value) {
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
 		if (value == null)
 			return;
-		Integer val = Integer.parseInt((String)value) - 1;
-		if (val == 36)
-			 def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) >= " + val.toString());
-		else def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) = " + val.toString());
+
+        String sql = value.mapSqlOR(new ValueIteratorInt() {
+            @Override
+            public String iterateInt(Integer value, int index) {
+                if (value == null) {
+                    return null;
+                }
+                String s;
+                if (value == 36)
+                     s = "(timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) >= " + value.toString() + ")";
+                else s = "(timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) = " + value.toString() + ")";
+                return null;
+            }
+        });
+        def.addRestriction(sql);
+
+/*
+        if (value.getClass().isArray()) {
+            String sql = "";
+            for (String s: (String[])value) {
+                Integer val = Integer.parseInt((String)s) - 1;
+                if (!sql.isEmpty()) {
+                    sql += " or ";
+                }
+                if (val == 36)
+                    sql += "(timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) >= " + val.toString() + ")";
+                else sql += "(timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) = " + val.toString() + ")";
+            }
+            def.addRestriction("(" + sql + ")");
+        }
+        else {
+            Integer val = Integer.parseInt((String)value) - 1;
+            if (val == 36)
+                def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) >= " + val.toString());
+            else def.addRestriction("timestampdiff(month, tbcase.initreatmentdate, tbcase.endtreatmentdate) = " + val.toString());
+        }
+*/
 	}
 
 

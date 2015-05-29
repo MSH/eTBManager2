@@ -3,6 +3,7 @@ package org.msh.tb.reports2.variables;
 import org.jboss.seam.international.Messages;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
+import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
 import org.msh.tb.reports2.VariableImpl;
 
@@ -38,18 +39,12 @@ public class RegimenTypeVariable extends VariableImpl {
 		else return Messages.instance().get("regimens.standard");
 	}
 
-	@Override
-	public Object createKey(Object values) {
-		return values;
-	}
-
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#prepareFilterQuery(org.msh.reports.query.SQLDefs, org.msh.reports.filters.FilterOperation, java.lang.Object)
 	 */
 	@Override
-	public void prepareFilterQuery(SQLDefs def, FilterOperation oper,
-			Object value) {
-		if ("0".equals(value))
+	public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
+		if ("0".equals(value.asString()))
 			 def.addRestriction("tbcase.regimen_id is null");
 		else def.addRestriction("tbcase.regimen_id is not null");
 		def.addRestriction("tbcase.initreatmentdate is not null");
@@ -66,5 +61,8 @@ public class RegimenTypeVariable extends VariableImpl {
 		return options;
 	}
 
-
+	@Override
+	public boolean isMultiSelection() {
+		return false;
+	}
 }
