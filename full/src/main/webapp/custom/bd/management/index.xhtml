@@ -58,27 +58,29 @@
 		<div class="icon-report" style="float:left;"/>#{messages['manag.hivreport']}
 	</s:link>
 
+<!--Out of usage
 	<s:link view="/custom/bd/management/tbform10.xhtml" rendered="true" >
 		<f:param name="useregdate" value="#{true}"/>
 		<f:param name="useinitreatmentdate" value="#{false}"/>
 		<div class="icon-report" style="float:left;"/>#{messages['manag.tbform10']}
 	</s:link>
+-->
 
     <s:link view="/custom/bd/management/tbform10v2015.xhtml" rendered="true" >
-        <f:param name="useregdate" value="#{true}"/>
-        <f:param name="useinitreatmentdate" value="#{false}"/>
+		<f:param name="useregdate" value="#{true}"/>
         <div class="icon-report" style="float:left;"/>#{messages['manag.tbform102015']}
     </s:link>
 
+<!--Out of usage
 	<s:link view="/custom/bd/management/pulmonary.xhtml" rendered="true" >
 		<f:param name="useregdate" value="#{true}"/>
 		<f:param name="useinitreatmentdate" value="#{true}"/>
 		<div class="icon-report" style="float:left;"/>#{messages['manag.pulmonaryreport']}
 	</s:link>
+-->
 
     <s:link view="/custom/bd/management/tbform11v2015.xhtml" rendered="true" >
-        <f:param name="useregdate" value="#{true}"/>
-        <f:param name="useinitreatmentdate" value="#{false}"/>
+		<f:param name="useregdate" value="#{true}"/>
         <div class="icon-report" style="float:left;"/>#{messages['manag.tbform112015']}
     </s:link>
 
@@ -88,11 +90,17 @@
         <f:param name="useinitreatmentdate" value="#{true}"/>
         <div class="icon-report" style="float:left;"/>#{messages['manag.pulmonaryontreatreport']}
     </s:link>
--->
+
     <s:link view="/custom/bd/management/pulmonaryontreatnew.xhtml" rendered="true" >
         <f:param name="useinitreatmentdate" value="#{true}"/>
         <div class="icon-report" style="float:left;"/>#{messages['manag.pulmonaryontreatreport']}
     </s:link>
+-->
+
+	<s:link view="/custom/bd/management/tbform12v2015.xhtml" rendered="true" >
+		<f:param name="useregdate" value="#{true}"/>
+		<div class="icon-report" style="float:left;"/>#{messages['manag.tbform122015']}
+	</s:link>
 	
 	<s:link value="#{messages['manag.ind.infectsite']}" view="/management/infecsite.xhtml" styleClass="icon-report" rendered="false"/>
 	<s:link value="#{messages['manag.ind.prevtreat']}" view="/management/infecsite.xhtml" styleClass="icon-report" rendered="false"/>
