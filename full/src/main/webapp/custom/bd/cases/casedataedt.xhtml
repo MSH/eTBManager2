@@ -268,7 +268,7 @@
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		<h:selectOneMenu id="infectsite" value="#{tbcasebd.infectionSite}" required="#{tbcasebd.validated}">
+    		<h:selectOneMenu id="infectsite" value="#{tbcasebd.infectionSite}" required="#{true}">
     			<s:selectItems var="it" value="#{infectionSite_bd}" noSelectionLabel="-" label="#{messages[it.key]}" />
     			<s:convertEnum />
     		</h:selectOneMenu>
