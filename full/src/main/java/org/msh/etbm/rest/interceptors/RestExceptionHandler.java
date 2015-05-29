@@ -1,5 +1,6 @@
 package org.msh.etbm.rest.interceptors;
 
+import org.msh.etbm.rest.exceptions.BadRequestException;
 import org.msh.etbm.rest.exceptions.UnauthorizedException;
 
 import javax.ws.rs.core.Response;
@@ -19,6 +20,13 @@ public class RestExceptionHandler implements ExceptionMapper<Exception> {
             return Response
                     .status(401)
                     .entity("Invalid user name or password for the given workspace")
+                    .build();
+        }
+
+        if (cause instanceof BadRequestException) {
+            return Response
+                    .status(400)
+                    .entity("Bad request")
                     .build();
         }
 
