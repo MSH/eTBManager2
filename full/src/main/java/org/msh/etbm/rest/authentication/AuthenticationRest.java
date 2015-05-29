@@ -4,6 +4,8 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
+import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
+import org.msh.etbm.rest.exceptions.UnauthorizedException;
 import org.msh.etbm.services.auth.AuthWorkspace;
 import org.msh.etbm.services.auth.AuthenticationService;
 
@@ -44,10 +46,16 @@ public class AuthenticationRest {
                     "token within 24h idle-time, it will never expire.<p>" +
                     "When calling an API that requires authentication, the authentication token must be included in the request as a cookie " +
                     "or a query param using the name authToken. If an invalid token is sent, a 402 (invalid authentication token) will be returned" +
-                    "from the request."
+                    "from the request.",
+            returnCodes = {@ApiDocReturn(statusCode = "401", description = "Invalid user name or password")
+            }
     )
     public String login(AuthenticationForm form) {
         String token = authenticationService.login(form.getLogin(), form.getPassword(), form.getWorkspace());
+
+        if (token == null) {
+            throw new UnauthorizedException();
+        }
 
         return token;
     }
