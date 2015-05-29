@@ -33,14 +33,13 @@
 <h:form styleClass="form1">
 <h:panelGroup id="indicator">
 
-    <ui:param name="hideinterimmonth" value="true" />
-	<ui:include src="/custom/bd/management/filtersbd.xhtml" >
-		<ui:param name="showregdate" value="true" />
-		<ui:param name="readonlyregdate" value="true" />
-		<ui:param name="showinitreatdate" value="true" />
-        <ui:param name="readonlyinitreatdate" value="false" />
+    <ui:include src="/custom/bd/management/filtersbd.xhtml" >
+        <ui:param name="showregdate" value="true" />
+        <ui:param name="readonlyregdate" value="true" />
+        <ui:param name="showinitreatdate" value="false" />
         <ui:param name="disableInfectionSite" value="true" />
-	</ui:include>
+        <ui:param name="disablePatientType" value="true" />
+    </ui:include>
 
 	<s:fragment rendered="#{indicatorController.executing}">
 
