@@ -1,5 +1,6 @@
 package org.msh.etbm.rest.interceptors;
 
+import org.codehaus.jackson.JsonParseException;
 import org.msh.etbm.rest.exceptions.BadRequestException;
 import org.msh.etbm.rest.exceptions.UnauthorizedException;
 
@@ -27,6 +28,14 @@ public class RestExceptionHandler implements ExceptionMapper<Exception> {
             return Response
                     .status(400)
                     .entity("Bad request")
+                    .build();
+        }
+
+        if (cause instanceof JsonParseException) {
+            JsonParseException jsonError = (JsonParseException)cause;
+            return Response
+                    .status(400)
+                    .entity(jsonError.getMessage())
                     .build();
         }
 
