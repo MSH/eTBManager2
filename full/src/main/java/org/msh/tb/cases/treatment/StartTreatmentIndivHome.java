@@ -15,6 +15,7 @@ import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.medicines.MedicineSelection;
+import org.msh.tb.misc.EntityEvent;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 
@@ -111,7 +112,7 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 		if (isSaveChages())
 			caseHome.persist();
 		
-		Events.instance().raiseEvent("treatment-started");
+		Events.instance().raiseEvent("treatment-started", new EntityEvent(EntityEvent.EventType.NEW, tbcase));
 
 		return "treatment-started";
 		

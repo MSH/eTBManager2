@@ -170,4 +170,10 @@
         </sql>
     </changeSet>
 
+    <changeSet id="2.2-1.5" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="treatmentCategory" type="int" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

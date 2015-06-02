@@ -10,6 +10,7 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
+import org.msh.tb.misc.EntityEvent;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.tbunits.TBUnitType;
 
@@ -87,7 +88,7 @@ public class StartTreatmentHome {
 			caseHome.persist();
 		}
 		
-		Events.instance().raiseEvent("treatment-started");
+		Events.instance().raiseEvent("treatment-started", new EntityEvent(EntityEvent.EventType.NEW, tbcase));
 		
 		return "treatment-started";
 	}

@@ -10,6 +10,11 @@
 
 
 	<s:fragment rendered="#{not editing}">
+	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentCategory}">
+		<ui:define name="label">#{messages['TreatmentCategory']}:</ui:define>
+		#{messages[tbcase.treatmentCategory.key]}
+	</s:decorate>
+
 	<s:decorate template="/layout/display.xhtml" style="padding-top:5px;padding-bottom:5px;" rendered="#{tbcase.initialRegimenChanged}">
 		<ui:param name="labelstyle" value="width:150px;" />
 		<ui:define name="label">#{messages['TbCase.regimenIni']}:</ui:define>

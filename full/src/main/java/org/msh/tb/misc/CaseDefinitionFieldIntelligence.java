@@ -1,4 +1,4 @@
-package org.msh.tb.bd;
+package org.msh.tb.misc;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -8,11 +8,8 @@ import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseDefinition;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.XpertResult;
-import org.msh.tb.misc.EntityEvent;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,7 +54,6 @@ public class CaseDefinitionFieldIntelligence {
             return;
 
         TbCase tbcase = caseHome.getInstance();
-        Workspace ws = tbcase.getPatient().getWorkspace();
 
         CaseDefinition value = null;
 
@@ -94,7 +90,6 @@ public class CaseDefinitionFieldIntelligence {
             tbcase.setCaseDefinition(value);
             entityManager.persist(tbcase);
             entityManager.flush();
-            System.out.println("heyhey");
         }
 
     }

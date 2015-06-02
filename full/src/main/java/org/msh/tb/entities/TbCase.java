@@ -174,6 +174,8 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	
 	@Lob
 	private String comments;
+
+	private TreatmentCategory treatmentCategory;
 	
 	@Embedded
 	@AttributeOverrides({
@@ -1426,4 +1428,12 @@ public class TbCase implements Serializable, Transactional, SyncKey {
     public void setMovedSecondLineTreatment(boolean movedSecondLineTreatment) {
         this.movedSecondLineTreatment = movedSecondLineTreatment;
     }
+
+	public TreatmentCategory getTreatmentCategory() {
+		return treatmentCategory;
+	}
+
+	public void setTreatmentCategory(TreatmentCategory treatmentCategory) {
+		this.treatmentCategory = treatmentCategory;
+	}
 }
