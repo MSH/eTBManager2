@@ -1,6 +1,7 @@
 package org.msh.tb.bd;
 
 import org.jboss.seam.annotations.In;
+import org.msh.tb.bd.entities.enums.SmearStatus;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.Gender;
 import org.msh.tb.entities.enums.PatientType;
@@ -70,14 +71,35 @@ import java.util.Map;
     /**
      * Static string with the ordinal of the patient types counted on the report
      */
-    protected static final String PATIENT_TYPES_ORDINAL_ROWS = PatientType.NEW.ordinal() + ", " + PatientType.PREVIOUSLY_TREATED.ordinal() + ", " + PatientType.UNKNOWN_PREVIOUS_TB_TREAT.ordinal();
+    protected static final String PATIENT_TYPES_ORDINAL_ROWS = PatientType.NEW.ordinal() + ", " +
+                                                               PatientType.PREVIOUSLY_TREATED.ordinal() + ", " +
+                                                               PatientType.UNKNOWN_PREVIOUS_TB_TREAT.ordinal();
 
     /**
      * Static string with the ordinal of the previously treated patient types counted on the report
      */
-    protected static final String PATIENT_TYPES_PRE_TREAT_ORDINAL_ROWS = PatientType.RELAPSE.ordinal() + ", " + PatientType.TREATMENT_AFTER_FAILURE.ordinal() + ", "
-            + PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP.ordinal() + ", " + PatientType.OTHER_PREVIOUSLY_TREATED.ordinal();
+    protected static final String PATIENT_TYPES_PRE_TREAT_ORDINAL_ROWS = PatientType.RELAPSE.ordinal() + ", " +
+                                                                         PatientType.TREATMENT_AFTER_FAILURE.ordinal() + ", " +
+                                                                         PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP.ordinal() + ", " +
+                                                                         PatientType.OTHER_PREVIOUSLY_TREATED.ordinal();
 
+    /**
+     * Static string with the ordinal of the outcomes counted on the report
+     */
+    protected static final String OUTCOMES_INCLUDED_ORDINAL = CaseState.DIED.ordinal() + ", " +
+                                                              CaseState.FAILED.ordinal() + ", " +
+                                                              CaseState.DEFAULTED.ordinal() + ", " +
+                                                              CaseState.NOT_EVALUATED.ordinal() + ", " +
+                                                              CaseState.OTHER.ordinal();
+
+    /**
+     * Method that insert the values on the tables based on the types defined to rows and columns.
+     * This method also calculates the total row and the grand-total column.
+     * @param c Column that will receive the quantity
+     * @param row Row that will receive the quantity
+     * @param gender Gender sub column that will receive the quantity
+     * @param qtd the quantity that will be set
+     */
     protected void setValue(Column c, Row row, Gender gender, Float qtd){
         if(gender == null || row == null || c == null || qtd == null)
             return;
@@ -138,16 +160,108 @@ import java.util.Map;
     }
 
     /**
+     * This method will return the Column enum equivalent to the Smear Status passed as parameter
+     * @param s Smear Status
+     * @return The Column enum based on the Smear Status
+     */
+    private Column getSmearColumn(SmearStatus s){
+        if(SmearStatus.SMEAR_POSITIVE.equals(s))
+            return Column.SMEAR_POSITIVE;
+        else if(SmearStatus.SMEAR_NEGATIVE.equals(s))
+            return Column.SMEAR_NEGATIVE;
+
+        return null;
+    }
+
+    /**
+     * This method will return the Column enum equivalent to the Outcome passed as parameter
+     * @param c Case State - Outcome
+     * @return The Column enum based on the Outcome
+     */
+    private Column getOutcomeColumn(CaseState c){
+        if(CaseState.DIED.equals(c))
+            return Column.OUTCOME_DIED;
+        else if(CaseState.FAILED.equals(c))
+            return Column.OUTCOME_FAILURE;
+        else if(CaseState.DEFAULTED.equals(c))
+            return Column.OUTCOME_LOST_TO_FOLLOW_UP;
+        else if(CaseState.NOT_EVALUATED.equals(c))
+            return Column.OUTCOME_NOT_EVALUATED;
+        else if(CaseState.OTHER.equals(c))
+            return Column.OUTCOME_OTHER;
+
+        return null;
+    }
+
+    /**
      * Execute the needed queries to generate the table
      */
     protected void createIndicators() {
         createInterfaceFields();
         List<Object[]> queryResult;
 
-        //TODO: smear section
+        //smear section
+        queryResult = entityManager.createQuery(" select c.patientType, c.previouslyTreatedType, p.gender, c.followUpSmearStatus, count (*) " +
+                " from TbCaseBD c join c.patient p "
+                + getHQLWhereForQuery()
+                + " and c.followUpSmearStatus in (0,1) "
+                + "group by c.patientType, c.previouslyTreatedType, p.gender, c.followUpSmearStatus ")
+                .getResultList();
+
+        for (Object[] o : queryResult) {
+            PatientType pt = (PatientType) o[0];
+            PatientType prevPt = (PatientType) o[1];
+            Gender g = (Gender) o[2];
+            SmearStatus smear = (SmearStatus) o[3];
+            Long qtd = (Long) o[4];
+            Column c = getSmearColumn(smear);
+
+            if(c == null)
+                throw new RuntimeException("Column must not be null.");
+
+            setValue(c, getPatientTypeAsRow(pt.equals(PatientType.PREVIOUSLY_TREATED) ? prevPt : pt), g, qtd.floatValue());
+        }
 
 
-        //TODO: case states section
+        //outcomes section
+        queryResult = entityManager.createQuery(" select c.patientType, c.previouslyTreatedType, p.gender, c.state, count (*) " +
+                " from TbCaseBD c join c.patient p "
+                + getHQLWhereForQuery()
+                + " and c.followUpSmearStatus = 2  and c.state in ("+OUTCOMES_INCLUDED_ORDINAL+") "
+                + " group by c.patientType, c.previouslyTreatedType, p.gender, c.state ")
+                .getResultList();
+
+        for (Object[] o : queryResult) {
+            PatientType pt = (PatientType) o[0];
+            PatientType prevPt = (PatientType) o[1];
+            Gender g = (Gender) o[2];
+            CaseState caseState = (CaseState) o[3];
+            Long qtd = (Long) o[4];
+            Column c = getOutcomeColumn(caseState);
+
+            if(c == null)
+                throw new RuntimeException("Column must not be null.");
+
+            setValue(c, getPatientTypeAsRow(pt.equals(PatientType.PREVIOUSLY_TREATED) ? prevPt : pt), g, qtd.floatValue());
+        }
+
+
+        //not evaluated section
+        queryResult = entityManager.createQuery(" select c.patientType, c.previouslyTreatedType, p.gender, count (*) " +
+                " from TbCaseBD c join c.patient p "
+                + getHQLWhereForQuery()
+                + " and c.followUpSmearStatus = 2  and c.state not in ("+OUTCOMES_INCLUDED_ORDINAL+") "
+                + " group by c.patientType, c.previouslyTreatedType, p.gender ")
+                .getResultList();
+
+        for (Object[] o : queryResult) {
+            PatientType pt = (PatientType) o[0];
+            PatientType prevPt = (PatientType) o[1];
+            Gender g = (Gender) o[2];
+            Long qtd = (Long) o[3];
+
+            setValue(Column.NOT_EVALUATED_CASES, getPatientTypeAsRow(pt.equals(PatientType.PREVIOUSLY_TREATED) ? prevPt : pt), g, qtd.floatValue());
+        }
 
 
         //Total registered section

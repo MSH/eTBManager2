@@ -4,6 +4,7 @@ import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.bd.entities.enums.Occupation;
 import org.msh.tb.bd.entities.enums.PulmonaryTypesBD;
 import org.msh.tb.bd.entities.enums.SalaryRange;
+import org.msh.tb.bd.entities.enums.SmearStatus;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
@@ -41,6 +42,8 @@ public class TbCaseBD extends TbCase{
     @Temporal(TemporalType.DATE)
     @Column(name="REF_TO_DATE")
     private Date refToDate;
+
+	private SmearStatus followUpSmearStatus;
 
     public FieldValue getPatientRefToFv() {
         return patientRefToFv;
@@ -111,5 +114,12 @@ public class TbCaseBD extends TbCase{
 	public void setPulmonaryTypesBD(PulmonaryTypesBD pulmonaryTypesBD) {
 		this.pulmonaryTypesBD = pulmonaryTypesBD;
 	}
-		
+
+	public SmearStatus getFollowUpSmearStatus() {
+		return followUpSmearStatus;
+	}
+
+	public void setFollowUpSmearStatus(SmearStatus followUpSmearStatus) {
+		this.followUpSmearStatus = followUpSmearStatus;
+	}
 }

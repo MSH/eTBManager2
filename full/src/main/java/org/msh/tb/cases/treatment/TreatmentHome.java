@@ -18,6 +18,7 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.misc.EntityEvent;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
@@ -543,6 +544,9 @@ public class TreatmentHome {
 		tbcase.setOwnerUnit(null);
 		tbcase.setIniContinuousPhase(null);
 		tbcase.setRegimen(null);
+		tbcase.setRegimenIni(null);
+		tbcase.setInitialRegimenWithSecondLineDrugs(null);
+		tbcase.setTreatmentCategory(null);
 
 		Integer id = caseHome.getInstance().getId();
 		entityManager.createQuery("delete from PrescribedMedicine where tbcase.id = " + id.toString()).executeUpdate();

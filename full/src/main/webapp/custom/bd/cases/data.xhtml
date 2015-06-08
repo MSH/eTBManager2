@@ -199,10 +199,15 @@
 	<td	colspan="2">
 		<s:fragment rendered="#{tbcasebd.diagnosisType == 'CONFIRMED'}">
 
-        <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.caseDefinition!=null}">
-            <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
-            #{messages[tbcase.caseDefinition.key]}
-        </s:decorate>
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.caseDefinition!=null}">
+			<ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
+			#{messages[tbcase.caseDefinition.key]}
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcasebd.followUpSmearStatus!=null}">
+			<ui:define name="label">#{messages['SmearStatusTB12']}:</ui:define>
+			#{messages[tbcasebd.followUpSmearStatus.key]}
+		</s:decorate>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.drugResistanceType}">
 			<ui:define name="label">#{messages['DrugResistanceType']}</ui:define>
@@ -230,6 +235,12 @@
     		#{messages[tbcase.patientType.key]}
             <h:outputText rendered="#{tbcase.patientType == 'PREVIOUSLY_TREATED' and not empty tbcase.previouslyTreatedType}" value=" - #{messages[tbcase.previouslyTreatedType.key]} "/>
             <h:outputText rendered="#{tbcase.patientType == 'OTHER' and not empty tbcase.patientTypeOther}" value=" - #{tbcase.patientTypeOther} "/>
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['TreatmentCategory']}:</ui:define>
+			<h:outputText value="#{messages[tbcase.treatmentCategory.key]}" rendered="#{not empty tbcase.treatmentCategory}"/>
+			<h:outputText value="#{messages['TreatmentCategory.undefined']}" rendered="#{empty tbcase.treatmentCategory}"/>
 		</s:decorate>
 
 		</s:fragment>

@@ -188,9 +188,10 @@
             <h:outputText rendered="#{tbcase.patientType == 'OTHER' and not empty tbcase.patientTypeOther}" value=" - #{tbcase.patientTypeOther} "/>
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentCategory}">
+		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['TreatmentCategory']}:</ui:define>
-			#{messages[tbcase.treatmentCategory.key]}
+			<h:outputText value="#{messages[tbcase.treatmentCategory.key]}" rendered="#{not empty tbcase.treatmentCategory}"/>
+			<h:outputText value="#{messages['TreatmentCategory.undefined']}" rendered="#{empty tbcase.treatmentCategory}"/>
 		</s:decorate>
 
         <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null}">

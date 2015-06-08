@@ -176,4 +176,60 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="2.2-1.6" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="initialRegimenWithSecondLineDrugs" type="boolean" />
+        </addColumn>
+    </changeSet>
+
+    <!-- Solve inconsistence. Initial Regimen was not being erased when undoing the treatment -->
+    <changeSet id="2.2-1.7" author="msantos">
+        <sql>
+            update tbcase set REGIMEN_INI_ID = null where initreatmentdate is null;
+        </sql>
+    </changeSet>
+
+    <!-- Updates fields initialRegimenWithSecondLineDrugs and treatmentCategory -->
+    <changeSet id="2.2-1.8" author="msantos">
+        <sql>
+            <!--Updates all tbcase with tratment setting false on initialRegimenWithSecondLineDrugs-->
+            update tbcase
+            set initialRegimenWithSecondLineDrugs = false
+            where initreatmentdate is not null;
+
+            <!-- Updates all tbcase with second line medicine on initial regimen setting true on initialRegimenWithSecondLineDrugs -->
+            update tbcase c
+            inner join regimen r on c.REGIMEN_INI_ID = r.id
+            inner join medicineregimen medreg on medreg.regimen_id = r.id
+            inner join medicine med on med.id = medreg.medicine_id
+            set initialRegimenWithSecondLineDrugs = true
+            where initialRegimenWithSecondLineDrugs = false
+            and med.line = 1;
+
+            <!-- Updates all tbcase with second line medicine on current regimen setting true on initialRegimenWithSecondLineDrugs -->
+            update tbcase c
+            inner join regimen r on c.REGIMEN_ID = r.id
+            inner join medicineregimen medreg on medreg.regimen_id = r.id
+            inner join medicine med on med.id = medreg.medicine_id
+            set initialRegimenWithSecondLineDrugs = true
+            where c.REGIMEN_INI_ID is null
+            and initialRegimenWithSecondLineDrugs = false
+            and med.line = 1;
+
+            <!-- Updates all tbcase with second line medicine on individualized regimen setting true on initialRegimenWithSecondLineDrugs -->
+            update tbcase c
+            inner join prescribedmedicine prescmed on prescmed.case_id = c.id
+            inner join medicine med on med.id = prescmed.medicine_id
+            set initialRegimenWithSecondLineDrugs = true
+            where c.REGIMEN_INI_ID is null and c.regimen_id is null
+            and initialRegimenWithSecondLineDrugs = false
+            and med.line = 1;
+
+            <!-- calculates the field treatment category -->
+            update tbcase set treatmentCategory = 2 where initialRegimenWithSecondLineDrugs = true;
+            update tbcase set treatmentCategory = 0 where initialRegimenWithSecondLineDrugs = false and patientType in (0,48);
+            update tbcase set treatmentCategory = 1 where initialRegimenWithSecondLineDrugs = false and patientType not in (0,48);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

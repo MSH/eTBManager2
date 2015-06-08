@@ -176,7 +176,9 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	private String comments;
 
 	private TreatmentCategory treatmentCategory;
-	
+
+	private Boolean initialRegimenWithSecondLineDrugs;
+
 	@Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name="address", column=@Column(name="NOTIF_ADDRESS")),
@@ -1435,5 +1437,13 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
 	public void setTreatmentCategory(TreatmentCategory treatmentCategory) {
 		this.treatmentCategory = treatmentCategory;
+	}
+
+	public Boolean isInitialRegimenWithSecondLineDrugs() {
+		return initialRegimenWithSecondLineDrugs;
+	}
+
+	public void setInitialRegimenWithSecondLineDrugs(Boolean initialRegimenWithSecondLineDrugs) {
+		this.initialRegimenWithSecondLineDrugs = initialRegimenWithSecondLineDrugs;
 	}
 }

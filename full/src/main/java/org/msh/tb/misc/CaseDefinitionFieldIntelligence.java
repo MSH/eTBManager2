@@ -44,6 +44,11 @@ public class CaseDefinitionFieldIntelligence {
         updateCaseDefinitionField(entityEvent);
     }
 
+    @Observer("entity.TbCaseNG")
+    public void tbCaseNGModifiedIncludedOrRemoved(EntityEvent entityEvent){
+        updateCaseDefinitionField(entityEvent);
+    }
+
     /**
      * This method will get the case on caseHome and check its parameter to define if the case definiciton
      * for this field is Bacteriologically Confirmed or Clinically Diagnosed.
