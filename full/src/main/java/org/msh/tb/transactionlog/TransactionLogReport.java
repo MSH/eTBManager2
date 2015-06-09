@@ -4,6 +4,8 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.msh.tb.StandardFilters;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TransactionLog;
@@ -74,12 +76,20 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 			entityId = -1;
 			return;
 		}
-		
+
 		entityId = caseHome.getInstance().getId();
 		iniDate = null;
 		endDate = null;
 		searchKey = null;
+		entityClass = null;
 		allResults = true;
+
+        // clear other filters that may restrict list of transaction log items
+        StandardFilters filters = (StandardFilters) App.getComponent("standardFilters");
+        filters.getAuSelection().setSelectedUnit(null);
+        filters.getLabSelection().setSelected(null);
+        filters.getTbunitSelection().setSelected(null);
+        filters.getTbunitSelection().setAdminUnit(null);
 	}
 
 

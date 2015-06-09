@@ -51,7 +51,9 @@ public class CaseLogService {
 	public void logValidation() {
 		TbCase tbcase = caseHome.getInstance();
 		
-		beginTX("CASE_VALIDATE", tbcase).end();
+		beginTX("CASE_VALIDATE", tbcase)
+                .addRow("DisplayCaseNumber.VALIDATION_NUMBER", tbcase.getDisplayValidationNumber())
+				.end();
 	}
 
 

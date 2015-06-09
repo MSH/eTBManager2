@@ -57,6 +57,7 @@ public class TreatmentLogService {
 		ActionTX atx = ActionTX.begin("CASE_TREAT");
 
 		TbCase tbcase = caseHome.getInstance();
+		caseHome.setTransactionLogActive(false);
 
 		// log changes in the treatment period
 		Period p = tbcase.getTreatmentPeriod();
@@ -91,11 +92,15 @@ public class TreatmentLogService {
 		}
 		
 		if (editedMedicines != null) {
-			for (PrescribedMedicine pm: editedMedicines)
-				atx.addRow("form.edit", getDisplayTextPrescribedMed(pm));
+			for (PrescribedMedicine pm: editedMedicines) {
+                String s = getDisplayTextPrescribedMed(pm) +
+                        " (" + LocaleDateConverter.getDisplayDate(pm.getPeriod().getIniDate(), false) +
+                        "..." + LocaleDateConverter.getDisplayDate(pm.getPeriod().getEndDate(), false) + ")";
+                atx.addRow("form.edit", s);
+            }
 			changed = true;
 		}
-		
+
 		if (removedMedicines != null) {
 			for (RemovedPediod rp: removedMedicines) {
 				String s = rp.getMedicine().getAbbrevName() +

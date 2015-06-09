@@ -534,14 +534,18 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 			return code;
 		}
 		case VALIDATION_NUMBER:
-			if ((getCaseNumber() == null) || (getValidationState() == ValidationState.WAITING_VALIDATION))
-				 return Messages.instance().get("cases.nonumber");
-			else return formatCaseNumber(patient.getRecordNumber(), caseNumber);
+            return getDisplayValidationNumber();
 		default:
 			return id != null? id.toString(): Messages.instance().get("cases.nonumber");
 		}
 	}
-	
+
+
+	public String getDisplayValidationNumber() {
+        if ((getCaseNumber() == null) || (getValidationState() == ValidationState.WAITING_VALIDATION))
+            return Messages.instance().get("cases.nonumber");
+        else return formatCaseNumber(patient.getRecordNumber(), caseNumber);
+	}
 
 	/**
 	 * Formats the case number to be displayed to the user

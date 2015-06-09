@@ -87,7 +87,7 @@ public class ActionTX {
      * @return boolean value
      */
     protected boolean prepareForSaving() {
-        if ((roleAction == RoleAction.EDIT) && (values == null)) {
+        if ((roleAction == RoleAction.EDIT) && (values == null) && (detailWriter.isEmpty())) {
             return false;
         }
 
@@ -148,15 +148,14 @@ public class ActionTX {
      * @return string value
      */
     protected String generateDetails() {
-        if (values == null) {
-            return null;
+        if (values != null) {
+            for (PropertyValue val: values) {
+                if (val.getOperation() != Operation.EDIT)
+                    detailWriter.addTableRow(val.getMapping().getMessageKey(), val.getValue());
+                else detailWriter.addTableRow(val.getMapping().getMessageKey(), val.getValue(), val.getEntityNewValue());
+            }
         }
 
-        for (PropertyValue val: values) {
-            if (val.getOperation() != Operation.EDIT)
-                detailWriter.addTableRow(val.getMapping().getMessageKey(), val.getValue());
-            else detailWriter.addTableRow(val.getMapping().getMessageKey(), val.getValue(), val.getEntityNewValue());
-        }
         return getDetailWriter().asXML();
     }
 

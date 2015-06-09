@@ -17,7 +17,16 @@ public class DetailXMLWriter {
 	private Element root;
 	
 	private Element table;
-	
+
+    /**
+     * Check if there is any information stored in the object
+     * @return true if there is no information stored
+     */
+	public boolean isEmpty() {
+        return root == null;
+    }
+
+
 	/**
 	 * Add a message from the message file with its optional parameters
 	 * @param msg
