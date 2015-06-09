@@ -10,6 +10,7 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
@@ -35,6 +36,7 @@ import java.util.List;
  */
 @Name("caseEditingHome")
 @Scope(ScopeType.CONVERSATION)
+@LogInfo(roleName="CASE_DATA", entityClass=TbCase.class)
 public class CaseEditingHome {
 
 	@In(create=true) protected CaseHome caseHome;
@@ -81,6 +83,9 @@ public class CaseEditingHome {
 			return "initialized";
 		
 		Patient p = patientHome.getInstance();
+
+		patientHome.setTransactionLogActive(false);
+        patientHome.setDisplayMessage(false);
 		
 		if (caseHome.getInstance().getClassification() == null)
 			return "/cases/index.xhtml";
