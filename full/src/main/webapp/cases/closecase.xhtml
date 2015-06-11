@@ -37,7 +37,7 @@
                         </h:selectOneRadio>
                     </s:decorate>
 
-                    <s:decorate template="/layout/edit.xhtml" >
+                    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification == 'TB'}">
                         <h:selectBooleanCheckbox id="movedToSecondLine" value="#{tbcase.movedSecondLineTreatment}"/>#{messages['CaseState.MOVED_SECONDLINE']}
                     </s:decorate>
 
