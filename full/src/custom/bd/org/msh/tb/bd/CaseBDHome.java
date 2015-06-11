@@ -49,7 +49,7 @@ public class CaseBDHome {
 
 		if(ret.equals("error"))
 			return "error";
-		
+
 		saveMedicalExamination();
 		
 		return ret;
@@ -99,6 +99,8 @@ public class CaseBDHome {
 	public String saveMedicalExamination() {
 		if (medicalExaminationBdHome == null)
 			return "error";
+
+		medicalExaminationBdHome.setTransactionLogActive(false);
 
 		medicalExaminationBdHome.setDisplayMessage(false);
 		return medicalExaminationBdHome.persist();
