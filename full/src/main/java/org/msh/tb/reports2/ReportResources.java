@@ -217,6 +217,7 @@ public class ReportResources {
 		addVariable(grp, new CountingVariable("totalcases", "manag.ind.numc", UnitType.CASE_ONLY));
 		addVariable(grp, new CountingExamsVariable());
 		addVariable(grp, new InterimOutcomeVariable());
+		addFilter(grp, new InterimMonthFilter());
 		return grp;
 	}
 
