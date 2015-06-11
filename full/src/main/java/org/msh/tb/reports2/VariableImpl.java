@@ -19,7 +19,7 @@ import java.util.List;
  * @author Ricardo Memoria
  *
  */
-public class VariableImpl implements Variable, Filter {
+public abstract class VariableImpl implements Variable, Filter {
 
 	public static final String KEY_NULL = "null";
 

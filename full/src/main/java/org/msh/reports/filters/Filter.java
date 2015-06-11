@@ -40,4 +40,5 @@ public interface Filter extends ReportElement {
 	 * @return boolean value
 	 */
 	boolean isMultiSelection();
+
 }

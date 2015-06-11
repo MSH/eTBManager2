@@ -216,6 +216,7 @@ public class ReportResources {
 		ReportGroup grp = addGroup("manag.reportgen.var.groupothers");
 		addVariable(grp, new CountingVariable("totalcases", "manag.ind.numc", UnitType.CASE_ONLY));
 		addVariable(grp, new CountingExamsVariable());
+		addVariable(grp, new InterimOutcomeVariable());
 		return grp;
 	}
 

@@ -81,6 +81,9 @@ public class InterimOutcomeIndicator extends Indicator2D {
 	 * @param dtMicro
 	 */
 	protected void addValue(Date dtIniTreat, CaseState state, Date dtCult, Date dtMicro, Date dtEndTreatment) {
+		if (dtIniTreat == null) {
+			return;
+		}
 		IndicatorFilters filters = getIndicatorFilters();
 		int intrMonths = filters.getInterimMonths();
         int treatMonths = DateUtils.monthsBetween(dtIniTreat, dtEndTreatment);

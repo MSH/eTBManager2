@@ -54,6 +54,7 @@ public class AgeRangeVariable extends VariableImpl {
 		return ageRangeHome;
 	}
 
+
 	/* (non-Javadoc)
 	 * @see org.msh.tb.reports2.VariableImpl#getDisplayText(java.lang.Object)
 	 */

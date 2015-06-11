@@ -234,7 +234,12 @@ public class DateFieldVariable extends VariableImpl {
 	}
 
 
-	public Object filterValueFromString(String value) {
+    /**
+     * Convert a filter value to its period representation
+     * @param value
+     * @return
+     */
+	public Object convertToFilterValue(String value) {
 		if (value == null)
 			return null;
 		
