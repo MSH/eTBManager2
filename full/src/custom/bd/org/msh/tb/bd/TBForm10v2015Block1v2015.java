@@ -74,7 +74,7 @@ public class TBForm10v2015Block1v2015 extends TBForm10v2015 {
             PatientType pt = (pt1.equals(PatientType.PREVIOUSLY_TREATED) ? prevpt : pt1);
 
             if(pt != null && (pt.equals(PatientType.UNKNOWN_PREVIOUS_TB_TREAT) || pt.equals(PatientType.NEW) || pt.equals(PatientType.RELAPSE) || pt.equals(PatientType.TREATMENT_AFTER_FAILURE) ||
-                    pt.equals(PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP) || pt.equals(PatientType.OTHER)))
+                    pt.equals(PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP) || pt.equals(PatientType.OTHER_PREVIOUSLY_TREATED)))
             this.block1Info.setValue(ar, subgroup, g, pt, qtd);
         }
     }
@@ -109,6 +109,7 @@ public class TBForm10v2015Block1v2015 extends TBForm10v2015 {
         }
 
         //Total Row
+        //Pulmonary - Bacteriologically Confirmed
         for(PatientType pt : patientTypesReport){
             addValue("M"+pt.ordinal()+"bc", messages.get("manag.gender.male"), messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(0, pt, Gender.MALE).floatValue());
             addValue("F"+pt.ordinal()+"bc", messages.get("manag.gender.female"),  messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(0, pt, Gender.FEMALE).floatValue());
@@ -117,13 +118,13 @@ public class TBForm10v2015Block1v2015 extends TBForm10v2015 {
         //Pulmonary - Clinically Confirmed
         for(PatientType pt : patientTypesReport){
             addValue("M" + pt.ordinal() + "cc", messages.get("manag.gender.male"),  messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(1, pt, Gender.MALE).floatValue());
-            addValue("F"+pt.ordinal()+"cc", messages.get("manag.gender.female"),  messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(1, pt, Gender.MALE).floatValue());
+            addValue("F"+pt.ordinal()+"cc", messages.get("manag.gender.female"),  messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(1, pt, Gender.FEMALE).floatValue());
         }
 
         //Extrapulmonary
         for(PatientType pt : patientTypesReport){
             addValue("M" + pt.ordinal() + "ex", messages.get("manag.gender.male"),  messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(2, pt, Gender.MALE).floatValue());
-            addValue("F"+pt.ordinal()+"ex", messages.get("manag.gender.female"),  messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(2, pt, Gender.MALE).floatValue());
+            addValue("F"+pt.ordinal()+"ex", messages.get("manag.gender.female"),  messages.get("global.total"), block1Info.getTotalByGenderAndPatientType(2, pt, Gender.FEMALE).floatValue());
         }
         addValue("MT", messages.get("manag.gender.male"),  messages.get("global.total"), block1Info.getGrandTotalByGender(Gender.MALE).floatValue());
         addValue("FT", messages.get("manag.gender.female"), messages.get("global.total"), block1Info.getGrandTotalByGender(Gender.FEMALE).floatValue());
@@ -167,11 +168,11 @@ public class TBForm10v2015Block1v2015 extends TBForm10v2015 {
                 rowInfo.getPulmonaryBacteriologicallyConf().getMaleValues().put(pt, (rowInfo.getPulmonaryBacteriologicallyConf().getMaleValues().get(pt).longValue()) + quantity.longValue());
             else if(subgroup == 0 && gender.equals(Gender.FEMALE))
                 rowInfo.getPulmonaryBacteriologicallyConf().getFemaleValues().put(pt, (rowInfo.getPulmonaryBacteriologicallyConf().getFemaleValues().get(pt).longValue()) + quantity.longValue());
-            if(subgroup == 1 && gender.equals(Gender.MALE))
+            else if(subgroup == 1 && gender.equals(Gender.MALE))
                 rowInfo.getPulmonaryClinicallyConf().getMaleValues().put(pt, (rowInfo.getPulmonaryClinicallyConf().getMaleValues().get(pt).longValue()) + quantity.longValue());
             else if(subgroup == 1 && gender.equals(Gender.FEMALE))
                 rowInfo.getPulmonaryClinicallyConf().getFemaleValues().put(pt, (rowInfo.getPulmonaryClinicallyConf().getFemaleValues().get(pt).longValue()) + quantity.longValue());
-            if(subgroup == 2 && gender.equals(Gender.MALE))
+            else if(subgroup == 2 && gender.equals(Gender.MALE))
                 rowInfo.getExtrapulmonary().getMaleValues().put(pt, (rowInfo.getExtrapulmonary().getMaleValues().get(pt).longValue()) + quantity.longValue());
             else if(subgroup == 2 && gender.equals(Gender.FEMALE))
                 rowInfo.getExtrapulmonary().getFemaleValues().put(pt, (rowInfo.getExtrapulmonary().getFemaleValues().get(pt).longValue()) + quantity.longValue());

@@ -25,7 +25,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
             PatientType.RELAPSE,
             PatientType.TREATMENT_AFTER_FAILURE,
             PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP,
-            PatientType.OTHER,
+            PatientType.OTHER_PREVIOUSLY_TREATED,
     };
 
     /**
@@ -83,7 +83,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
         pTypesAcceptedSubGroup = "" + PatientType.RELAPSE.ordinal();
         pTypesAcceptedSubGroup = pTypesAcceptedSubGroup + "," + PatientType.TREATMENT_AFTER_FAILURE.ordinal();
         pTypesAcceptedSubGroup = pTypesAcceptedSubGroup + "," + PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP.ordinal();
-        pTypesAcceptedSubGroup = pTypesAcceptedSubGroup + "," + PatientType.OTHER.ordinal();
+        pTypesAcceptedSubGroup = pTypesAcceptedSubGroup + "," + PatientType.OTHER_PREVIOUSLY_TREATED.ordinal();
 
         return " and (c.patientType in (" + pTypesAcceptedGroup + ") or c.previouslyTreatedType in (" + pTypesAcceptedSubGroup + ") )";
     }
