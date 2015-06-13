@@ -17,17 +17,28 @@
 <ui:define name="content">
 <h1><i class="icon-double-angle-right"/>#{title}</h1>
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate template="/layout/casebody.xhtml" id="maindec">
 
 <script type="text/javascript">
 <!--
 function isPatientTypeOther(cb) {
    return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'OTHER'));
 }
+function isPatientTypePrevTreat(cb) {
+	return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'PREVIOUSLY_TREATED'));
+}
 function showPatientTypeOther(cb) {
   if (isPatientTypeOther(cb))
   	jQuery('#patientTypeOther').show(500);
   else jQuery('#patientTypeOther').hide(500);
+}
+function showPrevTreatType(cb) {
+	if (isPatientTypePrevTreat(cb))
+		jQuery('#prevTreatType').show(500);
+	else{
+		document.getElementById('maindec:form-confirmed:prevTreatTypeDec:previouslyTreatedType').options[0].selected = "true";
+		jQuery('#prevTreatType').hide(500);
+	}
 }
 function showExtrapulmonary(cb) {
   if (isExtrapulmonary(cb))
@@ -106,22 +117,42 @@ function diagnosisTypeClick(radio) {
     </s:decorate>
     </div>
 
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
-    		<h:selectOneMenu id="patType" value="#{suspectFollowupHome.dataModel.patientType}" required="true">
-    			<s:selectItems var="it" value="#{patientTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}" id="patType1Dec">
+			<ui:define name="label">#{messages['PatientType']}:</ui:define>
+			<h:selectOneMenu id="patType1" value="#{suspectFollowupHome.dataModel.patientType}" required="#{true}">
+				<s:selectItems var="it" value="#{patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
+				<s:convertEnum />
+			</h:selectOneMenu>
 		</s:decorate>
 
-	<rich:jQuery selector="#patType" query="change(function(){ showPatientTypeOther(this); })" />
-
-		<div id="patientTypeOther">
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
-    		<h:inputText value="#{suspectFollowupHome.dataModel.patientTypeOther}" style="width:200px;" maxlength="100" />
-		</s:decorate>
+		<div id="prevTreatType" style="#{suspectFollowupHome.dataModel.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+			<s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
+				<ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
+				<ui:param name="redasterisk" value="#{true}"/>
+				<h:selectOneMenu value="#{suspectFollowupHome.dataModel.previouslyTreatedType}" id="previouslyTreatedType">
+					<s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
 		</div>
+
+		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
+			<ui:define name="label">#{messages['PatientType']}:</ui:define>
+			<h:selectOneMenu id="patType2" value="#{suspectFollowupHome.dataModel.patientType}" required="#{true}">
+				<s:selectItems var="it" value="#{patientTypesDRTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
+
+		<div id="patientTypeOther" style="#{tbcase.patientType != 'OTHER' ? 'display:none' : ''}">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
+				<h:inputText value="#{suspectFollowupHome.dataModel.patientTypeOther}" style="width:200px;" maxlength="100" />
+			</s:decorate>
+		</div>
+
+		<rich:jQuery selector="#patType1" query="change(function(){ showPrevTreatType(this); })" />
+		<rich:jQuery selector="#patType2" query="change(function(){ showPatientTypeOther(this); })" />
 
 		<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>

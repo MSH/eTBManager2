@@ -206,7 +206,7 @@
 
         <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}" id="patType1Dec">
             <ui:define name="label">#{messages['PatientType']}:</ui:define>
-            <h:selectOneMenu id="patType1" value="#{tbcase.patientType}" required="#{true}" onchange="checkPrevTreatType()">
+            <h:selectOneMenu id="patType1" value="#{tbcase.patientType}" required="#{true}">
                 <s:selectItems var="it" value="#{patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
                 <s:convertEnum />
             </h:selectOneMenu>
@@ -215,7 +215,7 @@
         <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
             <s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
                 <ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
-                <ui:param name="redasterisk" value="#{tbcase.validated}"/>
+                <ui:param name="redasterisk" value="#{true}"/>
                     <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" id="previouslyTreatedType">
                         <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
                         <s:convertEnum />

@@ -115,6 +115,7 @@ public class GlobalLists {
 		PrevTBTreatmentOutcome.COMPLETED,
 		PrevTBTreatmentOutcome.FAILURE,
 		PrevTBTreatmentOutcome.DEFAULTED,
+		PrevTBTreatmentOutcome.NOT_EVALUATED,
 		PrevTBTreatmentOutcome.SCHEME_CHANGED,
 		PrevTBTreatmentOutcome.TRANSFERRED_OUT,
 		PrevTBTreatmentOutcome.UNKNOWN,

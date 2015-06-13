@@ -231,7 +231,7 @@
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}" id="patType1Dec">
         <ui:define name="label">#{messages['PatientType']}:</ui:define>
-        <h:selectOneMenu id="patType1" value="#{tbcase.patientType}" required="#{true}" onchange="checkPrevTreatType()">
+        <h:selectOneMenu id="patType1" value="#{tbcase.patientType}" required="#{true}">
             <s:selectItems var="it" value="#{patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
             <s:convertEnum />
         </h:selectOneMenu>
@@ -240,7 +240,7 @@
     <div id="prevTreatType" style="#{tbcase.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
         <s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
             <ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
-            <ui:param name="redasterisk" value="#{tbcase.validated}"/>
+            <ui:param name="redasterisk" value="#{true}"/>
             <h:selectOneMenu value="#{tbcase.previouslyTreatedType}" id="previouslyTreatedType">
                 <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
                 <s:convertEnum />
@@ -461,7 +461,7 @@ else jQuery('#pulmonary2').hide(500);
 				</a:repeat>
 				<td class="colcb">
 					<s:validateAll>
-					<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
+					<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}">
 						<s:selectItems var="v" value="#{globalLists_bd.getPrevTBTreatmentOutcomes()}" label="#{messages[v.key]}" noSelectionLabel="-" />
 						<s:convertEnum />
 					</h:selectOneMenu>
@@ -472,7 +472,7 @@ else jQuery('#pulmonary2').hide(500);
 						<f:selectItems value="#{months}"/>
 					</h:selectOneMenu>
 					<s:validateAll>
-						<h:selectOneMenu id="outcomeyear" value="#{it.prevTBTreatment.outcomeYear}" required="true">
+						<h:selectOneMenu id="outcomeyear" value="#{it.prevTBTreatment.outcomeYear}">
 							<f:selectItems value="#{years}"/>
 						</h:selectOneMenu>
 					</s:validateAll>

@@ -14,7 +14,8 @@ public enum PrevTBTreatmentOutcome {
 	DIAGNOSTIC_CHANGED,
 	NO_OUTCOME_YET,
 	OTHER,
-    /*Bangladesh*/DELAYED_CONVERTER;
+    /*Bangladesh*/DELAYED_CONVERTER,
+	NOT_EVALUATED;
 
 	
 	public String getKey() {
@@ -46,6 +47,8 @@ public enum PrevTBTreatmentOutcome {
 			return TRANSFERRED_OUT;
 		case OTHER:
 			return OTHER;
+		case NOT_EVALUATED:
+			return NOT_EVALUATED;
 		default:
 			return PrevTBTreatmentOutcome.UNKNOWN;
 		}
