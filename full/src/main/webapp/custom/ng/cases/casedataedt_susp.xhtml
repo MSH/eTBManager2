@@ -73,6 +73,9 @@
 	</td></tr></table>
 	</div>
 
+
+
+
     <!-- exams only for new suspects -->
     <s:fragment rendered="#{empty tbcase.id}">
 
@@ -95,7 +98,8 @@
 				<ui:param name="examHome" value="#{microscopyActions}" />
                 <ui:param name="redasteriskforreq" value="true"/>
                 <ui:param name="ctrlprefix" value="mic"/>
-                <ui:param name="hassampletype" value="true" />
+				<ui:param name="hideSampleNumber" value="true" />
+				<ui:param name="hideLaboratory" value="true" />
 			</s:decorate>
 
 			<div class="paragraph">#{messages['cases.exams.results']}</div>
@@ -140,12 +144,15 @@
 							   label="#{messages[it.key]}" />
 				<s:convertEnum />
 			</h:selectOneMenu>
+
 			<div id="rifres" style="#{empty xpertActions.instance.result!='TB_DETECTED'? 'display:none': ''}">
-				<h:selectOneMenu id="xprifres" value="#{examGenexpert.rifResult}">
-					<s:selectItems value="#{xpertActions.rifResults}" var="it"
-								   noSelectionLabel="-" label="#{messages[it.key]}" />
-					<s:convertEnum />
-				</h:selectOneMenu>
+				<s:decorate template="/layout/edit_nolabel.xhtml">
+					<h:selectOneMenu id="xprifres" value="#{xpertActions.instance.rifResult}">
+						<s:selectItems value="#{xpertActions.rifResults}" var="it"
+									   noSelectionLabel="-" label="#{messages[it.key]}" />
+						<s:convertEnum />
+					</h:selectOneMenu>
+				</s:decorate>
 			</div>
 		</s:decorate>
 
@@ -156,6 +163,9 @@
                 <ui:param name="fieldsrequired" value="false"/>
                 <ui:param name="redasteriskforreq" value="true"/>
 				<ui:param name="ctrlprefix" value="xp"/>
+				<ui:param name="hideSampleType" value="true" />
+				<ui:param name="hideSampleNumber" value="true" />
+				<ui:param name="hideLaboratory" value="true" />
 			</s:decorate>
 		</div>
 	</div>

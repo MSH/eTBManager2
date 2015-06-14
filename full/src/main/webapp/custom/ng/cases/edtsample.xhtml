@@ -20,7 +20,7 @@
     </div>
 
 	<div id="divsample">
-    <s:decorate template="/layout/edit.xhtml" rendered="#{not empty hassampletype ? hassampletype : false}">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{empty hideSampleType}">
     	<ui:define name="label">#{messages['PatientSample.sampleType']}:</ui:define>
     	<h:selectOneMenu id="#{ctrlprefix}sampletype" value="#{examHome.instance.sampleType}" >
     		<s:selectItems value="#{sampletypes_ng}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
@@ -28,13 +28,13 @@
     	</h:selectOneMenu>
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" rendered="#{empty hideSampleNumber}">
     	<ui:define name="label">#{messages['PatientSample.sampleNumber']}:</ui:define>
     	<h:inputText id="#{ctrlprefix}sample" value="#{examHome.instance.sampleNumber}" maxlength="50" style="width:200px;"/>
     </s:decorate>
     </div>
 
-    <s:decorate template="/layout/labselection.xhtml" >
+    <s:decorate template="/layout/labselection.xhtml" rendered="#{empty hideLaboratory}">
     	<ui:param name="required" value="false" />
         <ui:param name="redasterisk" value="true" />
     	<ui:param name="labselection" value="#{examHome.labselection}" />

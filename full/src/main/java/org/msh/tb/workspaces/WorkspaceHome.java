@@ -247,18 +247,16 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	 * @return
 	 */
 	public String saveDefaultworkspace() {
+		setTransactionLogActive(false);
 		if (!persist().equals("persisted"))
 			return "error";
 
 		// register transaction log
-		getActionTX()
-				.setEventName("SETUPWS")
+		ActionTX.begin("SETUPWS")
+				.setRoleAction(RoleAction.EDIT)
 				.end();
-//		TransactionLogService logService = new TransactionLogService();
-		defaultWorkspace.setUsers(null);
-//		logService.recordEntityState(defaultWorkspace, Operation.EDIT);
-//		logService.save("SETUPWS", RoleAction.EDIT, getInstance());
 
+		defaultWorkspace.setUsers(null);
 		defaultWorkspace = getInstance();
 		
 		return "defaultws-persisted";
@@ -269,7 +267,8 @@ public class WorkspaceHome extends EntityHomeEx<Workspace> {
 	public EntityQuery<Workspace> getEntityQuery() {
 		return (WorkspacesQuery)Component.getInstance("workspaces", false);
 	}
-	
+
+
 	/**
 	 * Update the picture options changed by the user
 	 */

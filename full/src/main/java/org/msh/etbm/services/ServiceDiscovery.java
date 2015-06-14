@@ -7,6 +7,8 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.etbm.services.commons.DAOServices;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
+import org.msh.tb.login.SessionData;
+import org.msh.tb.login.UserSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +73,23 @@ public class ServiceDiscovery {
             }
         }
 
-        DAOServices comp = (DAOServices) App.getComponent(compname);
+        // get DAO services component
+        DAOServices comp = null;
+
+        Workspace ws = UserSession.getWorkspace();
+        String ext = ws.getExtension();
+
+        // extension was defined?
+        if (ext != null && !ext.isEmpty()) {
+            String customcomp = compname + ext.toUpperCase();
+
+            comp = (DAOServices) App.getComponent(customcomp);
+        }
+
+        if (comp == null) {
+            comp = (DAOServices) App.getComponent(compname);
+        }
+
         if (comp == null) {
             throw new RuntimeException("No component found with name " + comp);
         }

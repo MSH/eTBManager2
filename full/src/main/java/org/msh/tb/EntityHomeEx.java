@@ -55,6 +55,9 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 
 		if (actionTX == null) {
 			String evtName = getRoleName(action);
+			if (evtName == null) {
+				return false;
+			}
 			actionTX = ActionTX.begin(evtName, getInstance(), action);
 		}
 
