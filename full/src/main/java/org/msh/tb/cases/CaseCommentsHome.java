@@ -5,8 +5,10 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.security.Identity;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
+import org.msh.tb.bd.cases.exams.ExamBiopsy;
 import org.msh.tb.entities.CaseComment;
 import org.msh.tb.entities.UserLogin;
 
@@ -16,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Name("caseCommentsHome")
+@LogInfo(roleName="CASE_COMMENTS", entityClass=CaseComment.class)
 public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 	private static final long serialVersionUID = -7620376721300705176L;
 

@@ -60,10 +60,13 @@ public class CaseDefinitionFieldIntelligence {
 
         TbCase tbcase = caseHome.getInstance();
 
+        if(tbcase == null)
+            return;
+
         CaseDefinition value = null;
 
         //If it is a suspect (presumptive), the case is not a confirmed case, so, no case definition for  this case.
-        if (tbcase.getDiagnosisType().equals(DiagnosisType.SUSPECT)) {
+        if (tbcase.getDiagnosisType() == null || tbcase.getDiagnosisType().equals(DiagnosisType.SUSPECT)) {
             tbcase.setCaseDefinition(value);
             entityManager.persist(tbcase);
             entityManager.flush();
