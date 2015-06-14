@@ -258,33 +258,34 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 
 		TxLogServices logSrv = (TxLogServices)App.getComponent("txLogServices");
 
+		if (actionTX.getDescription() == null) {
+			actionTX.setDescription(getLogDescription());
+		}
+
+        if (actionTX.getEntityId() == null) {
+            actionTX.setEntityId(getLogEntityId());
+        }
+
+        if (actionTX.getEntityClass() == null) {
+            actionTX.setEntityClass(getLogEntityClass());
+        }
+
+        if (actionTX.getEntity() == null) {
+            actionTX.setEntity( getInstance() );
+        }
+
+        actionTX.end();
+
+/*
 		actionTX.setDescription( getLogDescription() )
 			.setEntityId(getLogEntityId())
 			.setEntityClass(getLogEntityClass())
 			.setEntity( getInstance() )
 			.end();
-
-/*
-
-		switch (action) {
-		case DELETE: logService.recordEntityState(getInstance(), Operation.DELETE);
-			break;
-		case NEW: logService.recordEntityState(getInstance(), Operation.NEW);
-			break;
-		default:
-		}
-		
-		logService.save(roleName, action, getLogDescription(), getLogEntityId(), getLogEntityClass(), getInstance());
 */
 	}
 
-/*
-	public void saveExecuteTransaction(String roleName) {
-		saveTransactionLog(RoleAction.EXEC);
-	}
-*/
 
-	
 	/**
 	 * Return the entity class to be used in the transaction log recording operation
 	 * @return

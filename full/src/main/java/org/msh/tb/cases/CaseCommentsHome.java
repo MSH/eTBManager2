@@ -10,7 +10,9 @@ import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.bd.cases.exams.ExamBiopsy;
 import org.msh.tb.entities.CaseComment;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.UserLogin;
+import org.msh.tb.entities.enums.RoleAction;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -70,7 +72,24 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 		comment.setDate(new Date());
 		comment.setView(view);
 		comment.setTbcase(caseHome.getInstance());
-		
+
+		setDisplayMessage(false);
+        // set log information to record
+        setTransactionLogActive(true);
+        if (initTransactionLog(RoleAction.NEW)) {
+            String s = comment.getComment();
+            if (s.length() > 30) {
+                s = s.substring(0, 29) + "...";
+            }
+
+            getActionTX()
+                    .setEntity(caseHome.getInstance())
+                    .setEntityClass(TbCase.class.getSimpleName())
+                    .setEntityId(caseHome.getInstance().getId())
+                    .setDescription(caseHome.getInstance().toString())
+                    .getDetailWriter().addText(s);
+        }
+
 		persist();
 		
 		if (comments != null) {
@@ -84,8 +103,7 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 		return "comment-added";
 	}
 
-
-	/**
+    /**
 	 * Create a list of comments from a specific section. The first time the list is requested, it's loaded from
 	 * the database, but it's them saved in memory to be reused during request
 	 * @param section
