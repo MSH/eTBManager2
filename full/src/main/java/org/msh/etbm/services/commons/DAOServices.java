@@ -99,7 +99,7 @@ public abstract class DAOServices<E> {
      */
     protected Class<E> getEntityClass() {
         if (entityClass == null) {
-            entityClass = EntityUtils.getGenericEntityClass(getClass());
+            entityClass = EntityUtils.getDeclaredGenericType(getClass());
         }
         return entityClass;
     }

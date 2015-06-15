@@ -60,6 +60,12 @@ public abstract class LabExamActions<E extends LaboratoryExam> extends EntityAct
     }
 
 
+    @Override
+    public Object getInstanceToLog() {
+        return ((CaseHome) App.getComponent("caseHome")).getInstance();
+    }
+
+
     /**
      * Bind fields to UI components
      * @return

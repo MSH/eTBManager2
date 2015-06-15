@@ -84,7 +84,7 @@ public abstract class EntityActions<E> {
      */
     public Class<E> getEntityClass() {
         if (entityClass == null) {
-            entityClass = EntityUtils.getGenericEntityClass(getClass());
+            entityClass = EntityUtils.getDeclaredGenericType(getClass());
         }
         return entityClass;
     }
@@ -246,6 +246,14 @@ public abstract class EntityActions<E> {
 
 
     /**
+     * Return the instance that will be recorded in the transaction log report (id, description, class)
+     * @return entity object to record its information in the transaction log
+     */
+    public Object getInstanceToLog() {
+        return getInstance();
+    }
+
+    /**
      * Start transaction recording of the entity being edited
      */
     public ActionTX beginTxLog() {
@@ -264,6 +272,7 @@ public abstract class EntityActions<E> {
      */
     public void endTxLog() {
         if (atx != null) {
+            atx.inpersonate(getInstanceToLog());
             atx.end();
             atx = null;
         }

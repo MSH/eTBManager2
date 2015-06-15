@@ -83,10 +83,8 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
             }
 
             getActionTX()
+                    .inpersonate(caseHome.getInstance())
                     .setEntity(caseHome.getInstance())
-                    .setEntityClass(TbCase.class.getSimpleName())
-                    .setEntityId(caseHome.getInstance().getId())
-                    .setDescription(caseHome.getInstance().toString())
                     .getDetailWriter().addText(s);
         }
 

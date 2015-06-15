@@ -75,15 +75,7 @@ public class TxLogServices {
             if (oper != null) {
                 atx.mapValues(entity, oper);
             }
-            atx.setDescription(entity.toString());
-            atx.setEntityClass(entity.getClass().getSimpleName());
-            // get the entity ID by reflection
-            try {
-                Integer id = (Integer)PropertyUtils.getProperty(entity, "id");
-                atx.setEntityId(id);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            atx.inpersonate(entity);
         }
         return atx;
     }

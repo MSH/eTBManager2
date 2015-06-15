@@ -11,6 +11,7 @@ import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.etbm.commons.transactionlog.DetailXMLWriter;
 import org.msh.etbm.commons.transactionlog.TxLogServices;
 import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
+import org.msh.etbm.services.commons.EntityUtils;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseClassification;
@@ -296,8 +297,14 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 			return logInfo.entityClass().getSimpleName();
 
 		Class clazz = getEntityClass();
+
+        if (clazz == null) {
+            return null;
+        }
+
+        clazz = EntityUtils.getRootEntityClass(clazz);
 		
-		return (clazz != null? clazz.getSimpleName(): null);
+		return clazz.getSimpleName();
 	}
 
 	/**

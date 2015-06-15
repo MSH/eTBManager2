@@ -4,6 +4,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.msh.etbm.commons.transactionlog.mapping.EntityLogManager;
 import org.msh.etbm.commons.transactionlog.mapping.EntityLogMapping;
 import org.msh.etbm.commons.transactionlog.mapping.PropertyMapping;
+import org.msh.etbm.services.commons.EntityUtils;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.enums.RoleAction;
@@ -77,6 +78,25 @@ public class ActionTX {
                 }
             }
         }
+    }
+
+
+    /**
+     * Uses the given entity to inpersonate it in the transaction log, recording its Id, description and class
+     * @param entity the entity to be impersonated in the
+     */
+    public ActionTX inpersonate(Object entity) {
+        description = entity.toString();
+        entityClass = EntityUtils.getRootEntityClass( entity.getClass() ).getSimpleName();
+        // get the entity ID by reflection
+        try {
+            Integer id = (Integer)PropertyUtils.getProperty(entity, "id");
+            entityId = id;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return this;
     }
 
     /**
