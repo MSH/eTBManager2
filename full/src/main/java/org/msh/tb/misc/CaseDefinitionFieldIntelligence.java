@@ -59,7 +59,6 @@ public class CaseDefinitionFieldIntelligence {
             return;
 
         TbCase tbcase = caseHome.getInstance();
-
         if(tbcase == null)
             return;
 
