@@ -233,7 +233,7 @@
     </changeSet>
 
     <!-- updates secDrugsReceived field in all workspaces -->
-    <changeSet id="2.2-1.8" author="msantos">
+    <changeSet id="2.2-1.9" author="msantos">
         <sql>
             update tbcase c
             set secDrugsReceived = null;
