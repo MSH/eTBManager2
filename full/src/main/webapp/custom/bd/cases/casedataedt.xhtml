@@ -197,6 +197,7 @@
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
 
+	<!--
 	<a:region>
     <s:decorate template="/layout/edit.xhtml" rendered="#{caseHome.managed}">
     	<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
@@ -212,6 +213,7 @@
 	    </a:status> 
     </s:decorate>
     </a:region>
+    -->
 
 	<s:fragment rendered="#{tbcasebd.diagnosisType=='CONFIRMED'}">
     <s:decorate template="/layout/dateedit.xhtml" >
