@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:s="http://jboss.com/products/seam/taglib">
                  
     <div class="prop"> 
@@ -11,6 +12,16 @@
         <span class="readonly-value" style="#{empty resultlabelstyle? '': resultlabelstyle}">
             <ui:insert/>
         </span>
+        <s:span styleClass="readonly-value" rendered="#{not empty explanationmessagekey}">
+                <span onmouseover="document.getElementById('exmsg.#{explanationmessagekey}').style.display = 'block'"
+                      onmouseout="document.getElementById('exmsg.#{explanationmessagekey}').style.display = 'none'">
+                    <i class="icon-question-sign" style="color:coral;font-size:15px;margin:3px"></i>
+                </span>
+        </s:span>
     </div>
-    
+
+    <div class="medalertmsg" id="exmsg.#{explanationmessagekey}" style="display:none;font-size:12px;padding:3px;">
+        <h:outputText value="#{messages[explanationmessagekey]}" escape="false"/>
+    </div>
+
 </ui:composition>

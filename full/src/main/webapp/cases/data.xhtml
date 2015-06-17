@@ -157,6 +157,7 @@
 		<s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED'}">
 
         <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.caseDefinition}">
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.caseDefinition"/>
             <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
             #{messages[tbcase.caseDefinition.key]}
         </s:decorate>
@@ -190,6 +191,7 @@
 
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['TreatmentCategory']}:</ui:define>
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.treatmentCategory"/>
 			<h:outputText value="#{messages[tbcase.treatmentCategory.key]}" rendered="#{not empty tbcase.treatmentCategory}"/>
 			<h:outputText value="#{messages['TreatmentCategory.undefined']}" rendered="#{empty tbcase.treatmentCategory}"/>
 		</s:decorate>
@@ -197,6 +199,7 @@
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null and tbcase.classification == 'DRTB'}">
 			<ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.usedSecLineDrugs"/>
 			#{messages[tbcase.secDrugsReceived.key]}
 		</s:decorate>
 
@@ -208,7 +211,7 @@
 				</th>
 				<th rowspan="2">#{messages['cases.prevtreat.date']}
 				</th>
-				<th colspan="#{prevTBTreatmentHome.substances.size == 0 ? 1 : prevTBTreatmentHome.substances.size}">
+				<th rowspan="#{prevTBTreatmentHome.substances.size == 0 ? 2 : 1}" colspan="#{prevTBTreatmentHome.substances.size == 0 ? 1 : prevTBTreatmentHome.substances.size}">
 					#{messages['cases.prevtreat.meds']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}

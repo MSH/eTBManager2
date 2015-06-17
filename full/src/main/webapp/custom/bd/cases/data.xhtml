@@ -201,11 +201,13 @@
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.caseDefinition!=null}">
 			<ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.caseDefinition"/>
 			#{messages[tbcase.caseDefinition.key]}
 		</s:decorate>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcasebd.followUpSmearStatus!=null}">
 			<ui:define name="label">#{messages['SmearStatusTB12']}:</ui:define>
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.followUpSmearStatus"/>
 			#{messages[tbcasebd.followUpSmearStatus.key]}
 		</s:decorate>
 
@@ -239,6 +241,7 @@
 
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['TreatmentCategory']}:</ui:define>
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.treatmentCategory"/>
 			<h:outputText value="#{messages[tbcase.treatmentCategory.key]}" rendered="#{not empty tbcase.treatmentCategory}"/>
 			<h:outputText value="#{messages['TreatmentCategory.undefined']}" rendered="#{empty tbcase.treatmentCategory}"/>
 		</s:decorate>
@@ -272,7 +275,7 @@
 				</th>
 				<th rowspan="2">#{messages['cases.prevtreat.date']}
 				</th>
-				<th colspan="#{prevTBTreatmentHome.substances.size == 0 ? 1 : prevTBTreatmentHome.substances.size}">
+				<th rowspan="#{prevTBTreatmentHome.substances.size == 0 ? 2 : 1}" colspan="#{prevTBTreatmentHome.substances.size == 0 ? 1 : prevTBTreatmentHome.substances.size}">
 					#{messages['cases.prevtreat.meds']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']} <h:outputText value=" - #{messages['form.monthyear']}" rendered="#{prevTBTreatmentHome.hasOutcomeDate()}"/> 
