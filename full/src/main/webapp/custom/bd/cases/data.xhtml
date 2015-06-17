@@ -258,7 +258,12 @@
                 <b>#{messages['MedicalExamination.RefToDate']}: </b><h:outputText value="#{tbcasebd.refToDate}" converter="localeDateConverter"/>
             </h:outputText>
         </s:decorate>
-		
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null and tbcase.classification == 'DRTB'}">
+			<ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
+			#{messages[tbcase.secDrugsReceived.key]}
+		</s:decorate>
+
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
 		<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="100%" class="table1">
@@ -267,7 +272,7 @@
 				</th>
 				<th rowspan="2">#{messages['cases.prevtreat.date']}
 				</th>
-				<th colspan="#{prevTBTreatmentHome.substances.size}">
+				<th colspan="#{prevTBTreatmentHome.substances.size == 0 ? 1 : prevTBTreatmentHome.substances.size}">
 					#{messages['cases.prevtreat.meds']}
 				</th>
 				<th rowspan="2">#{messages['PrevTBTreatment.outcome']} <h:outputText value=" - #{messages['form.monthyear']}" rendered="#{prevTBTreatmentHome.hasOutcomeDate()}"/> 
@@ -291,6 +296,9 @@
 					<h:outputText value="x" rendered="#{sub.selected}" />
 				</td>
 				</a:repeat>
+				<s:fragment rendered="#{prevTBTreatmentHome.substances.size == 0}">
+					<td class="colcb"> - </td>
+				</s:fragment>
 				<td class="colcb">
 					#{messages[it.prevTBTreatment.outcome.key]}
 					<h:outputText value=" - #{it.prevTBTreatment.outcomeMonth+1}/#{it.prevTBTreatment.outcomeYear}" rendered="#{it.prevTBTreatment.hasOutcomeDate()}"/>

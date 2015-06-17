@@ -232,4 +232,40 @@
         </sql>
     </changeSet>
 
+    <!-- updates secDrugsReceived field in all workspaces -->
+    <changeSet id="2.2-1.8" author="msantos">
+        <sql>
+            update tbcase c
+            set secDrugsReceived = null;
+
+            update tbcase c
+            set secDrugsReceived = 0
+            where c.classification = 1 and
+            exists(select * from prevtbtreatment p
+            inner join res_prevtbtreatment r on r.PREVTBTREATMENT_ID = p.id
+            inner join substance s on s.id = r.SUBSTANCE_ID
+            where s.line = 1 and p.case_id = c.id);
+
+            update tbcase c
+            set secDrugsReceived = 1
+            where secDrugsReceived is null and
+            c.classification = 1 and
+            exists(select * from prevtbtreatment p
+            inner join res_prevtbtreatment r on r.PREVTBTREATMENT_ID = p.id
+            inner join substance s on s.id = r.SUBSTANCE_ID
+            where s.line = 0 and p.case_id = c.id);
+
+            update tbcase c
+            set secDrugsReceived = 1
+            where secDrugsReceived is null and
+            c.classification = 1 and
+            not exists(select * from prevtbtreatment p where p.case_id = c.id);
+
+            update tbcase c
+            set secDrugsReceived = 2
+            where secDrugsReceived is null
+            and c.classification = 1;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

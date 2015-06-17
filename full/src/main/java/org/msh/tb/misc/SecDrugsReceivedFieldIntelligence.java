@@ -24,6 +24,16 @@ public class SecDrugsReceivedFieldIntelligence {
         updateCaseDefinitionField(entityEvent);
     }
 
+    @Observer("entity.TbCaseBD")
+    public void tbCaseBDModifiedIncludedOrRemoved(EntityEvent entityEvent){
+        updateCaseDefinitionField(entityEvent);
+    }
+
+    @Observer("entity.TbCaseNG")
+    public void tbCaseNGModifiedIncludedOrRemoved(EntityEvent entityEvent){
+        updateCaseDefinitionField(entityEvent);
+    }
+
     /**
      * This method will get the case passed as parameter and check its previous treatments to define id this
      * case have ever used second line drugs.

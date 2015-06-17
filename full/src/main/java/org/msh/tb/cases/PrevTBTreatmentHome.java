@@ -402,20 +402,6 @@ public class PrevTBTreatmentHome {
 		return false;
 	}
 
-    public boolean usedSecondLineDrugs(){
-
-        for(Item i : treatments) {
-            for (ItemSelect it : i.getItems()) {
-                if (it.isSelected()) {
-                    Substance s = (Substance) it.getItem();
-                    if(s.getLine().equals(MedicineLine.SECOND_LINE))
-                        return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public boolean usedAnyDrugs(){
         for(Item i : treatments) {
             for (ItemSelect it : i.getItems()) {
