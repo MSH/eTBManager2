@@ -193,13 +193,13 @@
 			<h:outputText value="#{messages[tbcase.treatmentCategory.key]}" rendered="#{not empty tbcase.treatmentCategory}"/>
 			<h:outputText value="#{messages['TreatmentCategory.undefined']}" rendered="#{empty tbcase.treatmentCategory}"/>
 		</s:decorate>
-
-        <s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null}">
-            <ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
-            #{messages[tbcase.secDrugsReceived.key]}
-        </s:decorate>
 		</s:fragment>
-		
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null and tbcase.classification == 'DRTB'}">
+			<ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
+			#{messages[tbcase.secDrugsReceived.key]}
+		</s:decorate>
+
 		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
 		<h2>#{messages['cases.prevtreat']}</h2>
 		<table width="100%" class="table1">

@@ -182,7 +182,8 @@
     	<ui:param name="required" value="true" />
     	<ui:param name="datefield" value="#{tbcase.diagnosisDate}" />
     	<ui:param name="edtid" value="diagdateedt" />
-    	<ui:param name="checkDeathDate" value="true" />
+		<ui:param name="checkDeathDate" value="true" />
+		<ui:param name="future" value="false" />
     </s:decorate>
 
     <s:decorate id="resistancetype" template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
@@ -395,23 +396,6 @@ function isPulmonary(cb) {
 		</table>
         <br/>
 		</s:fragment>
-
-        <s:decorate template="/layout/edit.xhtml">
-            <ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
-            <ui:param name="labelstyle" value="width:270px"/>
-            <h:selectOneMenu id="secDrugsRec" value="#{tbcase.secDrugsReceived}">
-                <s:selectItems var="it" value="#{secDrugsRec}" noSelectionLabel="-" label="#{messages[it.key]}" />
-                <s:convertEnum />
-            </h:selectOneMenu>
-            <s:span id="slAlertMessage" styleClass="medalertmsg" style="width:315px;margin-bottom:8px">
-                <span style="margin-left:6px;margin-right:6px">
-                     <h:outputText value="#{messages['SystemSugest.msg1']} "/>
-                     <h:outputText rendered="#{prevTBTreatmentHome.usedSecondLineDrugs()}" value="#{messages['SystemSugest']} #{messages['global.yes']}"/>
-                     <h:outputText rendered="#{prevTBTreatmentHome.usedAnyDrugs() and (not prevTBTreatmentHome.usedSecondLineDrugs())}" value="#{messages['SystemSugest']} #{messages['global.no']}"/>
-                     <h:outputText rendered="#{(not prevTBTreatmentHome.usedAnyDrugs())}" value="#{messages['SystemSugest']} #{messages['manag.ind.interim.unknown']}"/>
-                </span>
-            </s:span>
-        </s:decorate>
 
 		</h:panelGroup>
 		

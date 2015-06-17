@@ -192,6 +192,7 @@
 		<ui:param name="required" value="true" />
 		<ui:param name="edtid" value="regdateedt" />
 		<ui:param name="checkDeathDate" value="true" />
+		<ui:param name="future" value="false" />
     </s:decorate>
     </div>
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
@@ -219,6 +220,7 @@
     	<ui:param name="datefield" value="#{tbcasebd.diagnosisDate}" /> 
     	<ui:param name="edtid" value="diagdateedt" />
     	<ui:param name="checkDeathDate" value="true" />
+		<ui:param name="future" value="false" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcasebd.classification=='DRTB'}">
