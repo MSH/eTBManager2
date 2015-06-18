@@ -5,6 +5,8 @@
 	<restrict>#{userSession.canEditCases}</restrict>
 	<param name="classif" value="#{tbcase.classification}" required="true"/>
 	<param name="type" value="#{tbcase.diagnosisType}" required="true" />
+	<param name="unitId" value="#{casesViewController.selectedUnitIdParam}" />
+
 	<end-conversation />
 	<navigation>
 		<rule if-outcome="newpatient">

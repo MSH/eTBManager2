@@ -1,58 +1,72 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:s="http://jboss.com/products/seam/taglib"
-                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-                template="admintemplate.xhtml">
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+				xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+				template="admintemplate.xhtml">
 
-<ui:param name="title" value="#{messages['admin.tags']}" />
-<ui:param name="submenu" value="0" />
+	<ui:param name="title" value="#{messages['admin.tags']}" />
+	<ui:param name="submenu" value="0" />
 
 
-<ui:define name="content">
-<h1><i class="icon-tags" />#{title}</h1>
-<h:form id="main">
-<s:link view="/admin/edttag.xhtml"
-	styleClass="button" 
-	rendered="#{s:hasRole('TAGS_EDT')}" >
-	<f:param name="id" value="#{null}" />
-	<span>#{messages['form.new']}</span>
-</s:link>
-<a:commandLink reRender="main,messages" action="#{tagsCasesHome.fixTagsConsolidation}" rendered="#{userLogin.user.login=='RICARDO' or userLogin.user.login=='MSANTOS'}" styleClass="button-alt">
-	<span>Fix Tags Consolidation</span>
-</a:commandLink>
-<p/>
-<h:dataTable id="tbl" value="#{tagsQuery.resultList}" var="r" border="0" columnClasses="coll,coll" 
-	width="700px"  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tagsQuery.resultList}" style="margin-top:4px;">
-  <h:column>
-  	<f:facet name="header">
-  		<h:outputText value="#{messages['form.name']}" styleClass="collh" />
-  	</f:facet>
-  	<h:outputText value="#{r.name}" rendered="#{not s:hasRole('TAGS_EDT')}"/>
-  	<s:link value="#{r.name}" view="/admin/edttag.xhtml" rendered="#{s:hasRole('TAGS_EDT')}" styleClass="#{r.active?'':'entity-inactive'}">
-  		<span class="tag-#{r.type}-icon" />
-		<f:param name="id" value="#{r.id}" />
-  	</s:link>
-  </h:column>
+	<ui:define name="content">
+		<h1><i class="icon-tags" />#{title}</h1>
+		<h:form id="main">
+			<s:link view="/admin/edttag.xhtml"
+					styleClass="button"
+					rendered="#{s:hasRole('TAGS_EDT')}" >
+				<f:param name="id" value="#{null}" />
+				<span>#{messages['form.new']}</span>
+			</s:link>
+			<a:commandLink reRender="main,messages" action="#{tagsCasesHome.fixTagsConsolidation}" rendered="#{userLogin.user.login=='RICARDO' or userLogin.user.login=='MSANTOS'}" styleClass="button-alt">
+				<span>Fix Tags Consolidation</span>
+			</a:commandLink>
+			<p/>
+			<h:dataTable id="tbl" value="#{tagsQuery.resultList}" var="r" border="0" columnClasses="coll,colc,colc,coll"
+						 width="700px"  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tagsQuery.resultList}" style="margin-top:4px;">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['form.name']}" styleClass="collh" />
+					</f:facet>
+					<h:outputText value="#{r.name}" rendered="#{not s:hasRole('TAGS_EDT')}"/>
+					<s:link value="#{r.name}" view="/admin/edttag.xhtml" rendered="#{s:hasRole('TAGS_EDT')}" styleClass="#{r.active?'':'entity-inactive'}">
+						<span class="tag-#{r.type}-icon" />
+						<f:param name="id" value="#{r.id}" />
+					</s:link>
+				</h:column>
 
-  <h:column rendered="#{s:hasRole('TAGS_EDT')}">
-  	<f:facet name="header">
-  		<h:outputText value="#{messages['form.action']}" styleClass="collh" />
-  	</f:facet>
-	<a:commandLink action="#{tagHome.remove}" value="#{messages['form.remove']}" 
-		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
-		reRender="main,messages">
-		<a:actionparam assignTo="#{tagHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
-	</a:commandLink>
-  </h:column>
-</h:dataTable>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['form.summary']}" />
+					</f:facet>
+					<s:div styleClass="icon-ok" rendered="#{r.summary}"></s:div>
+				</h:column>
 
-<ui:include src="/layout/tablerow.xhtml" />
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['form.displayorder']}" />
+					</f:facet>
+					#{r.displayOrder}
+				</h:column>
 
-</h:form>
-</ui:define>
+				<h:column rendered="#{s:hasRole('TAGS_EDT')}">
+					<f:facet name="header">
+						<h:outputText value="#{messages['form.action']}" styleClass="collh" />
+					</f:facet>
+					<a:commandLink action="#{tagHome.remove}" value="#{messages['form.remove']}"
+								   onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}"
+								   reRender="main,messages">
+						<a:actionparam assignTo="#{tagHome.id}" value="#{r.id}" name="id" converter="javax.faces.Integer"/>
+					</a:commandLink>
+				</h:column>
+			</h:dataTable>
 
-</ui:composition>  
+			<ui:include src="/layout/tablerow.xhtml" />
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

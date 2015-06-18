@@ -6,7 +6,7 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.ng.entities.TbContact_Ng;
+import org.msh.tb.ng.entities.TbContactNG;
 
 /**
 * @author Vani Rao
@@ -14,7 +14,7 @@ import org.msh.tb.ng.entities.TbContact_Ng;
 * 
 */
 @Name("tbContactNGHome")
-public class TbContactNGHome extends EntityHomeEx<TbContact_Ng> {
+public class TbContactNGHome extends EntityHomeEx<TbContactNG> {
 
 	/**
 	 * 
@@ -28,13 +28,13 @@ public class TbContactNGHome extends EntityHomeEx<TbContact_Ng> {
 	private String contactOtherName;
 
 	@Factory("tbContactNG")
-	public TbContact_Ng getTbContact() {
+	public TbContactNG getTbContact() {
 		return getInstance();
 	}
 	
 	@Override
 	public String persist() {		
-		TbContact_Ng con = getInstance();
+		TbContactNG con = getInstance();
 		TbCase tbcase = caseHome.getInstance();
 		
 		con.setTbcase(tbcase);

@@ -75,7 +75,7 @@ public class TxLogServices {
             if (oper != null) {
                 atx.mapValues(entity, oper);
             }
-            atx.inpersonate(entity);
+            atx.impersonate(entity);
         }
         return atx;
     }

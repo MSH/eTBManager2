@@ -232,6 +232,43 @@
         </sql>
     </changeSet>
 
+    <changeSet id="2.2.6" author="rmemoria">
+        <addColumn tableName="tbcase">
+            <column name="otherExtrapulmonary" type="varchar(200)" />
+            <column name="otherExtrapulmonary2" type="varchar(200)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.9" author="rmemoria">
+        <addColumn tableName="exammicroscopy">
+            <column name="numberSamplesCollected" type="int"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.9b" author="rmemoria">
+        <addColumn tableName="fieldvalue">
+            <column name="enabled" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.9c" author="rmemoria">
+        <update tableName="fieldvalue">
+            <column name="enabled" valueBoolean="true" />
+        </update>
+    </changeSet>
+
+    <changeSet id="2.2-1.10" author="rmemoria">
+        <addColumn tableName="tag">
+            <column name="displayOrder" type="int" />
+            <column name="summary" type="bool" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.11" author="rmemoria">
+        <update tableName="tag">
+            <column name="summary" valueBoolean="false" />
+        </update>
+    </changeSet>
     <!-- updates secDrugsReceived field in all workspaces -->
     <changeSet id="2.2-1.9" author="msantos">
         <sql>

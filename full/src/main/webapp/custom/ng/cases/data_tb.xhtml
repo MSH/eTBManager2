@@ -131,9 +131,9 @@
 	</tr><tr>
 	
 	<td>
-	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.emailAddress}">
+	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.emailAddress}">
 		<ui:define name="label">#{messages['TbCase.emailAddress']}:</ui:define>
-		<h:outputText value="#{tbcaseng.emailAddress}" />
+		<h:outputText value="#{tbcase.emailAddress}" />
 	</s:decorate>	
 	</td>
 	
@@ -172,9 +172,9 @@
 
 	<tr>
 	<td>
-	    <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.tbRegistrationNumber}">
+	    <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.tbRegistrationNumber}">
     		<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-			<h:outputText value="#{tbcaseng.tbRegistrationNumber}" />
+			<h:outputText value="#{tbcase.tbRegistrationNumber}" />
 		</s:decorate>
 	</td>
 	</tr><tr>
@@ -195,9 +195,9 @@
 	</td>
 	</tr><tr>
 	<td>
-	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcaseng.suspectType}">
+	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.suspectType}">
 		<ui:define name="label">#{messages['TbCase.SuspectType']}:</ui:define>
-		#{messages[tbcaseng.suspectType.toString()]}
+		#{messages[tbcase.suspectType.toString()]}
 	</s:decorate>
 	</td>
 	</tr><tr>

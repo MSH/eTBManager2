@@ -136,15 +136,17 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	@PropertyLog(messageKey="TbField.PULMONARY_TYPES")
 	private FieldValue pulmonaryType;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="EXTRAPULMONARY_ID")
+	@Embedded
+	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "EXTRAPULMONARY_ID")) })
+	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherExtrapulmonary")) })
 	@PropertyLog(messageKey="TbField.EXTRAPULMONARY_TYPES")
-	private FieldValue extrapulmonaryType;
+	private FieldValueComponent extrapulmonaryType;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="EXTRAPULMONARY2_ID")
+	@Embedded
+	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "EXTRAPULMONARY2_ID")) })
+	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherExtrapulmonary2")) })
 	@PropertyLog(messageKey="TbField.EXTRAPULMONARY_TYPES")
-	private FieldValue extrapulmonaryType2;
+	private FieldValueComponent extrapulmonaryType2;
 	
 	@Column(length=100)
 	private String patientTypeOther;
@@ -1027,7 +1029,10 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	/**
 	 * @return the extrapulmonaryType
 	 */
-	public FieldValue getExtrapulmonaryType() {
+	public FieldValueComponent getExtrapulmonaryType() {
+        if (extrapulmonaryType == null) {
+            extrapulmonaryType = new FieldValueComponent();
+        }
 		return extrapulmonaryType;
 	}
 
@@ -1035,7 +1040,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	/**
 	 * @param extrapulmonaryType the extrapulmonaryType to set
 	 */
-	public void setExtrapulmonaryType(FieldValue extrapulmonaryType) {
+	public void setExtrapulmonaryType(FieldValueComponent extrapulmonaryType) {
 		this.extrapulmonaryType = extrapulmonaryType;
 	}
 
@@ -1043,7 +1048,10 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	/**
 	 * @return the extrapulmonaryType2
 	 */
-	public FieldValue getExtrapulmonaryType2() {
+	public FieldValueComponent getExtrapulmonaryType2() {
+		if (extrapulmonaryType2 == null) {
+            extrapulmonaryType2 = new FieldValueComponent();
+        }
 		return extrapulmonaryType2;
 	}
 
@@ -1051,7 +1059,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	/**
 	 * @param extrapulmonaryType2 the extrapulmonaryType2 to set
 	 */
-	public void setExtrapulmonaryType2(FieldValue extrapulmonaryType2) {
+	public void setExtrapulmonaryType2(FieldValueComponent extrapulmonaryType2) {
 		this.extrapulmonaryType2 = extrapulmonaryType2;
 	}
 
@@ -1129,7 +1137,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
 
 	/**
-	 * @param issueCounter the issueCounter to set
+	 * @param issueCount the issueCounter to set
 	 */
 	public void setIssueCounter(int issueCount) {
 		this.issueCounter = issueCount;

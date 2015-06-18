@@ -12,6 +12,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.adminunits.AdminUnitSelection;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.exams.ExamCultureHome;
 import org.msh.tb.cases.exams.ExamMicroscopyHome;
 import org.msh.tb.cases.exams.MedicalExaminationHome;
@@ -55,7 +56,7 @@ public class CaseEditingHome {
 	private TBUnitSelection tbunitselection;
 	private AdminUnitSelection notifAdminUnit;
 	private AdminUnitSelection currentAdminUnit;
-	protected boolean initialized;
+	private boolean initialized;
 
     /*patientid: Identify the id of the patient DRTB case used to search its BMU Tb case
     * regdate: identify the registration date used to search its BMU Tb case
@@ -101,11 +102,20 @@ public class CaseEditingHome {
 			updatePatientAge();
 		
 		// initialize default values
+		CasesViewController ctrl = (CasesViewController) App.getComponent("casesViewController");
+		if (ctrl != null && ctrl.getSelectedUnit() != null) {
+			getTbunitselection().setSelected(ctrl.getSelectedUnit());
+			getTbunitselection().setReadOnly(true);
+		}
+
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 		if (userWorkspace != null) {
-			if (userWorkspace.getTbunit().isNotifHealthUnit())
+/*
+			if (userWorkspace.getTbunit().isNotifHealthUnit()) {
 				getTbunitselection().setSelected(userWorkspace.getTbunit());
-			
+			}
+*/
+
 			AdministrativeUnit au = userWorkspace.getAdminUnit();
 			if (au == null)
 				au = userWorkspace.getTbunit().getAdminUnit();
@@ -134,7 +144,7 @@ public class CaseEditingHome {
 //		prevTBTreatmentHome.getTreatments();
 		
 		Events.instance().raiseEvent("new-notification");
-		
+
 		initialized = true;
 		return "initialized";
 	}
@@ -143,7 +153,7 @@ public class CaseEditingHome {
 	/**
 	 * Update the patient's age according to his birth date and the diagnosis date 
 	 */
-	protected void updatePatientAge() {
+	public void updatePatientAge() {
 		Date dtBirth = caseHome.getInstance().getPatient().getBirthDate();
 		if (dtBirth == null)
 			return;
@@ -256,7 +266,7 @@ public class CaseEditingHome {
 		return s;
 	}
 
-    protected void updateOwnerUnit(TbCase tbcase){
+    public void updateOwnerUnit(TbCase tbcase){
         if(tbcase.getOwnerUnit() == null){
             if(tbcase.getHealthUnits() != null && tbcase.getHealthUnits().size() > 0){
                 TreatmentHealthUnit ownerUnit = null;

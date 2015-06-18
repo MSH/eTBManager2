@@ -115,23 +115,25 @@ public class GlobalLists {
 	
 	
 	private static final TbField tbFields[] = {
-		TbField.COMORBIDITY,
-		TbField.SIDEEFFECT,
-		TbField.DST_METHOD,
-		TbField.CULTURE_METHOD,
-		TbField.CONTACTCONDUCT,
-		TbField.CONTACTTYPE,
-		TbField.XRAYPRESENTATION,
-		TbField.PULMONARY_TYPES,
-		TbField.EXTRAPULMONARY_TYPES,
-		TbField.ART_REGIMEN,
-		TbField.RISK_GROUP,
-		TbField.ADJUSTMENT,
-		TbField.SUSPECT_TYPE,
-		TbField.SOURCE_REFERRAL,
-		TbField.OCCUPATION,
-		TbField.MARITAL_STATUS,
-		TbField.REASON_XPERT_EXAM
+			TbField.COMORBIDITY,
+			TbField.SIDEEFFECT,
+			TbField.SIDEEFECT_TB,
+			TbField.DST_METHOD,
+			TbField.CULTURE_METHOD,
+			TbField.CONTACTCONDUCT,
+			TbField.CONTACTTYPE,
+			TbField.XRAYPRESENTATION,
+			TbField.PULMONARY_TYPES,
+			TbField.EXTRAPULMONARY_TYPES,
+			TbField.ART_REGIMEN,
+			TbField.RISK_GROUP,
+			TbField.ADJUSTMENT,
+			TbField.SUSPECT_TYPE,
+			TbField.SOURCE_REFERRAL,
+			TbField.OCCUPATION,
+			TbField.MARITAL_STATUS,
+			TbField.REASON_XPERT_EXAM,
+			TbField.DOT_PROVIDER
 	};
 	
 	private static final SuspectType suspectTypes[] = {

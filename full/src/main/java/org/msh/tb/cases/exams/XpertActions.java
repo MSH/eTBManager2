@@ -31,7 +31,9 @@ public class XpertActions extends LabExamActions<ExamXpert> {
      * @return
      */
     public FacesMessagesBinder bindFields() {
-        return super.bindFields().bind("xprifres", "rifResult");
+        return super.bindFields()
+                .bind("xprifres", "rifResult")
+                .bind("edtxpreason", "reasonTest");
     }
 
     /**

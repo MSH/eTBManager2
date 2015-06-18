@@ -13,9 +13,27 @@ public class FieldValueComponent {
 	private String complement;
 
 
+	public FieldValueComponent() {
+		super();
+	}
+
+
+	public FieldValueComponent(FieldValue value) {
+		super();
+		this.value = value;
+	}
+
 	@Override
 	public String toString() {
-		return (value != null? value.toString(): null);
+        if (value == null) {
+            return "";
+        }
+
+        String s = value.toString();
+        if (complement != null && !complement.isEmpty()) {
+            s += " - " + s;
+        }
+        return s;
 	}
 	
 	/**

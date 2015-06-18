@@ -318,18 +318,23 @@ function isPulmonary(cb) {
 </script>
 
 	<div id="extrapul" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
-    		<h:selectOneMenu value="#{tbcasebd.extrapulmonaryType}" style="margin-right:4px;">
-    			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
-    			<s:convertEntity />
-    		</h:selectOneMenu>
+		<div style="float:left">
+			<s:decorate template="/layout/editfield.xhtml" >
+				<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
+				<ui:param name="id" value="edtextrap" />
+				<ui:param name="field" value="#{tbcasebd.extrapulmonaryType}" />
+				<ui:param name="list" value="#{fieldsQuery.extrapulmonaryTypes}" />
+			</s:decorate>
+		</div>
 
-    		<h:selectOneMenu value="#{tbcasebd.extrapulmonaryType2}">
-    			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
-    			<s:convertEntity />
-    		</h:selectOneMenu>
-		</s:decorate>
+		<div style="float:left">
+			<s:decorate template="/layout/editfield.xhtml" >
+				<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}(2):</ui:define>
+				<ui:param name="id" value="edtextrap" />
+				<ui:param name="field" value="#{tbcasebd.extrapulmonaryType2}" />
+				<ui:param name="list" value="#{fieldsQuery.extrapulmonaryTypes}" />
+			</s:decorate>
+		</div>
 	</div>
 
 	<div id="pulmonary" style="clear:both;">

@@ -11,6 +11,7 @@ import org.msh.tb.ng.entities.enums.IntakeAntiDrugsDuration;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -37,6 +38,9 @@ public class TbCaseNG extends TbCase{
 	@PropertyLog(messageKey="TbField.SUSPECT_TYPE")
 	private FieldValue suspectType;
 
+    /** Date when the patient was officially registered in the health unit */
+    private Date healthunitRegistrationDate;
+
     @Embedded
     @AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SOURCEREFERRAL_ID")) })
     @AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherSourceReferral")) })
@@ -59,7 +63,12 @@ public class TbCaseNG extends TbCase{
     private YesNoType intakeAntiTBDrugs;
 
     private IntakeAntiDrugsDuration intakeAntiTBDrugsDuration;
-	
+
+    @Embedded
+    @AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "dotProvider_id")) })
+    @AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "complDotProvider")) })
+    private FieldValueComponent dotProvider;
+
 	public List<CaseDispensing_Ng> getDispng() {
 		return dispng;
 	}
@@ -154,6 +163,25 @@ public class TbCaseNG extends TbCase{
 
     public void setIntakeAntiTBDrugsDuration(IntakeAntiDrugsDuration intakeAntiTBDrugsDuration) {
         this.intakeAntiTBDrugsDuration = intakeAntiTBDrugsDuration;
+    }
+
+    public Date getHealthunitRegistrationDate() {
+        return healthunitRegistrationDate;
+    }
+
+    public void setHealthunitRegistrationDate(Date healthunitRegistrationDate) {
+        this.healthunitRegistrationDate = healthunitRegistrationDate;
+    }
+
+    public FieldValueComponent getDotProvider() {
+        if (dotProvider == null) {
+            dotProvider = new FieldValueComponent();
+        }
+        return dotProvider;
+    }
+
+    public void setDotProvider(FieldValueComponent dotProvider) {
+        this.dotProvider = dotProvider;
     }
 }
 

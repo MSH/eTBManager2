@@ -31,6 +31,14 @@ public class FieldsOptions {
 	private List<ItemWorkspace> items = new ArrayList<ItemWorkspace>();
 
 	/**
+	 * Clear all lists, requiring system to read from the database again
+	 */
+	public void refresh() {
+		items = null;
+	}
+
+
+	/**
 	 * Returns list of detection values
 	 * @return
 	 */

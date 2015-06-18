@@ -27,7 +27,6 @@ public class AdminUnitSelector<E> {
 	private boolean applyHealthSystemRestrictions;
 	private List<ValueChangeListener> listeners;
 	private String clientId;
-//	private Integer adminUnitId;
 
 	// store the selected item
 	private E selected;
@@ -61,7 +60,7 @@ public class AdminUnitSelector<E> {
 	 * Initialize the content of the selection box
 	 */
 	protected void initialize() {
-		AdministrativeUnit adminunit = getAuselection().getUnitLevel1();
+		AdministrativeUnit adminunit = getAuselection().getSelectedUnit();
 		if (adminunit != null)
 			setAdminUnit(adminunit);
 	}
@@ -200,7 +199,7 @@ public class AdminUnitSelector<E> {
 	 */
 	public AdministrativeUnit getAdminUnit() {
 		// it's not using the basic selection
-		if ((auselection == null) || (auselection.getUnitLevel1() == null)) {
+		if ((auselection == null) || (auselection.getSelectedUnit() == null)) {
 			// try to get it from the request body
 			Integer id = getAdminUnitId();
 			if (id == null)
@@ -208,7 +207,7 @@ public class AdminUnitSelector<E> {
 			return App.getEntityManager().find(AdministrativeUnit.class, id);
 		}
 		
-		return getAuselection().getUnitLevel1();
+		return getAuselection().getSelectedUnit();
 	}
 	
 	/**
@@ -216,7 +215,8 @@ public class AdminUnitSelector<E> {
 	 * @param admin instance of {@link AdministrativeUnit}
 	 */
 	public void setAdminUnit(AdministrativeUnit admin) {
-		getAuselection().setUnitLevel1(admin);
+        getAuselection().setSelectedUnit(admin);
+//		getAuselection().setUnitLevel1(admin);
 		if (admin == null)
 			 setAdminUnitId(null);
 		else setAdminUnitId(admin.getId());
@@ -239,17 +239,27 @@ public class AdminUnitSelector<E> {
 	/**
 	 * @param auselection the auselection to set
 	 */
+/*
 	public void setAuselection(AdminUnitSelection auselection) {
 		this.auselection = auselection;
 	}
+*/
 
 
 	/**
-	 * Checks if administrative unit level 1 is read only
+	 * Checks if administrative unit level 1 is read only or if the user can select its own
 	 * @return true if is read only, otherwise return false
 	 */
 	public boolean isLevel1ReadOnly() {
 		return getAuselection().isLevel1ReadOnly();
+	}
+
+    /**
+     * Checks if administrative unit level 2 is read only or if the user can select its own
+     * @return true if is read only, otherwise return false
+     */
+	public boolean isLevel2ReadOnly() {
+		return getAuselection().isLevel2ReadOnly();
 	}
 
 	/**
@@ -267,6 +277,13 @@ public class AdminUnitSelector<E> {
 	 */
 	protected void createAuselection() {
 		auselection = new AdminUnitSelection(applyUserRestrictions);
+		auselection.addListener(new AdminUnitChangeListener() {
+			@Override
+			public void notifyAdminUnitChange(AdminUnitSelection auselection) {
+				setAdminUnitId(auselection.getSelectedUnitId());
+				setSelected(null);
+			}
+		});
 	}
 
 	/**

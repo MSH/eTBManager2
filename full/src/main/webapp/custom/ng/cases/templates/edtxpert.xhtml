@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+		<ui:param name="redasterisk" value="#{true}" />
+
+		<h:selectOneMenu id="xpres" value="#{xpertActions.instance.result}"
+						 onchange="xpertResultChanged(this, 'xpertdata');xpertResultChanged2(this);">
+			<s:selectItems value="#{xpertActions.genexpertResults}"
+						   var="it"
+						   noSelectionLabel="#{messages['global.notdone']}"
+						   label="#{messages[it.key]}" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+
+		<div id="rifres" style="#{empty xpertActions.instance.result!='TB_DETECTED'? 'display:none': ''}">
+			<s:decorate template="/layout/edit_nolabel.xhtml">
+				<h:selectOneMenu id="xprifres" value="#{xpertActions.instance.rifResult}">
+					<s:selectItems value="#{xpertActions.rifResults}" var="it"
+								   noSelectionLabel="-" label="#{messages[it.key]}" />
+					<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
+		</div>
+	</s:decorate>
+
+	<rich:jQuery selector="#xpresult" query="change( function(){ xpertResultChanged2(this, 'xpertdata'); })" />
+	<div id="xpertdata" style="#{empty xpertActions.instance.result? 'display:none': ''}">
+
+        <s:decorate template="/layout/editfield.xhtml" >
+            <ui:define name="label">#{messages['TbField.REASON_XPERT_EXAM']}:</ui:define>
+            <ui:param name="id" value="edtxpreason" />
+            <ui:param name="field" value="#{xpertActions.instance.reasonTest}" />
+            <ui:param name="list" value="#{fieldsQuery.reasosXpertTest}" />
+        </s:decorate>
+
+		<s:decorate template="/custom/ng/cases/edtsample.xhtml">
+			<ui:param name="examHome" value="#{xpertActions}" />
+			<ui:param name="fieldsrequired" value="false"/>
+			<ui:param name="redasteriskforreq" value="true"/>
+			<ui:param name="ctrlprefix" value="xp"/>
+			<ui:param name="hideSampleType" value="true" />
+			<ui:param name="hideSampleNumber" value="true" />
+			<ui:param name="hideLaboratory" value="true" />
+		</s:decorate>
+	</div>
+
+	<script type="text/javascript">
+        function xpertResultChanged(cb, elem, immediate) {
+            if (cb.selectedIndex !== 0)
+                jQuery('#'+ elem).slideDown(immediate?0:500)
+            else jQuery('#' + elem).slideUp(immediate?0:500);
+        }
+        function xpertResultChanged2(cb) {
+            var s = cb.options[cb.selectedIndex].value;
+            if (s === 'TB_DETECTED') {
+                jQuery('#rifres').show();
+            }
+            else {
+                jQuery('#rifres').hide();
+            }
+        }
+    </script>
+
+	</ui:composition>

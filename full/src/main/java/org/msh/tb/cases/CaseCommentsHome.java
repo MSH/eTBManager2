@@ -33,7 +33,7 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 		return getInstance();
 	}
 
-	
+
 	@Override
 	public String remove() {
 		if (comments != null) {
@@ -43,7 +43,9 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 					break;
 				}
 		}
-		
+
+        prepareTxLog(RoleAction.DELETE);
+
 		super.remove();
 
 		// clear instance to avoid comment being displayed after removed
@@ -73,19 +75,8 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 		comment.setTbcase(caseHome.getInstance());
 
 		setDisplayMessage(false);
-        // set log information to record
-        setTransactionLogActive(true);
-        if (initTransactionLog(RoleAction.NEW)) {
-            String s = comment.getComment();
-            if (s.length() > 30) {
-                s = s.substring(0, 29) + "...";
-            }
 
-            getActionTX()
-                    .inpersonate(caseHome.getInstance())
-                    .setEntity(caseHome.getInstance())
-                    .getDetailWriter().addText(s);
-        }
+        prepareTxLog(RoleAction.NEW);
 
 		persist();
 		
@@ -101,9 +92,29 @@ public class CaseCommentsHome extends EntityHomeEx<CaseComment> {
 	}
 
     /**
+     * Prepare the transaction log to save information about the comment operation
+     * @param action the action being performed (new comment or removed comment)
+     */
+    protected void prepareTxLog(RoleAction action) {
+        // set log information to record
+        setTransactionLogActive(true);
+        if (initTransactionLog(action)) {
+            String s = getInstance().getComment();
+            if (s.length() > 30) {
+                s = s.substring(0, 29) + "...";
+            }
+
+            getActionTX()
+                    .impersonate(caseHome.getInstance())
+                    .setEntity(caseHome.getInstance())
+                    .getDetailWriter().addText(s);
+        }
+    }
+
+    /**
 	 * Create a list of comments from a specific section. The first time the list is requested, it's loaded from
 	 * the database, but it's them saved in memory to be reused during request
-	 * @param section
+	 * @param view the panel being displayed in the case detail view
 	 * @return
 	 */
 	public List<CommentWrapper> createComments(CaseView view) {

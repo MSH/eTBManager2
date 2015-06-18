@@ -45,7 +45,13 @@ public class Tag extends WSObject implements Serializable {
 	private boolean active;
 	
 	private boolean dailyUpdate;
-	
+
+	@PropertyLog(messageKey = "form.displayorder")
+	private Integer displayOrder;
+
+	@PropertyLog(messageKey = "form.summary")
+	private boolean summary;
+
 	/**
 	 * Return true if tag is auto generated and maintained by the system
 	 * @return
@@ -160,5 +166,21 @@ public class Tag extends WSObject implements Serializable {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public Integer getDisplayOrder() {
+		return displayOrder;
+	}
+
+	public void setDisplayOrder(Integer displayOrder) {
+		this.displayOrder = displayOrder;
+	}
+
+	public boolean isSummary() {
+		return summary;
+	}
+
+	public void setSummary(boolean summary) {
+		this.summary = summary;
 	}
 }

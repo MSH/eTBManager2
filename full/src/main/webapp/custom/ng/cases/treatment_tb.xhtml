@@ -30,6 +30,12 @@
 						</div>
 						<div class="content" style="padding:20px 0">
 							<ui:param name="labelstyle" value="width:200px" />
+							<s:decorate template="/layout/editfield.xhtml" >
+								<ui:define name="label">#{messages['TbField.DOT_PROVIDER']}:</ui:define>
+								<ui:param name="id" value="edtdotprov" />
+								<ui:param name="field" value="#{tbcase.dotProvider}" />
+								<ui:param name="list" value="#{fieldsQuery.dotProviders}" />
+							</s:decorate>
 
 							<s:decorate template="/layout/dateedit.xhtml" >
 								<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
@@ -92,6 +98,11 @@
 								   reRender="main,messages">
 					</rich:menuItem>
 				</rich:dropDownMenu>
+
+                <s:decorate template="/layout/displayfield.xhtml">
+                    <ui:define name="label">#{messages['TbField.DOT_PROVIDER']}:</ui:define>
+                    #{tbcase.dotProvider}
+                </s:decorate>
 
 				<s:decorate template="/cases/treattable.xhtml">
 					<ui:param name="editing" value="false" />

@@ -13,26 +13,19 @@ import java.util.List;
 
 
 /**
- * Wrapper class to help selection of TB units
+ * Wrapper class to help selection of TB units in forms
  * @author Ricardo Memoria
  *
  */
 @Name("tbunitselection")
 @BypassInterceptors
 public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
-	
-//	private Tbunit tbunit;
-	
+
 	//private boolean applyUserRestrictions;
 	protected TBUnitType type;
 //	protected boolean applyHealthSystemRestrictions;
-	protected boolean ignoreReadOnlyRule;
-	
-//	private UnitListFilter filter = new UnitListFilter();
-	
-//	protected TbunitSelectionList options;
-
-//	private List<TbunitChangeListener> listeners;
+//	protected boolean ignoreReadOnlyRule;
+	private boolean readOnly;
 
 	/**
 	 * Constructor with default arguments
@@ -68,39 +61,18 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	 */
 	public void setTbunit(Tbunit unit) {
 		setSelected(unit);
-/*		if (unit != null) 
-			getAuselection().setSelectedUnit( unit.getAdminUnit().getParentLevel1() );
-*/	}
+	}
 	
 	
 	public void setSelected(Tbunit unit) {
-		if (unit != null)
-			setAdminUnit(unit.getAdminUnit().getParentLevel1());
+		if (unit != null){
+            setAdminUnit(unit.getAdminUnit());
+//			setAdminUnit(unit.getAdminUnit().getParentLevel1());
+        }
 		super.setSelected(unit);
 	}
 	
-	/**
-	 * Change the TB Unit selected
-	 * @param unit to be selected
-	 * @author A.M.
-	 */
-/*	public void setTbunitWithOptions(Tbunit unit) {
-		if (this.tbunit == unit)
-			return;
-		
-		if (unit != null) {
-			getAuselection().setSelectedUnit( unit.getAdminUnit().getParentLevel1() );
-//			options = null;
-//			getOptions();
-		}else{
-			getAuselection().setSelectedUnit(null);
-//			options = null;
-		}
-		this.tbunit = unit;
-		notifyChange();
-	}
-*/
-	
+
 	/**
 	 * Checks if administrative unit level 1 is read only
 	 * @return true if is read only, otherwise return false
@@ -108,6 +80,7 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	public boolean isLevel1ReadOnly() {
 		return getAuselection().isLevel1ReadOnly();
 	}
+
 
 	/**
 	 * Return the list of user administrative units realted to the user restrictions
@@ -137,8 +110,10 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	 */
 	protected void applyUserTBUnitRestriction() {
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
-		if ((userWorkspace != null) && (userWorkspace.getView() == UserView.TBUNIT))
-			setSelected(userWorkspace.getTbunit());
+		if ((userWorkspace != null) && (userWorkspace.getView() == UserView.TBUNIT)) {
+            setSelected(userWorkspace.getTbunit());
+            this.readOnly = true;
+        }
 	}
 
 	/** {@inheritDoc}
@@ -167,57 +142,40 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	}
 	
 	public boolean isReadOnly() {
-		if(ignoreReadOnlyRule)
-			return false;
-		
+        return readOnly;
+/*
+		if (getSelected() == null) {
+            return false;
+        }
+
 		UserWorkspace userWorkspace = (UserWorkspace)Component.getInstance("userWorkspace");
 		return (userWorkspace.getView() == UserView.TBUNIT);
+*/
 	}
+
+    /**
+     * Set the read-only value to true
+     * @param value
+     */
+    public void setReadOnly(boolean value) {
+        readOnly = value;
+    }
 
 	/**
 	 * @return the ignoreReadOnlyRule
 	 */
+/*
 	public boolean isIgnoreReadOnlyRule() {
 		return ignoreReadOnlyRule;
 	}
+*/
 
 	/**
 	 * @param ignoreReadOnlyRule the ignoreReadOnlyRule to set
 	 */
+/*
 	public void setIgnoreReadOnlyRule(boolean ignoreReadOnlyRule) {
 		this.ignoreReadOnlyRule = ignoreReadOnlyRule;
 	}
-
-	/**
-	 * @return the applyHealthSystemRestrictions
-	 */
-/*	public boolean isApplyHealthSystemRestrictions() {
-		return filter.isApplyHealthSystemRestriction();
-	}
 */
-	/**
-	 * @return the ignoreReadOnlyRule
-	 */
-/*	public boolean isIgnoreReadOnlyRule() {
-		return ignoreReadOnlyRule;
-	}
-*/
-	/**
-	 * @param ignoreReadOnlyRule the ignoreReadOnlyRule to set
-	 */
-/*	public void setIgnoreReadOnlyRule(boolean ignoreReadOnlyRule) {
-		this.ignoreReadOnlyRule = ignoreReadOnlyRule;
-	}
-*/
-	/**
-	 * @param applyHealthSystemRestrictions the applyHealthSystemRestrictions to set
-	 */
-/*	public void setApplyHealthSystemRestrictions(
-			boolean applyHealthSystemRestrictions) {
-		setApplyHealthSystemRestrictions(applyHealthSystemRestrictions);
-	}
-	
-	public void changeListener(ValueChangeEvent evt) {
-		System.out.println(evt.getComponent().getId());
-	}
-*/}
+}

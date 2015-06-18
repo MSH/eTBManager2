@@ -86,4 +86,84 @@
         </sql>
     </changeSet>
 
+    <changeSet id="2.2.5" author="rmemoria" context="NG">
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled)
+            select 42, 'Health worker', 'Health worker', id, 0, true
+            from workspace where extension='ng';
+        </sql>
+    </changeSet>
+
+    <changeSet id="2.2.6" author="rmemoria" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="healthunitRegistrationDate" type="date" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2.7" author="rmemoria" context="NG">
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'Relapse', 'Relapse', id, 0, true, 1 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'Return after lost follow up', 'Return after lost follow up', id, 0, true, 2 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'Failed six month regimen', 'Failed six month regimen', id, 0, true, 3 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'Symptomatic contact of DR-TB cases', 'Symptomatic contact of DR-TB cases', id, 0, true, 4 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'PLHIV with symptoms of TB', 'PLHIV with symptoms of TB', id, 0, true, 5 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'EPTB', 'EPTB', id, 0, true, 6 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'Health workers with TB symptoms', 'Health workers with TB symptoms', id, 0, true, 7 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'Symptomatic presumptive TB cases with AFB result', 'Symptomatic presumptive TB cases with AFB result', id, 0, true, 8 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 43, 'Children', 'Children', id, 0, true, 9 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder, otherDescription)
+            select 43, 'Others', 'Others', id, 1, true, 10, 'Which?' from workspace where extension='ng';
+        </sql>
+    </changeSet>
+
+    <changeSet id="2.2.8" author="rmemoria" context="NG">
+        <addColumn tableName="tbcaseng">
+            <column name="dotProvider_id" type="int" />
+            <column name="complDotProvider" type="varchar(100)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2.9" author="rmemoria" context="NG">
+        <addForeignKeyConstraint baseTableName="tbcaseng" baseColumnNames="dotProvider_id" constraintName="fk_dotprovfield"
+                                 referencedTableName="fieldvalue" referencedColumnNames="id"
+                                onDelete="SET NULL" onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="2.2.10" author="rmemoria" context="NG">
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder)
+            select 44, 'Health worker', 'Health worker', id, 0, true, 1 from workspace where extension='ng';
+        </sql>
+        <sql>
+            insert into fieldvalue (field, name1, short_name1, workspace_id, other, enabled, displayOrder, otherDescription)
+            select 44, 'Treatment supporter', 'Treatment supporter', id, 1, true, 2, 'GSM number:' from workspace where extension='ng';
+        </sql>
+    </changeSet>
 </databaseChangeLog>

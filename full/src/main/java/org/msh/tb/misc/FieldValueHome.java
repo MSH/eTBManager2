@@ -7,6 +7,7 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.Messages;
 import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.enums.TbField;
 
@@ -46,7 +47,10 @@ public class FieldValueHome extends EntityHomeEx<FieldValue> {
 				return "error";
 			}
 		}
-		
+
+		FieldsOptions foptions = (FieldsOptions) App.getComponent("fieldOptions");
+		foptions.refresh();
+
 		return super.persist();
 	}
 

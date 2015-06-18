@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+        >
+
+	<h:panelGroup id="tblres">
+		<table id="tblunits" class="table2">
+			<tr>
+				<th>
+					Location
+				</th>
+				<th>
+					Suspects
+				</th>
+				<th>
+					TB cases
+				</th>
+				<th>
+					DR-TB cases
+				</th>
+				<th>
+					TOTAL
+				</th>
+			</tr>
+			<tbody id="relbody">
+			</tbody>
+		</table>
+	</h:panelGroup>
+
+
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			refreshResult(0);
+		});
+		function openUnitTree(id) {
+			window.adminrow = 'row' + id;
+			refreshResult(id);
+		}
+		function afterResult() {
+			var s = '#tblunits #relbody';
+			var sel = '#divreport tr';
+			if (window.adminrow) {
+				s += ' #' + window.adminrow;
+				jQuery('#divreport tr').insertAfter(s);
+			}
+			else {
+				jQuery(sel).appendTo(s);
+			}
+			console.log(s);
+		}
+	</script>
+	<a:jsFunction name="refreshResult"
+				  action="#{casesUnitReport.execute}"
+				  reRender="pnlresult"
+				  oncomplete="afterResult()" ajaxSingle="true">
+		<a:actionparam name="param1" assignTo="#{casesUnitReport.admunitId}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+
+
+	<h:panelGroup id="pnlresult">
+		<div id="divreport" style="display:none">
+			<table>
+			<a:repeat value="#{casesUnitReport.items}" var="it">
+				<tr id="row#{it.id}">
+					<td class="highlight">
+						<div style="float:left; padding-left:#{casesUnitReport.level * 32}px">
+						<s:fragment rendered="#{it.type=='ADMINUNIT'}">
+								<a:commandLink onclick="openUnitTree(#{it.id})" rendered="#{it.node}"><i class="icon-plus-sign"></i></a:commandLink>
+								#{it.name}
+						</s:fragment>
+						<s:fragment rendered="#{it.type == 'HEALTHFACILITY'}">
+							<div class="icon-hu" />#{it.name}
+						</s:fragment>
+						</div>
+					</td>
+					<td align="center">
+						#{it.numSuspects > 0? it.numSuspects : '-'}
+					</td>
+					<td align="center">
+						#{it.numTB > 0? it.numTB : '-'}
+					</td>
+					<td align="center">
+						#{it.numDRTB > 0? it.numDRTB : '-'}
+					</td>
+					<td align="center">
+						#{it.numSuspects + it.numTB + it.numDRTB > 0? it.numSuspects + it.numTB + it.numDRTB : '-'}
+					</td>
+				</tr>
+			</a:repeat>
+			</table>
+		</div>
+	</h:panelGroup>
+
+</ui:composition>

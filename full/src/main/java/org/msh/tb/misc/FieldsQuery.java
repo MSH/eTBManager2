@@ -128,6 +128,11 @@ public class FieldsQuery {
 		return getValues();
 	}
 
+	public List<FieldValue> getSideEffectsTb() {
+		field = TbField.SIDEEFECT_TB;
+		return getValues();
+	}
+
 	/**
 	 * Returns list of comorbidities
 	 * @return
@@ -374,6 +379,11 @@ public class FieldsQuery {
 
 	public List<FieldValue> getReasosXpertTest() {
 		field = TbField.REASON_XPERT_EXAM;
+		return getValues();
+	}
+
+	public List<FieldValue> getDotProviders() {
+		field = TbField.DOT_PROVIDER;
 		return getValues();
 	}
 }

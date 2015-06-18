@@ -1,8 +1,9 @@
-package org.msh.tb.cases;
+package org.msh.tb.cases.tags;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Tag;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Workspace;
@@ -16,7 +17,8 @@ import java.util.List;
 public class CaseTagHome {
 
 	@In(create=true) EntityManager entityManager;
-	@In(required=true) CaseHome caseHome;
+	@In(required=true)
+	CaseHome caseHome;
 
 	private List<ItemSelect<Tag>> items;
 

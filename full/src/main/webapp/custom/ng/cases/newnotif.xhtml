@@ -48,7 +48,8 @@
 					</s:decorate>
 				</h:panelGroup>
 
-				<h:inputHidden value="#{tbcase.classification}" />
+				<h:inputHidden id="cla" value="#{tbcase.classification}" />
+				<h:inputHidden id="unit" value="#{casesViewController.selectedUnitIdParam}"/>
 
 				<a:commandLink id="btnsearch" styleClass="button"
 							   focus="name" onclick="if (!disableButton(this)) return false;initPatientSearch(); return false" >

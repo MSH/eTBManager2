@@ -1,4 +1,4 @@
-package org.msh.tb.ng;
+package org.msh.tb.ng.cases;
 
 
 import org.jboss.seam.ScopeType;
@@ -10,6 +10,8 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.international.StatusMessage;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseEditingHome;
+import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.PatientHome;
 import org.msh.tb.cases.exams.*;
 import org.msh.tb.entities.ExamCulture;
 import org.msh.tb.entities.ExamMicroscopy;
@@ -22,6 +24,8 @@ import org.msh.validators.BeanValidator;
 import org.msh.validators.FacesMessagesBinder;
 import org.msh.validators.MessagesList;
 
+import java.util.Date;
+
 
 /**
  * Handle TB and DR-TB cases editing and new notification
@@ -30,29 +34,38 @@ import org.msh.validators.MessagesList;
  */
 @Name("caseEditingHomeNg")
 @Scope(ScopeType.CONVERSATION)
-public class CaseEditingHomeNg extends CaseEditingHome {
+public class CaseEditingHomeNg {
 
     @In(create = true) MicroscopyActions microscopyActions;
     @In(create = true) XpertActions xpertActions;
     @In(create = true) CultureActions cultureActions;
+    @In(create = true) CaseEditingHome caseEditingHome;
+    @In CaseHome caseHome;
+    @In FacesMessages facesMessages;
+
+    private boolean initialized;
 
 
     /**
      * Initialize the caseHome object for editing
      */
     public void initializeEditing() {
+        if (initialized) {
+            return;
+        }
+
         TbCase tbcase = caseHome.getInstance();
 
-        if (getTbunitselection().getSelected() == null)
-            getTbunitselection().setSelected(tbcase.getNotificationUnit());
+        if (caseEditingHome.getTbunitselection().getSelected() == null)
+            caseEditingHome.getTbunitselection().setSelected(tbcase.getNotificationUnit());
 
-        if (getNotifAdminUnit().getSelectedUnit() == null)
-            getNotifAdminUnit().setSelectedUnit(tbcase.getNotifAddress().getAdminUnit());
+        if (caseEditingHome.getNotifAdminUnit().getSelectedUnit() == null)
+            caseEditingHome.getNotifAdminUnit().setSelectedUnit(tbcase.getNotifAddress().getAdminUnit());
 
-        if (getCurrentAdminUnit().getSelectedUnit() == null)
-            getCurrentAdminUnit().setSelectedUnit(tbcase.getCurrentAddress().getAdminUnit());
+        if (caseEditingHome.getCurrentAdminUnit().getSelectedUnit() == null)
+            caseEditingHome.getCurrentAdminUnit().setSelectedUnit(tbcase.getCurrentAddress().getAdminUnit());
 
-        updatePatientAge();
+        caseEditingHome.updatePatientAge();
 
         initialized = true;
     }
@@ -177,32 +190,6 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     }
 
 
-    /**
-     * Register the notification of a new DR-TB case
-     * @return
-     */
-/*
-    private String saveNewDRTBcase() {
-
-
-        if(examMicroscopyHome.getInstance() != null && examMicroscopyHome.getInstance().getResult() != null
-                && !examMicroscopyHome.persist().equals("persisted"))
-            return "error";
-
-        if(examXpertHome.getInstance() != null && examXpertHome.getInstance().getResult() != null
-                && !examXpertHome.persist().equals("persisted"))
-            return "error";
-
-        if(examCultureHome.getInstance() != null && examCultureHome.getInstance().getResult() != null
-                && !examCultureHome.persist().equals("persisted"))
-            return "error";
-
-        facesMessages.clear();
-        facesMessages.addFromResourceBundle(StatusMessage.Severity.INFO, "default.entity_created");
-
-        return "persisted";
-    }
-*/
 
     /**
      * Prepare a new case (confirmed or suspect) to be saved
@@ -210,9 +197,13 @@ public class CaseEditingHomeNg extends CaseEditingHome {
     private void prepareNew() {
         TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
 
-        tbcase.setNotificationUnit(getTbunitselection().getSelected());
-        tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
+        tbcase.setNotificationUnit(caseEditingHome.getTbunitselection().getSelected());
+        tbcase.getNotifAddress().setAdminUnit(caseEditingHome.getTbunitselection().getAuselection().getSelectedUnit());
         tbcase.setOwnerUnit(tbcase.getNotificationUnit());
+
+        if (tbcase.getRegistrationDate() == null) {
+            tbcase.setRegistrationDate( new Date() );
+        }
 
         if (tbcase.getValidationState() == null)
             tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
@@ -221,52 +212,12 @@ public class CaseEditingHomeNg extends CaseEditingHome {
             tbcase.setState(CaseState.WAITING_TREATMENT);
 
         tbcase.getPatient().setWorkspace(caseHome.getWorkspace());
-        updatePatientAge();
+        caseEditingHome.updatePatientAge();
 
         // set the initial classification of the suspect (won't change in case of confirmed cases that were not suspects)
         tbcase.setSuspectClassification(tbcase.getClassification());
     }
 
-    /**
-     * Save the notification of a new suspect case
-     * @return
-     */
-/*
-    private String saveNewSuspect(){
-        prepareNew();
-
-        // validate data
-        if(!validateSuspectData())
-            return "error";
-
-        // save the patient's data
-        patientHome.setTransactionLogActive(false);
-        patientHome.persist();
-
-        // treatment was defined ?
-        caseHome.setTransactionLogActive(true);
-        if (!caseHome.persist().equals("persisted"))
-            return "error";
-
-        // save exams results
-        if (cultureActions.getInstance().getResult() != null) {
-            cultureActions.save();
-        }
-        if (microscopyActions.getInstance().getResult() != null) {
-            microscopyActions.save();
-        }
-
-        if (xpertActions.getInstance().getResult() != null) {
-            xpertActions.save();
-        }
-
-        caseHome.setTransactionLogActive(false);
-
-        caseHome.updateCaseTags();
-
-        return "persisted";
-    }
-*/
 
     /**
      * Save changes made to a case
@@ -278,15 +229,15 @@ public class CaseEditingHomeNg extends CaseEditingHome {
 
         TbCaseNG tbcase = (TbCaseNG) caseHome.getInstance();
 
-        tbcase.setNotificationUnit(getTbunitselection().getSelected());
-        tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
+        tbcase.setNotificationUnit(caseEditingHome.getTbunitselection().getSelected());
+        tbcase.getNotifAddress().setAdminUnit(caseEditingHome.getTbunitselection().getAuselection().getSelectedUnit());
 
         //fix the inconsistence when owner unit is null.
         if(tbcase.getOwnerUnit() == null){
-            updateOwnerUnit(tbcase);
+            caseEditingHome.updateOwnerUnit(tbcase);
         }
 
-        updatePatientAge();
+        caseEditingHome.updatePatientAge();
 
         String s = caseHome.persist();
 
@@ -296,44 +247,6 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         return s;
     }
 
-/*
-    private String saveNewTBcase(){
-        if(!validateTbCaseData())
-            return "error";
-        //TODO
-        TbCaseNG tbcase = (TbCaseNG)caseHome.getInstance();
-
-        tbcase.setSuspectClassification(tbcase.getClassification());
-
-        // save the patient's data
-        patientHome.persist();
-
-        // get notification unit
-        tbcase.setNotificationUnit(getTbunitselection().getSelected());
-        tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
-
-        tbcase.setOwnerUnit(tbcase.getNotificationUnit());
-
-        if (tbcase.getValidationState() == null)
-            tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
-
-        if (tbcase.getState() == null)
-            tbcase.setState(CaseState.WAITING_TREATMENT);
-
-        updatePatientAge();
-
-        // treatment was defined ?
-        caseHome.setTransactionLogActive(true);
-        if (!caseHome.persist().equals("persisted"))
-            return "error";
-
-        caseHome.setTransactionLogActive(false);
-
-        caseHome.updateCaseTags();
-
-        return "persisted";
-    }
-*/
 
     /**
      * Save changes made to a case
@@ -345,15 +258,15 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         //TODO
         TbCaseNG tbcase = (TbCaseNG) caseHome.getInstance();
 
-        tbcase.setNotificationUnit(getTbunitselection().getSelected());
-        tbcase.getNotifAddress().setAdminUnit(getTbunitselection().getAuselection().getSelectedUnit());
+        tbcase.setNotificationUnit(caseEditingHome.getTbunitselection().getSelected());
+        tbcase.getNotifAddress().setAdminUnit(caseEditingHome.getTbunitselection().getAuselection().getSelectedUnit());
 
         //fix the inconsistence when owner unit is null.
         if(tbcase.getOwnerUnit() == null){
-            updateOwnerUnit(tbcase);
+            caseEditingHome.updateOwnerUnit(tbcase);
         }
 
-        updatePatientAge();
+        caseEditingHome.updatePatientAge();
 
         String s = caseHome.persist();
 
@@ -377,8 +290,11 @@ public class CaseEditingHomeNg extends CaseEditingHome {
             return "validation-error";
         }
 
+        PatientHome patientHome = caseEditingHome.getPatientHome();
+
         // save the patient's data
         patientHome.setTransactionLogActive(false);
+        patientHome.setDisplayMessage(false);
         patientHome.persist();
 
         // treatment was defined ?
@@ -393,13 +309,14 @@ public class CaseEditingHomeNg extends CaseEditingHome {
 
         caseHome.updateCaseTags();
 
+        saveContacts();
+
         return "persisted";
     }
 
     /**
      * Overrides parent method to apply validation manually
      */
-    @Override
     public String saveEditing() {
         String result;
 
@@ -474,4 +391,15 @@ public class CaseEditingHomeNg extends CaseEditingHome {
         }
     }
 
+
+    /**
+     * Save the list of contacts
+     */
+    private void saveContacts() {
+        ContactsActionNG act = (ContactsActionNG)App.getComponent("contactsActionNG");
+
+        if (act != null) {
+            act.save();
+        }
+    }
 }

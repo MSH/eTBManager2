@@ -51,4 +51,5 @@ public class ExamXpert extends LaboratoryExam implements Serializable{
 	public void setRifResult(XpertRifResult rifResult) {
 		this.rifResult = rifResult;
 	}
+
 }

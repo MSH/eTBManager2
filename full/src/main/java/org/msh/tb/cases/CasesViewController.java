@@ -73,11 +73,28 @@ public class CasesViewController {
 	public Integer getSelectedUnitId() {
 		return selectedUnit != null? selectedUnit.getId() : null;
 	}
-	
+
+	/**
+	 * Return the param to be used in URL to represent the selected unit id
+	 * @return the id of the selected unit, or -1 if unit is not selected
+	 */
 	public Integer getSelectedUnitIdParam() {
 		return selectedUnit == null? -1: selectedUnit.getId();
 	}
-	
+
+	/**
+	 * Set the unit ID by the URL param
+	 * @param id the selected unit ID, or -1 if no unit is selected
+	 */
+	public void setSelectedUnitIdParam(Integer id) {
+		if (id == -1) {
+			setSelectedUnit(null);
+		}
+		else {
+			setSelectedUnitId(id);
+		}
+	}
+
 	public Integer getFiltersUnitId() {
 		CaseFilters filters = (CaseFilters)App.getComponent("caseFilters", true);
 		return filters == null? null: filters.getUnitId();

@@ -5,7 +5,9 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.TagsCasesHome;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.CaseSideEffect;
+import org.msh.tb.entities.Substance;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.misc.FieldsQuery;
@@ -30,6 +32,7 @@ public class SideEffectHome extends WsEntityHome<CaseSideEffect>{
 	@In(create=true) FieldsQuery fieldsQuery;
 	@In(create=true) FacesMessages facesMessages;
 	private List<CaseSideEffect> results;
+	private List<Substance> substances;
 
 	
 	/**
@@ -164,4 +167,19 @@ public class SideEffectHome extends WsEntityHome<CaseSideEffect>{
 		
 		return !validationError;
 	}
+
+
+    public List<Substance> getSubstances() {
+        if (substances == null) {
+            String hql = "select distinct c.substance " +
+                    "from PrescribedMedicine m, in(m.medicine.components) c " +
+                    "where m.tbcase.id = #{caseHome.id}";
+            substances = App.getEntityManager()
+                    .createQuery(hql)
+                    .getResultList();
+
+        }
+
+        return substances;
+    }
 }

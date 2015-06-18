@@ -85,7 +85,7 @@ public class ActionTX {
      * Uses the given entity to inpersonate it in the transaction log, recording its Id, description and class
      * @param entity the entity to be impersonated in the
      */
-    public ActionTX inpersonate(Object entity) {
+    public ActionTX impersonate(Object entity) {
         description = entity.toString();
         entityClass = EntityUtils.getRootEntityClass( entity.getClass() ).getSimpleName();
         // get the entity ID by reflection

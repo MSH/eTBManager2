@@ -79,7 +79,8 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 				"from tbunit u inner join administrativeunit a on a.id = u.adminunit_id " +
 				"where u.treatmentHealthUnit = true and u.workspace_id = " + defaultWorkspace.getId().toString() + generateSQLConditionByUserView() +
 				(hsID != null? " and u.healthsystem_id = " + hsID: "") + 
-				" group by u.id, u.name1, a.code order by a.code, secLevelAUname, u.name1";
+				" group by u.id, u.name1, a.code order by a.code, " +
+				(countryLevelInfo.getLevelsWorspace().isHasLevel2() ? "secLevelAUname, " : "") + "u.name1";
 		
 		Query query = entityManager.createNativeQuery(sql);
 		if ( getFirstResult()!=null) query.setFirstResult( getFirstResult() );
@@ -215,7 +216,9 @@ public class HealthUnitsQuery extends EntityQuery<HealthUnitInfo> {
 			info.setCasesTransferIn(readLongValue(vals[5]));
 			info.setCasesTransferOut(readLongValue(vals[6]));
 			info.setCasesNotOnTreatment(readLongValue(vals[7]));
-            info.setSecondAdminUnitLevel((String)vals[8]);
+			if (countryLevelInfo.getLevelsWorspace().isHasLevel2()) {
+				info.setSecondAdminUnitLevel((String)vals[8]);
+			}
 
 			res.add(info);
 		}

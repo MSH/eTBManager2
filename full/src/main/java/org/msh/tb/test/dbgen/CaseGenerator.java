@@ -178,7 +178,7 @@ public class CaseGenerator {
 		
 		if (tbcase.getInfectionSite() == InfectionSite.PULMONARY)
 			 tbcase.setPulmonaryType(newValue(preferences.getPulmonaryForms()));
-		else tbcase.setExtrapulmonaryType(newValue(preferences.getExtrapulmonaryForms()));
+		else tbcase.setExtrapulmonaryType(new FieldValueComponent( newValue(preferences.getExtrapulmonaryForms())));
 		
 		// days to start treatment after diagnosis
 		RangeValue startTreat;

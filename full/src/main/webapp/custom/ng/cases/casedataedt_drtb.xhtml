@@ -145,7 +145,7 @@
     <tr><td>
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['TbCase.emailAddress']}:</ui:define>
-    		<h:inputText value="#{tbcaseng.emailAddress}" />
+    		<h:inputText value="#{tbcase.emailAddress}" />
     	</s:decorate>	
 	</td></tr>
     
@@ -184,7 +184,7 @@
     <s:decorate template="/layout/edit.xhtml" >
     	<!--<ui:define name="label">#{messages['TbCase.TBRegistrationNumber']}:</ui:define>-->
     	<ui:define name="label">#{messages['TbCase.LGATBL']}:</ui:define>
-		<h:inputText value="#{tbcaseng.tbRegistrationNumber}" style="width:120px;" maxlength="10"></h:inputText>
+		<h:inputText value="#{tbcase.tbRegistrationNumber}" style="width:120px;" maxlength="10"></h:inputText>
 	</s:decorate>
     
     <rich:jQuery selector="#divregdate input" query="bind('keypress', function() { handleCaseDateChange();})" />
@@ -227,7 +227,7 @@
 	<div id="showsustype" style="clear:both;">
 	<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.diagnosisType=='SUSPECT'}">
     		<ui:define name="label">#{messages['SuspectType']}:</ui:define>
-    		<h:selectOneMenu id="susType" value="#{tbcaseng.suspectType}" required="#{tbcase.validated}">
+    		<h:selectOneMenu id="susType" value="#{tbcase.suspectType}" required="#{tbcase.validated}">
     			<s:selectItems value="#{fieldsQuery.suspectTypes}"  var="q" noSelectionLabel="-" label="#{q.name}" />
     			<s:convertEntity />
     		</h:selectOneMenu>

@@ -28,6 +28,11 @@ public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 
     private VisualAppearance visualAppearance;
 
+    /**
+     * Indicate the number of samples collected to perform microscopy
+     */
+    private Integer numberSamplesCollected;
+
     @Override
     public ExamResult getExamResult() {
         if (result == null) {
@@ -93,5 +98,13 @@ public class ExamMicroscopy extends LaboratoryExam implements Serializable {
 
     public void setVisualAppearance(VisualAppearance visualAppearance) {
         this.visualAppearance = visualAppearance;
+    }
+
+    public Integer getNumberSamplesCollected() {
+        return numberSamplesCollected;
+    }
+
+    public void setNumberSamplesCollected(Integer numberSamplesCollected) {
+        this.numberSamplesCollected = numberSamplesCollected;
     }
 }

@@ -18,6 +18,9 @@ public class ExamXpertNG extends ExamXpert{
     private FieldValueComponent reasonTest;
 
     public FieldValueComponent getReasonTest() {
+        if (reasonTest == null) {
+            reasonTest = new FieldValueComponent();
+        }
         return reasonTest;
     }
 

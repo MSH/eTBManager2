@@ -47,15 +47,15 @@
                     </h:panelGroup>
                 </rich:tab>
 
-                <rich:tab label="#{messages['cases.details.followup']}" id="tab2" ontabenter="updateTab(2)">
-                    <h:panelGroup id="pnltab2">
-                        <s:decorate template="followup.xhtml" rendered="#{caseFilters.caseTab==2}"/>
-                    </h:panelGroup>
-                </rich:tab>
-
                 <rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
                     <h:panelGroup id="pnltab3">
                         <s:decorate template="treatment_tb.xhtml" rendered="#{caseFilters.caseTab==3}"/>
+                    </h:panelGroup>
+                </rich:tab>
+
+                <rich:tab label="#{messages['cases.details.followup']}" id="tab2" ontabenter="updateTab(2)">
+                    <h:panelGroup id="pnltab2">
+                        <s:decorate template="followup.xhtml" rendered="#{caseFilters.caseTab==2}"/>
                     </h:panelGroup>
                 </rich:tab>
 

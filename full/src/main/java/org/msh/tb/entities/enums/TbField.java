@@ -59,7 +59,9 @@ public enum TbField {
     MEDEXAM_REFTOTYPE,
 	SOURCE_REFERRAL,
 	OCCUPATION,
-	REASON_XPERT_EXAM;
+	REASON_XPERT_EXAM,
+	DOT_PROVIDER,
+	SIDEEFECT_TB;
 	
 	public String getKey() {
 		return getClass().getSimpleName().concat("." + name());

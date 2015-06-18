@@ -9,6 +9,7 @@ import org.msh.etbm.services.commons.DAOServices;
 import org.msh.etbm.services.commons.EntityUtils;
 import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
+import org.msh.tb.ETB;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.validators.FacesMessagesBinder;
@@ -85,6 +86,7 @@ public abstract class EntityActions<E> {
     public Class<E> getEntityClass() {
         if (entityClass == null) {
             entityClass = EntityUtils.getDeclaredGenericType(getClass());
+            entityClass = ETB.getWorkspaceClass(entityClass);
         }
         return entityClass;
     }
@@ -239,6 +241,7 @@ public abstract class EntityActions<E> {
             return null;
         }
 
+        // getInstance() because it is the entity to save tx link
         atx = ActionTX.begin(eventName, getInstance(), action);
 
         return atx;
@@ -271,11 +274,13 @@ public abstract class EntityActions<E> {
      * Save the transaction log
      */
     public void endTxLog() {
-        if (atx != null) {
-            atx.inpersonate(getInstanceToLog());
-            atx.end();
-            atx = null;
+        if (atx == null) {
+            return;
         }
+
+        atx.impersonate(getInstanceToLog());
+        atx.end();
+        atx = null;
     }
 
     /**
