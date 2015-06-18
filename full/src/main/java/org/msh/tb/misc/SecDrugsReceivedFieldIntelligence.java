@@ -3,9 +3,12 @@ package org.msh.tb.misc;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
-import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.*;
-import org.msh.tb.entities.enums.*;
+import org.msh.tb.entities.PrevTBTreatment;
+import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.MedicineLine;
+import org.msh.tb.entities.enums.SecDrugsReceived;
 
 import javax.persistence.EntityManager;
 import java.util.List;

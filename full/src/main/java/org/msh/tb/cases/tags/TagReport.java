@@ -9,10 +9,7 @@ import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.na.TBUnitCaseNumber;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

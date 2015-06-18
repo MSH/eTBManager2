@@ -9,7 +9,6 @@ import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.entities.CaseComment;
-import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.UserLogin;
 import org.msh.tb.entities.enums.RoleAction;
 

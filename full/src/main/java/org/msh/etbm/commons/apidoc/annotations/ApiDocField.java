@@ -1,7 +1,5 @@
 package org.msh.etbm.commons.apidoc.annotations;
 
-import org.hibernate.annotations.Type;
-
 import java.lang.annotation.*;
 
 /**

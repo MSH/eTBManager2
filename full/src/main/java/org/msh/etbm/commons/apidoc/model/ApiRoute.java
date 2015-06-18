@@ -1,7 +1,5 @@
 package org.msh.etbm.commons.apidoc.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.ArrayList;
 import java.util.List;
 

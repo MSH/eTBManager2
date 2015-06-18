@@ -4,11 +4,13 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.*;
-import org.msh.tb.entities.enums.*;
+import org.msh.tb.entities.PrescribedMedicine;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.MedicineLine;
+import org.msh.tb.entities.enums.PatientType;
+import org.msh.tb.entities.enums.TreatmentCategory;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 /**
  * Created by Mauricio on 01/06/2015.

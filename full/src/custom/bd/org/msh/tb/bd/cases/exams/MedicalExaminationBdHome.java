@@ -4,8 +4,6 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.cases.exams.ExamHome;
-import org.msh.tb.entities.MedicalExamination;
-import org.msh.tb.entities.TbCase;
 
 
 @Name("medicalExaminationBdHome")

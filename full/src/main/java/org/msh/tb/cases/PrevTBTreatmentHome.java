@@ -10,7 +10,6 @@ import org.msh.tb.SubstancesQuery;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.DiagnosisType;
-import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.PrevTBTreatmentOutcome;
 import org.msh.utils.ItemSelect;
 import org.msh.utils.date.DateUtils;

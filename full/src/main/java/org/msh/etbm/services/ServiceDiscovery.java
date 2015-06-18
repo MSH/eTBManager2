@@ -7,7 +7,6 @@ import org.jboss.seam.annotations.Scope;
 import org.msh.etbm.services.commons.DAOServices;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
-import org.msh.tb.login.SessionData;
 import org.msh.tb.login.UserSession;
 
 import java.util.HashMap;

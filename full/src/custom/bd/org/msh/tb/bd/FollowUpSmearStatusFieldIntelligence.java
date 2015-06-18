@@ -6,8 +6,13 @@ import org.jboss.seam.annotations.Observer;
 import org.msh.tb.bd.entities.TbCaseBD;
 import org.msh.tb.bd.entities.enums.SmearStatus;
 import org.msh.tb.cases.CaseHome;
-import org.msh.tb.entities.*;
-import org.msh.tb.entities.enums.*;
+import org.msh.tb.entities.ExamMicroscopy;
+import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.InfectionSite;
+import org.msh.tb.entities.enums.MicroscopyResult;
 import org.msh.tb.misc.EntityEvent;
 import org.msh.utils.date.DateUtils;
 

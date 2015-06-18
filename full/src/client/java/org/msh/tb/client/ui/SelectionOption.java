@@ -1,7 +1,5 @@
 package org.msh.tb.client.ui;
 
-import com.google.gwt.user.client.ui.Widget;
-
 /**
  * Represent an option of the MultiSelectionBox
  * Created by rmemoria on 26/5/15.

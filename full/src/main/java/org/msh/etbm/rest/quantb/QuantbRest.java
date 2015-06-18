@@ -3,7 +3,6 @@ package org.msh.etbm.rest.quantb;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
-import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.rest.authentication.Authenticated;
 import org.msh.etbm.services.quantb.QuantbData;
 import org.msh.etbm.services.quantb.QuantbServices;

@@ -3,7 +3,6 @@ package org.msh.etbm.commons.apidoc.impl;
 
 import org.msh.etbm.commons.apidoc.annotations.ApiDocField;
 import org.msh.etbm.commons.apidoc.model.ApiObject;
-import org.msh.tb.application.SysStartup;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;

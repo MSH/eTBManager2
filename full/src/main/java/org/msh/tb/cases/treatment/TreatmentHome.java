@@ -18,7 +18,6 @@ import org.msh.tb.entities.enums.CaseState;
 import org.msh.tb.entities.enums.MedicineLine;
 import org.msh.tb.entities.enums.RegimenPhase;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.misc.EntityEvent;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;

@@ -2,10 +2,7 @@ package org.msh.tb.reports2.variables;
 
 import org.jboss.seam.core.Expressions;
 import org.jboss.seam.international.Messages;
-import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
-import org.msh.reports.filters.ValueHandler;
-import org.msh.reports.query.SQLDefs;
 import org.msh.tb.entities.enums.MessageKey;
 import org.msh.tb.reports2.VariableImpl;
 

@@ -1,13 +1,10 @@
 package org.msh.tb.bd;
 
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.msh.tb.entities.enums.*;
-import org.msh.tb.indicators.core.Indicator2D;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Map;
+import org.msh.tb.entities.enums.CaseClassification;
+import org.msh.tb.entities.enums.CaseDefinition;
+import org.msh.tb.entities.enums.DiagnosisType;
+import org.msh.tb.entities.enums.InfectionSite;
 
 
 /**

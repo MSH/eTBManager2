@@ -8,7 +8,6 @@ import org.jboss.resteasy.spi.Failure;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 import org.jboss.seam.Component;
-import org.jboss.seam.security.Identity;
 import org.msh.etbm.services.auth.AuthenticationService;
 
 import javax.ws.rs.WebApplicationException;

@@ -1,12 +1,9 @@
 package org.msh.etbm.rest.pub;
 
-import com.google.gwt.i18n.client.LocalizableResource;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.international.LocaleSelector;
 import org.msh.etbm.commons.apidoc.annotations.ApiDoc;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocMethod;
 import org.msh.etbm.commons.apidoc.annotations.ApiDocQueryParam;
-import org.msh.etbm.commons.apidoc.annotations.ApiDocReturn;
 import org.msh.etbm.rest.StandardResult;
 import org.msh.etbm.services.pub.SendNewPasswordService;
 import org.msh.etbm.services.pub.SupportedLocales;
@@ -14,11 +11,12 @@ import org.msh.etbm.services.pub.UserRegistrationService;
 import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 
-import javax.faces.context.FacesContext;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Set of pub rest api

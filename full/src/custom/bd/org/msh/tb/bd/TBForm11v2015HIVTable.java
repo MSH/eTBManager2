@@ -5,7 +5,6 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CaseClassification;
 import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.Gender;
-import org.msh.tb.entities.enums.InfectionSite;
 import org.msh.tb.indicators.core.Indicator2D;
 
 import javax.persistence.EntityManager;

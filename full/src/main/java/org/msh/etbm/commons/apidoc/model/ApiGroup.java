@@ -2,7 +2,6 @@ package org.msh.etbm.commons.apidoc.model;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
