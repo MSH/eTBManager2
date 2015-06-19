@@ -10,14 +10,15 @@
       template="/layout/template_new.xhtml">
 
 
-<ui:param name="title" value="#{messages['cases.examhiv']}" /><ui:param name="left" value="0" />
+<ui:param name="title" value="#{messages['cases.examhiv']}" />
+<ui:param name="left" value="0" />
 <ui:param name="topmenu" value="0" />
 <ui:param name="labelstyle" value="width:180px" />
 
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate template="/layout/casebody.xhtml" id="casebody">
 	<a:form id="formexam" styleClass="form1">
 	<div class="form-content">
     <s:decorate id="dt" template="/layout/dateedit.xhtml" >
@@ -38,7 +39,7 @@
     </s:decorate>
 
 	<div id="divpos" style="#{examHIV.result=='POSITIVE'?'':'display:none'}">
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate template="/layout/edit.xhtml" id="date1Dec">
 		<ui:define name="label">#{messages['cases.examhiv.art']}</ui:define>
 		<h:selectOneMenu value="#{examHIV.ARTstarted}" onchange="toggleYesNo(this.selectedIndex, '#artdiv');">
 			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
@@ -58,7 +59,7 @@
     	</span>
 	</s:decorate>
 
-	<s:decorate template="/layout/edit.xhtml">
+	<s:decorate template="/layout/edit.xhtml" id="date2Dec">
 		<ui:define name="label">#{messages['cases.examhiv.cpt']}</ui:define>
 		<h:selectOneMenu value="#{examHIV.CPTstarted}" onchange="toggleYesNo(this.selectedIndex, '#cptdiv');">
 			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
@@ -85,9 +86,13 @@ function toggleYesNo(option, divname) {
 	try {
 		divname = eval(divname);
 	} catch (e) {}
-	if (option == '1')
+	if (option == '1') {
+		document.getElementById('casebody:formexam:date1Dec:date1InputDate').value = '';
+		document.getElementById('casebody:formexam:date2Dec:date2InputDate').value = '';
 		jQuery(divname).hide();
-	else jQuery(divname).show();
+	}else{
+		jQuery(divname).show();
+	}
 }
 -->
 </script>
