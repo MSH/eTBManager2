@@ -227,9 +227,9 @@
             <h:outputText rendered="#{not empty tbcase.pulmonaryType}" value=" - #{tbcase.pulmonaryType}"/>
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.extrapulmonaryType!=null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.infectionSite == 'EXTRAPULMONARY' and tbcase.extrapulmonaryType.value!=null}">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
-    		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
+    		#{tbcase.extrapulmonaryType} <h:outputText value=" / #{tbcase.extrapulmonaryType2}" rendered="#{tbcase.extrapulmonaryType2.value != null}" />
 		</s:decorate>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">

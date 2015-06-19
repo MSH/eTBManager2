@@ -300,45 +300,60 @@ function showPrevTreatType(cb) {
         jQuery('#prevTreatType').hide(500);
     }
 }
-function showExtrapulmonary(cb) {
-  if (isExtrapulmonary(cb))
-  	jQuery('#extrapul').show(500);
-  else jQuery('#extrapul').hide(500);
-  if (isPulmonary(cb)) 
-	jQuery('#pulmonary').show(500);
-  else jQuery('#pulmonary').hide(500);
-}
 function isExtrapulmonary(cb) {
-  return ((cb.selectedIndex == 2) || (cb.selectedIndex == 3));
+	return ((cb.selectedIndex == 2) || (cb.selectedIndex == 3));
 }
+
 function isPulmonary(cb) {
-  return ((cb.selectedIndex == 1) || (cb.selectedIndex == 3));
+	return ((cb.selectedIndex == 1) || (cb.selectedIndex == 3));
+}
+
+function showExtrapulmonary(cb) {
+	if (isExtrapulmonary(cb))
+		jQuery('#extrapul').show(500);
+	else{
+		document.getElementById('main:edtextrapdec:edtextrapfldoptions').options[0].selected = "true";
+		document.getElementById('main:edtextrap2dec:edtextrap2fldoptions').options[0].selected = "true";
+		document.getElementById('extrapul').style.display = "none";
+	}
+
+	if (isPulmonary(cb))
+		jQuery('#pulmonary').show(500);
+	else{
+		document.getElementById('main:pulmonaryTypeDec:pulmonarybd').options[0].selected = "true";
+		document.getElementById('pulmonary').style.display = "none";
+
+		document.getElementById('main:pulmonaryTypesDec:pulmonaryTypes').options[0].selected = "true";
+		document.getElementById('pulmonary2').style.display = "none";
+	}
 }
 -->
 </script>
 
 	<div id="extrapul" style="clear:both;">
 		<div style="float:left">
-			<s:decorate template="/layout/editfield.xhtml" >
+			<s:decorate template="/layout/editfield.xhtml" id="edtextrapdec">
 				<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
 				<ui:param name="id" value="edtextrap" />
 				<ui:param name="field" value="#{tbcasebd.extrapulmonaryType}" />
 				<ui:param name="list" value="#{fieldsQuery.extrapulmonaryTypes}" />
+				<ui:param name="required" value="#{false}" />
 			</s:decorate>
 		</div>
 
 		<div style="float:left">
-			<s:decorate template="/layout/editfield.xhtml" >
+			<s:decorate template="/layout/editfield.xhtml" id="edtextrap2dec">
 				<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}(2):</ui:define>
-				<ui:param name="id" value="edtextrap" />
+				<ui:param name="id" value="edtextrap2" />
 				<ui:param name="field" value="#{tbcasebd.extrapulmonaryType2}" />
 				<ui:param name="list" value="#{fieldsQuery.extrapulmonaryTypes}" />
+				<ui:param name="required" value="#{false}" />
 			</s:decorate>
 		</div>
 	</div>
 
 	<div id="pulmonary" style="clear:both;">
-		<s:decorate template="/layout/edit.xhtml">
+		<s:decorate template="/layout/edit.xhtml" id="pulmonaryTypeDec">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
     		<h:selectOneMenu id="pulmonarybd" value="#{tbcasebd.pulmonaryTypesBD}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{pulmonaryTypesBD}" noSelectionLabel="-" label="#{messages[it.key]}" />
@@ -351,21 +366,25 @@ function isPulmonary(cb) {
  <script type="text/javascript">
  <!--
 function showPulmonaryTypes(cb){
-if(cb.selectedIndex == 2)
-	jQuery('#pulmonary2').show(500);
-else jQuery('#pulmonary2').hide(500);
- }
+	if(cb.selectedIndex == 2)
+		jQuery('#pulmonary2').show(500);
+	else{
+		document.getElementById('main:pulmonaryTypesDec:pulmonaryTypes').options[0].selected = "true";
+		jQuery('#pulmonary2').hide(500);
+	}
+}
  -->
  </script>	
  
  	<div id="pulmonary2" style="clear:both;">  
- 		<s:decorate template="/layout/edit.xhtml"> 		
-    		<h:selectOneMenu value="#{tbcasebd.pulmonaryType}" style="margin-right:4px;">
+ 		<s:decorate template="/layout/edit.xhtml" id="pulmonaryTypesDec">
+    		<h:selectOneMenu id="pulmonaryTypes" value="#{tbcasebd.pulmonaryType}" style="margin-right:4px;">
     			<s:selectItems var="it" value="#{fieldOptions.pulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
     			<s:convertEntity />
     		</h:selectOneMenu>
 		</s:decorate>
 	</div>
+
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
 <rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
 <rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
