@@ -133,16 +133,19 @@ public class CasesUnitReport {
      * Mount the list of health facilities based on the administrative unit selected
      */
     protected void mountHealthFacilities() {
-        String sql = "select a.id, a.name1, 0, b.diagnosisType, b.classification, count(*)\n" +
-                "from tbunit a " +
-                "left join tbcase b on b.owner_unit_id=a.id\n" +
-                "where " + (admunitId == null? "a.adminunit_id is null" : "a.adminunit_id = " + admunitId) +
-                " and b.state < 3\n" +
-                "group by a.id, a.name1, b.diagnosisType, b.classification\n" +
+        String sql = "select a.id, a.name1, 0, res.diagnosisType, res.classification, count(*) from tbunit a\n" +
+                "left join (select owner_unit_id, diagnosistype, classification, count(*)\n" +
+                "from tbcase c\n" +
+                "inner join patient p on p.id=c.patient_id where p.workspace_id=:wsid\n" +
+                "group by owner_unit_id, diagnosisType, classification) res on a.id=res.owner_unit_id\n" +
+                "where a.adminunit_id=:auId\n" +
+                "group by a.id, a.name1, res.diagnosisType, res.classification\n" +
                 "order by a.name1";
 
         List<Object[]> lst = entityManager
                 .createNativeQuery(sql)
+                .setParameter("wsid", UserSession.getWorkspace().getId())
+                .setParameter("auId", admunitId)
                 .getResultList();
 
         mountList(lst, CaseUnitItem.UnitType.HEALTHFACILITY);

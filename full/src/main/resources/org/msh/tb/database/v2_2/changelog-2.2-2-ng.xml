@@ -166,4 +166,27 @@
             select 44, 'Treatment supporter', 'Treatment supporter', id, 1, true, 2, 'GSM number:' from workspace where extension='ng';
         </sql>
     </changeSet>
+    
+    <changeSet id="2.2.11" author="rmemoria" context="NG">
+        <sql>
+            INSERT INTO `tag` (workspace_id, `tag_name`,`sqlcondition`,`consistencyCheck`,`active`,`dailyUpdate`,`displayOrder`,`summary`)
+            select id, 'Presumptive without result','not exists(select * from exammicroscopy where case_id=a.id)\nand\nnot exists(select * from examxpert where case_id=a.id)',0,1,0,1,1 from workspace where extension='ng'
+        </sql>
+        <sql>
+            INSERT INTO `tag` (workspace_id, `tag_name`,`sqlcondition`,`consistencyCheck`,`active`,`dailyUpdate`,`displayOrder`,`summary`)
+            select id, 'DS TB - All cases','a.classification=0 and diagnosisType=1',0,1,0,2,1 from workspace where extension='ng'
+        </sql>
+        <sql>
+            INSERT INTO `tag` (workspace_id, `tag_name`,`sqlcondition`,`consistencyCheck`,`active`,`dailyUpdate`,`displayOrder`,`summary`)
+            select id, 'DR-TB on treatment','a.classification=1 and a.state in (1,2)',0,1,0,10,1 from workspace where extension='ng'
+        </sql>
+        <sql>
+            INSERT INTO `tag` (workspace_id, `tag_name`,`sqlcondition`,`consistencyCheck`,`active`,`dailyUpdate`,`displayOrder`,`summary`)
+            select id, 'DR-TB without baseline culture','a.classification=1 and a.diagnosisType=1 \nand not exists(select * from examculture where case_id=a.id and dateCollected &lt; a.initreatmentdate)',0,1,0,11,1 from workspace where extension='ng'
+        </sql>
+        <sql>
+            INSERT INTO `tag` (workspace_id, `tag_name`,`sqlcondition`,`consistencyCheck`,`active`,`dailyUpdate`,`displayOrder`,`summary`)
+            select id,'TOTAL','a.classification in (0,1)',0,1,0,200,1 from workspace where extension='ng'
+        </sql>
+    </changeSet>
 </databaseChangeLog>

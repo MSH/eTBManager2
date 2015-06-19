@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
 				xmlns:h="http://java.sun.com/jsf/html"
 				xmlns:a="https://ajax4jsf.dev.java.net/ajax"
 				xmlns:s="http://jboss.com/products/seam/taglib"
@@ -13,7 +14,7 @@
 					Location
 				</th>
 				<th>
-					Suspects
+					#{messages['DiagnosisType.SUSPECT']}
 				</th>
 				<th>
 					TB cases
@@ -67,13 +68,14 @@
 				<tr id="row#{it.id}">
 					<td class="highlight">
 						<div style="float:left; padding-left:#{casesUnitReport.level * 32}px">
-						<s:fragment rendered="#{it.type=='ADMINUNIT'}">
+							<s:fragment rendered="#{it.type=='ADMINUNIT'}">
 								<a:commandLink onclick="openUnitTree(#{it.id})" rendered="#{it.node}"><i class="icon-plus-sign"></i></a:commandLink>
 								#{it.name}
-						</s:fragment>
-						<s:fragment rendered="#{it.type == 'HEALTHFACILITY'}">
-							<div class="icon-hu" />#{it.name}
-						</s:fragment>
+							</s:fragment>
+							<s:link rendered="#{it.type == 'HEALTHFACILITY'}" value="#{it.name}">
+								<f:param name="id" value="#{it.id}" />
+								<div class="icon-hu"></div>
+							</s:link>
 						</div>
 					</td>
 					<td align="center">

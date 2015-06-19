@@ -17,6 +17,12 @@
 	<name>eTB Manager Full version ${project.version}</name>
     <description>e-TB Manager containing the generic version + customized versions for each country implemented</description>
 
+	<properties>
+		<workspace-context>NG</workspace-context>
+		<app.country>ng</app.country>
+		<app.country-extension>-ng</app.country-extension>
+	</properties>
+
 	<build>
 		<finalName>${war.filename}</finalName>
 
