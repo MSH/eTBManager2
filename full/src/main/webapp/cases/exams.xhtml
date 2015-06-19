@@ -444,7 +444,19 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['cases.details.result']}" styleClass="collh"/>
 				</f:facet>
-				#{messages[r.result.key]}
+				#{messages[r.result.key]}<br/>
+
+				<s:fragment rendered="#{r.result=='POSITIVE'}">
+					<h:outputText value="#{messages['cases.examhiv.art']}"/>
+					<h:outputText value=" #{r.ARTstarted ? messages['global.yes'] : messages['global.no']}"/>
+					<h:outputText rendered="#{r.ARTstarted}" value=" - "/>
+					<h:outputText rendered="#{r.ARTstarted}" value="#{r.startedARTdate}" converter="localeDateConverter"/>
+					<br/>
+					<h:outputText value="#{messages['cases.examhiv.cpt']}"/>
+					<h:outputText value=" #{r.CPTstarted ? messages['global.yes'] : messages['global.no']}"/>
+					<h:outputText rendered="#{r.CPTstarted}" value=" - "/>
+					<h:outputText rendered="#{r.CPTstarted}" value="#{r.startedCPTdate}" converter="localeDateConverter"/>
+				</s:fragment>
 			</h:column>
 			
 			<h:column>
