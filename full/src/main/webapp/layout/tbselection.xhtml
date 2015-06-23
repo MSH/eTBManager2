@@ -9,7 +9,7 @@
 	<s:decorate template="/layout/edit.xhtml" rendered="#{not tbunitselection.level1ReadOnly}">
 		<ui:define name="label">#{tbunitselection.labelAdminUnit}:</ui:define>
 		<ui:param name="labelstyle" value="#{labelstyle}" />
-		<h:selectOneMenu id="#{empty idcbselau ? 'cbselau' : idcbselau}" value="#{tbunitselection.adminUnit}" required="#{required}">
+		<h:selectOneMenu id="#{empty idcbselau ? 'cbselau' : idcbselau}" value="#{tbunitselection.auselection.unitLevel1}" required="#{required}">
 			<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="#{empty noSelUseAll ? '-' : (noSelUseAll ? messages['form.noselection'] : '-')}" label="#{it.name}"/>
 			<s:convertEntity />
 			<a:support event="onchange" ajaxSingle="true" reRender="pnlunits,#{auRerender}" focus="cbunits" />
