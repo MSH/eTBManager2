@@ -124,7 +124,7 @@ public class CaseDefinitionFieldIntelligence {
                 result = list.get(0);
         }else{
             list = (List<LaboratoryExam>) entityManager.createQuery(" from " + examEntityName + " e " +
-                    " where e.tbcase.id = :caseId and e.dateCollected < :iniTreatDate and e.result is not null  " +
+                    " where e.tbcase.id = :caseId and e.dateCollected <= :iniTreatDate and e.result is not null  " +
                     " order by e.dateCollected desc, e.id desc ")
                     .setParameter("caseId", tbcase.getId())
                     .setParameter("iniTreatDate", tbcase.getTreatmentPeriod().getIniDate())
