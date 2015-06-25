@@ -34,17 +34,123 @@
 
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
-			refreshResult(0);
+			window.$ = jQuery;
+			window.tree = {};
+
+			mountTree();
+			$('#divreport tr').appendTo('#tblunits #relbody');
 		});
-		function openUnitTree(id) {
-			window.adminrow = 'row' + id;
-			refreshResult(id);
+
+		function findNode(id, pnode) {
+			var tree = pnode? pnode.items: window.tree;
+			for (var k in tree) {
+				var n = tree[k];
+				if (n.id === id) {
+					return n;
+				}
+				n = findNode(id, n);
+				if (n) {
+					return n;
+				}
+			}
 		}
+
+		// mount tree from the loaded HTML
+		function mountTree() {
+			// get the parent id
+			var pid = $('.edtparent').val();
+			var items = !pid || pid === 0? window.tree: findNode(pid).items;
+			if (!pid || pid === 0) {
+				items = window.tree;
+			}
+			else {
+				var n = findNode(pid);
+				if (!n.items) {
+					n.items = {};
+				}
+				items = n.items;
+			}
+
+			// get all ids
+			$('#divreport tr').each(function() {
+				var s = this.id.substring(3);
+				items[s] = {
+					id: s,
+					collapsed: true
+				};
+			});
+		}
+
+		function nodeClick(id) {
+			var node = findNode(id);
+			if (node.collapsed) {
+				expandNode(node);
+			}
+			else {
+				collapseNode(node);
+			}
+		}
+
+		function expandNode(node) {
+
+		}
+
+		function collapseNode(node) {
+			alert('Collapsing ' + node.id);
+		}
+
+
+
+
+		function toggleTreeNode(id) {
+			var node = window.tree[id];
+			if (node) {
+				if (node.collapsed) {
+					expandNode(node);
+				}
+				else {
+					collapseNode(node);
+				}
+			}
+			else {
+				node = {id: id};
+				loadNode(node);
+			}
+
+
+			window.selrow = id;
+			var node = getRow(id);
+			var lnk = node.hasClass('node-collapse'); jQuery('.node-collapsed', node);
+			var iscol = lnk.length > 0;
+
+			// is collapsed?
+			if (iscol) {
+				lnk.addClass('node-expanded').removeClass('node-collapsed');
+				jQuery('.icon-plus-sign', lnk).removeClass('icon-plus-sign').addClass('icon-minus-sign');
+
+				// add children
+				addNodes(id);
+			}
+			else {
+				lnk.removeClass('node-expanded').addClass('node-collapsed');
+				jQuery('.icon-minus-sign', lnk).addClass('icon-plus-sign').removeClass('icon-minus-sign');
+
+				// remove children
+				var res = jQuery('#tblunits #relbody .p' + id);
+				jQuery('#tblunits #relbody .p' + id).remove();
+			}
+		}
+
+		function getRow(id) {
+			var s = '#tblunits #relbody #row' + id;
+			return jQuery(s);
+		}
+
 		function afterResult() {
 			var s = '#tblunits #relbody';
 			var sel = '#divreport tr';
-			if (window.adminrow) {
-				s += ' #' + window.adminrow;
+			if (window.selrow) {
+				s += ' #row' + window.selrow;
 				jQuery('#divreport tr').insertAfter(s);
 			}
 			else {
@@ -53,7 +159,8 @@
 			console.log(s);
 		}
 	</script>
-	<a:jsFunction name="refreshResult"
+
+	<a:jsFunction name="loadNodes"
 				  action="#{casesUnitReport.execute}"
 				  reRender="pnlresult"
 				  oncomplete="afterResult()" ajaxSingle="true">
@@ -63,14 +170,18 @@
 
 	<h:panelGroup id="pnlresult">
 		<div id="divreport" style="display:none">
+			<input id="edtparent" type="hidden" value="#{casesUnitReport.admunitId}" />
 			<table>
-			<a:repeat value="#{casesUnitReport.items}" var="it">
-				<tr id="row#{it.id}">
+			<a:repeat value="#{casesUnitReport.items}" var="it" rendered="#{facesContext.renderResponse}">
+				<tr id="row#{it.id}" class="p#{casesUnitReport.admunitId}">
 					<td class="highlight">
-						<div style="float:left; padding-left:#{casesUnitReport.level * 32}px">
+						<div id="divitem" style="float:left; padding-left:#{casesUnitReport.level * 24}px">
 							<s:fragment rendered="#{it.type=='ADMINUNIT'}">
-								<a:commandLink onclick="openUnitTree(#{it.id})" rendered="#{it.node}"><i class="icon-plus-sign"></i></a:commandLink>
-								#{it.name}
+								<a:commandLink onclick="nodeClick('#{it.id})" rendered="#{it.node}" styleClass="node-collapsed">
+									<i class="icon-plus-sign"></i>
+									#{it.name}
+								</a:commandLink>
+								<h:outputText value="#{it.name}" rendered="#{not it.node}" />
 							</s:fragment>
 							<s:link rendered="#{it.type == 'HEALTHFACILITY'}" value="#{it.name}">
 								<f:param name="id" value="#{it.id}" />

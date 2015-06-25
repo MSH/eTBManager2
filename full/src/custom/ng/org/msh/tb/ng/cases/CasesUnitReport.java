@@ -9,6 +9,7 @@ import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -59,11 +60,13 @@ public class CasesUnitReport {
      * Create the report
      */
     protected void createReport() {
+/*
         if (!executing) {
             return;
         }
+*/
 
-        if (admunitId == 0) {
+        if (admunitId != null && admunitId == 0) {
             admunitId = null;
         }
 

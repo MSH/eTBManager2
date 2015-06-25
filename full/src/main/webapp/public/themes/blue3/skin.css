@@ -132,6 +132,8 @@ select {font-size:1em; }
 	height:40px;
 	width:auto;
 	text-align:right;
+	overflow-x: hidden;
+	max-width: 150px;
 }
 
 .page-header-right .user-data {

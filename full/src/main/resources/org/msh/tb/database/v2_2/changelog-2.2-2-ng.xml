@@ -80,7 +80,7 @@
         </sql>
     </changeSet>
 
-    <changeSet id="2.2.4" author="rmemoria" context="NG">
+    <changeSet id="2.2.4" author="rmemoria">
         <sql>
             update examxpert set discriminator='gen' where discriminator is null
         </sql>

@@ -124,6 +124,8 @@ input, select {
 	height:30px;
 	width:auto;
 	text-align:right;
+	overflow-x: hidden;
+	max-width: 150px;
 }
 
 .page-header-right .user-data {
