@@ -10,20 +10,20 @@
 	<h:panelGroup id="tblres">
 		<table id="tblunits" class="table2">
 			<tr>
-				<th>
+				<th style="max-width: 200px">
 					Location
 				</th>
 				<th>
 					#{messages['DiagnosisType.SUSPECT']}
 				</th>
 				<th>
-					TB cases
+					#{messages['CaseClassification.TB']}
 				</th>
 				<th>
-					DR-TB cases
+					#{messages['CaseClassification.DRTB']}
 				</th>
 				<th>
-					TOTAL
+					#{messages['global.total']}
 				</th>
 			</tr>
 			<tbody id="relbody">
@@ -34,11 +34,11 @@
 
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
-			window.$ = jQuery;
+//			window.$ = jQuery;
 			window.tree = {};
 
 			mountTree();
-			$('#divreport tr').appendTo('#tblunits #relbody');
+			jQuery('#divreport tr').appendTo('#tblunits #relbody');
 		});
 
 		function findNode(id, pnode) {
@@ -58,7 +58,7 @@
 		// mount tree from the loaded HTML
 		function mountTree() {
 			// get the parent id
-			var pid = $('.edtparent').val();
+			var pid = jQuery('#edtparent').val();
 			var items = !pid || pid === 0? window.tree: findNode(pid).items;
 			if (!pid || pid === 0) {
 				items = window.tree;
@@ -72,7 +72,7 @@
 			}
 
 			// get all ids
-			$('#divreport tr').each(function() {
+			jQuery('#divreport tr').each(function() {
 				var s = this.id.substring(3);
 				items[s] = {
 					id: s,
@@ -91,14 +91,60 @@
 			}
 		}
 
+		// show child nodes of a given node
 		function expandNode(node) {
+			if (!node.items) {
+				loadNodes(node.id);
+				return;
+			}
 
+			for (var k in node.items) {
+				jQuery('#row' + k).show();
+			}
+
+			jQuery('#row' + node.id + ' .icon-plus-sign').removeClass('icon-plus-sign').addClass('icon-minus-sign');
+			node.collapsed = false;
 		}
 
 		function collapseNode(node) {
-			alert('Collapsing ' + node.id);
+			node.collapsed = true;
+			if (!node.items) {
+				return;
+			}
+
+			for (var id in node.items) {
+				jQuery('#row' + id).hide();
+				var child = node.items[id];
+				collapseNode(child);
+				child.collapsed = true;
+			}
+			jQuery('#row' + node.id + ' .icon-minus-sign').removeClass('icon-minus-sign').addClass('icon-plus-sign');
 		}
 
+		function childrenVisible(node, visible) {
+			if (!node.items) {
+				return;
+			}
+			node.items.forEach(function(item) {
+				var el = jQuery('#row' + item);
+				if (visible) {
+					el.show();
+				}
+				else {
+					el.hide();
+				}
+			});
+		}
+
+		function afterLoad() {
+			mountTree();
+			// get parent node list
+			var pid = jQuery('#edtparent').val();
+			jQuery('#divreport tr').insertAfter('#relbody #row' + pid);
+
+			var pnode = findNode(pid);
+			expandNode(pnode);
+		}
 
 
 
@@ -114,7 +160,7 @@
 			}
 			else {
 				node = {id: id};
-				loadNode(node);
+				loadNode(id);
 			}
 
 
@@ -163,13 +209,13 @@
 	<a:jsFunction name="loadNodes"
 				  action="#{casesUnitReport.execute}"
 				  reRender="pnlresult"
-				  oncomplete="afterResult()" ajaxSingle="true">
+				  oncomplete="afterLoad()" ajaxSingle="true">
 		<a:actionparam name="param1" assignTo="#{casesUnitReport.admunitId}" converter="javax.faces.Integer" />
 	</a:jsFunction>
 
 
 	<h:panelGroup id="pnlresult">
-		<div id="divreport" style="display:none">
+		<div id="divreport" style="display:block">
 			<input id="edtparent" type="hidden" value="#{casesUnitReport.admunitId}" />
 			<table>
 			<a:repeat value="#{casesUnitReport.items}" var="it" rendered="#{facesContext.renderResponse}">
@@ -177,7 +223,7 @@
 					<td class="highlight">
 						<div id="divitem" style="float:left; padding-left:#{casesUnitReport.level * 24}px">
 							<s:fragment rendered="#{it.type=='ADMINUNIT'}">
-								<a:commandLink onclick="nodeClick('#{it.id})" rendered="#{it.node}" styleClass="node-collapsed">
+								<a:commandLink onclick="nodeClick('#{it.id}')" rendered="#{it.node}" styleClass="node-collapsed">
 									<i class="icon-plus-sign"></i>
 									#{it.name}
 								</a:commandLink>
