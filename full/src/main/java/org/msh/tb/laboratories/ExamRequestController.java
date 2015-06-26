@@ -97,6 +97,40 @@ public class ExamRequestController {
 	}
 
 
+    /**
+     * Called to initialize the editing form, when initialing opening it
+     */
+    public void initEditing() {
+/*
+        if (initialized) {
+            return;
+        }
+*/
+        ExamRequestHome requestHome = (ExamRequestHome)App.getComponent("examRequestHome");
+        if (!requestHome.isManaged()) {
+            throw new RuntimeException("No exam request selected");
+        }
+
+        ExamRequest req = requestHome.getInstance();
+
+        CaseHome caseHome = (CaseHome) App.getComponent("caseHome");
+        caseHome.setInstance(req.getTbcase());
+
+        tbcase = req.getTbcase();
+        requestDate = tbcase.getRegistrationDate();
+    }
+
+
+    /**
+     * Save changes made to the exam request
+     * @return
+     */
+    public String persistEditing() {
+        ExamRequestHome requestHome = (ExamRequestHome)App.getComponent("examRequestHome");
+        return  requestHome.persist();
+    }
+
+
 	/**
 	 * Initialize patient data
 	 * @return

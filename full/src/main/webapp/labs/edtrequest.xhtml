@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
+
+    <ui:param name="title" value="#{messages['labs.newreq']}" />
+
+    <ui:param name="topmenu" value="4" />
+    <ui:param name="labelstyle" value="width:180px" />
+    <ui:param name="left" value="0" />
+
+
+    <ui:define name="content">
+        <h1>#{title}</h1>
+
+        <rich:jQuery name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
+        <h:form id="main" styleClass="form1">
+            <div class="form-content">
+                <s:decorate template="/layout/dateedit.xhtml" >
+                    <ui:define name="label">#{messages['labs.reqdate']}:</ui:define>
+                    <ui:param name="required" value="true" />
+                    <ui:param name="future" value="true" />
+                    <ui:param name="datefield" value="#{examRequestController.requestDate}" />
+                </s:decorate>
+
+                <h2>#{messages['cases.patientdata']}</h2>
+                <table width="100%" style="border-collapse:collapse;">
+                    <tr><td colspan="2">
+                        <s:decorate template="/layout/editname.xhtml">
+                            <ui:define name="label">#{messages['Patient.name']}:</ui:define>
+                            <ui:param name="patientdata" value="#{tbcase.patient}" />
+                            <ui:param name="required" value="#{true}" />
+                        </s:decorate>
+
+                    </td></tr>
+                    <tr><td>
+
+                        <s:decorate template="/layout/edit.xhtml">
+                            <ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
+                            <h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;" maxlength="50"></h:inputText>
+                        </s:decorate>
+
+                    </td><td>
+
+                        <s:decorate template="/layout/edit.xhtml">
+                            <ui:define name="label">#{messages['Gender']}:</ui:define>
+                            <h:selectOneMenu value="#{tbcase.patient.gender}" required="true">
+                                <s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+                                <s:convertEnum />
+                            </h:selectOneMenu>
+                        </s:decorate>
+
+                    </td></tr>
+
+                    <ui:include src="/layout/editbirthdate.xhtml" />
+
+                    <tr><td>
+
+                        <s:decorate template="/layout/edit.xhtml" >
+                            <ui:define name="label">#{messages['Nationality']}:</ui:define>
+                            <h:selectOneMenu value="#{tbcase.nationality}">
+                                <s:selectItems var="s" value="#{nationalities}" noSelectionLabel="-" label="#{messages[s.key]}"/>
+                                <s:convertEnum />
+                            </h:selectOneMenu>
+                        </s:decorate>
+
+                    </td></tr>
+
+                    <tr><td colspan="2">
+                        <h2>#{messages['Address']}</h2>
+                    </td></tr>
+
+                    <tr><td colspan="2">
+                        <s:decorate template="/layout/edit.xhtml">
+                            <ui:define name="label">#{messages['Address.address']}:</ui:define>
+                            <h:inputText value="#{tbcase.notifAddress.address}" style="width:300px" required="true" maxlength="100"/>
+                        </s:decorate>
+
+                    </td></tr>
+
+                    <tr><td colspan="2">
+                        <s:decorate template="/layout/edit.xhtml">
+                            <h:inputText value="#{tbcase.notifAddress.complement}" style="width:300px" maxlength="100"/>
+                        </s:decorate>
+                    </td></tr>
+
+                    <tr><td>
+                        <s:decorate template="/layout/auselection.xhtml">
+                            <ui:param name="auselection" value="#{examRequestController.auselection}" />
+                            <ui:param name="requiredLevel" value="#{defaultWorkspace.patientAddrRequiredLevels}" />
+                        </s:decorate>
+                    </td></tr>
+
+                    <tr><td>
+                        <s:decorate template="/layout/edit.xhtml">
+                            <ui:define name="label">#{messages['Address.zipCode']}</ui:define>
+                            <h:inputText value="#{tbcase.notifAddress.zipCode}" maxlength="20" />
+                        </s:decorate>
+                    </td></tr>
+
+                </table>
+
+                <h2>#{messages['cases.generaldata']}</h2>
+
+                <s:fragment rendered="#{tbcase.id == null}">
+
+                    <s:decorate template="/layout/edit.xhtml">
+                        <ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+                        <h:selectOneMenu value="#{tbcase.diagnosisType}" required="true">
+                            <s:selectItems value="#{globalLists.diagnosisTypes}" var="s" noSelectionLabel="-" label="#{messages[s.key]}"/>
+                            <s:convertEnum />
+                        </h:selectOneMenu>
+                    </s:decorate>
+
+                    <s:decorate template="/layout/edit.xhtml">
+                        <ui:define name="label">#{messages['CaseClassification']}:</ui:define>
+                        <h:selectOneMenu value="#{tbcase.classification}" required="true">
+                            <s:selectItems value="#{globalLists.caseClassifications}" var="s" noSelectionLabel="-" label="#{messages[s.key]}"/>
+                        </h:selectOneMenu>
+                    </s:decorate>
+
+                    <s:decorate template="/layout/tbselection3.xhtml">
+                        <ui:define name="label">#{messages['FilterHealthUnit.NOTIFICATION_UNIT']}:</ui:define>
+                        <ui:param name="tbunitselection" value="#{examRequestController.unitselection}" />
+                    </s:decorate>
+
+                </s:fragment>
+
+                <s:fragment rendered="#{tbcase.id != null}">
+
+                    <s:decorate template="/layout/display.xhtml" style="width:100%">
+                        <ui:define name="label">#{messages['CaseClassification']}:</ui:define>
+                        #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]}
+                    </s:decorate>
+                    <s:decorate template="/layout/display.xhtml">
+                        <ui:define name="label">#{messages['FilterHealthUnit.NOTIFICATION_UNIT']}:</ui:define>
+                        <div style="width:700px">
+                            <s:decorate template="/layout/unit.xhtml">
+                                <ui:param name="unit" value="#{tbcase.notificationUnit}" />
+                            </s:decorate>
+                        </div>
+                    </s:decorate>
+
+                </s:fragment>
+
+                <hr/>
+                <table width="700px" >
+                    <tr>
+                        <th align="left">
+                            <h2>#{messages['labs.newreq.samples']}</h2>
+                        </th>
+                        <th align="right">
+                            <a:commandLink styleClass="button" action="#{examRequestController.initAddSample}"
+                                           ajaxSingle="true"
+                                           onclick="if (!disableButton(this)) return false;"
+                                           reRender="formsample"
+                                           oncomplete="enableButton();showModalAutoTop('sampledlg');return false;">
+                                <span>#{messages['labs.newreq.addsample']}...</span>
+                            </a:commandLink>
+                        </th>
+                    </tr>
+                    <tr><td colspan="2">
+                        <h:panelGroup id="samples">
+                            <h:dataTable value="#{examRequestController.samples}" var="it" styleClass="table1" rendered="#{not empty examRequestController.samples}">
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="#{messages['cases.prevtreat.num']}" styleClass="collh" /></f:facet>
+                                    #{it.index}
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="#{messages['PatientSample.dateCollected']}" styleClass="collh" /></f:facet>
+                                    <h:outputText value="#{it.dateCollected}" converter="localeDateConverter" />
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="#{messages['PatientSample.sampleNumber']}" styleClass="collh" /></f:facet>
+                                    <h:outputText value="#{it.sampleNumber}" />
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="#{messages['labs.newreq.exams']}" styleClass="collh" /></f:facet>
+                                    <s:div rendered="#{it.addExamMicroscopy}">
+                                        <span class="checked-icon" />#{messages['cases.exammicroscopy']}
+                                    </s:div>
+                                    <s:div rendered="#{it.addExamCulture}">
+                                        <span class="checked-icon" />#{messages['cases.examculture']}
+                                    </s:div>
+                                    <s:div rendered="#{it.addExamXpert}">
+                                        <span class="checked-icon" />#{messages['cases.examxpert']}
+                                    </s:div>
+                                    <s:div rendered="#{it.addExamDST}">
+                                        <span class="checked-icon" />#{messages['cases.examdst']}
+                                    </s:div>
+                                </h:column>
+
+                                <h:column>
+                                    <div>
+                                        <a:commandLink action="#{examRequestController.initEditSample(it)}" reRender="formsample"
+                                                       oncomplete="showModalAutoTop('sampledlg');return false;"
+                                                       ajaxSingle="true">
+                                            <span><span class="edit-icon" />#{messages['form.edit']}</span>
+                                        </a:commandLink>
+                                    </div>
+                                    <div>
+                                        <a:commandLink action="#{examRequestController.deleteSampleRequest(it)}" reRender="samples"
+                                                       onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"
+                                                       ajaxSingle="true">
+                                            <span><span class="delete-icon"/>#{messages['form.remove']}</span>
+                                        </a:commandLink>
+                                    </div>
+                                </h:column>
+                            </h:dataTable>
+
+                        </h:panelGroup>
+                    </td></tr>
+                </table>
+
+            </div>
+
+            <div class="form-footer">
+                <a:commandLink id="btnsearch" styleClass="button"
+                               focus="name" onclick="if (!disableButton(this)) return false;"
+                               action="#{examRequestController.persist}" reRender="main">
+                    <span>#{messages['form.ok']}</span>
+                </a:commandLink>
+                <s:link view="/labs/index.xhtml" styleClass="button-alt" propagation="end" >
+                    <span>#{messages['form.cancel']}</span>
+                </s:link>
+
+                <rich:jQuery timing="onload" selector="#main input[type='text']:first" query="focus()" />
+                <rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
+            </div>
+
+
+            <a:jsFunction name="updateSamples" reRender="samples" ajaxSingle="true"/>
+
+        </h:form>
+    </ui:define>
+
+
+    <ui:define name="dialogs">
+        <ui:include src="/labs/sampledlg.xhtml" />
+    </ui:define>
+
+</ui:composition>

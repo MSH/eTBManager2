@@ -50,16 +50,26 @@ public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
         if (exam.getResult() != MicroscopyResult.POSITIVE)
 			exam.setNumberOfAFB(null);
 
-        if(exam.getStatus().equals(ExamStatus.PERFORMED) && exam.getResult() == null){
-            facesMessages.addToControlFromResourceBundle("miccbres2", "javax.faces.component.UIInput.REQUIRED");
-            return "error";
-        }else if(!exam.getStatus().equals(ExamStatus.PERFORMED)){
-            exam.setResult(null);
-            exam.setDateRelease(null);
-            exam.setComments(null);
-            exam.setNumberOfAFB(null);
+        // set pre condition to avoid problems with legacy versions
+        if (exam.getResult() != null  &&  exam.getStatus() == null) {
+            exam.setStatus(ExamStatus.PERFORMED);
         }
-		
+        else {
+            // result was informed ?
+            if (ExamStatus.PERFORMED.equals(exam.getStatus()) && exam.getResult() == null){
+                facesMessages.addToControlFromResourceBundle("miccbres2", "javax.faces.component.UIInput.REQUIRED");
+                return "error";
+            }
+
+            if (ExamStatus.PERFORMED != exam.getStatus()) {
+                exam.setResult(null);
+                exam.setDateRelease(null);
+                exam.setComments(null);
+                exam.setNumberOfAFB(null);
+            }
+        }
+
+
 		return super.persist();
 	}
 

@@ -70,6 +70,8 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 			return;
 
         LaboratoryExam exam = getLaboratoryExam();
+        System.out.println(exam.getId());
+        System.out.println(exam.getLaboratory());
 
 		Laboratory lab = exam.getLaboratory();
         getLabselection().setSelected(lab);

@@ -239,11 +239,11 @@
 			</s:link>
 			<h2>#{messages['cases.examculture']}</h2>
 			
-		<s:div styleClass="region3" rendered="#{empty examCultureKHHome.allResults}"><div class="content">
-			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureKHHome.allResults}" />
+		<s:div styleClass="region3" rendered="#{empty examCultureHome.allResults}"><div class="content">
+			<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty examCultureHome.allResults}" />
 		</div></s:div>
 		
-		<h:dataTable value="#{examCultureKHHome.allResults}" var="r" rendered="#{not empty examCultureKHHome.allResults}" width="100%" 
+		<h:dataTable value="#{examCultureHome.allResults}" var="r" rendered="#{not empty examCultureHome.allResults}" width="100%" 
 			styleClass="table1" columnClasses="colb,colb,colb,colb,colb,colb,colb,colcb">
 			<h:column>
 				<f:facet name="header">
@@ -300,8 +300,8 @@
 	
 	</h:panelGroup>	
 
-<a:jsFunction name="remExamCulture" action="#{examCultureKHHome.remove}" reRender="pnlculture" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
-	<a:actionparam name="param1" assignTo="#{examCultureKHHome.id}" converter="javax.faces.Integer"/>
+<a:jsFunction name="remExamCulture" action="#{examCultureHome.remove}" reRender="pnlculture" ajaxSingle="true" rendered="#{caseHome.canEditExams}">
+	<a:actionparam name="param1" assignTo="#{examCultureHome.id}" converter="javax.faces.Integer"/>
 </a:jsFunction>
 
 	<div class="spacer" />

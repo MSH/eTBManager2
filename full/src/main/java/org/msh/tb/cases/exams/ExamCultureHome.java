@@ -32,6 +32,12 @@ public class ExamCultureHome extends LaboratoryExamHome<ExamCulture> {
 	@Override
 	public String persist() {
 		ExamCulture exam = getInstance();
+
+        // avoid errors in legacy UIs
+        if (exam.getStatus() == null  &&  exam.getResult() != null) {
+            exam.setStatus(ExamStatus.PERFORMED);
+        }
+
 		if (exam.getResult() != CultureResult.POSITIVE)
 			exam.setNumberOfColonies(null);
 

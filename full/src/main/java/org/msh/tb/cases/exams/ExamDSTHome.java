@@ -180,12 +180,18 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	@Override
 	@End(beforeRedirect=true)
 	public String persist() {
+        ExamDST exam = getInstance();
 
-        if(!getInstance().getStatus().equals(ExamStatus.PERFORMED)){
-            getInstance().setComments(null);
-            getInstance().setDateRelease(null);
-            getInstance().setMethod(null);
-            getInstance().setResults(new ArrayList<ExamDSTResult>());
+        // set default value for legacy UIs
+        if (exam.getStatus() == null) {
+            exam.setStatus(ExamStatus.PERFORMED);
+        }
+
+        if (!exam.getStatus().equals(ExamStatus.PERFORMED)){
+            exam.setComments(null);
+            exam.setDateRelease(null);
+            exam.setMethod(null);
+            exam.setResults(new ArrayList<ExamDSTResult>());
 
             return persistWithoutValidation();
         }

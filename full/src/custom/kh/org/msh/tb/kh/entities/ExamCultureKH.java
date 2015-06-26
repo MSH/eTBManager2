@@ -12,7 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="examculture_kh")
-public class ExamCulture_Kh extends ExamCulture{
+public class ExamCultureKH extends ExamCulture{
 
 	/**
 	 * 
