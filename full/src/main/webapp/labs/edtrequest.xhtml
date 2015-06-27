@@ -154,8 +154,9 @@
                                action="#{examRequestController.persistEditing}" reRender="main">
                     <span>#{messages['form.ok']}</span>
                 </a:commandLink>
-                <s:link view="/labs/index.xhtml" styleClass="button-alt" propagation="end" >
+                <s:link view="/labs/requestdata.xhtml" styleClass="button-alt" propagation="end" >
                     <span>#{messages['form.cancel']}</span>
+                    <ui:param name="id" value="#{examRequestHome.id}" />
                 </s:link>
 
                 <rich:jQuery timing="onload" selector="#main input[type='text']:first" query="focus()" />
