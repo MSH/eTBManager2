@@ -108,8 +108,7 @@
 
                 <h2>#{messages['cases.generaldata']}</h2>
 
-                <s:fragment rendered="#{tbcase.id == null}">
-
+                <s:fragment rendered="#{examRequestController.editCaseData}">
                     <s:decorate template="/layout/edit.xhtml">
                         <ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
                         <h:selectOneMenu value="#{tbcase.diagnosisType}" required="true">
@@ -129,11 +128,9 @@
                         <ui:define name="label">#{messages['FilterHealthUnit.NOTIFICATION_UNIT']}:</ui:define>
                         <ui:param name="tbunitselection" value="#{examRequestController.unitselection}" />
                     </s:decorate>
-
                 </s:fragment>
 
-                <s:fragment rendered="#{tbcase.id != null}">
-
+                <s:fragment rendered="#{not examRequestController.editCaseData}">
                     <s:decorate template="/layout/display.xhtml" style="width:100%">
                         <ui:define name="label">#{messages['CaseClassification']}:</ui:define>
                         #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect] : messages[tbcase.classification.key]}
@@ -142,91 +139,19 @@
                         <ui:define name="label">#{messages['FilterHealthUnit.NOTIFICATION_UNIT']}:</ui:define>
                         <div style="width:700px">
                             <s:decorate template="/layout/unit.xhtml">
-                                <ui:param name="unit" value="#{tbcase.notificationUnit}" />
+                                <ui:param name="unit" value="#{examRequestController.unitselection.selected}" />
                             </s:decorate>
                         </div>
                     </s:decorate>
 
                 </s:fragment>
 
-                <hr/>
-                <table width="700px" >
-                    <tr>
-                        <th align="left">
-                            <h2>#{messages['labs.newreq.samples']}</h2>
-                        </th>
-                        <th align="right">
-                            <a:commandLink styleClass="button" action="#{examRequestController.initAddSample}"
-                                           ajaxSingle="true"
-                                           onclick="if (!disableButton(this)) return false;"
-                                           reRender="formsample"
-                                           oncomplete="enableButton();showModalAutoTop('sampledlg');return false;">
-                                <span>#{messages['labs.newreq.addsample']}...</span>
-                            </a:commandLink>
-                        </th>
-                    </tr>
-                    <tr><td colspan="2">
-                        <h:panelGroup id="samples">
-                            <h:dataTable value="#{examRequestController.samples}" var="it" styleClass="table1" rendered="#{not empty examRequestController.samples}">
-                                <h:column>
-                                    <f:facet name="header"><h:outputText value="#{messages['cases.prevtreat.num']}" styleClass="collh" /></f:facet>
-                                    #{it.index}
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header"><h:outputText value="#{messages['PatientSample.dateCollected']}" styleClass="collh" /></f:facet>
-                                    <h:outputText value="#{it.dateCollected}" converter="localeDateConverter" />
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header"><h:outputText value="#{messages['PatientSample.sampleNumber']}" styleClass="collh" /></f:facet>
-                                    <h:outputText value="#{it.sampleNumber}" />
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header"><h:outputText value="#{messages['labs.newreq.exams']}" styleClass="collh" /></f:facet>
-                                    <s:div rendered="#{it.addExamMicroscopy}">
-                                        <span class="checked-icon" />#{messages['cases.exammicroscopy']}
-                                    </s:div>
-                                    <s:div rendered="#{it.addExamCulture}">
-                                        <span class="checked-icon" />#{messages['cases.examculture']}
-                                    </s:div>
-                                    <s:div rendered="#{it.addExamXpert}">
-                                        <span class="checked-icon" />#{messages['cases.examxpert']}
-                                    </s:div>
-                                    <s:div rendered="#{it.addExamDST}">
-                                        <span class="checked-icon" />#{messages['cases.examdst']}
-                                    </s:div>
-                                </h:column>
-
-                                <h:column>
-                                    <div>
-                                        <a:commandLink action="#{examRequestController.initEditSample(it)}" reRender="formsample"
-                                                       oncomplete="showModalAutoTop('sampledlg');return false;"
-                                                       ajaxSingle="true">
-                                            <span><span class="edit-icon" />#{messages['form.edit']}</span>
-                                        </a:commandLink>
-                                    </div>
-                                    <div>
-                                        <a:commandLink action="#{examRequestController.deleteSampleRequest(it)}" reRender="samples"
-                                                       onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"
-                                                       ajaxSingle="true">
-                                            <span><span class="delete-icon"/>#{messages['form.remove']}</span>
-                                        </a:commandLink>
-                                    </div>
-                                </h:column>
-                            </h:dataTable>
-
-                        </h:panelGroup>
-                    </td></tr>
-                </table>
-
             </div>
 
             <div class="form-footer">
                 <a:commandLink id="btnsearch" styleClass="button"
                                focus="name" onclick="if (!disableButton(this)) return false;"
-                               action="#{examRequestController.persist}" reRender="main">
+                               action="#{examRequestController.persistEditing}" reRender="main">
                     <span>#{messages['form.ok']}</span>
                 </a:commandLink>
                 <s:link view="/labs/index.xhtml" styleClass="button-alt" propagation="end" >

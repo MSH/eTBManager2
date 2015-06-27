@@ -50,9 +50,9 @@ public class ExamRequestController {
 	private boolean validated;
 	private Date requestDate;
 	private Laboratory laboratory;
+    private boolean editCaseData;
 
-
-	/**
+    /**
 	 * Initialize a new request of exams for a patient
 	 */
 	public String init() {
@@ -92,6 +92,8 @@ public class ExamRequestController {
 		requestDate = DateUtils.getDate();
 		
 		initialized = true;
+
+        editCaseData = tbcase.getId() == null;
 		
 		return "initialized";
 	}
@@ -118,6 +120,10 @@ public class ExamRequestController {
 
         tbcase = req.getTbcase();
         requestDate = tbcase.getRegistrationDate();
+        getUnitselection().setSelected(tbcase.getOwnerUnit());
+        getAuselection().setSelectedUnit(tbcase.getNotifAddress().getAdminUnit());
+
+        editCaseData = tbcase.getOwnerUnit() == null || tbcase.getNotificationUnit() == null;
     }
 
 
@@ -127,6 +133,15 @@ public class ExamRequestController {
      */
     public String persistEditing() {
         ExamRequestHome requestHome = (ExamRequestHome)App.getComponent("examRequestHome");
+
+        ExamRequest req = requestHome.getInstance();
+
+        if (editCaseData) {
+            req.setTbunit(getUnitselection().getSelected());
+            req.getTbcase().setOwnerUnit(getUnitselection().getSelected());
+            req.getTbcase().setNotificationUnit(getUnitselection().getSelected());
+        }
+
         return  requestHome.persist();
     }
 
@@ -171,6 +186,7 @@ public class ExamRequestController {
 			tbcase.setRegistrationDate(requestDate);
 			tbcase.setState(CaseState.WAITING_TREATMENT);
 			tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
+            tbcase.setOwnerUnit(unitselection.getTbunit());
 //			tbcase.setDiagnosisType(DiagnosisType.SUSPECT);
 		}
 		
@@ -402,4 +418,12 @@ public class ExamRequestController {
 	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
 	}
+
+    public boolean isEditCaseData() {
+        return editCaseData;
+    }
+
+    public void setEditCaseData(boolean editCaseData) {
+        this.editCaseData = editCaseData;
+    }
 }
