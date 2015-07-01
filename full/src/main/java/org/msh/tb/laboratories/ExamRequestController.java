@@ -199,12 +199,17 @@ public class ExamRequestController {
         entityManager.persist(tbcase);
 
         // Create a new exam request
-        ExamRequest examRequest = new ExamRequest();
+        ExamRequestHome home = (ExamRequestHome)App.getComponent("examRequestHome");
+        home.clearInstance();
+        ExamRequest examRequest = home.getInstance();
+
         examRequest.setRequestDate(new Date());
         examRequest.setTbcase(tbcase);
         examRequest.setUser(UserSession.getUser());
         examRequest.setLaboratory(laboratory);
-        entityManager.persist(examRequest);
+
+        home.persist();
+//        entityManager.persist(examRequest);
 
 		for (SampleRequest request: samples) {
 			// add microscopy exam requested
@@ -214,6 +219,7 @@ public class ExamRequestController {
 				tbcase.getExamsMicroscopy().add(mic);
 //				sample.getMicroscopyExams().add(mic);
 				entityManager.persist(mic);
+                examRequest.getExamsMicroscopy().add(mic);
 			}
 
 			// add culture exam requested
@@ -223,6 +229,7 @@ public class ExamRequestController {
 				tbcase.getExamsCulture().add(cult);
 //				sample.getCultureExams().add(cult);
 				entityManager.persist(cult);
+                examRequest.getExamsCulture().add(cult);
 			}
 
 			// add dst exam requested
@@ -232,6 +239,7 @@ public class ExamRequestController {
 				tbcase.getExamsDST().add(dst);
 //				sample.getDstExams().add(dst);
 				entityManager.persist(dst);
+                examRequest.getExamsDST().add(dst);
 			}
 			
 			// add molecular biology exam requested
@@ -241,6 +249,7 @@ public class ExamRequestController {
 				tbcase.getExamsXpert().add(exam);
 //				sample.getXpertExams().add(exam);
 				entityManager.persist(exam);
+                examRequest.getExamsXpert().add(exam);
 			}
 		}
 

@@ -1,140 +1,140 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:s="http://jboss.com/products/seam/taglib"
-      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['labs.newreq']}" />
+    <ui:param name="title" value="#{messages['labs.newreq']}" />
 
-<ui:param name="topmenu" value="4" />
-<ui:param name="labelstyle" value="width:140px" />
-<ui:param name="left" value="0" />
+    <ui:param name="topmenu" value="4" />
+    <ui:param name="labelstyle" value="width:140px" />
+    <ui:param name="left" value="0" />
 
-<ui:define name="content">
-<h1>#{title}</h1>
+    <ui:define name="content">
+        <h1>#{title}</h1>
 
-<rich:jQuery name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
-<h:form id="main" styleClass="form1">
-<div class="form-content">
+        <rich:jQuery name="showbutton" selector="#newpacbutton" query="slideDown(500)" />
+        <h:form id="main" styleClass="form1">
+            <div class="form-content">
 
-	<h2>#{messages['cases.searchpatient']}</h2>
+                <h2>#{messages['cases.searchpatient']}</h2>
 
-    <s:decorate id="name" template="/layout/editname.xhtml">
-    	<ui:define name="label">#{messages['Patient.name']}:</ui:define>
-   		<ui:param name="patientdata" value="#{patient}" />
-    </s:decorate>
-		
-	<h:panelGroup id="bd">
-    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
-    	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
-    	<ui:param name="required" value="false" /> 
-    	<ui:param name="datefield" value="#{patient.birthDate}" /> 
-    	<ui:param name="future" value="false" /> 
-    </s:decorate>
-    </h:panelGroup>
+                <s:decorate id="name" template="/layout/editname.xhtml">
+                    <ui:define name="label">#{messages['Patient.name']}:</ui:define>
+                    <ui:param name="patientdata" value="#{patient}" />
+                </s:decorate>
 
-	<h:inputHidden value="#{tbcase.classification}" />
-</div>
+                <h:panelGroup id="bd">
+                    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+                        <ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
+                        <ui:param name="required" value="false" />
+                        <ui:param name="datefield" value="#{patient.birthDate}" />
+                        <ui:param name="future" value="false" />
+                    </s:decorate>
+                </h:panelGroup>
 
-	<div class="form-footer">
-		<a:commandLink id="btnsearch" styleClass="button"
-			focus="name" onclick="if (!disableButton(this)) return false;initPatientSearch(); return false" >
-			<span>#{messages['form.search']}</span>
-		</a:commandLink>
-		<s:link view="/labs/index.xhtml" styleClass="button-alt" >
-			<span>#{messages['form.cancel']}</span>
-		</s:link>
+                <h:inputHidden value="#{tbcase.classification}" />
+            </div>
 
-	<rich:jQuery timming="onload" selector="#main input[type='text']:first" query="focus()" />
-	<rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
-	</div>
-	
-<h:panelGroup id="pnlpatients">
+            <div class="form-footer">
+                <a:commandLink id="btnsearch" styleClass="button"
+                               focus="name" onclick="if (!disableButton(this)) return false;initPatientSearch(); return false" >
+                    <span>#{messages['form.search']}</span>
+                </a:commandLink>
+                <s:link view="/labs/index.xhtml" styleClass="button-alt" >
+                    <span>#{messages['form.cancel']}</span>
+                </s:link>
 
-<div id="newpacbutton" class="button-bar" style="display:none;" >
-	<a:commandLink onclick="if (!disableButton(this)) return false;"
-    	action="#{examRequestController.selectPatientData}" styleClass="button" >
-	    <span>#{messages['cases.newpatient']}</span>
-	</a:commandLink>
-</div>
+                <rich:jQuery timing="onload" selector="#main input[type='text']:first" query="focus()" />
+                <rich:hotKey selector="#main input" key="return" handler="initPatientSearch()" />
+            </div>
 
-<s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
-	<ui:param name="list" value="#{patients}" />
-</s:decorate>
+            <h:panelGroup id="pnlpatients">
 
-<h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2" 
-	rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.name']}" styleClass="collh">
-  			<f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
-			</s:link>
-		</f:facet>
-		<s:link view="/labs/newrequest.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
-			<f:param name="pacid" value="#{it.patient.id}" />
-		</s:link>
-		<s:link value="#{it.patient.fullName}" view="/labs/newrequest.xhtml" >
-			<f:param name="pacid" value="#{it.patient.id}" />
-		</s:link>
-		<br/>
-		#{it.patient.recordNumber}
-	</h:column>
+                <div id="newpacbutton" class="button-bar" style="display:none;" >
+                    <a:commandLink onclick="if (!disableButton(this)) return false;"
+                                   action="#{examRequestController.selectPatientData}" styleClass="button" >
+                        <span>#{messages['cases.newpatient']}</span>
+                    </a:commandLink>
+                </div>
 
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.birthDate']}" >
-  			<f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		<h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
-	</h:column>
+                <s:decorate template="/layout/naveg.xhtml" rendered="#{patients.searching}">
+                    <ui:param name="list" value="#{patients}" />
+                </s:decorate>
 
-	<h:column>
-		<f:facet name="header">
-			<s:link value="#{messages['Patient.securityNumber']}" styleClass="collh">
-  			<f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
-			</s:link>
-		</f:facet>
-		#{it.patient.securityNumber}
-	</h:column>
-	
-	<h:column>
-		<f:facet name="header">
-			<h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
-		</f:facet>
-		<h:outputText value="#{it.caseStatus}" escape="false" />
-	</h:column>
-</h:dataTable>
-</h:panelGroup>
+                <h:dataTable value="#{patients.patientList}" var="it" styleClass="table1" rowClasses="lin1,lin2"
+                             rendered="#{patients.searching and (not empty patients.resultList)}" width="680px" columnClasses="coll,colc,colc,coll">
+                    <h:column>
+                        <f:facet name="header">
+                            <s:link value="#{messages['Patient.name']}" styleClass="collh">
+                                <f:param name="order" value="#{patients.order=='p.name,p.middleName'?'p.name desc,p.middleName desc':''}" />
+                            </s:link>
+                        </f:facet>
+                        <s:link view="/labs/newrequest.xhtml"	styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;">
+                            <f:param name="pacid" value="#{it.patient.id}" />
+                        </s:link>
+                        <s:link value="#{it.patient.fullName}" view="/labs/newrequest.xhtml" >
+                            <f:param name="pacid" value="#{it.patient.id}" />
+                        </s:link>
+                        <br/>
+                        #{it.patient.recordNumber}
+                    </h:column>
 
-<script type="text/javascript">
-function initPatientSearch() {
-	if (!checkfields()){
-		enableButton();
-		return false;
-	}
-	searchPatient();
-}
-function checkfields() {
-	if (jQuery("#pacname input[value!='']").size() == 0) {
-		alert("#{messages['cases.new.namereq']}");
-		return false;
-	}
-	return true;
-}
-</script>
-<a:jsFunction name="searchPatient" reRender="pnlpatients,dt" 
-	oncomplete="if (data) showbutton();enableButton();"
-	action="#{patients.search}"  
-	data="#{patients.searching}" />
+                    <h:column>
+                        <f:facet name="header">
+                            <s:link value="#{messages['Patient.birthDate']}" >
+                                <f:param name="order" value="p.birthDate#{patients.order=='p.birthDate'?' desc':''}" />
+                            </s:link>
+                        </f:facet>
+                        <h:outputText value="#{it.patient.birthDate}"  converter="localeDateConverter"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <s:link value="#{messages['Patient.securityNumber']}" styleClass="collh">
+                                <f:param name="order" value="p.securityNumber#{patients.order=='p.securityNumber'?' desc':''}" />
+                            </s:link>
+                        </f:facet>
+                        #{it.patient.securityNumber}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['cases.sit.current']}" styleClass="collh" />
+                        </f:facet>
+                        <h:outputText value="#{it.caseStatus}" escape="false" />
+                    </h:column>
+                </h:dataTable>
+            </h:panelGroup>
+
+            <script type="text/javascript">
+                function initPatientSearch() {
+                    if (!checkfields()){
+                        enableButton();
+                        return false;
+                    }
+                    searchPatient();
+                }
+                function checkfields() {
+                    if (jQuery("#divpacname input[value!='']").size() == 0) {
+                        alert("#{messages['cases.new.namereq']}");
+                        return false;
+                    }
+                    return true;
+                }
+            </script>
+            <a:jsFunction name="searchPatient" reRender="pnlpatients,dt"
+                          oncomplete="if (data) showbutton();enableButton();"
+                          action="#{patients.search}"
+                          data="#{patients.searching}" />
 
 
-</h:form>
-</ui:define>
+        </h:form>
+    </ui:define>
 
-</ui:composition>  
+</ui:composition>
