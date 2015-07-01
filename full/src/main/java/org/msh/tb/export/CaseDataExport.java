@@ -107,8 +107,8 @@ public class CaseDataExport {
 				"notifunit.name, notifau, c.registrationDate, r.name, c.diagnosisDate, " +
 				"c.treatmentPeriod.iniDate, c.treatmentPeriod.endDate, c.drugResistanceType, " +
 				"c.infectionSite, pt.name.name1, ept.name.name1, ept2.name.name1, c.patientType " +
-			"from TbCase c join c.patient p left join c.regimen r left join c.pulmonaryType pt left join c.extrapulmonaryType ept " +
-				"left join c.extrapulmonaryType2 ept2 left join c.notificationUnit notifunit " +
+			"from TbCase c join c.patient p left join c.regimen r left join c.pulmonaryType pt left join c.extrapulmonaryType.value ept " +
+				"left join c.extrapulmonaryType2.value ept2 left join c.notificationUnit notifunit " +
 				"left join c.notificationUnit.adminUnit notifau left join notifau.parent left join notifau.parent.parent left join notifau.parent.parent.parent left join notifau.parent.parent.parent.parent " +
 				"left join c.currentAddress.adminUnit currAddAu left join currAddAu.parent left join currAddAu.parent.parent left join currAddAu.parent.parent.parent left join currAddAu.parent.parent.parent.parent " +
 			"where c.id in " + caseIds;
