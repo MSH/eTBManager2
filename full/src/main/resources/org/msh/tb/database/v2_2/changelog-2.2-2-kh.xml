@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="2.2.1-KH" author="rmemoria" context="KH">
+        <sql>
+            insert into examculture_kh (id)
+            select e.id from examculture e
+            inner join tbcase c on c.id=e.case_id
+            inner join patient p on c.patient_id=p.id
+            inner join workspace w on w.id=p.workspace_id
+            where w.extension='kh'
+            and not exists(select * from examculture_kh where id=e.id);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

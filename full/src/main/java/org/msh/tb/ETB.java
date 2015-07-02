@@ -34,7 +34,24 @@ public class ETB {
 		}
 		else return clazz;
 	}
-	
+
+
+    /**
+     * Create a new object using a customized version in the current workspace, if available
+     * @param clazz point to the class to create an object
+     * @param <E> the base class to create an object from
+     * @return instance of the class, but may be a custom object
+     */
+    public static <E> E newWorkspaceObject(Class<E> clazz) {
+        try {
+            clazz = getWorkspaceClass(clazz);
+            return clazz.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
 	
 	/**
 	 * Return the display name of the sub class implemented for the given class 

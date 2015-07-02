@@ -9,6 +9,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.contexts.Contexts;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.ETB;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
@@ -214,7 +215,7 @@ public class ExamRequestController {
 		for (SampleRequest request: samples) {
 			// add microscopy exam requested
 			if (request.isAddExamMicroscopy()) {
-				ExamMicroscopy mic = new ExamMicroscopy();
+				ExamMicroscopy mic = ETB.newWorkspaceObject(ExamMicroscopy.class);
 				prepareExam(mic, examRequest, request);
 				tbcase.getExamsMicroscopy().add(mic);
 //				sample.getMicroscopyExams().add(mic);
@@ -224,7 +225,7 @@ public class ExamRequestController {
 
 			// add culture exam requested
 			if (request.isAddExamCulture()) {
-				ExamCulture cult = new ExamCulture();
+				ExamCulture cult = ETB.newWorkspaceObject(ExamCulture.class);
 				prepareExam(cult, examRequest, request);
 				tbcase.getExamsCulture().add(cult);
 //				sample.getCultureExams().add(cult);
@@ -234,7 +235,7 @@ public class ExamRequestController {
 
 			// add dst exam requested
 			if (request.isAddExamDST()) {
-				ExamDST dst = new ExamDST();
+				ExamDST dst = ETB.newWorkspaceObject(ExamDST.class);
 				prepareExam(dst, examRequest, request);
 				tbcase.getExamsDST().add(dst);
 //				sample.getDstExams().add(dst);
@@ -244,7 +245,7 @@ public class ExamRequestController {
 			
 			// add molecular biology exam requested
 			if (request.isAddExamXpert()) {
-				ExamXpert exam = new ExamXpert();
+				ExamXpert exam = ETB.newWorkspaceObject(ExamXpert.class);
 				prepareExam(exam, examRequest, request);
 				tbcase.getExamsXpert().add(exam);
 //				sample.getXpertExams().add(exam);
