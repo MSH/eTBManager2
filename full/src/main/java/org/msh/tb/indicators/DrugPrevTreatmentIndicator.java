@@ -28,7 +28,7 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 				"and c.patientType <> " + PatientType.NEW.ordinal() +
 				outcomes;
 		lst = generateValuesByField("c.state", cond);
-		addRowValues(getMessage("manag.confmdrrep.prev1line"), null, lst);
+		addRowValues(getMessage("manag.confmdrrep.prev12line"), null, lst);
 
 		// get cases previously treated with 1st and 2nd line drugs
 		cond = "exists(select p.id from PrevTBTreatment p, in(p.substances) s " +
@@ -36,7 +36,7 @@ public class DrugPrevTreatmentIndicator extends Indicator2D {
 				"and c.patientType <> " + PatientType.NEW.ordinal() + 
 				outcomes;
 		lst = generateValuesByField("c.state", cond);
-		addRowValues(getMessage("manag.confmdrrep.prev12line"), null, lst);
+		addRowValues(getMessage("manag.confmdrrep.prev1line"), null, lst);
 	}
 
 
