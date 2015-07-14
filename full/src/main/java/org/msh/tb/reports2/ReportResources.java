@@ -218,6 +218,7 @@ public class ReportResources {
 		addVariable(grp, new CountingExamsVariable());
 		addVariable(grp, new InterimOutcomeVariable());
 		addFilter(grp, new InterimMonthFilter());
+        add(grp, new RifResistanceDetectionVariable());
 		return grp;
 	}
 
