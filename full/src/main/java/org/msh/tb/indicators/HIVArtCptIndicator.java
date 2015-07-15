@@ -15,14 +15,11 @@ import java.util.Map;
 @Name("hivArtCptIndicator")
 public class HIVArtCptIndicator extends Indicator2D{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6872640495293874422L;
 	private String artcount;
 	private String artper;
 	private String cptcount;
 	private String cptper;
+
 	@Override
 	protected void createIndicators() {
 		// TODO Auto-generated method stub
@@ -73,8 +70,9 @@ public class HIVArtCptIndicator extends Indicator2D{
 		
 		addValue(cptper,messages.get("global.yes"), cptperc);
 		addValue(cptper,messages.get("global.no"), ncptperc);
-		
 	}
+
+
 	@Override
 	protected String getHQLFrom() {
 		return "from TbCase c";

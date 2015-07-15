@@ -1,6 +1,7 @@
 package org.msh.tb.indicators;
 
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.indicators.core.Indicator;
 
 /**
@@ -11,17 +12,21 @@ import org.msh.tb.indicators.core.Indicator;
 @Name("hivIndicator")
 public class HivIndicator extends Indicator {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5752532950894149959L;
-
 	@Override
 	protected void createIndicators() {
-		setGroupFields("hiv.result");
-		createItems( createQuery().getResultList() );
+//		setGroupFields("hiv.result");
+        setCondition("exists(select id from ExamHIV where tbcase.id=c.id and result=" + HIVResult.POSITIVE.ordinal() + ")");
+        Number val = (Number)createQuery().getSingleResult();
+        addValue(translateKey(HIVResult.POSITIVE), val.intValue());
+
+        setCondition("not exists(select id from ExamHIV where tbcase.id=c.id and result=" + HIVResult.POSITIVE.ordinal() + ")");
+        val = (Number)createQuery().getSingleResult();
+        addValue(translateKey(HIVResult.NEGATIVE), val.intValue());
+
+//		createItems(createQuery().getResultList());
 	}
 
+/*
 	@Override
 	protected String getHQLJoin() {
 		String joinStr = "join hiv.tbcase c ";
@@ -31,12 +36,15 @@ public class HivIndicator extends Indicator {
 			joinStr = joinStr.concat(s);
 		return joinStr;
 	}
+*/
 
 
+/*
 	@Override
 	protected String getHQLFrom() {
 		return "from ExamHIV hiv";
 	}
+*/
 
 	@Override
 	public boolean isHasTotal() {
