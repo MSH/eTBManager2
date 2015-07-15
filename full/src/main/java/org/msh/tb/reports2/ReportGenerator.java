@@ -305,7 +305,8 @@ public class ReportGenerator {
 		// set filter values
 		if (filters != null) {
 			for (String id: filters.keySet()) {
-				Filter var = res.findFilterById(id);
+                Filter var = (Filter)res.findVariableById(id);
+//				Filter var = res.findFilterById(id);
 				if (var != null) {
 					String value = filters.get(id);
 //					rep.addFilter((Filter)var, var.filterValueFromString( value ));

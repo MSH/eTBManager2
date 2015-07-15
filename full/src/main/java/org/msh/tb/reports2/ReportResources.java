@@ -103,6 +103,7 @@ public class ReportResources {
 		add(grp, new RegimenTypeVariable());
 		add(grp, new PrescMedicineVariable());
 		add(grp, new TreatmentSourceVariable());
+//        add(grp, new TreatmentDelayVariable());
 		return grp;
 	}
 	
