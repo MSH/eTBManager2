@@ -2,6 +2,7 @@ package org.msh.tb.indicators;
 
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.enums.HIVResult;
 import org.msh.tb.indicators.core.Indicator2D;
 import org.msh.tb.indicators.core.IndicatorTable;
 import org.msh.tb.indicators.core.IndicatorTable.TableColumn;
@@ -26,9 +27,9 @@ public class HIVArtCptIndicator extends Indicator2D{
 		Map<String, String> messages = Messages.instance();
 		
 		artcount 		= getMessage("cases.examhiv.art");
-		artper 		= getMessage("cases.examhiv.artperc");
+		artper 		= getMessage("cases.examhiv.art") + " (%)";
 		cptcount 		= getMessage("cases.examhiv.cpt");
-		cptper 		= getMessage("cases.examhiv.cptperc");
+		cptper 		= getMessage("cases.examhiv.cpt") + " (%)";
 		
 		IndicatorTable table = getTable();
 		table.addColumn(artcount, null);
@@ -40,14 +41,21 @@ public class HIVArtCptIndicator extends Indicator2D{
 		colcptper.setHighlight(true);
 		
 		// calculate number of cases with hiv positive
-		int total = calcNumberOfCases("exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id = c.id)");
+		int total = calcNumberOfCases("exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id = c.id " +
+                "and hiv.result = " + HIVResult.POSITIVE.ordinal() +  ")");
 		
 		// calculate number of HIV +ve cases who started on ART
-		int artCount = calcNumberOfCases("exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id = c.id and hiv.startedARTdate is not null)");
+		int artCount = calcNumberOfCases("exists(select hiv.id from ExamHIV hiv " +
+                "where hiv.tbcase.id = c.id " +
+                "and hiv.startedARTdate is not null " +
+                "and hiv.result = " + HIVResult.POSITIVE.ordinal() + ")");
 		
 			
 		// calculate number of HIV +ve cases who started on CPT
-		int cptCount = calcNumberOfCases("exists(select hiv.id from ExamHIV hiv where hiv.tbcase.id = c.id and hiv.startedCPTdate is not null)");
+		int cptCount = calcNumberOfCases("exists(select hiv.id from ExamHIV hiv " +
+                "where hiv.tbcase.id = c.id " +
+                "and hiv.startedCPTdate is not null " +
+                "and hiv.result = " + HIVResult.POSITIVE.ordinal() + ")");
 		
 		
 		float artperc = (float)artCount/(float)total*100;
