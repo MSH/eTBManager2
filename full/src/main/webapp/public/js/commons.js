@@ -38,10 +38,10 @@ function disableButton(button) {
 	return true;
 }
 // enable all buttons of the page
-function enableButton() { 
+function enableButton() {
 	jQuery('.button-disabled').each(function() {
-	var s=jQuery(this).removeClass("button-disabled").text();
-	jQuery('span',this).html(s);
+	    var s=jQuery(this).removeClass("button-disabled").text();
+	    jQuery('span',this).html(s);
 	});
 }
 // startup call when document is loaded

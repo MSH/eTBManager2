@@ -1,166 +1,166 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:s="http://jboss.com/products/seam/taglib"
-      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
-      template="/layout/template_new.xhtml">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{messages['cases.searchresult']}" />
-<ui:param name="topmenu" value="0" />
-<ui:param name="left" value="0" />
+    <ui:param name="title" value="#{messages['cases.searchresult']}" />
+    <ui:param name="topmenu" value="0" />
+    <ui:param name="left" value="0" />
 
-<ui:define name="header">
-<style type="text/css">
-.link-header-sr {
-padding:4px;
-display:block;
-}
+    <ui:define name="header">
+        <style type="text/css">
+            .link-header-sr {
+                padding:4px;
+                display:block;
+            }
 
-</style>
-</ui:define>
+        </style>
+    </ui:define>
 
-<ui:define name="naveg">
-	<s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
-	<div class="item selected">
-		<s:link value="#{title}" propagation="none" />
-	</div>
-</ui:define>
+    <ui:define name="naveg">
+        <s:link value="#{messages['cases']}" view="/cases/index.html" propagation="none"/>
+        <div class="item selected">
+            <s:link value="#{title}" propagation="none" />
+        </div>
+    </ui:define>
 
-<ui:define name="left">
-</ui:define>
+    <ui:define name="left">
+    </ui:define>
 
-<ui:define name="icons">
-<h:form >
-	<h:commandLink action="#{casesExport.download()}" style="float:right;margin-right:10px;">
-		<div class="excel-icon" />
-	</h:commandLink>
-</h:form>
-</ui:define>
+    <ui:define name="icons">
+        <h:form >
+            <h:commandLink action="#{casesExport.download()}" style="float:right;margin-right:10px;">
+                <div class="excel-icon" />
+            </h:commandLink>
+        </h:form>
+    </ui:define>
 
-<ui:define name="content">
-<h:form id="listCases">
+    <ui:define name="content">
+        <h:form id="listCases">
 
-<h1>#{title}</h1>
+            <h1>#{title}</h1>
 
-	<table width="100%"><tr><td>
-	
-	
-	</td><td>
-		<h:commandLink styleClass="button-alt" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;">
-			<span>#{messages['cases.newsearch']}</span>
-		</h:commandLink>	
-	</td></tr></table>
-	
-	<s:decorate template="/layout/naveg.xhtml">
-		<ui:param name="list" value="#{cases}" />
-	
-	<h:panelGroup id="res">
-	<table id="tblres" width="100%" class="table1">
-		<tr><th class="searchtitle">
-				<a:commandLink value="#{messages['Patient.name']}" onclick="changeOrder(3);return false;" styleClass="link-header-sr"/>
-				<a:commandLink value="#{messages['Patient.caseNumber']}" onclick="changeOrder(0); return false;" styleClass="link-header-sr"/>
-				<a:commandLink value="#{messages['Gender']}" onclick="changeOrder(1); return false;"  styleClass="link-header-sr"/>
-				<a:commandLink value="#{messages['TbCase.patientAge']}" onclick="changeOrder(4);return false;" styleClass="link-header-sr"/>
-			</th>
-			<th class="searchtitle">
-				<div style="padding:4px;">
-				<a:commandLink value="#{messages['CaseClassification']}" onclick="changeOrder(2);return false;" styleClass="link-header-sr"/>
-				<a:commandLink value="#{messages['CaseState']}" onclick="changeOrder(8);return false;" styleClass="link-header-sr"/>
-				</div>
-			</th>
-			<th class="searchtitle">
-				<div style="padding:4px;">
-				<a:commandLink value="#{messages['TbCase.notificationUnit']}" onclick="changeOrder(5);return false;" styleClass="link-header-sr"/>
-				<div class="link-header-sr">
-				<a:commandLink value="#{levelInfo.nameLevel1}" onclick="changeOrder(6);return false;" />
-				 - 
-				<a:commandLink value="#{levelInfo.nameLevel2}" onclick="changeOrder(7);return false;" />
-				(#{messages['Address']})
-				</div>
-				<a:commandLink value="#{messages['ValidationState']}" onclick="changeOrder(11);return false;"/>
-				</div>
-			</th>
-		</tr>
-	<ui:repeat value="#{cases.resultList}" var="it">
-	<tr><td>
-			<div style="height:50px;float:left">
-				<s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" >
-					<f:param name="id" value="#{it.tbcase.id}" />
-				</s:link>
-			</div>
-			<div>
-				<s:link view="/cases/casedata.xhtml" value="#{it.patient.fullName}">
-					<f:param name="id" value="#{it.tbcase.id}" />
-				</s:link>
-				<div>#{it.displayCaseNumber}</div>
-				<div>#{it.tbcase.age} #{messages['global.age']}</div>
-			</div>
-	</td>
-	<td>
-		<b>#{it.tbcase.diagnosisType=='SUSPECT'? messages[it.tbcase.classification.keySuspect] : messages[it.tbcase.classification.key]}</b>
-		<div><h:outputText value="#{caseHome.getStatusString(it.tbcase)}" styleClass="#{it.tbcase.onTreatment?'warn':''}"/></div>
-   		<h:outputText value="#{caseHome.getStatusString2(it.tbcase)}" style="color:#8DA48F;font-weight:bold;" rendered="#{it.tbcase.state!='ONTREATMENT'}"/>
-	</td>
-	<td>
-		<b>#{it.tbcase.ownerUnit.name}</b><br />
-		<h:outputText value="#{it.adminUnitDisplay}" /> 
-   		<h:outputText value="#{messages[it.tbcase.validationState.key]}" style="color:#8DA48F;font-weight:bold;display:block;"/>
-	</td>
-	</tr>
-	</ui:repeat>
-	</table>
-	</h:panelGroup>
-	</s:decorate>
-
-	<rich:jQuery selector="#tblres tr:odd" query="addClass('lin1')" />
-	<rich:jQuery selector="#tblres tr:even" query="addClass('lin2')" />
-
-	<a:jsFunction name="changeOrder" reRender="listCases" ajaxSingle="true" >
-		<a:actionparam name="param1" assignTo="#{caseFilters.newOrder}" converter="javax.faces.Integer" />
-	</a:jsFunction>
-</h:form>	
+            <table width="100%"><tr><td>
 
 
+            </td><td>
+                <h:commandLink styleClass="button-alt" onclick="Richfaces.showModalPanel('filtersdlg');return false;" style="float:right;">
+                    <span>#{messages['cases.newsearch']}</span>
+                </h:commandLink>
+            </td></tr></table>
 
-<rich:modalPanel id="filtersdlg" width="750" top="100" zindex="2000" autosized="true">
-	<f:facet name="header">
-		#{messages['cases.newsearch']}
-	</f:facet>
-	<h:form>
-	<a:region>
-	
-	<table width="99%">
-	<tr><td colspan="2">
+            <s:decorate template="/layout/naveg.xhtml">
+                <ui:param name="list" value="#{cases}" />
 
-	<ui:include src="#{wspage['/cases/searchfilters.xhtml']}" />
+                <h:panelGroup id="res">
+                    <table id="tblres" width="100%" class="table1">
+                        <tr><th class="searchtitle">
+                            <a:commandLink value="#{messages['Patient.name']}" onclick="changeOrder(3);return false;" styleClass="link-header-sr"/>
+                            <a:commandLink value="#{messages['Patient.caseNumber']}" onclick="changeOrder(0); return false;" styleClass="link-header-sr"/>
+                            <a:commandLink value="#{messages['Gender']}" onclick="changeOrder(1); return false;"  styleClass="link-header-sr"/>
+                            <a:commandLink value="#{messages['TbCase.patientAge']}" onclick="changeOrder(4);return false;" styleClass="link-header-sr"/>
+                        </th>
+                            <th class="searchtitle">
+                                <div style="padding:4px;">
+                                    <a:commandLink value="#{messages['CaseClassification']}" onclick="changeOrder(2);return false;" styleClass="link-header-sr"/>
+                                    <a:commandLink value="#{messages['CaseState']}" onclick="changeOrder(8);return false;" styleClass="link-header-sr"/>
+                                </div>
+                            </th>
+                            <th class="searchtitle">
+                                <div style="padding:4px;">
+                                    <a:commandLink value="#{messages['TbCase.notificationUnit']}" onclick="changeOrder(5);return false;" styleClass="link-header-sr"/>
+                                    <div class="link-header-sr">
+                                        <a:commandLink value="#{levelInfo.nameLevel1}" onclick="changeOrder(6);return false;" />
+                                        -
+                                        <a:commandLink value="#{levelInfo.nameLevel2}" onclick="changeOrder(7);return false;" />
+                                        (#{messages['Address']})
+                                    </div>
+                                    <a:commandLink value="#{messages['ValidationState']}" onclick="changeOrder(11);return false;"/>
+                                </div>
+                            </th>
+                        </tr>
+                        <ui:repeat value="#{cases.resultList}" var="it">
+                            <tr><td>
+                                <div style="height:50px;float:left">
+                                    <s:link view="/cases/casedata.xhtml" styleClass="#{it.patient.gender=='MALE'?'male-icon':'female-icon'}" >
+                                        <f:param name="id" value="#{it.tbcase.id}" />
+                                    </s:link>
+                                </div>
+                                <div>
+                                    <s:link view="/cases/casedata.xhtml" value="#{it.patient.fullName}">
+                                        <f:param name="id" value="#{it.tbcase.id}" />
+                                    </s:link>
+                                    <div>#{it.displayCaseNumber}</div>
+                                    <div>#{it.tbcase.age} #{messages['global.age']}</div>
+                                </div>
+                            </td>
+                                <td>
+                                    <b>#{it.tbcase.diagnosisType=='SUSPECT'? messages[it.tbcase.classification.keySuspect] : messages[it.tbcase.classification.key]}</b>
+                                    <div><h:outputText value="#{caseHome.getStatusString(it.tbcase)}" styleClass="#{it.tbcase.onTreatment?'warn':''}"/></div>
+                                    <h:outputText value="#{caseHome.getStatusString2(it.tbcase)}" style="color:#8DA48F;font-weight:bold;" rendered="#{it.tbcase.state!='ONTREATMENT'}"/>
+                                </td>
+                                <td>
+                                    <b>#{it.tbcase.ownerUnit.name}</b><br />
+                                    <h:outputText value="#{it.adminUnitDisplay}" />
+                                    <h:outputText value="#{messages[it.tbcase.validationState.key]}" style="color:#8DA48F;font-weight:bold;display:block;"/>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </table>
+                </h:panelGroup>
+            </s:decorate>
 
-	</td></tr>
-	<tr><td>
-		<ui:include src="/layout/waitstatus.xhtml" />
+            <rich:jQuery selector="#tblres tr:odd" query="addClass('lin1')" />
+            <rich:jQuery selector="#tblres tr:even" query="addClass('lin2')" />
 
-	</td></tr></table>	
-	
-	<div class="button-bar">
-		<a:commandLink id="btnsearch" action="#{cases.refresh}" 
-			styleClass="button"	reRender="listCases" 
-			onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
-			oncomplete="enableButton();Richfaces.hideModalPanel('filtersdlg');return false;">
-			<a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
-			<span>#{messages['form.search']}</span>
-		</a:commandLink>
-		<s:link onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
-			<span>#{messages['form.cancel']}</span>
-		</s:link>
-	</div>
-	</a:region>
-	<rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" /> 
-	</h:form>
-</rich:modalPanel>
+            <a:jsFunction name="changeOrder" reRender="listCases" ajaxSingle="true" >
+                <a:actionparam name="param1" assignTo="#{caseFilters.newOrder}" converter="javax.faces.Integer" />
+            </a:jsFunction>
+        </h:form>
 
-</ui:define>
 
-</ui:composition>  
+
+        <rich:modalPanel id="filtersdlg" width="750" top="100" zindex="2000" autosized="true">
+            <f:facet name="header">
+                #{messages['cases.newsearch']}
+            </f:facet>
+            <h:form>
+                <a:region>
+
+                    <table width="99%">
+                        <tr><td colspan="2">
+
+                            <ui:include src="#{wspage['/cases/searchfilters.xhtml']}" />
+
+                        </td></tr>
+                        <tr><td>
+                            <ui:include src="/layout/waitstatus.xhtml" />
+
+                        </td></tr></table>
+
+                    <div class="button-bar">
+                        <a:commandLink id="btnsearch" action="#{cases.refresh}"
+                                       styleClass="button"	reRender="listCases"
+                                       onclick="if (!disableButton(this)) return false;if (!validateFilters()) {enableButton();return false}"
+                                       oncomplete="enableButton();Richfaces.hideModalPanel('filtersdlg');return false;">
+                            <a:actionparam assignTo="#{caseFilters.searchCriteria}" value="#{'CUSTOM_FILTER'}"/>
+                            <span>#{messages['form.search']}</span>
+                        </a:commandLink>
+                        <s:link onclick="Richfaces.hideModalPanel('filtersdlg');return false;" styleClass="button-alt">
+                            <span>#{messages['form.cancel']}</span>
+                        </s:link>
+                    </div>
+                </a:region>
+                <rich:hotKey selector="#tblfilters input,select" key="return" handler="#{rich:element('btnsearch')}.click();" />
+            </h:form>
+        </rich:modalPanel>
+
+    </ui:define>
+
+</ui:composition>
