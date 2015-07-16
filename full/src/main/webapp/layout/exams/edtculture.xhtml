@@ -13,17 +13,18 @@
 
 <ui:param name="examHome" value="#{examCultureHome}" />
 
-    <s:decorate template="#{examTemplateWrapper}">
+    <s:decorate template="#{examTemplateWrapper}" id="dec2">
 
-        <s:decorate template="/layout/dateedit.xhtml" >
+        <s:decorate template="/layout/dateedit.xhtml" id="releasedec">
             <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
             <ui:param name="edtid" value="dtrelease" />
             <ui:param name="required" value="false" />
             <ui:param name="future" value="false" />
             <ui:param name="datefield" value="#{examCulture.dateRelease}" />
+            <ui:param name="id" value="daterelease"/>
         </s:decorate>
 
-        <s:decorate template="/layout/edit.xhtml" >
+        <s:decorate template="/layout/edit.xhtml" id="resultdec">
             <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
             <ui:param name="redasterisk" value="#{true}" />
             <h:selectOneMenu id="resultfield" value="#{examCulture.result}" required="false" onchange="examResultChanged(this);">
@@ -36,18 +37,18 @@
 
         <div style="display:block;width:600px;">
             <div id="pnlrespositive">
-                <s:decorate template="/layout/edit.xhtml" >
+                <s:decorate template="/layout/edit.xhtml" id="numColoniesDec">
                     <ui:define name="label">#{messages['ExamCulture.numberOfColonies']}:</ui:define>
-                    <h:selectOneMenu value="#{examCulture.numberOfColonies}" >
+                    <h:selectOneMenu id="numColoniesInput" value="#{examCulture.numberOfColonies}" >
                         <f:selectItems value="#{examCultureHome.getNumColonies()}"/>
                     </h:selectOneMenu>
                 </s:decorate>
             </div>
         </div>
 
-        <s:decorate template="/layout/edit.xhtml" >
+        <s:decorate template="/layout/edit.xhtml" id="mediadec">
             <ui:define name="label">#{messages['cases.exams.media']}:</ui:define>
-            <h:selectOneMenu value="#{examCulture.method}" required="false">
+            <h:selectOneMenu id="mediainput" value="#{examCulture.method}" required="false">
                 <s:selectItems value="#{fieldsQuery.cultureMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
                 <s:convertEntity />
             </h:selectOneMenu>
@@ -59,7 +60,16 @@
                 var s = cb.options[cb.selectedIndex].value;
                 if (s=='POSITIVE')
                     jQuery('#pnlrespositive').show(immediate?0:500)
-                else jQuery('#pnlrespositive').hide(immediate?0:500);
+                else{
+                    document.getElementById('dec1:dec2:dec3:formexam:numColoniesDec:numColoniesInput').options[0].selected = "true";
+                    jQuery('#pnlrespositive').hide(immediate?0:500);
+                }
+            }
+            function clearHiddenFields() {
+                document.getElementById('dec1:dec2:dec3:formexam:releasedec:dtreleaseInputDate').value = '';
+                document.getElementById('dec1:dec2:dec3:formexam:resultdec:resultfield').options[0].selected = "true";
+                document.getElementById('dec1:dec2:dec3:formexam:numColoniesDec:numColoniesInput').options[0].selected = "true";
+                document.getElementById('dec1:dec2:dec3:formexam:mediadec:mediainput').options[0].selected = "true";
             }
             -->
         </script>

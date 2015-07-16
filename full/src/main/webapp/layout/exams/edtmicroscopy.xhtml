@@ -38,7 +38,7 @@
             </s:decorate>
         </ui:define>
 
-        <s:decorate template="/layout/dateedit.xhtml" >
+        <s:decorate template="/layout/dateedit.xhtml" id="releasedatedec">
             <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
             <ui:param name="required" value="false" />
             <ui:param name="future" value="true" />
@@ -46,7 +46,7 @@
             <ui:param name="edtid" value="micdtrelease" />
         </s:decorate>
 
-        <s:decorate template="/layout/edit.xhtml" >
+        <s:decorate template="/layout/edit.xhtml" id="resultdec">
             <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
             <ui:param name="redasterisk" value="#{true}" />
             <h:selectOneMenu id="miccbres2" value="#{examMicroscopy.result}" required="false" onchange="examResultChanged(this, false);">
@@ -80,9 +80,13 @@
                     jQuery('#pnlrespositive').hide(immediate?0:500);
                 }
             }
+            function clearHiddenFields() {
+                document.getElementById('dec1:dec2:dec3:formexam:releasedatedec:micdtreleaseInputDate').value = '';
+                document.getElementById('dec1:dec2:dec3:formexam:afbdec:micafb').value = '';
+                document.getElementById('dec1:dec2:dec3:formexam:resultdec:miccbres2').options[0].selected = "true";
+            }
             -->
         </script>
-
         <rich:jQuery selector="#cbres2" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
     </s:decorate>
 

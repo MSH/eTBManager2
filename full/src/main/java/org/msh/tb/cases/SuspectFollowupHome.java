@@ -80,7 +80,9 @@ public class SuspectFollowupHome {
 			FacesMessages.instance().addToControlFromResourceBundle("cbresistance", "javax.faces.component.UIInput.REQUIRED");
 			return "error";
 		}
-		else dataModel.setDrugResistanceType(null);
+
+		if((dataModel.getClassification() == CaseClassification.TB) && (dataModel.getDrugResistanceType() != null))
+			dataModel.setDrugResistanceType(null);
 		
 		caseHome.initTransactionLog(RoleAction.EDIT);
 		caseHome.setTransactionLogActive(true);

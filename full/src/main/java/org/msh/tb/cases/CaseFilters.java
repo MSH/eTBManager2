@@ -68,7 +68,6 @@ public class CaseFilters {
 	private InfectionSite infectionSite;
 	private DiagnosisType diagnosisType;
     private DrugResistanceType drugResistanceType;
-    private YesNoType rifampsinResist;
     private YesNoType movedToSecLineReg;
 	private Integer iniMonth;
 	private Integer iniYear;
@@ -949,14 +948,6 @@ public class CaseFilters {
 
     public void setDrugResistanceType(DrugResistanceType drugResistanceType) {
         this.drugResistanceType = drugResistanceType;
-    }
-
-    public YesNoType getRifampsinResist() {
-        return rifampsinResist;
-    }
-
-    public void setRifampsinResist(YesNoType rifampsinResist) {
-        this.rifampsinResist = rifampsinResist;
     }
 
     public YesNoType getMovedToSecLineReg() {

@@ -9,7 +9,8 @@
       xmlns:rich="http://richfaces.ajax4jsf.org/rich"
       template="/layout/template_new.xhtml">
 
-<ui:param name="title" value="#{medicalExaminationHome.medicalExamination.id==null? messages['form.new']: messages['form.data_edit']} - #{messages['cases.details.medexam']}" /><ui:param name="waitdlg" value="1" />
+<ui:param name="title" value="#{medicalExaminationHome.medicalExamination.id==null? messages['form.new']: messages['form.data_edit']} - #{messages['cases.details.medexam']}" />
+<ui:param name="waitdlg" value="1" />
 <ui:param name="left" value="0" />
 
 <ui:param name="topmenu" value="0" />
@@ -20,7 +21,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate template="/layout/casebody.xhtml" id="maindec">
 	<a:form id="formexam" styleClass="form1">
 	
 	<div class="form-content">
@@ -59,7 +60,7 @@
     	#{messages['MedicalExamination.height.unit']}
     </s:decorate>
 
-	<s:fragment rendered="#{tbcase.state=='ONTREATMENT'}">
+	<s:fragment rendered="#{tbcase.state=='ONTREATMENT'}" id="treatdec">
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}</ui:define>
     	<h:selectOneMenu id="cbpresc" value="#{medicalExamination.usingPrescMedicines}" required="true" style="display:block;" >
@@ -72,7 +73,7 @@
 	<rich:jQuery selector="#cbpresc" timing="onload" query="each( function(){ isTakingPresMed(this, true); })" />
 
     	<div id="edtreason">
-    	 <s:decorate template="/layout/edit.xhtml">
+    	 <s:decorate template="/layout/edit.xhtml" id="reasondec">
     		<ui:define name="label">#{messages['MedicalExamination.reasonNotUsingPrescMedicines']}:</ui:define>
 	   		<h:inputText id ="edtreason" value="#{medicalExamination.reasonNotUsingPrescMedicines}" style="width:340px" maxlength="100"/>
     	</s:decorate>
@@ -127,7 +128,10 @@ function isTakingPresMed(cb, immediate) {
 	var s = cb.options[cb.selectedIndex].value;
 	if (s=='NO')
 	     jQuery('#edtreason').show(immediate?0:500)
-	else jQuery('#edtreason').hide(immediate?0:500);
+	else{
+		document.getElementById('maindec:formexam:reasondec:edtreason').value = '';
+		jQuery('#edtreason').hide(immediate?0:500);
+	}
 }
 </script>
 

@@ -327,6 +327,17 @@ function showExtrapulmonary(cb) {
 		document.getElementById('pulmonary2').style.display = "none";
 	}
 }
+
+function showRefToDetails(cb) {
+	if (cb.selectedIndex!=0)
+		jQuery('#refToFields').show(500);
+	else{
+		document.getElementById('main:refToUnitdec:reftounitdec:reftounit').value = '';
+		document.getElementById('main:refToUnitdec:dt:edtdateInputDate').value = '';
+		jQuery('#refToFields').hide(500);
+	}
+}
+
 -->
 </script>
 
@@ -396,24 +407,25 @@ function showPulmonaryTypes(cb){
 
     <s:decorate template="/layout/edit.xhtml" id="refToUnitdec">
         <ui:define name="label">#{messages['MedicalExamination.ReferredTo']}:</ui:define>
-        <h:selectOneMenu id="cbrefto" required="true" value="#{tbcasebd.patientRefToFv}" style="margin-right:4px;" onchange="checkClick(this.selectedIndex!=0, '#refToUnit')">
+        <h:selectOneMenu id="cbrefto" required="true" value="#{tbcasebd.patientRefToFv}" style="margin-right:4px;" onchange="showRefToDetails(this)">
             <s:selectItems var="it" value="#{fieldsQuery.refToTypes}" noSelectionLabel="-" label="#{it}" />
             <s:convertEntity />
         </h:selectOneMenu>
 
         <div id="refToFields">
-            <s:decorate template="/layout/edit.xhtml" >
+            <s:decorate template="/layout/edit.xhtml" id="reftounitdec">
                 <ui:define name="label">#{messages['MedicalExamination.RefToUnit']}:</ui:define>
                 <ui:param name="labelstyle" value="width:auto; text-align:left" />
-                <h:inputText value="#{tbcasebd.referredToUnitName}" style=" width : 340px;" maxlength="100"/>
+                <h:inputText id="reftounit" value="#{tbcasebd.referredToUnitName}" style=" width : 340px;" maxlength="100"/>
             </s:decorate>
 
-            <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+            <s:decorate id="dt" template="/layout/dateedit.xhtml">
                 <ui:define name="label">#{messages['MedicalExamination.RefToDate']}:</ui:define>
                 <ui:param name="labelstyle" value="width:auto; text-align:left" />
                 <ui:param name="required" value="false" />
                 <ui:param name="future" value="true" />
                 <ui:param name="datefield" value="#{tbcasebd.refToDate}" />
+				<ui:param name="id" value="reftodate"/>
             </s:decorate>
         </div>
 

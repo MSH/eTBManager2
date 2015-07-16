@@ -30,7 +30,10 @@ function isPatientTypePrevTreat(cb) {
 function showPatientTypeOther(cb) {
   if (isPatientTypeOther(cb))
   	jQuery('#patientTypeOther').show(500);
-  else jQuery('#patientTypeOther').hide(500);
+  else {
+	  document.getElementById('maindec:form-confirmed:pattypeotherdec:otherinput').value = '';
+	  jQuery('#patientTypeOther').hide(500);
+  }
 }
 function showPrevTreatType(cb) {
 	if (isPatientTypePrevTreat(cb))
@@ -93,13 +96,14 @@ function diagnosisTypeClick(radio) {
 	<div class="form-content">	
 	<s:decorate template="/layout/edit.xhtml">
 		<ui:define name="label">#{messages['Classification']}:</ui:define>
-		<h:selectOneRadio value="#{suspectFollowupHome.dataModel.classification}" layout="pageDirection" onclick="classifClick(this)">
+		<h:selectOneRadio id="caseclassification" value="#{suspectFollowupHome.dataModel.classification}" layout="pageDirection" onclick="classifClick(this)">
     		<s:selectItems var="it" value="#{globalLists.caseClassifications}" label="#{messages[it.key]}"/>
     		<s:convertEnum />
+			<a:support event="onchange" reRender="patType1" ajaxSingle="true"/>
 		</h:selectOneRadio>
 	</s:decorate>
 		
-    <s:decorate template="/layout/dateedit.xhtml" >
+    <s:decorate template="/layout/dateedit.xhtml">
     	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
     	<ui:param name="required" value="true" /> 
     	<ui:param name="datefield" value="#{suspectFollowupHome.dataModel.diagnosisDate}" /> 
@@ -107,8 +111,8 @@ function diagnosisTypeClick(radio) {
     	<ui:param name="checkDeathDate" value="true" />
     </s:decorate>
 
-	<div id="div-resistance">
-    <s:decorate template="/layout/edit.xhtml" >
+	<div id="div-resistance" style="display:#{suspectFollowupHome.dataModel.classification=='DRTB' ? '' : 'none'}">
+    <s:decorate template="/layout/edit.xhtml" id="decdrugresisttype">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
     	<h:selectOneMenu id="cbresistance" value="#{suspectFollowupHome.dataModel.drugResistanceType}" >
     		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
@@ -117,50 +121,39 @@ function diagnosisTypeClick(radio) {
     </s:decorate>
     </div>
 
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='TB'}" id="patType1Dec">
-			<ui:define name="label">#{messages['PatientType']}:</ui:define>
-			<h:selectOneMenu id="patType1" value="#{suspectFollowupHome.dataModel.patientType}" required="#{true}">
-				<s:selectItems var="it" value="#{patientTypesTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
+	<s:decorate template="/layout/edit.xhtml" id="patType1Dec">
+		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+		<h:selectOneMenu id="patType1" value="#{suspectFollowupHome.dataModel.patientType}" required="#{true}" onchange="showPrevTreatType(this);showPatientTypeOther(this);">
+			<s:selectItems var="it" value="#{suspectFollowupHome.dataModel.classification=='TB' ? patientTypesTB : patientTypesDRTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<div id="prevTreatType" style="#{suspectFollowupHome.dataModel.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+		<s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
+			<ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
+			<ui:param name="redasterisk" value="#{true}"/>
+			<h:selectOneMenu value="#{suspectFollowupHome.dataModel.previouslyTreatedType}" id="previouslyTreatedType">
+				<s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
 				<s:convertEnum />
 			</h:selectOneMenu>
 		</s:decorate>
+	</div>
 
-		<div id="prevTreatType" style="#{suspectFollowupHome.dataModel.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
-			<s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
-				<ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
-				<ui:param name="redasterisk" value="#{true}"/>
-				<h:selectOneMenu value="#{suspectFollowupHome.dataModel.previouslyTreatedType}" id="previouslyTreatedType">
-					<s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
-					<s:convertEnum />
-				</h:selectOneMenu>
-			</s:decorate>
-		</div>
-
-		<s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification=='DRTB'}">
-			<ui:define name="label">#{messages['PatientType']}:</ui:define>
-			<h:selectOneMenu id="patType2" value="#{suspectFollowupHome.dataModel.patientType}" required="#{true}">
-				<s:selectItems var="it" value="#{patientTypesDRTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
-				<s:convertEnum />
-			</h:selectOneMenu>
+	<div id="patientTypeOther" style="#{tbcase.patientType != 'OTHER' ? 'display:none' : ''}">
+		<s:decorate template="/layout/edit.xhtml" id="pattypeotherdec">
+			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
+			<h:inputText id="otherinput" value="#{suspectFollowupHome.dataModel.patientTypeOther}" style="width:200px;" maxlength="100" />
 		</s:decorate>
+	</div>
 
-		<div id="patientTypeOther" style="#{tbcase.patientType != 'OTHER' ? 'display:none' : ''}">
-			<s:decorate template="/layout/edit.xhtml">
-				<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
-				<h:inputText value="#{suspectFollowupHome.dataModel.patientTypeOther}" style="width:200px;" maxlength="100" />
-			</s:decorate>
-		</div>
-
-		<rich:jQuery selector="#patType1" query="change(function(){ showPrevTreatType(this); })" />
-		<rich:jQuery selector="#patType2" query="change(function(){ showPatientTypeOther(this); })" />
-
-		<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
-    		<h:selectOneMenu id="infectsite" value="#{suspectFollowupHome.dataModel.infectionSite}" required="true">
-    			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
-    			<s:convertEnum />
-    		</h:selectOneMenu>
-		</s:decorate>
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+		<h:selectOneMenu id="infectsite" value="#{suspectFollowupHome.dataModel.infectionSite}" required="true">
+			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
 
 	<rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
 
@@ -233,9 +226,9 @@ function diagnosisTypeClick(radio) {
 	    </s:decorate>
 
 		<div id="comments" style="display:none;clear:both;" >
-	    <s:decorate template="/layout/edit.xhtml" >
+	    <s:decorate template="/layout/edit.xhtml" id="commentsdec">
 			<ui:define name="label">#{messages['TbCase.otherOutcome']}:</ui:define>
-			<h:inputText value="#{caseCloseHome.comment}" maxlength="100" style="width:300px;"/>
+			<h:inputText id="commentsinput" value="#{caseCloseHome.comment}" maxlength="100" style="width:300px;"/>
 	    </s:decorate>
     	</div>
 	</div>
@@ -244,12 +237,22 @@ function diagnosisTypeClick(radio) {
 function statecheckClick(elem) {
    if (elem.value=='OTHER')
       jQuery('#comments').show(500);
-   else jQuery('#comments').hide(500);
+   else{
+	   jQuery('#comments').hide(500);
+	   document.getElementById('maindec:form-notconfirmed:commentsdec:commentsinput').value = '';
+   }
 }
 function classifClick(elem) {
-	if (jQuery(elem).val() == 'DRTB')
-		 jQuery("#div-resistance").slideDown(500);
-	else jQuery("#div-resistance").slideUp(500);
+	if (jQuery(elem).val() == 'DRTB') {
+		document.getElementById('maindec:form-confirmed:prevTreatTypeDec:previouslyTreatedType').options[0].selected = "true";
+		jQuery('#prevTreatType').hide(500);
+		jQuery("#div-resistance").slideDown(500);
+	}else{
+		document.getElementById('maindec:form-confirmed:decdrugresisttype:cbresistance').options[0].selected = "true";
+		document.getElementById('maindec:form-confirmed:pattypeotherdec:otherinput').value = '';
+		jQuery('#patientTypeOther').hide(500);
+		jQuery("#div-resistance").slideUp(500);
+	}
 }
 </script>
 

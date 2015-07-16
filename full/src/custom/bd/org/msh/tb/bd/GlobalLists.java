@@ -168,6 +168,30 @@ public class GlobalLists {
 			PatientType.DRTB_OTHER_NEW,
 			PatientType.DRTB_OTHER_PREVIOUSLY_TREATED
 	};
+
+	private static final PatientType patientTypesALL[] = {
+			PatientType.NEW,
+			PatientType.PREVIOUSLY_TREATED,
+			PatientType.UNKNOWN_PREVIOUS_TB_TREAT,
+			PatientType.CATI_NON_CONVERTER,
+			PatientType.CATI_FAILURE,
+			PatientType.CATI_TREATMENT_AFTER_LOSS_FOLLOW_UP,
+			PatientType.CATI_RELAPSE,
+			PatientType.CATII_NON_CONVERTER,
+			PatientType.CATII_FAILURE,
+			PatientType.CATII_TREATMENT_AFTER_LOSS_FOLLOW_UP,
+			PatientType.CATII_RELAPSE,
+			PatientType.DRTB_TRANSFER_IN,
+			PatientType.DRTB_CLOSE_CONTACT_WITHSS_UNKNOWN_HISTORY,
+			PatientType.DRTB_CLOSE_CONTACT_WITHSS_NEW,
+			PatientType.DRTB_CLOSE_CONTACT_WITHSS_PREVIOUSLY_TREATED,
+			PatientType.HIV_INFECTED_WITHSS_UNKNOWN_HISTORY,
+			PatientType.HIV_INFECTED_WITHSS_NEW,
+			PatientType.HIV_INFECTED_WITHSS_PREVIOUSLY_TREATED,
+			PatientType.DRTB_OTHER_UNKNOWN_HISTORY,
+			PatientType.DRTB_OTHER_NEW,
+			PatientType.DRTB_OTHER_PREVIOUSLY_TREATED
+	};
 	
 	public TbField[] getTbFields() {
 		return tbfields;
@@ -239,5 +263,10 @@ public class GlobalLists {
 	@Factory("patientTypesDRTB_bd")
 	public PatientType[] getPatientTypesDRTB() {
 		return patientTypesDRTB;
+	}
+
+	@Factory("patientTypesALL_bd")
+	public PatientType[] getPatientTypesALL() {
+		return patientTypesALL;
 	}
 }

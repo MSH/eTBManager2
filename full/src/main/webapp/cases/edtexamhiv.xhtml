@@ -41,7 +41,7 @@
 	<div id="divpos" style="#{examHIV.result=='POSITIVE'?'':'display:none'}">
 	<s:decorate template="/layout/edit.xhtml" id="date1Dec">
 		<ui:define name="label">#{messages['cases.examhiv.art']}</ui:define>
-		<h:selectOneMenu value="#{examHIV.ARTstarted}" onchange="toggleYesNo(this.selectedIndex, '#artdiv');">
+		<h:selectOneMenu id="select1" value="#{examHIV.ARTstarted}" onchange="toggleYesNo(this.selectedIndex, '#artdiv');">
 			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
 			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
 		</h:selectOneMenu>
@@ -61,7 +61,7 @@
 
 	<s:decorate template="/layout/edit.xhtml" id="date2Dec">
 		<ui:define name="label">#{messages['cases.examhiv.cpt']}</ui:define>
-		<h:selectOneMenu value="#{examHIV.CPTstarted}" onchange="toggleYesNo(this.selectedIndex, '#cptdiv');">
+		<h:selectOneMenu id="select2" value="#{examHIV.CPTstarted}" onchange="toggleYesNo(this.selectedIndex, '#cptdiv');">
 			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
 			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
 		</h:selectOneMenu>
@@ -87,8 +87,12 @@ function toggleYesNo(option, divname) {
 		divname = eval(divname);
 	} catch (e) {}
 	if (option == '1') {
+		document.getElementById('casebody:formexam:date1Dec:select1').options[1].selected = "true";
+		document.getElementById('casebody:formexam:date2Dec:select2').options[1].selected = "true";
 		document.getElementById('casebody:formexam:date1Dec:date1InputDate').value = '';
 		document.getElementById('casebody:formexam:date2Dec:date2InputDate').value = '';
+		document.getElementById('cptdiv').style.display = "none";
+		document.getElementById('artdiv').style.display = "none";
 		jQuery(divname).hide();
 	}else{
 		jQuery(divname).show();

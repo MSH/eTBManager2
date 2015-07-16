@@ -53,7 +53,10 @@ public class TreatmentsInfoHomeBD extends TreatmentsInfoHome {
                 "+ sum(day10) + sum(day11) + sum(day12) + sum(day13) + sum(day14) + sum(day15) + sum(day16) + sum(day17) + sum(day18) " +
                 "+ sum(day19) + sum(day20) + sum(day21) + sum(day22) + sum(day23) + sum(day24) + sum(day25) + sum(day26) + sum(day27) " +
                 "+ sum(day28) + sum(day29) + sum(day30) + sum(day31) ) as total " +
-                "from TreatmentMonitoring tm0 where tm0.tbcase.id = c.id) as medicineTakenDays, c.pulmonaryTypesBD " +
+                    "from TreatmentMonitoring tm0 " +
+                    "where tm0.tbcase.id = c.id " +
+                    "and ( tm0.month >= date_format(tm0.tbcase.treatmentPeriod.iniDate,'%m') and tm0.year >= date_format(tm0.tbcase.treatmentPeriod.iniDate,'%Y') ) " +
+                    "and (tm0.month <= date_format(tm0.tbcase.treatmentPeriod.endDate,'%m') and tm0.year <= date_format(tm0.tbcase.treatmentPeriod.endDate,'%Y') ) ) as medicineTakenDays, c.pulmonaryTypesBD " +
                 "from TbCaseBD c " +
                 "join c.patient p left join c.pulmonaryType pt " +
                 "where c.state = " + CaseState.ONTREATMENT.ordinal() +

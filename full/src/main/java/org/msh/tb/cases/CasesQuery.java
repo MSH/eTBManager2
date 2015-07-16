@@ -220,13 +220,6 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		mountAdvancedSearchConditions();
 		mountSingleSearchConditions();
 
-        if(caseFilters.getRifampsinResist() != null){
-            if(caseFilters.getRifampsinResist().equals(YesNoType.NO))
-                addCondition(" c.rifampcinResistance = false");
-            else if(caseFilters.getRifampsinResist().equals(YesNoType.YES))
-                addCondition(" c.rifampcinResistance = true");
-        }
-
         if(caseFilters.getMovedToSecLineReg() != null){
             if(caseFilters.getMovedToSecLineReg().equals(YesNoType.NO))
                 addCondition(" c.movedSecondLineTreatment = false");

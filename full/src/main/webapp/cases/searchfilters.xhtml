@@ -120,14 +120,6 @@
         </h:selectOneMenu>
     </s:decorate>
 
-    <s:decorate template="/layout/display.xhtml">
-        <ui:define name="label">#{messages['DrugResistanceType.RIF_RESISTANCE']}:</ui:define>
-        <h:selectOneMenu value="#{caseFilters.rifampsinResist}" >
-            <s:selectItems value="#{yesNoList}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
-            <s:convertEnum />
-        </h:selectOneMenu>
-    </s:decorate>
-
    <h2>#{messages['cases.casesearching.filterdates']}</h2>
 
    <div id="datesdiv" style="padding:6px;">

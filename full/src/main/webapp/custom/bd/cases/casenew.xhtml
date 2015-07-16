@@ -51,21 +51,21 @@
 
         <s:decorate template="/layout/edit.xhtml" id="cbdotprovdec" >
             <ui:define name="label">#{messages['MedicalExamination.DOTProviderType']}</ui:define>
-            <h:selectOneMenu id="cbdotprov" value="#{medicalExaminationBd.dotTypeFv}" style="display:block;" onchange="checkClick(this.selectedIndex!=0, '#dotProvName')">
+            <h:selectOneMenu id="cbdotprov" value="#{medicalExaminationBd.dotTypeFv}" style="display:block;" onchange="showDotDetails(this)">
                 <s:selectItems value="#{fieldsQuery.dotTypes}" var="it" label="#{it.name.name1}" noSelectionLabel="-"/>
                 <s:convertEntity />
             </h:selectOneMenu>
 
             <div id="dotProvName">
-                <s:decorate template="/layout/edit.xhtml" >
+                <s:decorate template="/layout/edit.xhtml" id="dotnamedec">
                     <ui:define name="label">#{messages['MedicalExamination.DOTProviderName']}:</ui:define>
                     <ui:param name="labelstyle" value="width:auto; text-align:left" />
-                    <h:inputText value="#{medicalExaminationBd.dotProvName}" style=" width : 400px;" maxlength="100"/>
+                    <h:inputText id="dotnameinput" value="#{medicalExaminationBd.dotProvName}" style=" width : 400px;" maxlength="100"/>
                 </s:decorate>
-                <s:decorate template="/layout/edit.xhtml" >
+                <s:decorate template="/layout/edit.xhtml" id="dotnumberdec">
                     <ui:define name="label">#{messages['MedicalExamination.DOTProviderPhoneNumber']}:</ui:define>
                     <ui:param name="labelstyle" value="width:auto; text-align:left" />
-                    <h:inputText value="#{medicalExaminationBd.dotPhoneNumber}" style=" width : 340px;" maxlength="100"/>
+                    <h:inputText id="dotnumberinput" value="#{medicalExaminationBd.dotPhoneNumber}" style=" width : 340px;" maxlength="100"/>
                 </s:decorate>
             </div>
 
@@ -97,13 +97,16 @@
 </a:form>
 
     <script type="text/javascript">
-        function checkClick(ashow, divname) {
-            if (ashow)
-                jQuery(divname).show(500);
-            else jQuery(divname).hide(500);
-        }
-        checkClick(document.getElementById('main:cbdotprovdec:cbdotprov').selectedIndex!=0, '#dotProvName');
-        checkClick(document.getElementById('main:cbreftodec:cbrefto').selectedIndex!=0, '#refToUnit');
+		function showDotDetails(cb){
+			if (cb.selectedIndex!=0)
+				jQuery('#dotProvName').show(500);
+			else{
+				document.getElementById('main:cbdotprovdec:dotnamedec:dotnameinput').value = '';
+				document.getElementById('main:cbdotprovdec:dotnumberdec:dotnumberinput').value = '';
+				jQuery('#dotProvName').hide(500);
+			}
+		}
+		showDotDetails(document.getElementById('main:cbdotprovdec:cbdotprov'));
     </script>
 
 </ui:define>

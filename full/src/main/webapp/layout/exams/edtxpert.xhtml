@@ -15,17 +15,18 @@
 <ui:param name="examHome" value="#{examXpertHome}" />
 
 
-<s:decorate template="#{examTemplateWrapper}">
+<s:decorate template="#{examTemplateWrapper}" id="dec2">
 
-    <s:decorate template="/layout/dateedit.xhtml" >
+    <s:decorate template="/layout/dateedit.xhtml" id="releasedec">
     	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
     	<ui:param name="edtid" value="dtrelease" />
     	<ui:param name="required" value="false" /> 
     	<ui:param name="future" value="false" /> 
     	<ui:param name="datefield" value="#{examGenexpert.dateRelease}" />
+		<ui:param name="id" value="daterelease"/>
     </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml" id="resultdec">
     	<ui:define name="label">#{messages['cases.details.result']}:
     	</ui:define>
         <ui:param name="redasterisk" value="#{true}"/>
@@ -38,7 +39,7 @@
 	<rich:jQuery selector="#cbres" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
 	
 	<div id="pnltbdet">
-	 <s:decorate template="/layout/edit.xhtml" >
+	 <s:decorate template="/layout/edit.xhtml" id="rifresultdec">
     	<ui:define name="label">#{messages['cases.details.result']}:
     		<s:span style="color:red;">*</s:span>
     	</ui:define>
@@ -56,6 +57,12 @@ function examResultChanged(cb, immediate) {
 	if (s=='TB_DETECTED')
 	     jQuery('#pnltbdet').slideDown(immediate?0:500)
 	else jQuery('#pnltbdet').slideUp(immediate?0:500);
+}
+
+function clearHiddenFields() {
+	document.getElementById('dec1:dec2:dec3:formexam:releasedec:dtreleaseInputDate').value = '';
+	document.getElementById('dec1:dec2:dec3:formexam:resultdec:resultfield').options[0].selected = "true";
+	document.getElementById('dec1:dec2:dec3:formexam:rifresultdec:rifres').options[0].selected = "true";
 }
 -->
 </script>

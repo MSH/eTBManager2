@@ -52,9 +52,9 @@
                 <h2>#{messages['cases.exams.results']}</h2>
                     <ui:insert />
 
-                    <s:decorate template="/layout/edit.xhtml" >
+                    <s:decorate template="/layout/edit.xhtml" id="commentsdec">
                         <ui:define name="label">#{messages['global.comments']}:</ui:define>
-                        <h:inputTextarea value="#{examHome.instance.comments}" style="width:500px;height:80px;"/>
+                        <h:inputTextarea id="commentstextarea" value="#{examHome.instance.comments}" style="width:500px;height:80px;"/>
                     </s:decorate>
 
                     <ui:insert name="aftercomments"/>
@@ -85,7 +85,11 @@
             var s = cb.options[cb.selectedIndex].value;
             if (s=='PERFORMED')
                 jQuery('#divexamcontent').slideDown(immediate?0:500)
-            else jQuery('#divexamcontent').slideUp(immediate?0:500);
+            else{
+                jQuery('#divexamcontent').slideUp(immediate?0:500);
+                document.getElementById('dec1:dec2:dec3:formexam:commentsdec:commentstextarea').value = '';
+                clearHiddenFields();
+            }
         }
         -->
     </script>

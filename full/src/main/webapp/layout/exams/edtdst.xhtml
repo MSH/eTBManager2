@@ -10,19 +10,20 @@
 <ui:param name="examHome" value="#{examDSTHome}" />
 <ui:param name="labelstyle" value="width:200px;" />
 
-    <s:decorate template="#{examTemplateWrapper}">
+    <s:decorate template="#{examTemplateWrapper}" id="dec2">
 
 
-        <s:decorate template="/layout/dateedit.xhtml" >
+        <s:decorate template="/layout/dateedit.xhtml" id="releasedec">
             <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
             <ui:param name="required" value="false" />
             <ui:param name="future" value="false" />
             <ui:param name="datefield" value="#{examDST.dateRelease}" />
+            <ui:param name="id" value="daterelease"/>
         </s:decorate>
 
-        <s:decorate template="/layout/edit.xhtml" >
+        <s:decorate template="/layout/edit.xhtml" id="methoddec">
             <ui:define name="label">#{messages['cases.exams.method']}:</ui:define>
-            <h:selectOneMenu value="#{examDST.method}" required="false">
+            <h:selectOneMenu id="methodinput" value="#{examDST.method}" required="false">
                 <s:selectItems value="#{fieldsQuery.DSTMethods}" var="it" noSelectionLabel="-" label="#{it.name}" />
                 <s:convertEntity />
             </h:selectOneMenu>
@@ -81,6 +82,13 @@
                     return false;
                 }
                 return true;
+            }
+
+            function clearHiddenFields() {
+                document.getElementById('dec1:dec2:dec3:formexam:releasedec:dtreleaseInputDate').value = '';
+                document.getElementById('dec1:dec2:dec3:formexam:resultdec:resultfield').options[0].selected = "true";
+                document.getElementById('dec1:dec2:dec3:formexam:numColoniesDec:numColoniesInput').options[0].selected = "true";
+                document.getElementById('dec1:dec2:dec3:formexam:mediadec:mediainput').options[0].selected = "true";
             }
 
             updateResultIcons();
