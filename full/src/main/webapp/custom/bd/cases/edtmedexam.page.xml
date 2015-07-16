@@ -4,6 +4,8 @@
 
 	<restrict>#{userSession.canEditCases}</restrict>
 
+	<action execute="#{medicalExaminationBdHome.initialize}" />
+
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
 	<param name="examid" value="#{medicalExaminationBdHome.id}" converterId="javax.faces.Integer" />
 

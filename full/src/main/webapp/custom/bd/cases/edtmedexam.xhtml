@@ -39,16 +39,17 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
-   		<h:inputText value="#{medicalExaminationBd.weight}" required="true" converter="localeDoubleConverter" 
-   			onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}');"
-   			onkeyup="updateBMI(this, event);"
-   			style="width:80px;" >
+   		<h:inputText value="#{medicalExaminationBd.weight}" required="true" converter="localeDoubleConverter"
+					 onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}',7,true);"
+					 style="width:80px;" >
    		</h:inputText>#{messages['MedicalExamination.weight.unit']}
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
-    	<h:inputText value="#{medicalExaminationBd.height}" />
+    	<h:inputText value="#{medicalExaminationBd.height}"
+					 onkeypress="return numbersOnly(this,event,'#{timezones.decimalSeparator}',6,true);">
+		</h:inputText>
     	#{messages['MedicalExamination.height.unit']}
     </s:decorate>
 

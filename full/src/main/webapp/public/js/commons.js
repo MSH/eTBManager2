@@ -113,6 +113,45 @@ else
    return false;
 }
 
+function numbersOnly(myfield, e, dec, maxlenght,blockOnlyDecimal) {
+	var key;
+	var keychar;
+
+	//check max lenght
+	if(myfield.value.length >=maxlenght)
+		return false;
+
+	if (window.event)
+		key = window.event.keyCode;
+	else if (e)
+		key = e.which;
+	else
+		return true;
+	keychar = String.fromCharCode(key);
+
+	//check only decimal
+	if (blockOnlyDecimal && dec && (keychar == dec) && (myfield.value == '0' || myfield.value == ''))
+		return false;
+
+// control keys
+	if ((key==null) || (key==0) || (key==8) ||
+		(key==9) || (key==13) || (key==27) )
+		return true;
+
+// numbers
+	else if ((("0123456789").indexOf(keychar) > -1))
+		return true;
+
+// decimal point jump
+	else if (dec && (keychar == dec))
+	{
+		myfield.form.elements[dec].focus();
+		return false;
+	}
+	else
+		return false;
+}
+
 function checkValid(elem1, elem2, elem3) {
   val1 = parseInt(elem1.value);
   if (isNaN(val1))
