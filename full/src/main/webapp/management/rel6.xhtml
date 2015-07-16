@@ -135,7 +135,7 @@
 		<s:fragment rendered="#{not empty m.comment}">
 			<h:outputText value="#{m.comment}" />
 		</s:fragment>
-		<s:fragment rendered="#{m.adjustmentType != null and (m.adjustment())}">
+		<s:fragment rendered="#{m.adjustmentType != null and (m.adjustment)}">
 			<h:outputText value="#{m.adjustmentType}" style="font-size:11px"/><br/>
 			<h:outputText value="#{m.comment}" style="font-size:11px" rendered="#{(not empty m.comment)}" />
 		</s:fragment>
@@ -147,7 +147,7 @@
 			<f:convertNumber pattern="#,###,###"/>
 		</h:outputText>
 		<br/>
-		<a:commandLink style="font-size:11px" onclick="loadMovDetails(#{m.id}); return false;" rendered="#{m.isDispensing()}">
+		<a:commandLink style="font-size:11px" onclick="loadMovDetails(#{m.id}); return false;" rendered="#{m.dispensing}">
 			<span>#{messages['form.details']}</span>
 		</a:commandLink>
 	</h:column>
