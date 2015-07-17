@@ -381,15 +381,17 @@ a.workspace-data {
 	padding:0;
 	color:#E47911;
 }
+
 .form1 .form-content {
 	display:table;
-	border-top:1px solid #becebe;
-	background-color: #e2eae2;
-	padding:4px 4px 10px 4px;
+    border-radius: 4px;
+	background-color: #e7efe7;
+	padding:16px 20px;
 	margin:6px 0px 10px 0px;
 	min-height:40px;
 	width:100%;
 	clear:both;
+    box-sizing: border-box;
 }
 
 .form1 .form-content h2 {
@@ -402,9 +404,7 @@ a.workspace-data {
 }
 
 .form1 .form-footer {
-	border-top:1px solid #becebe;
-	background: transparent url(images/formbg.png) repeat-x;
-	padding:12px 8px 8px 8px;
+	padding:8px 8px 8px 8px;
 	margin-top:10px;
 }
 

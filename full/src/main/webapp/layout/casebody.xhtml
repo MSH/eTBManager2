@@ -24,8 +24,8 @@
 	</div>
 	<div>
 		<div class="#{tbcase.patient.gender=='MALE'?'male-icon':'female-icon'}" style="float:left;"/>
-		<div class="text-big">#{tbcase.patient.fullName}</div>
-        <div class="text-medium">
+		<div class="text-medium"><b>#{tbcase.patient.fullName}</b></div>
+        <div class="hint">
             <h:outputText value="#{messages['DisplayCaseNumber.TB']}:" rendered="#{tbcase.classification.ordinal() == 0 and tbcase.diagnosisType == 'CONFIRMED'}"/>
             <h:outputText value="#{messages['DisplayCaseNumber.DRTB']}:" rendered="#{tbcase.classification.ordinal() == 1  and tbcase.diagnosisType == 'CONFIRMED'}"/>
             <h:outputText value="#{messages['TbCase.registrationCode']}:" rendered="#{tbcase.diagnosisType == 'SUSPECT'}"/>

@@ -6,9 +6,6 @@
                 xmlns:s="http://jboss.com/products/seam/taglib">
 
 
-    <s:decorate template="/layout/casebody.xhtml">
-        <a:form id="formexam" styleClass="form1">
-
             <div class="form-content">
 
                 <h2>#{messages['PatientSample.identification']}</h2>
@@ -55,25 +52,6 @@
                 </div>
 
             </div>
-            <div class="form-footer">
-                <div style="float:right;">
-                    <span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
-                </div>
-                <a:commandLink action="#{examHome.persist}" styleClass="button"
-                               reRender="formexam,messages"
-                               onclick="if (!disableButton(this)) return false;" >
-                    <span>#{messages['form.save']}</span>
-                </a:commandLink>
-                <s:link styleClass="button-alt"
-                        view="/labs/requestdata.xhtml"
-                        onclick="if (!disableButton(this)) return false;">
-                    <span>#{messages['form.cancel']}</span>
-                    <ui:param name="id" value="#{examRequestHome.id}" />
-                </s:link>
-            </div>
-
-        </a:form>
-    </s:decorate>
 
     <script type="text/javascript">
         <!--

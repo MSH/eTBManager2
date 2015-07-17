@@ -1,18 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      template="/layout/template_new.xhtml">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                template="#{wspage['/labs/edtexam-template.xhtml']}">
 
-<ui:param name="title" value="#{messages['cases.examculture']}" />
-<ui:param name="left" value="0" />
-<ui:param name="topmenu" value="4" />
-<ui:param name="examTemplateWrapper" value="/labs/templates/edtlabexam.xhtml" />
+    <ui:param name="title" value="#{messages['cases.examculture']}"/>
+    <ui:param name="examHome" value="#{examCultureHome}" />
+    <ui:param name="selectlab" value="false" />
 
-<ui:define name="content">
+    <ui:define name="exam-content">
+        <ui:include src="#{wspage['/layout/exams/edtculture-content.xhtml']}" />
+    </ui:define>
 
-    <ui:include src="/layout/exams/edtculture.xhtml" />
-
-</ui:define>
-
-</ui:composition>  
+</ui:composition>

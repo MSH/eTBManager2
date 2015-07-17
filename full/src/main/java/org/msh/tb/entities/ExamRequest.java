@@ -16,6 +16,8 @@ import java.util.List;
 @Table(name = "examrequest")
 public class ExamRequest {
 
+    public enum RegisteredBy {  HEALTH_FACILITY, LABORATORY  }
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
@@ -52,6 +54,8 @@ public class ExamRequest {
 
     @OneToMany(mappedBy = "request")
     private List<ExamXpert> examsXpert = new ArrayList<ExamXpert>();
+
+    private RegisteredBy registeredBy;
 
     public Integer getId() {
         return id;
@@ -131,5 +135,13 @@ public class ExamRequest {
 
     public void setLaboratory(Laboratory laboratory) {
         this.laboratory = laboratory;
+    }
+
+    public RegisteredBy getRegisteredBy() {
+        return registeredBy;
+    }
+
+    public void setRegisteredBy(RegisteredBy registeredBy) {
+        this.registeredBy = registeredBy;
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
- 
+
 <databaseChangeLog
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -424,6 +424,19 @@
             where e2.case_id = e1.case_id and e2.datecollected &lt;= tbcase.initreatmentdate))
             );
         </sql>
+    </changeSet>
+
+    <changeSet id="2.2-1.100" author="rmemoria">
+        <addColumn tableName="examrequest">
+            <column name="registeredBy" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.101" author="rmemoria">
+        <update tableName="examrequest">
+            <column name="registeredby" valueNumeric="1"></column>
+            <where>registeredby is null</where>
+        </update>
     </changeSet>
 
 </databaseChangeLog>

@@ -104,11 +104,11 @@ public class ExamRequestController {
      * Called to initialize the editing form, when initialing opening it
      */
     public void initEditing() {
-/*
+
         if (initialized) {
             return;
         }
-*/
+
         ExamRequestHome requestHome = (ExamRequestHome)App.getComponent("examRequestHome");
         if (!requestHome.isManaged()) {
             throw new RuntimeException("No exam request selected");
@@ -124,7 +124,10 @@ public class ExamRequestController {
         getUnitselection().setSelected(tbcase.getOwnerUnit());
         getAuselection().setSelectedUnit(tbcase.getNotifAddress().getAdminUnit());
 
-        editCaseData = tbcase.getOwnerUnit() == null || tbcase.getNotificationUnit() == null;
+        editCaseData = req.getRegisteredBy() == ExamRequest.RegisteredBy.LABORATORY;
+//        editCaseData = tbcase.getOwnerUnit() == null || tbcase.getNotificationUnit() == null;
+
+        initialized = true;
     }
 
 

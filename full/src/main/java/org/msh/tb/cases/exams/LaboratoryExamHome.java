@@ -10,6 +10,7 @@ import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Laboratory;
 import org.msh.tb.entities.LaboratoryExam;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.enums.ExamStatus;
 import org.msh.tb.laboratories.ExamRequestHome;
 import org.msh.tb.laboratories.LaboratorySelection;
 import org.msh.tb.misc.EntityEvent;
@@ -70,8 +71,9 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 			return;
 
         LaboratoryExam exam = getLaboratoryExam();
-        System.out.println(exam.getId());
-        System.out.println(exam.getLaboratory());
+        if (exam.getStatus() == null) {
+            exam.setStatus(ExamStatus.PERFORMED);
+        }
 
 		Laboratory lab = exam.getLaboratory();
         getLabselection().setSelected(lab);

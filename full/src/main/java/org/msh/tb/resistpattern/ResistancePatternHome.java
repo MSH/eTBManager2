@@ -106,8 +106,8 @@ public class ResistancePatternHome extends EntityHomeEx<ResistancePattern>{
 			subs += sub.getId();
 		}
 		
-		String dstDateCondition = diagnosis? " and sample.datecollected <= a.diagnosisDate ":"";
-		String xpertDateCondition = diagnosis? " and sample.datecollected <= a.diagnosisDate ":"";
+		String dstDateCondition = diagnosis? " and examdst.datecollected <= a.diagnosisDate ":"";
+		String xpertDateCondition = diagnosis? " and examxpert.datecollected <= a.diagnosisDate ":"";
 		
 		String sql = "insert into caseresistancepattern (case_id, resistpattern_id, diagnosis) " +
 				"select a.id, " + respattern.getId() + ", false " +
@@ -115,12 +115,10 @@ public class ResistancePatternHome extends EntityHomeEx<ResistancePattern>{
 				"inner join patient b on b.id=a.patient_id " +
 				"where workspace_id= " + respattern.getWorkspace().getId() + 
 				" and not exists(select * from examxpert " +
-                " inner join patientsample sample on sample.id=examxpert.sample_id " +
                 "where examxpert.case_id=a.id and rifresult=" + XpertResult.TB_DETECTED.ordinal() +
 				xpertDateCondition +
 				" and result=" + XpertRifResult.RIF_DETECTED.ordinal() + ") " +
 				"and (select count(distinct substance_id) from examdst " +
-                "inner join patientsample sample on sample.id = examdst.sample_id " +
                 "inner join examdstresult r on r.exam_id=examdst.id " +
 				"  where r.result=" + DstResult.RESISTANT.ordinal() + dstDateCondition + 
 				" and r.substance_id in (" + subs + ") and examdst.case_id=a.id) = " + respattern.getSubstances().size() +

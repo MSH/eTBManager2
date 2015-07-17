@@ -15,7 +15,7 @@
         
         <span class="value #{invalid?'fielderror':''}">
             <s:validateAll>
-			<h:selectOneMenu id="cbselau" value="#{tbunitselection.adminUnit}" required="#{required}" rendered="#{not tbunitselection.level1ReadOnly}">
+			<h:selectOneMenu id="cbselau" value="#{tbunitselection.auselection.unitLevel1}" required="#{required}" rendered="#{not tbunitselection.level1ReadOnly}">
 				<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
 				<s:convertEntity />
 				<a:support event="onchange" ajaxSingle="true" reRender="pnlunits" focus="cbunits"/>

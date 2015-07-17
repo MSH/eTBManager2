@@ -34,7 +34,12 @@
 
     <ui:define name="content">
         <h:form styleClass="form1">
+
             <h1>#{title}</h1>
+
+            <ui:include src="/layout/laboratory.xhtml" >
+                <ui:param name="laboratory" value="#{userWorkspace.laboratory}"/>
+            </ui:include>
 
             <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
 
