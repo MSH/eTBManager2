@@ -17,6 +17,8 @@ import org.msh.tb.reports2.variables.*;
 import org.msh.tb.reports2.variables.HivCptArtVariable.ReportType;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -49,10 +51,10 @@ public class ReportResources {
 		addPrevTreatmentVariables();
 //		addMedExaminationVariables();
 		addOtherVariables();
+
+		for(ReportGroup g : getGroups())
+			sortVariablesOnGroup(g);
 	}
-
-
-
 
 	/**
 	 * Add variables of the case data section
@@ -380,4 +382,16 @@ public class ReportResources {
 
         Contexts.getEventContext().set("userWorkspace", uw);
     }
+
+
+	private void sortVariablesOnGroup(ReportGroup grp){
+		Collections.sort(grp.getVariables(), new Comparator() {
+			@Override
+			public int compare(Object o0, Object o1) {
+				VariableImpl v0 = (VariableImpl) o0;
+				VariableImpl v1 = (VariableImpl) o1;
+				return v0.getLabel().compareTo(v1.getLabel());
+			}
+		});
+	}
 }

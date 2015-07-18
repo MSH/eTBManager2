@@ -19,7 +19,7 @@ import java.util.List;
  * @author Ricardo Memoria
  *
  */
-public abstract class VariableImpl implements Variable, Filter {
+public abstract class VariableImpl implements Variable, Filter, Comparable {
 
 	public static final String KEY_NULL = "null";
 
@@ -424,4 +424,10 @@ public abstract class VariableImpl implements Variable, Filter {
     public boolean isMultiSelection() {
         return true;
     }
+
+	@Override
+	public int compareTo(Object o) {
+		VariableImpl v = (VariableImpl)o;
+		return getLabel().compareTo(v.getLabel());
+	}
 }
