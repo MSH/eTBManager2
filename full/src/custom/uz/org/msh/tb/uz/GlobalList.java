@@ -40,17 +40,17 @@ public class GlobalList {
 		return tbfields;
 	}
 
-	@Factory("patientTypesALL")
+	@Factory("patientTypesALL_uz")
 	public PatientType[] getPatientTypesALL() {
 		return patientTypes;
 	}
 
-	@Factory("patientTypesTB")
+	@Factory("patientTypesTB_uz")
 	public PatientType[] getPatientTypesTB() {
 		return patientTypes;
 	}
 
-	@Factory("patientTypesDRTB")
+	@Factory("patientTypesDRTB_uz")
 	public PatientType[] getPatientTypesDRTB() {
 		return patientTypes;
 	}

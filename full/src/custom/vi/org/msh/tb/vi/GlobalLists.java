@@ -1,5 +1,6 @@
 package org.msh.tb.vi;
 
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.CultureResult;
 import org.msh.tb.entities.enums.DstResult;
@@ -117,4 +118,20 @@ public class GlobalLists {
 		
 		return lst;
 	}
+
+	@Factory("patientTypesALL_vi")
+	public PatientType[] getPatientTypesALL() {
+		return patientTypes;
+	}
+
+	@Factory("patientTypesTB_vi")
+	public PatientType[] getPatientTypesTB() {
+		return patientTypes;
+	}
+
+	@Factory("patientTypesDRTB_vi")
+	public PatientType[] getPatientTypesDRTB() {
+		return patientTypes;
+	}
+
 }

@@ -278,7 +278,7 @@ public class GlobalLists {
 		return lst;
 	}
 
-	@Factory("patientTypesALL")
+	@Factory("patientTypesALL_ng")
 	public PatientType[] getPatientTypesALL() {
 		return patientTypesALL;
 	}

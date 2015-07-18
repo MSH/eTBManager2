@@ -179,17 +179,17 @@ public class GlobalLists {
 		return sampleType;
 	}
 
-	@Factory("patientTypesALL")
+	@Factory("patientTypesALL_kh")
 	public PatientType[] getPatientTypesALL() {
 		return patientTypes;
 	}
 
-	@Factory("patientTypesTB")
+	@Factory("patientTypesTB_kh")
 	public PatientType[] getPatientTypesTB() {
 		return patientTypes;
 	}
 
-	@Factory("patientTypesDRTB")
+	@Factory("patientTypesDRTB_kh")
 	public PatientType[] getPatientTypesDRTB() {
 		return patientTypes;
 	}
