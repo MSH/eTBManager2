@@ -1,5 +1,6 @@
 package org.msh.tb.uz;
 
+import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.enums.PatientType;
 import org.msh.tb.entities.enums.TbField;
@@ -37,5 +38,20 @@ public class GlobalList {
 	
 	public TbField[] getTbFields() {
 		return tbfields;
+	}
+
+	@Factory("patientTypesALL")
+	public PatientType[] getPatientTypesALL() {
+		return patientTypes;
+	}
+
+	@Factory("patientTypesTB")
+	public PatientType[] getPatientTypesTB() {
+		return patientTypes;
+	}
+
+	@Factory("patientTypesDRTB")
+	public PatientType[] getPatientTypesDRTB() {
+		return patientTypes;
 	}
 }

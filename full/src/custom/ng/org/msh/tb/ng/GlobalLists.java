@@ -51,6 +51,21 @@ public class GlobalLists {
             PatientType.UNKNOWN_PREVIOUS_TB_TREAT
     };
 
+	private static final PatientType patientTypesALL[] = {
+			PatientType.NEW,
+			PatientType.RELAPSE,
+			PatientType.TREATMENT_AFTER_LOSS_FOLLOW_UP,
+			PatientType.TREATMENT_AFTER_FAILURE,
+			PatientType.OTHER_PREVIOUSLY_TREATED,
+			PatientType.TRANSFER_IN,
+			PatientType.UNKNOWN_PREVIOUS_TB_TREAT,
+			PatientType.AFTER_DEFAULT,
+			PatientType.FAILURE_FT,
+			PatientType.FAILURE_RT,
+			PatientType.RESISTANCE_PATTERN_CHANGED,
+			PatientType.OTHER
+	};
+
 	private final static Nationality[] nationalityTypes = {
 		Nationality.NIGERIA,
 		Nationality.OTHER
@@ -261,6 +276,11 @@ public class GlobalLists {
 			lst.add(item);
 		}
 		return lst;
+	}
+
+	@Factory("patientTypesALL")
+	public PatientType[] getPatientTypesALL() {
+		return patientTypesALL;
 	}
 	
 }

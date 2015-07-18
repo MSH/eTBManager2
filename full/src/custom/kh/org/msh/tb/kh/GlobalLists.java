@@ -178,6 +178,20 @@ public class GlobalLists {
 	public static SampleType[] getSampletype() {
 		return sampleType;
 	}
-	
+
+	@Factory("patientTypesALL")
+	public PatientType[] getPatientTypesALL() {
+		return patientTypes;
+	}
+
+	@Factory("patientTypesTB")
+	public PatientType[] getPatientTypesTB() {
+		return patientTypes;
+	}
+
+	@Factory("patientTypesDRTB")
+	public PatientType[] getPatientTypesDRTB() {
+		return patientTypes;
+	}
 }
 

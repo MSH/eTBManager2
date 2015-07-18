@@ -73,7 +73,7 @@ public class ReportResources {
 		add(grp, new EnumFieldVariable("is", "InfectionSite", "tbcase.infectionSite", InfectionSite.class));
 		add(grp, new PulmonaryVariable());
 		add(grp, new ExtrapulmonarVariable());
-		add(grp, new EnumFieldVariable("pt", "PatientType", "tbcase.patientType", PatientType.class, "#{globalLists.patientTypes}"));
+		add(grp, new EnumFieldVariable("pt", "PatientType", "tbcase.patientType", PatientType.class, "#{globalLists.patientTypesALL}"));
 		add(grp, new DateFieldVariable("regdate", "TbCase.registrationDate", "tbcase.registrationDate", true));
 		addVariable(grp, new DateFieldVariable("regdateM", "#{messages['TbCase.registrationDate']} (#{messages['global.months']})", "tbcase.registrationDate", false));
 		add(grp, new DateFieldVariable("diagdate", "TbCase.diagnosisDate", "tbcase.diagnosisDate", true));
