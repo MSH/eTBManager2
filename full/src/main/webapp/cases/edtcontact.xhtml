@@ -28,7 +28,7 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['Gender']}:</ui:define>
-    	<h:selectOneMenu value="#{tbContact.gender}" required="false">
+    	<h:selectOneMenu value="#{tbContact.gender}" required="true">
     		<s:selectItems value="#{genders}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
     		<s:convertEnum />
     	</h:selectOneMenu>
@@ -36,12 +36,12 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
-    	<h:inputText value="#{tbContact.age}" />
+    	<h:inputText value="#{tbContact.age}" required="true" />
     </s:decorate>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
-    	<h:selectOneMenu value="#{tbContact.contactType}" required="false">
+    	<h:selectOneMenu value="#{tbContact.contactType}" required="true">
     		<s:selectItems value="#{fieldsQuery.contactTypes}" var="s" noSelectionLabel="-" label="#{s.name}" />
     		<s:convertEntity />
     	</h:selectOneMenu>

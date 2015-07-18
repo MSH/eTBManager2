@@ -106,7 +106,8 @@ public class CaseDataExport {
 				"c.currentAddress.zipCode, c.phoneNumber, c.mobileNumber, " +
 				"notifunit.name, notifau, c.registrationDate, r.name, c.diagnosisDate, " +
 				"c.treatmentPeriod.iniDate, c.treatmentPeriod.endDate, c.drugResistanceType, " +
-				"c.infectionSite, pt.name.name1, ept.name.name1, ept2.name.name1, c.patientType " +
+				"c.infectionSite, pt.name.name1, ept.name.name1, ept2.name.name1, c.patientType, c.previouslyTreatedType, c.secDrugsReceived, " +
+				"c.movedSecondLineTreatment, c.lastBmuTbRegistNumber, c.lastBmuDateTbRegister, c.treatmentCategory, c.caseDefinition " +
 			"from TbCase c join c.patient p left join c.regimen r left join c.pulmonaryType pt left join c.extrapulmonaryType.value ept " +
 				"left join c.extrapulmonaryType2.value ept2 left join c.notificationUnit notifunit " +
 				"left join c.notificationUnit.adminUnit notifau left join notifau.parent left join notifau.parent.parent left join notifau.parent.parent.parent left join notifau.parent.parent.parent.parent " +
@@ -245,7 +246,7 @@ public class CaseDataExport {
 	public void addCaseDataTitles() {
 		// add title line
 		excel.addColumnMark("casedata");
-		excel.addGroupHeaderFromResource("cases.details.case", 33 + (levelInfo.getMaxLevel() * 2), "title");
+		excel.addGroupHeaderFromResource("cases.details.case", 40 + (levelInfo.getMaxLevel() * 2), "title");
 		
 		excel.addTextFromResource("Patient.caseNumber", "title");
 		excel.addTextFromResource("Patient.securityNumber", "title");
@@ -279,6 +280,13 @@ public class CaseDataExport {
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("TbField.EXTRAPULMONARY_TYPES", "title");
 		excel.addTextFromResource("PatientType", "title");
+		excel.addTextFromResource("PatientType.PREVIOUSLY_TREATED", "title");
+		excel.addTextFromResource("TbCase.seclineDrugsReceived", "title");
+		excel.addTextFromResource("CaseState.MOVED_SECONDLINE", "title");
+		excel.addTextFromResource("DisplayCaseNumber.TB", "title");
+		excel.addTextFromResource("TbCase.registrationDate.TB", "title");
+		excel.addTextFromResource("TreatmentCategory", "title");
+		excel.addTextFromResource("CaseDefinition", "title");
 		excel.addTextFromResource("case.inicialweight", "title");
 		excel.addTextFromResource("case.currweight", "title");
 		excel.addTextFromResource("cases.prevtreat.numprev", "title");
@@ -429,6 +437,18 @@ public class CaseDataExport {
 		excel.addValue(caseData, 30);
 		excel.addValue(caseData, 31);
 		excel.addValue(caseData, 32);
+		excel.addValue(caseData, 33);
+		excel.addValue(caseData, 34);
+		excel.addValue(((Boolean)caseData[35]).booleanValue() ? messages.get("global.yes") : messages.get("global.no"));
+		excel.addValue(caseData, 36);
+		excel.addDate(((Date)caseData[37]));
+
+		if(caseData[38] == null)
+			excel.addValue(messages.get("TreatmentCategory.undefined"));
+		else
+			excel.addValue(caseData, 38);
+
+		excel.addValue(caseData, 39);
 		addCalculatedValue(caseData, inicialWeight);
 		addCalculatedValue(caseData, currentWeight);
 		addCalculatedValue(caseData, numPrevTreat);
