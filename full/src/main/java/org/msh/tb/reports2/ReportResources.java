@@ -397,9 +397,9 @@ public class ReportResources {
 		Collections.sort(grp.getFilters(), new Comparator() {
 			@Override
 			public int compare(Object o0, Object o1) {
-				VariableImpl v0 = (VariableImpl) o0;
-				VariableImpl v1 = (VariableImpl) o1;
-				return v0.getLabel().compareTo(v1.getLabel());
+				Filter f0 = (Filter) o0;
+				Filter f1 = (Filter) o1;
+				return f0.getLabel().compareTo(f1.getLabel());
 			}
 		});
 	}
