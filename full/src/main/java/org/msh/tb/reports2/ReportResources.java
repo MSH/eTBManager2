@@ -53,7 +53,7 @@ public class ReportResources {
 		addOtherVariables();
 
 		for(ReportGroup g : getGroups())
-			sortVariablesOnGroup(g);
+			sortVariablesAndFiltersOnGroup(g);
 	}
 
 	/**
@@ -384,8 +384,17 @@ public class ReportResources {
     }
 
 
-	private void sortVariablesOnGroup(ReportGroup grp){
+	private void sortVariablesAndFiltersOnGroup(ReportGroup grp){
 		Collections.sort(grp.getVariables(), new Comparator() {
+			@Override
+			public int compare(Object o0, Object o1) {
+				VariableImpl v0 = (VariableImpl) o0;
+				VariableImpl v1 = (VariableImpl) o1;
+				return v0.getLabel().compareTo(v1.getLabel());
+			}
+		});
+
+		Collections.sort(grp.getFilters(), new Comparator() {
 			@Override
 			public int compare(Object o0, Object o1) {
 				VariableImpl v0 = (VariableImpl) o0;
