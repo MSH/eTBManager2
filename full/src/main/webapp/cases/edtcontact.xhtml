@@ -17,7 +17,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 
-<s:decorate template="/layout/casebody.xhtml">
+<s:decorate template="/layout/casebody.xhtml" id="maindec">
 	<a:form id="formexam" styleClass="form1">
 
 	<div class="form-content">
@@ -49,11 +49,21 @@
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
-    	<h:selectOneMenu value="#{tbContact.examinated}" required="false">
+    	<h:selectOneMenu value="#{tbContact.examinated}" required="false" onchange="showEvaluationDetails(this)">
 			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
 			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
     	</h:selectOneMenu>
     </s:decorate>
+
+	<div id="evaluationDate" style="display:#{tbContact.examinated ? '' : 'none'}">
+		<s:decorate template="/layout/dateedit.xhtml" id="evaldateDec">
+			<ui:define name="label">#{messages['global.date']}:</ui:define>
+			<ui:param name="required" value="false" />
+			<ui:param name="future" value="true" />
+			<ui:param name="datefield" value="#{tbContact.dateOfExamination}" />
+			<ui:param name="id" value="evaldate"/>
+		</s:decorate>
+	</div>
 
     <s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
@@ -62,16 +72,8 @@
     		<s:convertEntity />
     	</h:selectOneMenu>
     </s:decorate>
-    
-    <!-- VR: adding 'Date of Examination' -->
-    <s:decorate template="/layout/dateedit.xhtml">
-    <ui:define name="label">#{messages['TbContact.dateofexamination']}:</ui:define>
-    <ui:param name="required" value="false" /> 
-    	<ui:param name="future" value="true" /> 
-    <ui:param name="datefield" value="#{tbContact.dateOfExamination}" /> 
-    </s:decorate>
 
-    <s:decorate template="/layout/edit.xhtml" >
+	<s:decorate template="/layout/edit.xhtml" >
     	<ui:define name="label">#{messages['global.comments']}:</ui:define>
     	<h:inputTextarea value="#{tbContact.comments}" style="width:500px;height:80px;"/>
     </s:decorate>
@@ -94,6 +96,20 @@
     </div>
     
 	</a:form>
+
+	<script type="text/javascript">
+	<!--
+	function showEvaluationDetails(cb) {
+		if (cb.options[cb.selectedIndex].value == 'true')
+			jQuery('#evaluationDate').show(500);
+		else{
+			document.getElementById('maindec:formexam:evaldateDec:edtdateInputDate').value = '';
+			jQuery('#evaluationDate').hide(500);
+		}
+	}
+	-->
+	</script>
+
 </s:decorate>
 
 

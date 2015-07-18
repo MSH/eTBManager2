@@ -16,7 +16,7 @@
 <ui:define name="content">
 <h1>#{title}</h1>
 <h:form id="main" styleClass="form1">
-<s:decorate template="/layout/casebody.xhtml" >
+<s:decorate template="/layout/casebody.xhtml" id="dec1">
 	<div class="form-content">
 	<table width="100%">
 	<tr><td colspan="2" style="padding:6px;">
@@ -60,18 +60,14 @@
 
 	</td></tr>
 	<tr><td>
-    	<s:decorate template="/layout/display.xhtml">
+    	<s:decorate template="/layout/display.xhtml" id="dec3">
     		<ui:param name="labelstyle" value="width:250px"/>
     		<ui:define name="label">#{messages['TbCase.tbContact']}:</ui:define>
     		<h:selectBooleanCheckbox id="chkcont" value="#{tbcase.tbContact}" />
-    	</s:decorate>
-    </td><td>
-    	<div id="divpatname">
-    	<s:decorate template="/layout/edit.xhtml">
-    		<ui:define name="label">#{messages['TbCase.patientContactName']}:</ui:define>
-    		<h:inputText value="#{tbcase.patientContactName}" style="width:400px" maxlength="100"/>
-    	</s:decorate>
-    	</div>
+    		<span id="divpatname">
+    			<h:inputText id="patnameinput" value="#{tbcase.patientContactName}" style="width:300px" maxlength="100"/>
+    		</span>
+		</s:decorate>
     </td></tr>
     </table>
 	<rich:jQuery selector="#chkcont" query="click(function(){toggleDivPanel(this, '#divpatname');})" />
@@ -108,7 +104,10 @@ function updateRows() {
 function toggleDivPanel(chk, divname) {
 	if (chk.checked)
 		jQuery(divname).show();
-	else jQuery(divname).hide();
+	else {
+		document.getElementById('main:dec1:dec3:patnameinput').value = '';
+		jQuery(divname).hide();
+	}
 }
 </script>
 
