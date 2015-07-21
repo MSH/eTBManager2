@@ -189,13 +189,14 @@
             <h:outputText rendered="#{tbcase.patientType == 'OTHER' and not empty tbcase.patientTypeOther}" value=" - #{tbcase.patientTypeOther} "/>
 		</s:decorate>
 
+		</s:fragment>
+
 		<s:decorate template="/layout/display.xhtml">
 			<ui:define name="label">#{messages['TreatmentCategory']}:</ui:define>
 			<ui:param name="explanationmessagekey" value="ExplanationMessage.treatmentCategory"/>
 			<h:outputText value="#{messages[tbcase.treatmentCategory.key]}" rendered="#{not empty tbcase.treatmentCategory}"/>
 			<h:outputText value="#{messages['TreatmentCategory.undefined']}" rendered="#{empty tbcase.treatmentCategory}"/>
 		</s:decorate>
-		</s:fragment>
 
 		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null and tbcase.classification == 'DRTB'}">
 			<ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
