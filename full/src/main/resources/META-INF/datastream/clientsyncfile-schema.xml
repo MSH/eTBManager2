@@ -35,8 +35,10 @@
             <property name="regimenIni.id" elementName="regimenini" />
             <property name="ownerUnit.id" elementName="ownerunit" xmlAttribute="true"/>
             <property name="pulmonaryType.id" elementName="pulmonaryType" />
-            <property name="extrapulmonaryType.id" elementName="extrapulmonaryType" />
-            <property name="extrapulmonaryType2.id" elementName="extrapulmonaryType2" />
+            <property name="extrapulmonaryType.value" elementName="extrapulmonaryType" />
+            <property name="extrapulmonaryType.complement" elementName="extrapulmonaryTypeCompl" />
+            <property name="extrapulmonaryType2.value" elementName="extrapulmonaryType2" />
+            <property name="extrapulmonaryType2.complement" elementName="extrapulmonaryType2Compl" />
             <property name="notificationUnit.id" elementName="notificationUnit" />
             <property name="healthUnits" use="IGNORE" />
             <property name="prescribedMedicines" use="IGNORE" />
