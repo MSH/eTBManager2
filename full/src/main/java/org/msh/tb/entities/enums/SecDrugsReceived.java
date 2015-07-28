@@ -1,17 +1,11 @@
 package org.msh.tb.entities.enums;
 
 public enum SecDrugsReceived {
-	YES ("global.yes"),
-	NO ("global.no"),
-    UNKNOWN ("manag.ind.interim.unknown");
+	YES,
+	NO,
+    UNKNOWN;
 
-	private final String messageKey;
-
-	SecDrugsReceived(String msg) {
-		messageKey = msg;
-	}
-	
 	public String getKey() {
-		return messageKey;
+		return getClass().getSimpleName().concat("." + name());
 	}
 }
