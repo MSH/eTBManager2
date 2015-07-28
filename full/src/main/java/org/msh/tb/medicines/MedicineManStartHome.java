@@ -4,11 +4,13 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.*;
 import org.jboss.seam.annotations.Transactional;
 import org.msh.etbm.commons.transactionlog.ActionTX;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.MedicinesQuery;
 import org.msh.tb.SourceGroup;
 import org.msh.tb.SourcesQuery;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.movs.MovementHome;
 import org.msh.tb.transactionlog.TransactionLogService;
@@ -242,7 +244,7 @@ public class MedicineManStartHome {
 	 * Register in the logging system the starting of the unit in the medicine management control
 	 */
 	public void registerStartManLog() {
-		ActionTX atx = ActionTX.begin("MED_UNIT");
+		ActionTX atx = ActionTX.begin("MED_INIT");
 
 		Tbunit unit = userSession.getTbunit();
 		
@@ -265,6 +267,7 @@ public class MedicineManStartHome {
 		atx.setDescription( unit.toString() )
 				.setEntityClass( unit.getClass().getSimpleName() )
 				.setEntity( unit )
+				.setRoleAction(RoleAction.EXEC)
 				.end();
 
 //		logService.saveExecuteTransaction("MED_INIT", unit.toString(), unit.getId(), unit.getClass().getSimpleName(), unit);
