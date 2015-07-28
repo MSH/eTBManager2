@@ -85,7 +85,9 @@ public class ReportResources {
 		add(grp, new AgeRangeVariable());
 		add(grp, new SideEffectVariable("sideeffect"));
 		add(grp, new ComorbiditiesVariable());
-        add(grp, new EnumFieldVariable("caseDef", "CaseDefinition", "tbcase.caseDefinition", CaseDefinition.class));
+		add(grp, new EnumFieldVariable("caseDef", "CaseDefinition", "tbcase.caseDefinition", CaseDefinition.class));
+		add(grp, new EnumFieldVariable("treatCateg", "TreatmentCategory", "tbcase.treatmentCategory", TreatmentCategory.class));
+		add(grp, new EnumFieldVariable("secDrugsRec", "TbCase.seclineDrugsReceived", "tbcase.secDrugsReceived", SecDrugsReceived.class));
 		return grp;
 	}
 
