@@ -29,7 +29,7 @@
 	<h1>#{title}</h1>
 	<h:form id="main" prependId="false">
 
-    <s:decorate template="/layout/edit.xhtml" >
+    <s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Source']}:</ui:define>
 		<h:selectOneMenu value="#{quarterStockPositionReport.source}">
             <s:selectItems value="#{sources.resultList}" var="c" label="#{c.abbrevName} - #{c.name}" noSelectionLabel="#{messages['form.noselection']}" />
@@ -68,7 +68,7 @@
 	<s:fragment rendered="#{quarterStockPositionReport.isFiltersFilledIn()}">
 	
 	<!-- Alerts if there are units with the selected quarter opened -->
-	<s:div style="display:block" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}">
+	<s:div style="display:block" rendered="#{not empty quarterStockPositionReport.pendCloseQuarterUnits}" styleClass="noprint">
 		<!-- When selecting an administrative unit -->
 		<h:outputFormat styleClass="error" value="#{messages['quarter.openquarterunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
 			<f:param value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()}" />
@@ -80,7 +80,7 @@
 	</s:div>
 	
 	<!-- Alerts if there are units with the medicine control not started -->
-	<s:div style="padding:1px;display:block" rendered="#{not empty quarterStockPositionReport.unitsNotInitialized}">
+	<s:div style="padding:1px;display:block" rendered="#{not empty quarterStockPositionReport.unitsNotInitialized}" styleClass="noprint">
 		<!-- When selecting an administrative unit -->
 		<h:outputFormat styleClass="error" value="#{messages['quarter.notinitializedunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
 			<f:param value="#{quarterStockPositionReport.unitsNotInitialized.size()}" />
@@ -183,7 +183,35 @@
 	</h:column>	
 	-->
 	</h:dataTable>
-	
+
+	<br/>
+
+	<div class="printonly">
+		<h:outputFormat styleClass="error" value="#{messages['quarter.openquarterunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
+			<f:param value="#{quarterStockPositionReport.pendCloseQuarterUnits.size()}" />
+		</h:outputFormat>
+		<div style="width:98%;border: 1px gray solid;padding:6px;margin:0px;background-color:white;">
+			<a:repeat value="#{quarterStockPositionReport.pendCloseQuarterUnits}" var="unit">
+				<div class="#{unit.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
+				<h:outputText value="#{unit.name} - #{unit.adminUnit.fullDisplayName}" /><br/>
+			</a:repeat>
+		</div>
+	</div>
+
+	<br/>
+
+	<div class="printonly">
+		<h:outputFormat styleClass="error" value="#{messages['quarter.notinitializedunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
+			<f:param value="#{quarterStockPositionReport.unitsNotInitialized.size()}" />
+		</h:outputFormat>
+		<div style="width:98%;border: 1px gray solid;padding:6px;margin:0px;background-color:white;">
+			<a:repeat value="#{quarterStockPositionReport.unitsNotInitialized}" var="unit">
+				<div class="#{unit.treatmentHealthUnit?'icon-hu':'icon-ds'}" />
+				<h:outputText value="#{unit.name} - #{unit.adminUnit.fullDisplayName}" /><br/>
+			</a:repeat>
+		</div>
+	</div>
+
 	</s:fragment>
 
 	<!-- Modal panel with the units with no closed quarters -->
