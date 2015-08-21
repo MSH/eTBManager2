@@ -394,4 +394,8 @@ public class AdminUnitSelector<E> {
     public void setAdminUnitDefaultId(Integer id) {
     	setAdminUnitId(id);
     }
+
+    public String getClientId() {
+        return clientId;
+    }
 }
