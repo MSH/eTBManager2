@@ -59,7 +59,6 @@ public class ExamsRequestHome {
         TbCase tbcase = caseHome.getInstance();
 
         Laboratory lab = getItem().getLabSelection().getLaboratory();
-
         ExamRequest req = examRequestHome.getInstance();
         req.setTbunit(tbcase.getOwnerUnit());
         req.setLaboratory(lab);

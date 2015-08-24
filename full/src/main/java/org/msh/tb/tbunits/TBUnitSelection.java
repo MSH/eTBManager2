@@ -78,7 +78,7 @@ public class TBUnitSelection extends AdminUnitSelector<Tbunit> {
 	 * @return true if is read only, otherwise return false
 	 */
 	public boolean isLevel1ReadOnly() {
-		return getAuselection().isLevel1ReadOnly();
+		return isReadOnly() || getAuselection().isLevel1ReadOnly();
 	}
 
 

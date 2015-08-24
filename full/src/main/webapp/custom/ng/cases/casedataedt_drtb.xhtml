@@ -29,7 +29,6 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Patient.securityNumber']}:</ui:define>
-		<!--<h:inputText value="#{tbCase.patient.securityNumber}" style="width:120px;" maxlength="50"></h:inputText>-->
 		<h:inputText value="#{tbcase.patient.securityNumber}" style="width:120px;" maxlength="10"></h:inputText>
 		</s:decorate>
 	
@@ -37,7 +36,6 @@
 	
 	<s:decorate template="/layout/edit.xhtml">
     	<ui:define name="label">#{messages['Gender']}:</ui:define>
-    		<!-- <h:selectOneMenu value="#{tbCase.patient.gender}" required="true">-->
     		<h:selectOneMenu value="#{tbcase.patient.gender}" required="true">
     		<s:selectItems value="#{genders}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
     		<s:convertEnum />
@@ -78,7 +76,7 @@
     	<s:decorate template="/layout/edit.xhtml">
     		<!--<ui:define name="label">#{messages['Address.address']}:</ui:define> -->
     		<ui:define name="label">#{messages['Address.completeAddress']}:</ui:define>
-    		<h:inputTextarea value="#{tbcase.notifAddress.address}" style="width:300px;height:100px" required="true" maxlength="200"/>
+    		<h:inputTextarea value="#{tbcase.notifAddress.address}" style="width:300px;height:100px" required="true" />
     	</s:decorate>   	
     </td></tr>  
     
@@ -110,7 +108,7 @@
     	<!-- <div class="paragraph">#{messages['cases.details.addresscurr']}</div> -->
     	<s:decorate template="/layout/edit.xhtml">
     		<ui:define name="label">#{messages['cases.details.addresscurr']}:</ui:define>
-    		<h:inputTextarea value="#{tbcase.currentAddress.address}" style="width:300px;height:100px;margin-bottom:2px;" maxlength="100"/><br/>
+    		<h:inputTextarea value="#{tbcase.currentAddress.address}" style="width:300px;height:100px;margin-bottom:2px;" /><br/>
     		<!-- <h:inputText value="#{tbcase.currentAddress.complement}" style="width:300px" maxlength="100"/> -->
     	</s:decorate>
 
@@ -165,7 +163,7 @@
 	<tr><td style="padding-bottom:10px;">
 
 	<div class="paragraph">#{messages['TbCase.notificationUnit']}</div>
-	<s:decorate template="/layout/tbselection.xhtml" >
+	<s:decorate template="/custom/ng/layout/tbselection.xhtml" >
 		<ui:param name="tbunitselection" value="#{caseEditingHome.tbunitselection}" />
 		<ui:param name="required" value="true" />
 	</s:decorate>
