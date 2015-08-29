@@ -560,6 +560,10 @@ public class TreatmentHome {
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();
 
+		entityManager.createQuery("delete from TreatmentMonitoring tm where tm.tbcase.id = :caseId")
+				.setParameter("caseId", tbcase.getId())
+				.executeUpdate();
+
 		facesMessages.addFromResourceBundle("cases.treat.undo.executed");
 		
 		return "treatment-undone";
