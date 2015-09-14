@@ -19,7 +19,7 @@ public class HivIndicator extends Indicator {
         Number val = (Number)createQuery().getSingleResult();
         addValue(translateKey(HIVResult.POSITIVE), val.intValue());
 
-        setCondition("not exists(select id from ExamHIV where tbcase.id=c.id and result=" + HIVResult.POSITIVE.ordinal() + ")");
+        setCondition("exists(select id from ExamHIV where tbcase.id=c.id and result=" + HIVResult.NEGATIVE.ordinal() + ")");
         val = (Number)createQuery().getSingleResult();
         addValue(translateKey(HIVResult.NEGATIVE), val.intValue());
 

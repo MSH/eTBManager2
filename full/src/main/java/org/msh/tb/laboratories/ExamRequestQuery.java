@@ -2,7 +2,10 @@ package org.msh.tb.laboratories;
 
 import org.jboss.seam.annotations.Name;
 import org.msh.tb.entities.ExamRequest;
+import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.enums.DisplayCaseNumber;
 import org.msh.tb.entities.enums.ExamStatus;
+import org.msh.tb.login.UserSession;
 import org.msh.utils.EntityQuery;
 
 /**
@@ -79,6 +82,8 @@ public class ExamRequestQuery extends EntityQuery<ExamRequest>{
         if ((filters.getPatient() != null) && (!filters.getPatient().isEmpty())) {
             String[] names = filters.getPatient().split(" ");
             if (names.length > 0) {
+                String hqlNumber = generateHQLPatientNumber(filters.getPatient());
+
                 String s="(";
                 for (String name: names) {
                     if (!name.isEmpty()) {
@@ -91,11 +96,90 @@ public class ExamRequestQuery extends EntityQuery<ExamRequest>{
                     }
                 }
 
+                s = s + (hqlNumber.isEmpty() ? ")": " or (" + hqlNumber + "))");
+
                 hql += " and (" + s + "))";
             }
         }
 
         return hql;
+    }
+
+
+    /**
+     * Convert the number entered by the user and separates patient number and case number
+     * @return
+     */
+    protected String generateHQLPatientNumber(String key) {
+        if (key == null || key.equals(""))
+            return "";
+
+        String hql = "";
+
+        // check if search is by case ID
+        Workspace ws = UserSession.getWorkspace();
+        if ((ws.getSuspectCaseNumber() == DisplayCaseNumber.CASE_ID) || (ws.getConfirmedCaseNumber() == DisplayCaseNumber.CASE_ID)) {
+            Integer caseId = stringToNumber(key);
+            if (caseId != null)
+                hql += "c.id = " + caseId;
+        }
+
+        // check if search is by record number
+        if ((ws.getSuspectCaseNumber() == DisplayCaseNumber.VALIDATION_NUMBER) || (ws.getConfirmedCaseNumber() == DisplayCaseNumber.VALIDATION_NUMBER)) {
+            String[] s = key.split("-");
+            if (s.length == 1) {
+                Integer patnum = stringToNumber(s[0]);
+                if (patnum != null) {
+                    if (!hql.isEmpty())
+                        hql += " or ";
+                    hql += "p.recordNumber = " + patnum;
+                }
+            }
+            else {
+                if (s.length == 2) {
+                    Integer patnum = stringToNumber(s[0]);
+                    Integer digit = stringToNumber(s[1]);
+                    if ((patnum != null) && (digit != null)) {
+                        if (!hql.isEmpty())
+                            hql += " or ";
+                        hql += "(p.recordNumber = " + patnum + " and c.caseNumber = " + digit + ")";
+                    }
+                }
+            }
+        }
+
+        // add filters by suspect registration code
+        if (ws.getSuspectCaseNumber() == DisplayCaseNumber.USER_DEFINED) {
+            if (!hql.isEmpty())
+                hql += " or ";
+            hql += "c.suspectRegistrationCode = '" + key + "'";
+        }
+
+        // add filters by registration code
+        if (ws.getSuspectCaseNumber() == DisplayCaseNumber.USER_DEFINED) {
+            if (!hql.isEmpty())
+                hql += " or ";
+            hql += "c.registrationCode = '" + key + "'";
+        }
+
+        if (!hql.isEmpty())
+            hql = "(" + hql + ")";
+
+        return hql;
+    }
+
+    /**
+     * Convert a number from string to integer. If the number is not a valid number,
+     * it'll return null
+     * @param s the string representation of the number
+     * @return Integer number or null
+     */
+    protected Integer stringToNumber(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 
