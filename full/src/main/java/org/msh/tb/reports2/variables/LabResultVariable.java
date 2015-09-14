@@ -46,6 +46,7 @@ public class LabResultVariable extends EnumFieldVariable {
 	public void prepareQuery(SQLDefs def) {
 		String s[] = getFieldName().split("\\.");
 		def.table("tbcase").leftJoin("id", s[0] + ".case_id").getAlias();
+        def.addRestriction(s[0] + ".result is not null");
 	}
 
 }
