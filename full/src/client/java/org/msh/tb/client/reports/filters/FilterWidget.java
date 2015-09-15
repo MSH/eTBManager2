@@ -69,7 +69,23 @@ public abstract class FilterWidget extends Composite {
             setInitializing(false);
         }
 	}
-	
+
+    /**
+     * Select the item in the list box by its value
+     * @param lb
+     * @param value
+     */
+    protected void selectItemByValue(ListBox lb, String value) {
+        for (int i = 0; i < lb.getItemCount(); i++) {
+            if (value.equals(lb.getValue(i))) {
+                lb.setSelectedIndex(i);
+                return;
+            }
+        }
+
+        lb.setSelectedIndex(0);
+    }
+
 	/**
 	 * Retrieve a list of options from the server. The param argument will be sent to the server
 	 * and depends on the filter type and server interpretation

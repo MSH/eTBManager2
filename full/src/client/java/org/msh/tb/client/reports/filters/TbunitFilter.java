@@ -5,6 +5,7 @@ package org.msh.tb.client.reports.filters;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.msh.tb.client.commons.StandardCallback;
@@ -31,7 +32,7 @@ public class TbunitFilter extends FilterWidget {
 	private ChangeHandler adminUnitSelHandler = new ChangeHandler() {
 		@Override
 		public void onChange(ChangeEvent event) {
-			adminUnitChanged();
+			adminUnitChanged(null);
 		}
 	};
 	
@@ -59,16 +60,18 @@ public class TbunitFilter extends FilterWidget {
 		super.initialize(filter, value);
 
 		final String fval = value;
-		
-		loadServerOptions(null, new StandardCallback<ArrayList<CItem>>() {
-			@Override
-			public void onSuccess(ArrayList<CItem> result) {
-				if (result != null) {
-					fillListOptions(lbAdminUnits, result, fval);
-					lbAdminUnits.addChangeHandler(adminUnitSelHandler);
-				}
-			}
-		});
+
+        loadServerOptions(null, new StandardCallback<ArrayList<CItem>>() {
+            @Override
+            public void onSuccess(ArrayList<CItem> result) {
+                if (result != null) {
+                    fillListOptions(lbAdminUnits, result, null);
+                    lbAdminUnits.addChangeHandler(adminUnitSelHandler);
+
+                    setValue(fval);
+                }
+            }
+        });
 	}	
 
 	
@@ -98,7 +101,7 @@ public class TbunitFilter extends FilterWidget {
 	/**
 	 * Called when the selection in the list box with administrative units is changed
 	 */
-	protected void adminUnitChanged() {
+	protected void adminUnitChanged(String unit) {
 		if (lbUnits == null) {
 			lbUnits = new ListBox();
 			lbUnits.setVisibleItemCount(1);
@@ -117,13 +120,18 @@ public class TbunitFilter extends FilterWidget {
 		lbUnits.clear();
 		// get selected admin unit ID
 		String auid = getSelectedAUID();
+
+        lbUnits.setVisible(auid != null);
+
 		if (auid != null) {
 			// update TB unit list
+            Window.alert("Changed");
+            final String fu = unit;
 			loadServerOptions(auid, new StandardCallback<ArrayList<CItem>>() {
 				@Override
 				public void onSuccess(ArrayList<CItem> result) {
 					if (result != null) {
-						fillListOptions(lbUnits, result, null);
+						fillListOptions(lbUnits, result, fu);
 					}
 				}
 			});
@@ -135,8 +143,25 @@ public class TbunitFilter extends FilterWidget {
 	 */
 	@Override
 	public void setValue(String value) {
-		// TODO Auto-generated method stub
-		
+        if (value == null || value.isEmpty()) {
+            lbAdminUnits.setSelectedIndex(0);
+            adminUnitChanged(null);
+            return;
+        }
+
+        String[] vals = value.split(",");
+        String au, unit;
+        if (vals.length > 1) {
+            au = vals[0];
+            unit = vals[1];
+        }
+        else {
+            au = value;
+            unit = null;
+        }
+
+        selectItemByValue(lbAdminUnits, au);
+        adminUnitChanged(unit);
 	}
 
 	/** {@inheritDoc}
