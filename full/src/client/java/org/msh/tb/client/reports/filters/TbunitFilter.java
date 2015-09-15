@@ -125,7 +125,6 @@ public class TbunitFilter extends FilterWidget {
 
 		if (auid != null) {
 			// update TB unit list
-            Window.alert("Changed");
             final String fu = unit;
 			loadServerOptions(auid, new StandardCallback<ArrayList<CItem>>() {
 				@Override
