@@ -71,6 +71,12 @@ public class OptionsFilter extends FilterWidget {
             for (CItem item: options) {
                 selbox.add(item.getLabel(), item.getValue());
             }
+
+            // select values, if any
+            if (value != null) {
+                String[] vals = value.split(";");
+                selbox.selectValues(vals);
+            }
         }
         else {
             fillListOptions(lbOptions, options, value);
