@@ -24,6 +24,7 @@
         <s:decorate template="/labs/templates/examdisplay.xhtml">
             <ui:param name="examTitle" value="#{messages['cases.exammicroscopy']}" />
             <ui:param name="examView" value="/labs/edtexammicroscopy.xhtml" />
+            <ui:param name="onRemove" value="removeMicroscopy(#{exam.id});" />
 
             <s:decorate template="/layout/display.xhtml">
                 <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
@@ -47,6 +48,7 @@
         <s:decorate template="/labs/templates/examdisplay.xhtml">
             <ui:param name="examTitle" value="#{messages['cases.examxpert']}" />
             <ui:param name="examView" value="/labs/edtexamxpert.xhtml" />
+            <ui:param name="onRemove" value="removeXpert(#{exam.id});" />
 
             <s:decorate template="/layout/display.xhtml">
                 <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
@@ -75,6 +77,7 @@
         <s:decorate template="/labs/templates/examdisplay.xhtml">
             <ui:param name="examTitle" value="#{messages['cases.examculture']}" />
             <ui:param name="examView" value="/labs/edtexamculture.xhtml" />
+            <ui:param name="onRemove" value="removeCulture(#{exam.id});" />
 
             <s:decorate template="/layout/display.xhtml">
                 <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
@@ -98,6 +101,7 @@
         <s:decorate template="/labs/templates/examdisplay.xhtml">
             <ui:param name="examTitle" value="#{messages['cases.examdst']}" />
             <ui:param name="examView" value="/labs/edtexamdst.xhtml" />
+            <ui:param name="onRemove" value="removeDst(#{exam.id});" />
 
             <s:decorate template="/layout/display.xhtml" rendered="#{not empty exam.dateRelease}">
                 <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
@@ -129,5 +133,21 @@
             </h:dataTable>
         </s:decorate>
     </a:repeat>
+
+    <a:jsFunction name="removeMicroscopy" action="#{examRequestHome.removeMicroscopy}" ajaxSingle="true" reRender="main">
+        <a:actionparam name="param1" assignTo="#{examRequestHome.examId}" converter="javax.faces.Integer" />
+    </a:jsFunction>
+
+    <a:jsFunction name="removeCulture" action="#{examRequestHome.removeCulture}" ajaxSingle="true" reRender="main">
+        <a:actionparam name="param1" assignTo="#{examRequestHome.examId}" converter="javax.faces.Integer" />
+    </a:jsFunction>
+
+    <a:jsFunction name="removeDst" action="#{examRequestHome.removeDst}" ajaxSingle="true" reRender="main">
+        <a:actionparam name="param1" assignTo="#{examRequestHome.examId}" converter="javax.faces.Integer" />
+    </a:jsFunction>
+
+    <a:jsFunction name="removeXpert" action="#{examRequestHome.removeXpert}" ajaxSingle="true" reRender="main">
+        <a:actionparam name="param1" assignTo="#{examRequestHome.examId}" converter="javax.faces.Integer" />
+    </a:jsFunction>
 
 </ui:composition>  

@@ -58,6 +58,11 @@ public class CaseDefinitionFieldIntelligence {
         if(entityEvent.getType().equals(EntityEvent.EventType.DELETE) && entityEvent.getEntity() instanceof TbCase)
             return;
 
+        // if there is no case, so just return
+        if (!caseHome.isManaged()) {
+            return;
+        }
+
         TbCase tbcase = caseHome.getInstance();
         if(tbcase == null)
             return;

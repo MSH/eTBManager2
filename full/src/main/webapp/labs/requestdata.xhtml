@@ -24,16 +24,23 @@
     <ui:define name="left">
         <h:form>
 
-            <s:link view="/labs/edtrequest.xhtml">
-                <ui:param name="id" value="#{examRequestHome.id}" />
-                <i class="icon-edit-sign"></i>#{messages['labs.editpatient']}
-            </s:link>
+            <div class="vertical-menu">
+                <s:link view="/labs/edtrequest.xhtml">
+                    <ui:param name="id" value="#{examRequestHome.id}" />
+                    <i class="icon-edit-sign"></i>#{messages['labs.editpatient']}
+                </s:link>
 
+                <a:commandLink action="#{examRequestHome.remove}"
+                               onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}">
+                    <i class="icon-remove"></i>#{messages['form.remove']}
+                </a:commandLink>
+
+            </div>
         </h:form>
     </ui:define>
 
     <ui:define name="content">
-        <h:form styleClass="form1">
+        <h:form id="main" styleClass="form1">
 
             <h1>#{title}</h1>
 

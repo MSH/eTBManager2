@@ -30,8 +30,10 @@ public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
 	private static final long serialVersionUID = -7854784222737606292L;
 
 	private List<SelectItem> afbs;
+
 	@In
     FacesMessages facesMessages;
+
 	/**
 	 * @return
 	 */
@@ -68,7 +70,6 @@ public class ExamMicroscopyHome extends LaboratoryExamHome<ExamMicroscopy> {
                 exam.setNumberOfAFB(null);
             }
         }
-
 
 		return super.persist();
 	}

@@ -14,7 +14,12 @@
                 <f:param name="reqid" value="#{exam.request.id}" />
                 <f:param name="examid" value="#{exam.id}" />
             </s:link>
-            <a:commandLink value="#{messages['form.remove']}" styleClass="btn-flat"></a:commandLink>
+            <a:commandLink value="#{messages['form.remove']}"
+                           action="#{examHome.remove}"
+                           ajaxSingle="true"
+                           onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;} #{onRemove} return false;"
+                           styleClass="btn-flat">
+            </a:commandLink>
         </div>
 
         <div class="title">#{examTitle}</div>

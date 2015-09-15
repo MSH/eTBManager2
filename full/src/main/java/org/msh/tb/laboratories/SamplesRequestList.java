@@ -2,7 +2,9 @@ package org.msh.tb.laboratories;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.msh.tb.entities.*;
+import org.msh.tb.misc.EntityEvent;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -35,30 +37,41 @@ public class SamplesRequestList {
 	}
 
     /**
+     * Refresh the list
+     */
+    public void refresh() {
+        samples = null;
+    }
+
+
+    /**
      * Fill the list of laboratory exams to the corresponding sample request
      * @param lst list of {@link org.msh.tb.entities.LaboratoryExam} objects
      */
     private void fillExams(List lst) {
         for (Object obj: lst) {
             LaboratoryExam exam = (LaboratoryExam)obj;
-            SampleRequest req = findSampleByExam(exam);
-            if (exam instanceof ExamMicroscopy) {
-                req.getExamsMicroscopy().add((ExamMicroscopy)exam);
-                continue;
-            }
+            // exam may be just removed
+            if (entityManager.contains(exam)) {
+                SampleRequest req = findSampleByExam(exam);
+                if (exam instanceof ExamMicroscopy) {
+                    req.getExamsMicroscopy().add((ExamMicroscopy)exam);
+                    continue;
+                }
 
-            if (exam instanceof ExamCulture) {
-                req.getExamsCulture().add((ExamCulture)exam);
-                continue;
-            }
+                if (exam instanceof ExamCulture) {
+                    req.getExamsCulture().add((ExamCulture)exam);
+                    continue;
+                }
 
-            if (exam instanceof ExamDST) {
-                req.getExamsDST().add((ExamDST)exam);
-                continue;
-            }
+                if (exam instanceof ExamDST) {
+                    req.getExamsDST().add((ExamDST)exam);
+                    continue;
+                }
 
-            if (exam instanceof ExamXpert) {
-                req.getExamsXpert().add((ExamXpert)exam);
+                if (exam instanceof ExamXpert) {
+                    req.getExamsXpert().add((ExamXpert)exam);
+                }
             }
         }
     }

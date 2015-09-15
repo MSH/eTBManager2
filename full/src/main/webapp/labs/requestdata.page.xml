@@ -4,4 +4,9 @@
 
 	<param name="id" value="#{examRequestHome.id}" converterId="javax.faces.Integer" />
 
+    <navigation>
+        <rule if-outcome="removed">
+            <redirect view-id="/labs/index.xhtml" />
+        </rule>
+    </navigation>
 </page>
