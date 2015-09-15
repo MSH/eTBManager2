@@ -189,12 +189,12 @@
     		#{messages[tbcase.infectionSite.key]}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.pulmonaryType!=null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.pulmonaryType.value}">
     		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
     		#{tbcase.pulmonaryType}
 		</s:decorate>
 
-		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.extrapulmonaryType!=null}">
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.extrapulmonaryType.value}">
     		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
     		#{tbcase.extrapulmonaryType} <h:outputText value="/ #{tbcase.extrapulmonaryType2}" />
 		</s:decorate>

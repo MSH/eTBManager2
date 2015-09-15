@@ -61,10 +61,10 @@ public class SuspectFollowupHome {
 			throw new IllegalArgumentException("dataModel cannot be null");
 
 		if (dataModel.getInfectionSite() == InfectionSite.PULMONARY) {
-			if (dataModel.getPulmonaryType() == null) {
-				FacesMessages.instance().addToControlFromResourceBundle("cbpulmonary", "javax.faces.component.UIInput.REQUIRED");
-				return "error";
-			}
+//			if (dataModel.getPulmonaryType() == null) {
+//				FacesMessages.instance().addToControlFromResourceBundle("cbpulmonary", "javax.faces.component.UIInput.REQUIRED");
+//				return "error";
+//			}
 			dataModel.setExtrapulmonaryType(null);
 			dataModel.setExtrapulmonaryType2(null);
 		}
