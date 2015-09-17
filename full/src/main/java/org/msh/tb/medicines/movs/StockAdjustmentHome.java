@@ -207,6 +207,8 @@ public class StockAdjustmentHome extends Controller {
 		}
 		
 		facesMessages.addFromResourceBundle("Batch.adjustBatchSuccess");
+
+        items = null;
 		
 		return "batches-adjusted";
 	}
@@ -403,7 +405,7 @@ public class StockAdjustmentHome extends Controller {
 	 * @param batches
 	 */
 	private void saveLog(RoleAction roleAction, Map<Batch, Integer> batches) {
-		ActionTX atx = ActionTX.begin("STOCKPOS");
+		ActionTX atx = ActionTX.begin("STOCKPOS", null, RoleAction.EXEC);
 
 		DetailXMLWriter writer = atx.getDetailWriter();
 
