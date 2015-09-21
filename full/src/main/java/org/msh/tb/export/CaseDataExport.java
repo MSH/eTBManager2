@@ -23,49 +23,56 @@ import java.util.Map.Entry;
  */
 @Name("caseDataExport")
 public class CaseDataExport {
-	@In(create=true) InfoCountryLevels levelInfo;
-	@In(create=true) Map<String, String> messages;
-	@In(create=true) Workspace defaultWorkspace;
-	@In EntityManager entityManager;
+	@In(create = true)
+	InfoCountryLevels levelInfo;
+	@In(create = true)
+	Map<String, String> messages;
+	@In(create = true)
+	Workspace defaultWorkspace;
+	@In
+	EntityManager entityManager;
 	private UserTransaction transaction;
-	
+
 	private List<Object[]> casesData;
-	
+
 	private boolean exportExamHiv;
 	private List<Object[]> examsHIV;
-	
+
 	private boolean exportExamMicroscopy;
-	private List<Object[]> examsMicroscopy;	
-	
+	private List<Object[]> examsMicroscopy;
+
 	private boolean exportExamCulture;
 	private List<Object[]> examsCulture;
-	
+
 	private boolean exportExamDST;
 	private List<Object[]> examsDST;
 	private List<Object[]> substances;
-	
+
 	private boolean exportExamXRay;
 	private List<Object[]> examsXRay;
-		
+
 	private boolean exportCasesComorbidity;
 	private List<Object[]> casesComorbidity;
 	private List<Object[]> commorbidities;
-	
+
 	private boolean exportCaseSideEffect;
 	private List<Object[]> caseSideEffect;
 	private List<Object[]> sideEffects;
-	
+
 	private List<Object[]> numPrevTreat;
 	private List<Object[]> inicialWeight;
 	private List<Object[]> currentWeight;
 	private List<Object[]> firstMedExam;
-	
+
 	private String caseIds;
-	
+
 	protected ExcelCreator excel;
-	
+
 	private final static int MAX_CASES_PER_SHEET = 65500; // max: 65536 in excel 2003 or later
 	private final static int TITLE_ROW = 1;
+
+	private final static String CUSTOMIZED_FIELDS_BD = ",c.patientRefToFv.name.name1 ";
+	private final static int CUSTOMIZED_FIELDS_QTD_BD = 1;
 
 	/**
 	 * Create the excel file and send it to the client browser
@@ -75,179 +82,179 @@ public class CaseDataExport {
 		excel.sendResponse();
 	}
 
-	private void concatenateIds(List<Integer> casesId){
-		if(casesId == null || casesId.size() == 0){
+	private void concatenateIds(List<Integer> casesId) {
+		if (casesId == null || casesId.size() == 0) {
 			caseIds = null;
 			return;
 		}
-		
+
 		caseIds = "(";
-		for(Integer caseId : casesId){
+		for (Integer caseId : casesId) {
 			caseIds += caseId;
 			caseIds += ", ";
 		}
-		caseIds = caseIds.substring(0, caseIds.length()-2);
+		caseIds = caseIds.substring(0, caseIds.length() - 2);
 		caseIds += ")";
 	}
-	
-	private void loadData(List<Integer> casesId){
+
+	private void loadData(List<Integer> casesId) {
 		String q;
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
-		
+
 		concatenateIds(casesId);
-		
+
 		//Closes possible opened transaction
 		entityManager.flush();
 		commitTransaction();
 		entityManager.clear();
-		
+
 		q = "select c.id, p.recordNumber, c.caseNumber, p.securityNumber, p.lastName, p.middleName, p.name, p.motherName, c.classification, c.state, p.gender, p.birthDate, c.age, " +
 				"c.nationality, c.currentAddress.address, c.currentAddress.complement, currAddAu, " +
 				"c.currentAddress.zipCode, c.phoneNumber, c.mobileNumber, " +
 				"notifunit.name, notifau, c.registrationDate, r.name, c.diagnosisDate, " +
 				"c.treatmentPeriod.iniDate, c.treatmentPeriod.endDate, c.drugResistanceType, " +
 				"c.infectionSite, pt.name.name1, ept.name.name1, ept2.name.name1, c.patientType, c.previouslyTreatedType, c.secDrugsReceived, " +
-				"c.movedSecondLineTreatment, c.lastBmuTbRegistNumber, c.lastBmuDateTbRegister, c.treatmentCategory, c.caseDefinition " +
-			"from TbCase c join c.patient p left join c.regimen r left join c.pulmonaryType pt left join c.extrapulmonaryType.value ept " +
+				"c.movedSecondLineTreatment, c.lastBmuTbRegistNumber, c.lastBmuDateTbRegister, c.treatmentCategory, c.caseDefinition " + getCustomizedFields() +
+				"from " + getTbCaseHQLNameWorkdpace() + " c join c.patient p left join c.regimen r left join c.pulmonaryType pt left join c.extrapulmonaryType.value ept " +
 				"left join c.extrapulmonaryType2.value ept2 left join c.notificationUnit notifunit " +
 				"left join c.notificationUnit.adminUnit notifau left join notifau.parent left join notifau.parent.parent left join notifau.parent.parent.parent left join notifau.parent.parent.parent.parent " +
 				"left join c.currentAddress.adminUnit currAddAu left join currAddAu.parent left join currAddAu.parent.parent left join currAddAu.parent.parent.parent left join currAddAu.parent.parent.parent.parent " +
-			"where c.id in " + caseIds;
+				"where c.id in " + caseIds;
 		casesData = executeQuery(q, null);
-		
+
 		q = "select p.tbcase.id, count(p.tbcase.id) from PrevTBTreatment p where p.tbcase.id in " + caseIds + " group by p.tbcase.id";
 		numPrevTreat = executeQuery(q, null);
-		
+
 		q = "select me.tbcase.id, me.weight "
-			+ "from MedicalExamination me "
-			+ "where me.tbcase.id in " + caseIds + " and me.date = (select min(me1.date) from MedicalExamination me1 where me1.tbcase.id = me.tbcase.id)";
+				+ "from MedicalExamination me "
+				+ "where me.tbcase.id in " + caseIds + " and me.date = (select min(me1.date) from MedicalExamination me1 where me1.tbcase.id = me.tbcase.id)";
 		inicialWeight = executeQuery(q, null);
-		
+
 		q = "select me.tbcase.id, me.weight "
 				+ "from MedicalExamination me "
 				+ "where me.tbcase.id in " + caseIds + " and me.date = (select max(me1.date) from MedicalExamination me1 where me1.tbcase.id = me.tbcase.id)";
 		currentWeight = executeQuery(q, null);
-		
+
 		q = "select me.tbcase.id, min(me.date) from MedicalExamination me where me.tbcase.id in " + caseIds + " group by me.tbcase.id";
 		firstMedExam = executeQuery(q, null);
-		
-		if(exportExamHiv){
+
+		if (exportExamHiv) {
 			q = "select e.tbcase.id, e.date, e.result from ExamHIV e where e.tbcase.id in " + caseIds;
 			examsHIV = executeQuery(q, null);
 		}
-		
-		if(exportExamMicroscopy){
+
+		if (exportExamMicroscopy) {
 			q = "select e.tbcase.id, e.dateCollected, e.result from ExamMicroscopy e where e.tbcase.id in " + caseIds;
 			examsMicroscopy = executeQuery(q, null);
 		}
-		
-		if(exportExamCulture){
+
+		if (exportExamCulture) {
 			q = "select e.tbcase.id, e.dateCollected, e.result from ExamCulture e where e.tbcase.id in " + caseIds;
 			examsCulture = executeQuery(q, null);
 		}
 
-		if(exportExamDST){
+		if (exportExamDST) {
 			q = "select s.id, s.name.name1 from Substance s where s.dstResultForm = :true and s.workspace.id = :workspaceId";
 			parameters.put("workspaceId", defaultWorkspace.getId());
 			parameters.put("true", true);
 			substances = executeQuery(q, parameters);
 			parameters.clear();
-			
+
 			q = "select c.id, exam.dateCollected, res.result, res.substance.id"
 					+ " from ExamDSTResult res join res.exam exam join exam.tbcase c"
 					+ " where c.id in " + caseIds;
 			examsDST = executeQuery(q, null);
 		}
-		
-		if(exportExamXRay){
+
+		if (exportExamXRay) {
 			q = "select e.tbcase.id, e.date, e.presentation.name.name1 from ExamXRay e where e.tbcase.id in " + caseIds;
 			examsXRay = executeQuery(q, null);
 		}
-		
-		if(exportCasesComorbidity){
+
+		if (exportCasesComorbidity) {
 			q = "select fv.id, fv.name.name1 from FieldValue fv where fv.field = :fieldType and fv.workspace.id = :workspaceId";
 			parameters.put("fieldType", TbField.COMORBIDITY);
 			parameters.put("workspaceId", defaultWorkspace.getId());
 			commorbidities = executeQuery(q, parameters);
 			parameters.clear();
-			
+
 			q = "select e.tbcase.id, e.comorbidity.id from CaseComorbidity e where e.tbcase.id in " + caseIds;
 			casesComorbidity = executeQuery(q, null);
 		}
-		
-		if(exportCaseSideEffect){
+
+		if (exportCaseSideEffect) {
 			q = "select fv.id, fv.name.name1 from FieldValue fv where fv.field = :fieldType and fv.workspace.id = :workspaceId";
 			parameters.put("fieldType", TbField.SIDEEFFECT);
 			parameters.put("workspaceId", defaultWorkspace.getId());
 			sideEffects = executeQuery(q, parameters);
 			parameters.clear();
-			
+
 			q = "select e.tbcase.id, e.sideEffect.value.id from CaseSideEffect e where e.tbcase.id in " + caseIds;
 			caseSideEffect = executeQuery(q, null);
-		}		
+		}
 	}
-	
+
 	/**
 	 * Generate the content of the excel file
 	 */
 	protected void generateContent(List<Integer> casesId) {
 		int iSheets = 0;
-		
+
 		loadData(casesId);
-		
+
 		excel = new ExcelCreator();
 		excel.setFileName(messages.get("cases"));
 		excel.createWorkbook();
-		
-		excel.addSheet(messages.get("cases")+" - pg. " + iSheets+1, iSheets);
+
+		excel.addSheet(messages.get("cases") + " - pg. " + iSheets + 1, iSheets);
 		addTitles();
-		
-		for(Object[] caseData : casesData){
+
+		for (Object[] caseData : casesData) {
 			excel.lineBreak();
 			exportData(caseData);
-			
-			if(excel.getRow() == MAX_CASES_PER_SHEET){
+
+			if (excel.getRow() == MAX_CASES_PER_SHEET) {
 				iSheets += 1;
-				excel.addSheet(messages.get("cases")+" - pg. " + iSheets+1, iSheets);
+				excel.addSheet(messages.get("cases") + " - pg. " + iSheets + 1, iSheets);
 				addTitles();
 			}
 		}
-		 
+
 	}
 
-	public void addTitles(){
+	public void addTitles() {
 		//set title row
 		excel.setRow(TITLE_ROW);
-		
+
 		addCaseDataTitles();
-		
-		if(exportExamHiv)
+
+		if (exportExamHiv)
 			addExamTitles("hiv", "manag.hivreport.title1");
-		
-		if(exportExamMicroscopy)
+
+		if (exportExamMicroscopy)
 			addExamTitles("microscopy", "cases.exammicroscopy");
-		
-		if(exportExamCulture)
+
+		if (exportExamCulture)
 			addExamTitles("culture", "cases.examculture");
-		
-		if(exportExamDST)
+
+		if (exportExamDST)
 			addGeneralizedTittles(substances, "examdst", "cases.examdst");
-		
-		if(exportExamXRay)
+
+		if (exportExamXRay)
 			addExamTitles("xray", "cases.examxray");
-		
-		if(exportCasesComorbidity)
+
+		if (exportCasesComorbidity)
 			addGeneralizedTittles(commorbidities, "commorbidities", "cases.comorbidities");
-		
-		if(exportCaseSideEffect)
+
+		if (exportCaseSideEffect)
 			addGeneralizedTittles(sideEffects, "sideeffects", "cases.sideeffects.desc");
 	}
-	
+
 	public void addCaseDataTitles() {
 		// add title line
 		excel.addColumnMark("casedata");
-		excel.addGroupHeaderFromResource("cases.details.case", 40 + (levelInfo.getMaxLevel() * 2), "title");
-		
+		excel.addGroupHeaderFromResource("cases.details.case", 40 + (levelInfo.getMaxLevel() * 2) + getCaseDataCustomFieldsQtd(), "title");
+
 		excel.addTextFromResource("Patient.caseNumber", "title");
 		excel.addTextFromResource("Patient.securityNumber", "title");
 		excel.addTextFromResource("Patient.lastName", "title");
@@ -290,67 +297,68 @@ public class CaseDataExport {
 		excel.addTextFromResource("case.inicialweight", "title");
 		excel.addTextFromResource("case.currweight", "title");
 		excel.addTextFromResource("cases.prevtreat.numprev", "title");
+		addCaseDataCustomTitles();
 	}
-	
-	private void addExamTitles(String columnMark, String groupTitle){
+
+	private void addExamTitles(String columnMark, String groupTitle) {
 		// add title line
 		excel.addColumnMark(columnMark);
 		excel.addGroupHeaderFromResource(groupTitle, TreatmentMonth.values().length, "title");
-		
-		for(TreatmentMonth t : TreatmentMonth.values()){
-			if(t.equals(TreatmentMonth.DIGNOSIS))
+
+		for (TreatmentMonth t : TreatmentMonth.values()) {
+			if (t.equals(TreatmentMonth.DIGNOSIS))
 				excel.addText(messages.get(t.getKey()), "title");
 			else
 				excel.addText(t.getMonth() + messages.get(t.getKey()), "title");
 		}
 	}
-	
+
 	/**
-	 * @param list - Must have on the position 1 the name of the column and on the 
-	 * position 0 the id of the respective object.
+	 * @param list       - Must have on the position 1 the name of the column and on the
+	 *                   position 0 the id of the respective object.
 	 * @param columnMark
 	 * @param groupTitle
 	 */
-	private void addGeneralizedTittles(List<Object[]> list, String columnMark, String groupTitle){
+	private void addGeneralizedTittles(List<Object[]> list, String columnMark, String groupTitle) {
 		// add title line
 		excel.addColumnMark(columnMark);
 		excel.addGroupHeaderFromResource(groupTitle, list.size(), "title");
-		
-		for(Object[] o : list){
+
+		for (Object[] o : list) {
 			String s = (String) o[1];
 			excel.addText(s, "title");
 		}
 	}
-	
+
 	/**
 	 * Works only when wants to display all levels that workspace supports.
 	 */
-	private void addAdminUnitTitle(String witchAdmUnit){
-		if (levelInfo.isHasLevel1()) 
-			excel.addText(levelInfo.getNameLevel1().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
-		if (levelInfo.isHasLevel2()) 
-			excel.addText(levelInfo.getNameLevel2().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
-		if (levelInfo.isHasLevel3()) 
-			excel.addText(levelInfo.getNameLevel3().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
-		if (levelInfo.isHasLevel4()) 
-			excel.addText(levelInfo.getNameLevel4().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
-		if (levelInfo.isHasLevel5()) 
-			excel.addText(levelInfo.getNameLevel5().toString() + (witchAdmUnit!=null ? " (" + witchAdmUnit + ")" : "") , "title");
+	private void addAdminUnitTitle(String witchAdmUnit) {
+		if (levelInfo.isHasLevel1())
+			excel.addText(levelInfo.getNameLevel1().toString() + (witchAdmUnit != null ? " (" + witchAdmUnit + ")" : ""), "title");
+		if (levelInfo.isHasLevel2())
+			excel.addText(levelInfo.getNameLevel2().toString() + (witchAdmUnit != null ? " (" + witchAdmUnit + ")" : ""), "title");
+		if (levelInfo.isHasLevel3())
+			excel.addText(levelInfo.getNameLevel3().toString() + (witchAdmUnit != null ? " (" + witchAdmUnit + ")" : ""), "title");
+		if (levelInfo.isHasLevel4())
+			excel.addText(levelInfo.getNameLevel4().toString() + (witchAdmUnit != null ? " (" + witchAdmUnit + ")" : ""), "title");
+		if (levelInfo.isHasLevel5())
+			excel.addText(levelInfo.getNameLevel5().toString() + (witchAdmUnit != null ? " (" + witchAdmUnit + ")" : ""), "title");
 	}
-	
+
 	/**
 	 * Works only when wants to display all levels that workspace supports.
 	 */
-	private void addAdminUnitsValue(AdministrativeUnit au){
-		int colBefore = excel.getColumn()-1;
+	private void addAdminUnitsValue(AdministrativeUnit au) {
+		int colBefore = excel.getColumn() - 1;
 		AdministrativeUnit workingAu = au;
-		
-		while(workingAu != null){
+
+		while (workingAu != null) {
 			excel.setColumn(colBefore + workingAu.getLevel());
 			excel.addText(workingAu.getName().getName1());
 			workingAu = workingAu.getParent();
 		}
-		
+
 		excel.setColumn(colBefore + levelInfo.getMaxLevel() + 1);
 		
 		/*for(int i = 1; i < 6; i++){
@@ -374,60 +382,62 @@ public class CaseDataExport {
 			}
 		}*/
 	}
-	
-	/**Start to export the content**/
-	
-	private void exportData(Object[] caseData){
+
+	/**
+	 * Start to export the content
+	 **/
+
+	private void exportData(Object[] caseData) {
 		exportCaseData(caseData);
-		
-		if(exportExamHiv)
+
+		if (exportExamHiv)
 			addExamHivContent(caseData);
-		
-		if(exportExamMicroscopy)
+
+		if (exportExamMicroscopy)
 			addExamMicroscopyContent(caseData);
-		
-		if(exportExamCulture)
+
+		if (exportExamCulture)
 			addExamCultureContent(caseData);
-		
-		if(exportExamDST)
+
+		if (exportExamDST)
 			addExamDSTContent(caseData);
-		
-		if(exportExamXRay)
+
+		if (exportExamXRay)
 			addExamXRayContent(caseData);
-		
-		if(exportCasesComorbidity)
+
+		if (exportCasesComorbidity)
 			addCasesComorbidityContent(caseData);
-		
-		if(exportCaseSideEffect)
+
+		if (exportCaseSideEffect)
 			addCaseSideEffectContent(caseData);
-				
+
 	}
-	
+
 	public void exportCaseData(Object[] caseData) {
-		 
+
 		excel.addText(parseCaseNumber(caseData));
-		excel.addText(((String)caseData[3]));
-		excel.addText(((String)caseData[4]));
-		excel.addText((String) caseData[5]); 
+		excel.addText(((String) caseData[3]));
+		excel.addText(((String) caseData[4]));
+		excel.addText((String) caseData[5]);
 		excel.addText((String) caseData[6]);
-		excel.addText(((String)caseData[7]));
-		excel.addTextFromResource(((CaseClassification)caseData[8]).getKey());
-		excel.addTextFromResource(((CaseState)caseData[9]).getKey());
-		excel.addTextFromResource(((Gender)caseData[10]).getKey());
-		excel.addDate(((Date)caseData[11]));
-		excel.addNumber(((Integer)caseData[12]));
+		excel.addText(((String) caseData[7]));
+		excel.addTextFromResource(((CaseClassification) caseData[8]).getKey());
+		excel.addTextFromResource(((CaseState) caseData[9]).getKey());
+		excel.addTextFromResource(((Gender) caseData[10]).getKey());
+		excel.addDate(((Date) caseData[11]));
+		excel.addNumber(((Integer) caseData[12]));
 		excel.addValue(caseData, 13);
-		excel.addText(((String)caseData[14]));
-		excel.addText(((String)caseData[15]));
+		excel.addText(((String) caseData[14]));
+		excel.addText(((String) caseData[15]));
 		addAdminUnitsValue((AdministrativeUnit) caseData[16]);
 		excel.addValue(caseData, 17);
 		excel.addValue(caseData, 18);
-		excel.addValue(caseData, 19);		
+		excel.addValue(caseData, 19);
 		excel.addValue(caseData, 20);
-		addAdminUnitsValue((AdministrativeUnit)caseData[21]);
-		excel.addDate(((Date)caseData[22]));
+		addAdminUnitsValue((AdministrativeUnit) caseData[21]);
+		excel.addDate(((Date) caseData[22]));
 		addRegimen(caseData);
-		excel.addDate(((Date)caseData[24]));
+		excel.addDate(((Date) caseData[24]));
 		addCalculatedValue(caseData, firstMedExam); //don't use casedata position
 		excel.addDate(getIniTreatmentDate(caseData));
 		excel.addValue(caseData, 26);
@@ -439,11 +449,11 @@ public class CaseDataExport {
 		excel.addValue(caseData, 32);
 		excel.addValue(caseData, 33);
 		excel.addValue(caseData, 34);
-		excel.addValue(((Boolean)caseData[35]).booleanValue() ? messages.get("global.yes") : messages.get("global.no"));
+		excel.addValue(((Boolean) caseData[35]).booleanValue() ? messages.get("global.yes") : messages.get("global.no"));
 		excel.addValue(caseData, 36);
-		excel.addDate(((Date)caseData[37]));
+		excel.addDate(((Date) caseData[37]));
 
-		if(caseData[38] == null)
+		if (caseData[38] == null)
 			excel.addValue(messages.get("TreatmentCategory.undefined"));
 		else
 			excel.addValue(caseData, 38);
@@ -452,247 +462,249 @@ public class CaseDataExport {
 		addCalculatedValue(caseData, inicialWeight);
 		addCalculatedValue(caseData, currentWeight);
 		addCalculatedValue(caseData, numPrevTreat);
-		
+
+		addCaseDataCustomFields(caseData);
 	}
-	
-	private String parseCaseNumber(Object[] caseData){
+
+	private String parseCaseNumber(Object[] caseData) {
 		Integer recordNumber = ((Integer) caseData[1]);
 		Integer caseNumber = ((Integer) caseData[2]);
 		String sRecordNumber = null;
 		String sCaseNumber = null;
-		
-		if(recordNumber != null)
+
+		if (recordNumber != null)
 			sRecordNumber = Integer.toString(recordNumber);
-		
-		if(caseNumber != null && caseNumber.intValue() != 1)
+
+		if (caseNumber != null && caseNumber.intValue() != 1)
 			sCaseNumber = Integer.toString(caseNumber);
-		
-		if(sRecordNumber == null && sCaseNumber == null)
+
+		if (sRecordNumber == null && sCaseNumber == null)
 			return messages.get("cases.nonumber");
-		
+
 		return sCaseNumber == null ? sRecordNumber : sRecordNumber + "-" + sCaseNumber;
 	}
-	
+
 	/**
-	 * @param list - has to contain 2 values. 0 - caseIds, 1 - value to be displayed
-	 * @param tbcase
+	 * @param list   - has to contain 2 values. 0 - caseIds, 1 - value to be displayed
 	 */
-	public void addCalculatedValue(Object[] caseData, List<Object[]> list){
+	public void addCalculatedValue(Object[] caseData, List<Object[]> list) {
 		boolean isInList = false;
 		Integer idcase = null;
-		for(Object[] o : list){
+		for (Object[] o : list) {
 			idcase = (Integer) o[0];
-			if(idcase.equals((Integer) caseData[0])){
+			if (idcase.equals((Integer) caseData[0])) {
 				String value = "";
-				
-				if(o[1] instanceof Long){
+
+				if (o[1] instanceof Long) {
 					value = Long.toString((Long) o[1]);
 					excel.addText(value);
-				}else if(o[1] instanceof Double){
+				} else if (o[1] instanceof Double) {
 					value = Double.toString((Double) o[1]);
 					excel.addText(value);
-				}else if(o[1] instanceof String){
+				} else if (o[1] instanceof String) {
 					value = (String) o[1];
 					excel.addText(value);
-				}else if(o[1] instanceof Date){
+				} else if (o[1] instanceof Date) {
 					excel.addDate((Date) o[1]);
 				}
-				
+
 				isInList = true;
 				break;
 			}
 		}
-		if(!isInList)
-			excel.setColumn(excel.getColumn()+1);
+		if (!isInList)
+			excel.setColumn(excel.getColumn() + 1);
 		return;
 	}
-	
-	private Date getIniTreatmentDate(Object[] caseData){
+
+	private Date getIniTreatmentDate(Object[] caseData) {
 		return (Date) caseData[25];
 	}
-	
-	public void addRegimen(Object[] caseData){
-		if(caseData[21]!=null)
-			excel.addText(((String)caseData[23]));
+
+	public void addRegimen(Object[] caseData) {
+		if (caseData[21] != null)
+			excel.addText(((String) caseData[23]));
 		else
 			excel.addTextFromResource("regimens.individualized");
 	}
-		
-	public void addExamHivContent(Object[] caseData){
-		if(examsHIV == null)
+
+	public void addExamHivContent(Object[] caseData) {
+		if (examsHIV == null)
 			return;
-		
+
 		boolean hasResult;
-		
-		for(TreatmentMonth t : TreatmentMonth.values()){
+
+		for (TreatmentMonth t : TreatmentMonth.values()) {
 			hasResult = false;
-			for(Object[] exam : examsHIV){
+			for (Object[] exam : examsHIV) {
 				Integer caseId = (Integer) exam[0];
 				Date dateCollected = (Date) exam[1];
 				HIVResult result = (HIVResult) exam[2];
-				
-				if(caseId.equals((Integer)caseData[0]) && dateCollected != null
-						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()){
+
+				if (caseId.equals((Integer) caseData[0]) && dateCollected != null
+						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()) {
 					excel.addTextFromResource(result.getKey());
 					hasResult = true;
 					break;
 				}
 			}
-			if(!hasResult)
-				excel.setColumn(excel.getColumn()+1);
-		}
-	}
-	
-	public void addExamMicroscopyContent(Object[] caseData){
-		if(examsMicroscopy == null)
-			return;
-		
-		boolean hasResult;
-		
-		for(TreatmentMonth t : TreatmentMonth.values()){
-			hasResult = false;
-			for(Object[] exam : examsMicroscopy){
-				Integer caseId = (Integer) exam[0];
-				Date dateCollected = (Date) exam[1];
-				MicroscopyResult result = (MicroscopyResult) exam[2];
-				
-				if(caseId.equals((Integer)caseData[0]) && dateCollected != null
-						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()){
-					excel.addTextFromResource(result.getKey());
-					hasResult = true;
-					break;
-				}
-			}
-			if(!hasResult)
-				excel.setColumn(excel.getColumn()+1);
+			if (!hasResult)
+				excel.setColumn(excel.getColumn() + 1);
 		}
 	}
 
-	public void addExamCultureContent(Object[] caseData){
-		if(examsCulture == null)
+	public void addExamMicroscopyContent(Object[] caseData) {
+		if (examsMicroscopy == null)
 			return;
-		
+
 		boolean hasResult;
-		
-		for(TreatmentMonth t : TreatmentMonth.values()){
+
+		for (TreatmentMonth t : TreatmentMonth.values()) {
 			hasResult = false;
-			for(Object[] exam : examsCulture){
+			for (Object[] exam : examsMicroscopy) {
 				Integer caseId = (Integer) exam[0];
 				Date dateCollected = (Date) exam[1];
-				CultureResult result = (CultureResult) exam[2];
-				
-				if(caseId.equals((Integer) caseData[0]) && dateCollected != null
-						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()){
+				MicroscopyResult result = (MicroscopyResult) exam[2];
+
+				if (caseId.equals((Integer) caseData[0]) && dateCollected != null
+						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()) {
 					excel.addTextFromResource(result.getKey());
 					hasResult = true;
 					break;
 				}
 			}
-			if(!hasResult)
-				excel.setColumn(excel.getColumn()+1);
+			if (!hasResult)
+				excel.setColumn(excel.getColumn() + 1);
 		}
 	}
-	
-	public void addExamDSTContent(Object[] caseData){
-		if(examsDST == null)
+
+	public void addExamCultureContent(Object[] caseData) {
+		if (examsCulture == null)
 			return;
-		
+
 		boolean hasResult;
-		
-		for(Object[] s : substances){
+
+		for (TreatmentMonth t : TreatmentMonth.values()) {
+			hasResult = false;
+			for (Object[] exam : examsCulture) {
+				Integer caseId = (Integer) exam[0];
+				Date dateCollected = (Date) exam[1];
+				CultureResult result = (CultureResult) exam[2];
+
+				if (caseId.equals((Integer) caseData[0]) && dateCollected != null
+						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()) {
+					excel.addTextFromResource(result.getKey());
+					hasResult = true;
+					break;
+				}
+			}
+			if (!hasResult)
+				excel.setColumn(excel.getColumn() + 1);
+		}
+	}
+
+	public void addExamDSTContent(Object[] caseData) {
+		if (examsDST == null)
+			return;
+
+		boolean hasResult;
+
+		for (Object[] s : substances) {
 			Integer substanceId = (Integer) s[0];
 			hasResult = false;
-			for(Object[] exam : examsDST){
+			for (Object[] exam : examsDST) {
 				Integer caseId = (Integer) exam[0];
 				Date dateCollected = (Date) exam[1];
 				DstResult result = (DstResult) exam[2];
 				Integer caseSubstanceId = (Integer) exam[3];
-				
-				if(caseId.equals((Integer) caseData[0]) && dateCollected != null
+
+				if (caseId.equals((Integer) caseData[0]) && dateCollected != null
 						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == TreatmentMonth.DIGNOSIS.getMonth()
-						&& caseSubstanceId.equals(substanceId)){
+						&& caseSubstanceId.equals(substanceId)) {
 					excel.addTextFromResource(result.getKey());
 					hasResult = true;
 					break;
 				}
 			}
-			if(!hasResult)
-				excel.setColumn(excel.getColumn()+1);
+			if (!hasResult)
+				excel.setColumn(excel.getColumn() + 1);
 		}
 	}
-	
-	public void addExamXRayContent(Object[] caseData){
-		if(examsXRay == null)
+
+	public void addExamXRayContent(Object[] caseData) {
+		if (examsXRay == null)
 			return;
-		
+
 		boolean hasResult;
-		
-		for(TreatmentMonth t : TreatmentMonth.values()){
+
+		for (TreatmentMonth t : TreatmentMonth.values()) {
 			hasResult = false;
-			for(Object[] exam : examsXRay){
+			for (Object[] exam : examsXRay) {
 				Integer caseId = (Integer) exam[0];
 				Date dateCollected = (Date) exam[1];
 				String presentation = (String) exam[2];
-				
-				if(caseId.equals((Integer) caseData[0]) && dateCollected != null
-						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()){
+
+				if (caseId.equals((Integer) caseData[0]) && dateCollected != null
+						&& getMonthTreatment(dateCollected, getIniTreatmentDate(caseData)) == t.getMonth()) {
 					excel.addTextFromResource(presentation);
 					hasResult = true;
 					break;
 				}
 			}
-			if(!hasResult)
-				excel.setColumn(excel.getColumn()+1);
+			if (!hasResult)
+				excel.setColumn(excel.getColumn() + 1);
 		}
 	}
-	
-	public void addCasesComorbidityContent(Object[] caseData){
-		if(casesComorbidity == null)
+
+	public void addCasesComorbidityContent(Object[] caseData) {
+		if (casesComorbidity == null)
 			return;
 		boolean hasCommorbidity;
-		for(Object[] com : commorbidities){
+		for (Object[] com : commorbidities) {
 			hasCommorbidity = false;
 			Integer commorbidityId = (Integer) com[0];
-			for(Object[] caseCom : casesComorbidity){
+			for (Object[] caseCom : casesComorbidity) {
 				Integer caseId = (Integer) caseCom[0];
 				Integer commorbidityId2 = (Integer) caseCom[1];
-				
-				if(caseId.equals((Integer) caseData[0]) && commorbidityId2.equals(commorbidityId)){
+
+				if (caseId.equals((Integer) caseData[0]) && commorbidityId2.equals(commorbidityId)) {
 					excel.addTextFromResource("global.yes");
 					hasCommorbidity = true;
 					break;
 				}
 			}
-			if(!hasCommorbidity)
+			if (!hasCommorbidity)
 				excel.addTextFromResource("global.no");
 		}
 	}
-	
-	public void addCaseSideEffectContent(Object[] caseData){
-		if(caseSideEffect == null)
+
+	public void addCaseSideEffectContent(Object[] caseData) {
+		if (caseSideEffect == null)
 			return;
-		
+
 		boolean hasSideEffect;
-		
-		for(Object[] com : sideEffects){
+
+		for (Object[] com : sideEffects) {
 			hasSideEffect = false;
 			Integer sideEffectId = (Integer) com[0];
-			for(Object[] caseSE : caseSideEffect){
+			for (Object[] caseSE : caseSideEffect) {
 				Integer caseId = (Integer) caseSE[0];
 				Integer sideEffectId2 = (Integer) caseSE[1];
-				
-				if(caseId.equals((Integer) caseData[0]) && sideEffectId2.equals(sideEffectId)){
+
+				if (caseId.equals((Integer) caseData[0]) && sideEffectId2.equals(sideEffectId)) {
 					excel.addTextFromResource("global.yes");
 					hasSideEffect = true;
 					break;
 				}
 			}
-			if(!hasSideEffect)
+			if (!hasSideEffect)
 				excel.addTextFromResource("global.no");
 		}
 	}
-	
-	/** Getters 'n' setters **/
+
+	/**
+	 * Getters 'n' setters
+	 **/
 	public ExcelCreator getExcel() {
 		return excel;
 	}
@@ -751,7 +763,8 @@ public class CaseDataExport {
 
 	public void setExportCaseSideEffect(boolean exportCaseSideEffect) {
 		this.exportCaseSideEffect = exportCaseSideEffect;
-	}	
+	}
+
 	public List<Object[]> getNumPrevTreat() {
 		return numPrevTreat;
 	}
@@ -759,10 +772,11 @@ public class CaseDataExport {
 	public void setNumPrevTreat(List<Object[]> numPrevTreat) {
 		this.numPrevTreat = numPrevTreat;
 	}
-	
+
 	/**
 	 * Return number of month of treatment based on the date and IniTreatDate
 	 * Based On tbcase.getMonthTreatment(Date date)
+	 *
 	 * @param date
 	 * @param iniTreatmentDate
 	 * @return
@@ -775,46 +789,79 @@ public class CaseDataExport {
 
 		return num;
 	}
-	
-	public List<Object[]> executeQuery(String q, HashMap<String, Object> parameters){
+
+	private String getCustomizedFields() {
+		if (defaultWorkspace.getExtension() != null && defaultWorkspace.getExtension().equals("bd"))
+			return CUSTOMIZED_FIELDS_BD;
+		else
+			return "";
+	}
+
+	private String getTbCaseHQLNameWorkdpace() {
+		if (defaultWorkspace.getExtension() != null && defaultWorkspace.getExtension().equals("bd"))
+			return "TbCaseBD";
+		else
+			return "TbCase";
+	}
+
+	private void addCaseDataCustomTitles(){
+		if (defaultWorkspace.getExtension() != null && defaultWorkspace.getExtension().equals("bd")) {
+			excel.addTextFromResource("MedicalExamination.ReferredTo", "title");
+		}
+	}
+
+	private void addCaseDataCustomFields(Object[] caseData){
+		if (defaultWorkspace.getExtension() != null && defaultWorkspace.getExtension().equals("bd")) {
+			excel.addValue(caseData, 40);
+		}
+	}
+
+	private int getCaseDataCustomFieldsQtd(){
+		if (defaultWorkspace.getExtension() != null && defaultWorkspace.getExtension().equals("bd"))
+			return CUSTOMIZED_FIELDS_QTD_BD;
+		else
+			return 0;
+	}
+
+	public List<Object[]> executeQuery(String q, HashMap<String, Object> parameters) {
 		List<Object[]> r;
 		Query query;
-		
+
 		beginTransaction();
 		try {
-				query = entityManager.createQuery(q);
-				
-				if(parameters != null){
-					Iterator it = parameters.entrySet().iterator();
-					while (it.hasNext()) {
-						Entry pairs = (Map.Entry)it.next();
-						query.setParameter((String)pairs.getKey(), pairs.getValue());
-						it.remove(); // avoids a ConcurrentModificationException
-					}
-				}
-				
-				r = query.getResultList();
-				
-				entityManager.flush();
-				commitTransaction();
-				entityManager.clear();
+			query = entityManager.createQuery(q);
 
-		}
-		catch (Exception e) {
+			if (parameters != null) {
+				Iterator it = parameters.entrySet().iterator();
+				while (it.hasNext()) {
+					Entry pairs = (Map.Entry) it.next();
+					query.setParameter((String) pairs.getKey(), pairs.getValue());
+					it.remove(); // avoids a ConcurrentModificationException
+				}
+			}
+
+			r = query.getResultList();
+
+			entityManager.flush();
+			commitTransaction();
+			entityManager.clear();
+
+		} catch (Exception e) {
 			rollbackTransaction();
 			throw new RuntimeException(e);
 		}
-		
+
 		return r;
 	}
-	
+
 	/**
 	 * Return the transaction in use by the task
+	 *
 	 * @return
 	 */
 	protected UserTransaction getTransaction() {
 		if (transaction == null)
-			transaction = (UserTransaction)Component.getInstance("org.jboss.seam.transaction.transaction");
+			transaction = (UserTransaction) Component.getInstance("org.jboss.seam.transaction.transaction");
 		return transaction;
 	}
 
@@ -830,9 +877,9 @@ public class CaseDataExport {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * Commit a transaction that is under progress 
+	 * Commit a transaction that is under progress
 	 */
 	public void commitTransaction() {
 		try {
@@ -844,7 +891,7 @@ public class CaseDataExport {
 	}
 
 	/**
-	 * Roll back a transaction that is under progress 
+	 * Roll back a transaction that is under progress
 	 */
 	public void rollbackTransaction() {
 		try {
@@ -857,8 +904,8 @@ public class CaseDataExport {
 
 	/**
 	 * Default number of Treatment Months to display on the excel file
-	 * @author Mauricio Santos	
 	 *
+	 * @author Mauricio Santos
 	 */
 	public enum TreatmentMonth {
 		DIGNOSIS(-1),
@@ -886,23 +933,24 @@ public class CaseDataExport {
 		MONTH_22(22),
 		MONTH_23(23),
 		MONTH_25(24);
-		
-		TreatmentMonth(int month){
+
+		TreatmentMonth(int month) {
 			this.month = month;
 		}
-		
+
 		int month;
-		
+
 		public String getKey() {
-			if(ordinal() == 0)
+			if (ordinal() == 0)
 				return "cases.exams.prevdt";
 			else
 				return "global.monthth.2";
 		}
-		
+
 		public int getMonth() {
 			return month;
 		}
-	};
-		
+	}
+
+	;
 }
