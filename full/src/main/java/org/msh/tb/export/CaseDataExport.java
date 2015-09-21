@@ -71,7 +71,8 @@ public class CaseDataExport {
 	private final static int MAX_CASES_PER_SHEET = 65500; // max: 65536 in excel 2003 or later
 	private final static int TITLE_ROW = 1;
 
-	private final static String CUSTOMIZED_FIELDS_BD = ",c.patientRefToFv.name.name1 ";
+	private final static String CUSTOMIZED_FIELDS_BD = ",refBy.name.name1 ";
+	private final static String CUSTOMIZED_JOINS_BD = "left join c.patientRefToFv refBy ";
 	private final static int CUSTOMIZED_FIELDS_QTD_BD = 1;
 
 	/**
@@ -119,6 +120,7 @@ public class CaseDataExport {
 				"left join c.extrapulmonaryType2.value ept2 left join c.notificationUnit notifunit " +
 				"left join c.notificationUnit.adminUnit notifau left join notifau.parent left join notifau.parent.parent left join notifau.parent.parent.parent left join notifau.parent.parent.parent.parent " +
 				"left join c.currentAddress.adminUnit currAddAu left join currAddAu.parent left join currAddAu.parent.parent left join currAddAu.parent.parent.parent left join currAddAu.parent.parent.parent.parent " +
+				getCustomizedJoins() +
 				"where c.id in " + caseIds;
 		casesData = executeQuery(q, null);
 
@@ -793,6 +795,13 @@ public class CaseDataExport {
 	private String getCustomizedFields() {
 		if (defaultWorkspace.getExtension() != null && defaultWorkspace.getExtension().equals("bd"))
 			return CUSTOMIZED_FIELDS_BD;
+		else
+			return "";
+	}
+
+	private String getCustomizedJoins() {
+		if (defaultWorkspace.getExtension() != null && defaultWorkspace.getExtension().equals("bd"))
+			return CUSTOMIZED_JOINS_BD;
 		else
 			return "";
 	}
