@@ -62,7 +62,11 @@ public class UnitExcelImporter {
             String prevau = null;
             Integer previd = null;
             for (int i = 1; i < rows; i++) {
-                String admunit = sheet.getCell(0, i).getContents();
+                String admunit = sheet.getCell(1, i).getContents();
+
+                if (admunit.indexOf(" ") == 2) {
+                    admunit = admunit.substring(3);
+                }
 
                 if (admunit != null) {
                     admunit = admunit.trim();
@@ -76,7 +80,7 @@ public class UnitExcelImporter {
                     admunit = prevau;
                 }
 
-                String name = sheet.getCell(1, i).getContents();
+                String name = sheet.getCell(2, i).getContents();
                 if (name != null && name.trim().isEmpty()) {
                     name = null;
                 }

@@ -178,7 +178,9 @@ public class CaseFilters {
 				clearFilters();
 				stateIndex = sc;
 				unitId = uid;
-				classifications.selectAll();
+                if (classifications != null){
+                    classifications.selectAll();
+                }
 				diagnosisTypes.selectAll();
 				break;
 
@@ -186,7 +188,9 @@ public class CaseFilters {
 				String s = patient;
 				clearFilters();
 				patient = s;
-				classifications.selectAll();
+                if (classifications != null){
+                    classifications.selectAll();
+                }
 				diagnosisTypes.selectAll();
 				break;
 			
@@ -195,7 +199,9 @@ public class CaseFilters {
 				clearFilters();
 				validationState = vs;
 				unitId = uid;
-				classifications.selectAll();
+                if (classifications != null){
+                    classifications.selectAll();
+                }
 				diagnosisTypes.selectAll();
 				break;
 			
@@ -205,7 +211,9 @@ public class CaseFilters {
 				setFilterHealthUnit(FilterHealthUnit.TREATMENT_UNIT);
 				tagid = id;
 				unitId = uid;
-				classifications.selectAll();
+                if (classifications != null){
+                    classifications.selectAll();
+                }
 				diagnosisTypes.selectAll();
 				break;
 			
@@ -214,7 +222,9 @@ public class CaseFilters {
 				stateIndex = null;
 				tagid = null;
 				unitId = null;
-				classifications.selectAll();
+                if (classifications != null){
+                    classifications.selectAll();
+                }
 				diagnosisTypes.selectAll();
 				break;
 

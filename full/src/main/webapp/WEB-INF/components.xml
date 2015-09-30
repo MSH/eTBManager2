@@ -57,7 +57,7 @@
 
     <component class="org.jboss.seam.web.MultipartFilter">
         <property name="createTempFiles">true</property>
-        <property name="maxRequestSize">1000000</property>
+        <property name="maxRequestSize">10000000</property>
     </component>
 
     <event type="org.jboss.seam.security.notLoggedIn">
