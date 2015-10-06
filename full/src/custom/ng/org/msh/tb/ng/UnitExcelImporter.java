@@ -132,16 +132,18 @@ public class UnitExcelImporter {
      * @param name
      */
     public void insertUnit(Integer auid, String name) {
+        Workspace ws = UserSession.getWorkspace();
+
         EntityManager em = App.getEntityManager();
-        Number val = (Number)em.createQuery("select max(id) from Tbunit where upper(name.name1) = :name")
+        Number val = (Number)em.createQuery("select max(id) from Tbunit where upper(name.name1) = :name" +
+                " and workspace.id = :wsid")
                 .setParameter("name", name)
+                .setParameter("wsid", ws.getId() )
                 .getSingleResult();
 
         if (val != null) {
             return;
         }
-
-        Workspace ws = UserSession.getWorkspace();
 
         String sql = "insert into tbunit (batchControl, changeEstimatedQuantity, dispensingFrequency, \n" +
                 "mdrHealthUnit, medicineStorage, medicineSupplier, name1, numDAysOrder, orderOverMinimum, \n" +
