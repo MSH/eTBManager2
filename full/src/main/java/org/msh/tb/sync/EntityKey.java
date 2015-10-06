@@ -24,7 +24,10 @@ public class EntityKey {
 	private Integer serverId;
 	private boolean newServerId;
 	private EntityKeyAction action;
-	
+
+	public EntityKey(){
+		super();
+	}
 	
 	/**
 	 * Default constructor

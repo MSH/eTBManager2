@@ -206,9 +206,9 @@
         	<property name="duration" xmlAttribute="true" />
         </objectGraph>
         
-        <objectGraph name="deleted-entity" class="org.msh.tb.sync.EntityKey">
+        <objectGraph name="deleted-entity" class="org.msh.tb.sync.DeletedEntity">
             <property name="entityName" elementName="entity" xmlAttribute="true" />
-            <property name="serverId" elementName="id" xmlAttribute="true" />
+            <property name="entityId" elementName="id" xmlAttribute="true" />
         </objectGraph>
 
     </objectCollection>

@@ -240,10 +240,23 @@ public class SyncFileImporter {
 			entityVersions.add((EntityLastVersion)obj);
 			return;
 		}
-		
+
+		if(obj instanceof DeletedEntity){
+			handleDeletedEntity((DeletedEntity)obj);
+			return;
+		}
+
 		saveEntity(obj);
 	}
 
+	/**
+	 * Delete entities deleted on the desktop
+	 * @param obj
+	 */
+	protected void handleDeletedEntity(DeletedEntity obj){
+		EntityManager em = App.getEntityManager();
+		em.createQuery("delete from " + obj.getEntityName() + " where id = " + obj.getEntityId()).executeUpdate();
+	}
 
 	/**
 	 * Save entity. The method is under a transaction, so it's safe to persist and continue

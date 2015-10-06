@@ -6,6 +6,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 import org.msh.etbm.commons.transactionlog.ActionTX;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.PrescribedMedicine;
@@ -119,10 +120,24 @@ public class TreatmentLogService {
 					.setRoleAction( RoleAction.EDIT )
 					.setDescription( tbcase.toString() )
 					.end();
+
+			updateLastTransactionId(tbcase, atx.getTransactionLog().getId());
 		}
-//			log.save("CASE_TREAT", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
+		//			log.save("CASE_TREAT", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
+
+	private void updateLastTransactionId(TbCase tbcase, Integer txId){
+		App.getEntityManager().createQuery("update PrescribedMedicine set lastTransaction.id = :atxId where tbcase.id = :caseId")
+				.setParameter("atxId", txId)
+				.setParameter("caseId", tbcase.getId())
+				.executeUpdate();
+
+		App.getEntityManager().createQuery("update TreatmentHealthUnit set lastTransaction.id = :atxId where tbcase.id = :caseId")
+				.setParameter("atxId", txId)
+				.setParameter("caseId", tbcase.getId())
+				.executeUpdate();
+	}
 	
 	/**
 	 * Retrieve the new medicine included
@@ -226,6 +241,8 @@ public class TreatmentLogService {
 
 		atx.setEntityClass( TbCase.class.getSimpleName() )
 				.end();
+
+		updateLastTransactionId(tbcase, atx.getTransactionLog().getId());
 //		transactionLogService.saveExecuteTransaction("CASE_STARTTREAT", tbcase.getPatient().getFullName(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
