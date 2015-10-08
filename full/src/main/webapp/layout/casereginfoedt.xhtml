@@ -111,7 +111,7 @@
                     <ui:param name="edtid" value="regdateedt" />
                     <ui:param name="future" value="false" />
                     <ui:param name="checkDeathDate" value="true" />
-                    <ui:param name="labelstyle" value="width:290px"/>
+                    <ui:param name="labelstyle" value="width:270px"/>
                     <ui:define name="insidecalendartag">
                         <a:support event="oninputkeyup" ajaxSingle="true" reRender="bmunumbermsg,bmudatemsg,bmunumber,bmudatespan" action="#{caseEditingHome.updateBMUinfo}" />
                         <a:support event="onchanged" ajaxSingle="true" reRender="bmunumbermsg,bmudatemsg,bmunumber,bmudatespan" action="#{caseEditingHome.updateBMUinfo}"/>
@@ -134,7 +134,7 @@
                     <ui:param name="edtid" value="bmudate" />
                     <ui:param name="checkDeathDate" value="true" />
                     <ui:param name="future" value="false" />
-                    <ui:param name="labelstyle" value="width:290px"/>
+                    <ui:param name="labelstyle" value="width:270px"/>
                 </s:decorate>
                 </s:span>
             </td></tr>
@@ -161,7 +161,7 @@
                         <ui:param name="edtid" value="regdateedt" />
                         <ui:param name="checkDeathDate" value="true" />
                         <ui:param name="future" value="false" />
-                        <ui:param name="labelstyle" value="width:290px"/>
+                        <ui:param name="labelstyle" value="width:270px"/>
                         <ui:define name="insidecalendartag">
                             <a:support event="oninputkeyup" ajaxSingle="true" reRender="bmunumbermsg2,bmudatemsg2,bmunumber2,bmudatespan2" action="#{caseEditingHome.updateBMUinfo}" />
                             <a:support event="onchanged" ajaxSingle="true" reRender="bmunumbermsg2,bmudatemsg2,bmunumber2,bmudatespan2" action="#{caseEditingHome.updateBMUinfo}"/>
@@ -172,7 +172,7 @@
             <tr><td width="438px">
                 <s:decorate template="/layout/edit.xhtml">
                     <ui:define name="label">#{messages['DisplayCaseNumber.TB']}:</ui:define>
-                    <ui:param name="labelstyle" value="width:290px"/>
+                    <ui:param name="labelstyle" value="width:270px"/>
                     <h:inputText id="bmunumber2" value="#{tbcase.lastBmuTbRegistNumber}" style="width:120px;" maxlength="50"></h:inputText>
                 </s:decorate>
             </td><td width="553px">
