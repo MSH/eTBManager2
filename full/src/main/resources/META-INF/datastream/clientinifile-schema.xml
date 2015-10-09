@@ -169,6 +169,8 @@
             <property name="dailyUpdate" xmlAttribute="true" />
             <property name="lastTransaction" use="IGNORE" />
             <property name="workspace" use="IGNORE" />
+            <property name="displayOrder" use="IGNORE" />
+            <property name="summary" use="IGNORE" />
         </objectGraph>
 
         <!-- TREATMENT REGIMEN -->
@@ -206,6 +208,7 @@
             </property>
             <property name="workspace" use="IGNORE" />
             <property name="laboratory" use="IGNORE" />
+            <property name="lastTransaction" use="IGNORE" />
         </objectGraph>
 
         
@@ -219,6 +222,7 @@
             		<property name="cases" use="IGNORE" />
 		            <property name="lastTransaction" use="IGNORE" />
             		<property name="workspace" use="IGNORE" />
+                    <property name="clientId" use="IGNORE" />
             	</objectGraph>
             </property>
             <property name="classification" xmlAttribute="true" />
@@ -253,6 +257,7 @@
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="tags" use="IGNORE" />
             <property name="movedSecondLineTreatment" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
@@ -267,6 +272,7 @@
             <property name="method.id" elementName="method" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
 
         <objectGraph name="examxpert" class="org.msh.tb.entities.ExamXpert">
@@ -276,6 +282,7 @@
             <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
             <property name="lastTransaction" use="IGNORE" />
             <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
 
         <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult">
@@ -283,6 +290,7 @@
             <property name="exam.id" elementName="exam" xmlAttribute="true" />
             <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
             <property name="result" use="REQUIRED" xmlAttribute="true"/>
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="exammicroscopy" class="org.msh.tb.entities.ExamMicroscopy">
@@ -294,6 +302,7 @@
             <property name="method.id" elementName="method" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="examculture" class="org.msh.tb.entities.ExamCulture" >
@@ -305,6 +314,7 @@
             <property name="method.id" elementName="method" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="examhiv" class="org.msh.tb.entities.ExamHIV">
@@ -312,12 +322,14 @@
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
             <property name="result" xmlAttribute="true" />
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="treatmonitoring" class="org.msh.tb.entities.TreatmentMonitoring" >
             <property name="id" xmlAttribute="true" use="REQUIRED"/>
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="healthunit" class="org.msh.tb.entities.TreatmentHealthUnit" >
@@ -328,6 +340,7 @@
             <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
             <property name="period.endDate" elementName="endDate" use="REQUIRED" />
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="presc-med" class="org.msh.tb.entities.PrescribedMedicine" >
@@ -340,6 +353,7 @@
             <property name="doseUnit" use="REQUIRED" xmlAttribute="true"/>
             <property name="frequency" use="REQUIRED" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="address" class="org.msh.tb.entities.Address">
@@ -352,6 +366,7 @@
             <property name="contactType.id" elementName="contactType" />
             <property name="conduct.id" elementName="conduct" />
             <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="examxray" class="org.msh.tb.entities.ExamXRay">
@@ -359,12 +374,15 @@
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
             <property name="presentation.id" elementName="presentation" />
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="medexam" class="org.msh.tb.entities.MedicalExamination" >
             <property name="id" xmlAttribute="true" use="REQUIRED"/>
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="patientRefToFv" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="sideEffect" class="org.msh.tb.entities.CaseSideEffect" >
@@ -375,6 +393,7 @@
             <property name="substance.id" elementName="substance" />
             <property name="substance2.id" elementName="substance2" />
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
 
         <objectGraph name="comorbidity" class="org.msh.tb.entities.CaseComorbidity" >
@@ -384,6 +403,7 @@
         	<property name="duration" xmlAttribute="true" />
             <property name="comorb" use="IGNORE" />
 		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
         </objectGraph>
         
         <objectGraph name="casetag" class="org.msh.tb.sync.CaseTag">
