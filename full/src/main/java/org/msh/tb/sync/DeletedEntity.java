@@ -3,6 +3,8 @@
  */
 package org.msh.tb.sync;
 
+import javax.persistence.*;
+
 /**
  * Store information sent from the client about deleted entities. The content
  * is the result of serialization of the XML file
@@ -10,7 +12,13 @@ package org.msh.tb.sync;
  * @author Ricardo Memoria
  *
  */
+@Entity
+@Table(name="deletedentity")
 public class DeletedEntity {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.AUTO)
+	private Integer id;
 
 	private String entityName;
 	private int entityId;
@@ -40,4 +48,11 @@ public class DeletedEntity {
 		this.entityId = entityId;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }

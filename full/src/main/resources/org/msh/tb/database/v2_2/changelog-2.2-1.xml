@@ -439,4 +439,14 @@
         </update>
     </changeSet>
 
+    <changeSet id="2.2-3" author="msantos">
+        <createTable tableName="deletedentity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="entityName" type="varchar(255)"/>
+            <column name="entityId" type="int"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

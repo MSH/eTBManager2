@@ -6,6 +6,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
+import org.msh.tb.sync.DeletedEntity;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -49,6 +50,7 @@ public class TxLogServices {
 
         atx.setEventName(eventName);
         atx.setRoleAction(action);
+        atx.setEntity(entity);
 
         // entity was defined ?
         if (entity != null) {
@@ -134,6 +136,19 @@ public class TxLogServices {
         if (entity instanceof Transactional) {
             Transactional t = (Transactional)entity;
             t.setLastTransaction(log);
+            em.persist(t);
+            em.flush();
+        }
+
+        //Check if it is a Sync Deleted Entity to update Desktop
+        if(entity instanceof SyncKey && atx.getRoleAction().equals(RoleAction.DELETE)){
+            if (((SyncKey)entity).getId() != null) {
+                DeletedEntity ent = new DeletedEntity();
+                ent.setEntityId(((SyncKey)entity).getId());
+                ent.setEntityName(entity.getClass().getSimpleName());
+                em.persist(ent);
+                em.flush();
+            }
         }
 
         atx.notifySaved(log);
