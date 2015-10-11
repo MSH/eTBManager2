@@ -205,10 +205,11 @@
             <property name="comorbidity.id" elementName="comorbidity" use="REQUIRED" xmlAttribute="true"/>
         	<property name="duration" xmlAttribute="true" />
         </objectGraph>
-        
-        <objectGraph name="deleted-entity" class="org.msh.tb.sync.DeletedEntity">
+
+        <objectGraph name="deleted-entity" class="org.msh.tb.entities.DeletedEntity">
             <property name="entityName" elementName="entity" xmlAttribute="true" />
             <property name="entityId" elementName="id" xmlAttribute="true" />
+            <property name="id" use="IGNORE" />
         </objectGraph>
 
     </objectCollection>

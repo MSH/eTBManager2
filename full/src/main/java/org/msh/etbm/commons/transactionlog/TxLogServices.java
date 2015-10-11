@@ -6,7 +6,7 @@ import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
-import org.msh.tb.sync.DeletedEntity;
+import org.msh.tb.entities.DeletedEntity;
 
 import javax.persistence.EntityManager;
 import java.util.Date;

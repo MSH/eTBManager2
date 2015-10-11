@@ -11,12 +11,10 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.SourcesQuery;
 import org.msh.tb.TagsCasesHome;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
 import org.msh.tb.entities.*;
-import org.msh.tb.entities.enums.CaseClassification;
-import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.entities.enums.MedicineLine;
-import org.msh.tb.entities.enums.RegimenPhase;
+import org.msh.tb.entities.enums.*;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.tbunits.TBUnitSelection;
 import org.msh.tb.tbunits.TBUnitType;
@@ -548,7 +546,17 @@ public class TreatmentHome {
 		tbcase.setTreatmentCategory(null);
 
 		Integer id = caseHome.getInstance().getId();
+
+		//Register removal of PrescribedMedicine for Desktop Sync
+		List<PrescribedMedicine> pms = entityManager.createQuery("from PrescribedMedicine where tbcase.id = " + id.toString()).getResultList();
+		for(PrescribedMedicine pm : pms)
+			App.registerDeletedSyncEntity(pm);
 		entityManager.createQuery("delete from PrescribedMedicine where tbcase.id = " + id.toString()).executeUpdate();
+
+		//Register removal of TreatmentHealthUnit for Desktop Sync
+		List<TreatmentHealthUnit> thus = entityManager.createQuery("from TreatmentHealthUnit where tbcase.id = " + id.toString()).getResultList();
+		for(TreatmentHealthUnit thu : thus)
+			App.registerDeletedSyncEntity(thu);
 		entityManager.createQuery("delete from TreatmentHealthUnit where tbcase.id = " + id.toString()).executeUpdate();
 		
 //		tbcase.getTreatmentPeriod().set(null, null);
@@ -560,6 +568,12 @@ public class TreatmentHome {
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();
 
+		//Register removal of TreatmentMonitoring for Desktop Sync
+		List<TreatmentMonitoring> tms = entityManager.createQuery("from TreatmentMonitoring tm where tm.tbcase.id = :caseId")
+				.setParameter("caseId", tbcase.getId())
+				.getResultList();
+		for(TreatmentMonitoring tm : tms)
+			App.registerDeletedSyncEntity(tm);
 		entityManager.createQuery("delete from TreatmentMonitoring tm where tm.tbcase.id = :caseId")
 				.setParameter("caseId", tbcase.getId())
 				.executeUpdate();

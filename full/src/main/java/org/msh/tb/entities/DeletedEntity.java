@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.msh.tb.sync;
+package org.msh.tb.entities;
 
 import javax.persistence.*;
 
@@ -22,7 +22,9 @@ public class DeletedEntity {
 
 	private String entityName;
 	private int entityId;
-	
+
+	public DeletedEntity(){};
+
 	/**
 	 * @return the entityName
 	 */

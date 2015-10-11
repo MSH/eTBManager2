@@ -4,7 +4,9 @@ import org.jboss.seam.Component;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
+import org.msh.tb.entities.SyncKey;
 import org.msh.tb.entities.Workspace;
+import org.msh.tb.entities.DeletedEntity;
 
 import javax.persistence.EntityManager;
 
@@ -88,5 +90,14 @@ public class App {
 	 */
 	public static String getTempDir() {
 		return System.getProperty("java.io.tmpdir");
+	}
+
+	public static void registerDeletedSyncEntity(Object entity){
+		if (((SyncKey)entity).getId() != null) {
+			DeletedEntity ent = new DeletedEntity();
+			ent.setEntityId(((SyncKey) entity).getId());
+			ent.setEntityName(entity.getClass().getSimpleName());
+			getEntityManager().persist(ent);
+		}
 	}
 }

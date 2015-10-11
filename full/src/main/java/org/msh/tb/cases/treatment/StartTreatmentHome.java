@@ -6,7 +6,9 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.CaseState;
@@ -16,6 +18,7 @@ import org.msh.tb.tbunits.TBUnitType;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -67,8 +70,15 @@ public class StartTreatmentHome {
 			facesMessages.addFromResourceBundle("starttreatment.emptytreatment");
 			return "error";
 		}
-		
+
+		List<PrescribedMedicine> pms = entityManager.createQuery("from PrescribedMedicine pm where pm.tbcase.id = " + tbcase.getId()).getResultList();
+		for(PrescribedMedicine pm : pms)
+			App.registerDeletedSyncEntity(pm);
 		entityManager.createQuery("delete from PrescribedMedicine pm where pm.tbcase.id = " + tbcase.getId()).executeUpdate();
+
+		List<PrescribedMedicine> thus = entityManager.createQuery("from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).getResultList();
+		for(PrescribedMedicine thu : thus)
+			App.registerDeletedSyncEntity(thu);
 		entityManager.createQuery("delete from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).executeUpdate();
 		
 		caseRegimenHome.setUseDefaultDoseUnit(useDefaultDoseUnit);

@@ -92,6 +92,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = :unitid");
+		hqls.add("from DeletedEntity");
 	}
 
 	
