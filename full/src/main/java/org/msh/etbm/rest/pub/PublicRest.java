@@ -61,7 +61,7 @@ public class PublicRest {
     @Path("/registeruser")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @GET
+    @POST
     public StandardResult registerNewUser(@Valid RegistrationForm form) {
         try {
             UserRegistrationService srv = (UserRegistrationService)App.getComponent("userRegistrationService");
