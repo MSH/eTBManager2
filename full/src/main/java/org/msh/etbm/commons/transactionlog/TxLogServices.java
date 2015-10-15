@@ -141,7 +141,8 @@ public class TxLogServices {
         }
 
         //Check if it is a Sync Deleted Entity to update Desktop
-        if(entity instanceof SyncKey && atx.getRoleAction().equals(RoleAction.DELETE)){
+        /* Moved to EntityHomeEx
+        /*if(entity instanceof SyncKey && atx.getRoleAction().equals(RoleAction.DELETE)){
             if (((SyncKey)entity).getId() != null) {
                 DeletedEntity ent = new DeletedEntity();
                 ent.setEntityId(((SyncKey)entity).getId());
@@ -149,7 +150,7 @@ public class TxLogServices {
                 em.persist(ent);
                 em.flush();
             }
-        }
+        }*/
 
         atx.notifySaved(log);
 

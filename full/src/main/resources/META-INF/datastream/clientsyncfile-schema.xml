@@ -212,5 +212,18 @@
             <property name="id" use="IGNORE" />
         </objectGraph>
 
+        <objectGraph name="field" class="org.msh.tb.entities.FieldValue">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" />
+            <property name="shortName.name1" elementName="shortname1" use="REQUIRED" />
+            <property name="shortName.name2" elementName="shortname2" />
+            <property name="field" xmlAttribute="true" />
+            <property name="other" xmlAttribute="true" />
+            <property name="displayOrder" xmlAttribute="true" />
+            <property name="customId" xmlAttribute="true" />
+            <property name="workspace" use="IGNORE" />
+        </objectGraph>
+
     </objectCollection>
 </graphSchema>
