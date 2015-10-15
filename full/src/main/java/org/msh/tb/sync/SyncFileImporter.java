@@ -188,6 +188,11 @@ public class SyncFileImporter {
 			return null;
 		}
 
+        if (objectType == FieldValue.class) {
+            System.out.println("Ola");
+         //   throw new RuntimeException("TEST");
+        }
+
 		Integer clientId = (Integer)params.get("clientId");
 		Integer id = (Integer)params.get("id");
 		
@@ -216,6 +221,10 @@ public class SyncFileImporter {
 		if (id != null) {
 			return App.getEntityManager().find(objectType, id);
 		}
+
+        if (params.size() == 0) {
+            return null;
+        }
 
 		try {
 			// create new instance of object by workspace
