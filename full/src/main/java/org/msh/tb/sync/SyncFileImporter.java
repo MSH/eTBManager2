@@ -188,11 +188,6 @@ public class SyncFileImporter {
 			return null;
 		}
 
-        if (objectType == FieldValue.class) {
-            System.out.println("Ola");
-         //   throw new RuntimeException("TEST");
-        }
-
 		Integer clientId = (Integer)params.get("clientId");
 		Integer id = (Integer)params.get("id");
 		
