@@ -183,7 +183,9 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 			queryIndex = 0;
 			recordIndex = 0;
 			firstResult = 0;
-			list = em.createQuery(hqls.get(queryIndex)).getResultList();
+            String hql = hqls.get(queryIndex);
+            processEntityVersion(hql);
+			list = em.createQuery(hql).getResultList();
 		}
 		
 		if (recordIndex >= list.size()) {

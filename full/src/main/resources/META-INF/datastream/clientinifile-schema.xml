@@ -410,6 +410,12 @@
             <property name="caseId" xmlAttribute="true" use="REQUIRED" />
             <property name="tagId" xmlAttribute="true" use="REQUIRED" />
         </objectGraph>
-        
+
+        <objectGraph name="deleted-entity" class="org.msh.tb.entities.DeletedEntity">
+            <property name="entityName" elementName="entity" xmlAttribute="true" />
+            <property name="entityId" elementName="id" xmlAttribute="true" />
+            <property name="id" use="IGNORE" />
+        </objectGraph>
+
     </objectCollection>
 </graphSchema>

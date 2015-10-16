@@ -12,6 +12,7 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.utils.DataStreamUtils;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,11 @@ import java.util.zip.GZIPOutputStream;
  */
 @Name("desktopAnswerFileGenerator")
 public class DesktopAnswerFileGenerator implements ObjectProvider, DataInterceptor {
+
+    /**
+     * Indicate the block of data being processed by getNextList()
+     */
+    protected enum ListStep { QUERY, NEWKEYS, VERSIONS, DELETEDENTITIES };
 
 	@In EntityManager entityManager;
 
@@ -53,7 +59,8 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	private List<EntityLastVersion> entityVersions;
 	private EntityKeyList keyList;
 	private List<EntityLastVersion> clientEntityVersions;
-	private List<EntityKey> newKeys;
+    private ListStep listStep;
+    private List<DeletedEntity> deletedEntities = new ArrayList<DeletedEntity>();
 	
 	
 	public DesktopAnswerFileGenerator() {
@@ -92,7 +99,6 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = :unitid");
-		hqls.add("from DeletedEntity");
 	}
 
 	
@@ -103,7 +109,11 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		// initialize variables
 		unitId = unit.getId();
 		workspaceId = unit.getWorkspace().getId();
-		
+
+        // initial state of the list of objects to serialize
+        list = null;
+        listStep = ListStep.QUERY;
+
 		initialized = false;
 
 		context = DataStreamUtils.createContext("clientinifile-schema.xml");
@@ -173,7 +183,6 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 			recordIndex = 0;
 			firstResult = 0;
 			list = getNextList();
-//			list = em.createQuery(hqls.get(queryIndex)).getResultList();
 		}
 		
 		if (recordIndex >= list.size()) {
@@ -192,53 +201,110 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	 * @return
 	 */
 	private List getNextList() {
-		// the newKeys list is the last one to be processed.
-		// if the current list is equals entityVerions, so it's the last one 
-		// and must return null
-		if ((list != null) && (list == newKeys)) {
-			return null;
-		}
+        // check if it is the end of the process
+        if (listStep == null) {
+            return null;
+        }
 
-		if ((list != null) && (list == entityVersions)) {
-			newKeys = (keyList != null? keyList.getAllKeys(): null);
-			return newKeys;
-		}
-		
-		// is the end of the list ?
-		if (recordIndex < MAX_RESULTS) {
-			queryIndex++;
-			if (queryIndex >= hqls.size())
-				return entityVersions;
-			recordIndex = 0;
-			firstResult = 0;
-		}
-		else {
-			firstResult += MAX_RESULTS;
-		}
+        // get the current block list being processed
+        switch (listStep) {
+            case QUERY:
+                list = getNextQueryList();
+                if (list == null) {
+                    listStep = ListStep.NEWKEYS;
+                }
+                break;
 
-		em.clear();
+            case NEWKEYS:
+                list = getNewKeysList();
+                listStep = ListStep.VERSIONS;
+                break;
 
-		String hql = hqls.get(queryIndex);
+            case VERSIONS:
+                list = getVersionsList();
+                listStep = ListStep.DELETEDENTITIES;
+                break;
 
-		// is the first list of the entity ?
-		if (firstResult == 0) {
-			processEntityVersion(hql);
-		}
+            case DELETEDENTITIES:
+                list = getDeletedList();
+                listStep = null;
+                break;
+        }
 
-		list = loadList(hql, firstResult);
+        if (list == null || list.size() == 0) {
+            return getNextList();
+        }
 
-		// if there is nothing to return, move to the next list
-		if (list.size() == 0) {
-			recordIndex = 0;
-			return getNextList();
-		}
-		
-		if (queryIndex == unitLinkIndex)
-			return getUnitLinks((List<Object[]>)list);
-
-		return list;
+        return list;
 	}
 
+
+    /**
+     * Return the list of deleted keys
+     * @return
+     */
+    private List getDeletedList() {
+        return deletedEntities;
+    }
+
+    /**
+     * Return the list of entity versions for this synchronization
+     * @return
+     */
+    private List getVersionsList() {
+        return entityVersions;
+    }
+
+    /**
+     * Return the list of new keys created in the system
+     * @return
+     */
+    private List getNewKeysList() {
+        List newKeys = (keyList != null? keyList.getAllKeys(): null);
+        return newKeys;
+    }
+
+    /**
+     * Return the next list resulted from a HQL query
+     * @return
+     */
+    private List getNextQueryList() {
+        // is the end of the list ?
+        if (recordIndex < MAX_RESULTS) {
+            queryIndex++;
+            if (queryIndex >= hqls.size()) {
+                return null;
+            }
+            recordIndex = 0;
+            firstResult = 0;
+        }
+        else {
+            firstResult += MAX_RESULTS;
+        }
+
+        em.clear();
+
+        String hql = hqls.get(queryIndex);
+
+        // is the first list of the entity ?
+        if (firstResult == 0) {
+            processEntityVersion(hql);
+            processDeletedEntities(hql);
+        }
+
+        List lst = loadList(hql, firstResult);
+
+        // if there is nothing to return, move to the next list
+        if (lst.size() == 0) {
+            recordIndex = 0;
+            return getNextList();
+        }
+
+        if (queryIndex == unitLinkIndex)
+            return getUnitLinks((List<Object[]>)lst);
+
+        return lst;
+    }
 	
 	/**
 	 * Query the database and return the result list 
@@ -327,16 +393,57 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		
 		return s[1];
 	}
-	
+
+
+    private boolean isEntityQuery(String hql) {
+        String[] s = hql.split(" ");
+        // is an entity query
+        return ((s.length > 0) && (s[0].equals("from")));
+    }
+
+    /**
+     * Retrieve the deleted entities of the given entity class being processed
+     * @param hql
+     */
+    protected void processDeletedEntities(String hql) {
+        if (!isEntityQuery(hql)) {
+            return;
+        }
+        // retrieve the entity name from the hql instruction
+        String entityName = retrieveEntityName(hql);
+        if (entityName == null)
+            return;
+
+        EntityLastVersion ver = findClientLastVersion(entityName);
+        Integer txid = ver != null? ver.getLastVersion(): 0;
+
+        String sql = "select entityId from transactionlog where entityClass = :ent " +
+                "and workspacelog_id = :wsid and action = :act and id > :id";
+        List<Integer> lst = em.createNativeQuery(sql)
+                .setParameter("wsid", workspaceId)
+                .setParameter("ent", entityName)
+                .setParameter("act", RoleAction.DELETE.ordinal())
+                .setParameter("id", txid)
+                .getResultList();
+
+        // return the deleted IDs
+        for (Integer id: lst) {
+            DeletedEntity item = new DeletedEntity();
+            item.setEntityId(id);
+            item.setEntityName(entityName);
+
+            deletedEntities.add(item);
+        }
+    }
+
 	/**
-	 * Process entity
+	 * Get the last version of the entity
 	 * @param hql is the HQL instruction containing the data
 	 */
 	protected void processEntityVersion(String hql) {
-		String[] s = hql.split(" ");
-		// is an entity query
-		if ((s.length == 0) || (!s[0].equals("from")))
-			return;
+        if (!isEntityQuery(hql)) {
+            return;
+        }
 
 		// retrieve the entity name from the hql instruction
 		String entityName = retrieveEntityName(hql);
@@ -364,7 +471,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	/**
 	 * Return object containing the links between units. They can't be represented in the TB Unit object
 	 * because it may have multiple dependencies
-	 * @param list2
+	 * @param lst
 	 * @return
 	 */
 	private List getUnitLinks(List<Object[]> lst) {
