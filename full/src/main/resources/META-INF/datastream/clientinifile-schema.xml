@@ -280,6 +280,7 @@
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
             <property name="dateCollected" xmlAttribute="true" />
             <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="result" xmlAttribute="true" />
             <property name="lastTransaction" use="IGNORE" />
             <property name="request" use="IGNORE" />
             <property name="clientId" use="IGNORE" />
