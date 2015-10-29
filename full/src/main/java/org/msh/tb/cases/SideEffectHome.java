@@ -4,6 +4,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.CaseSideEffect;
@@ -25,6 +26,7 @@ import java.util.List;
  *
  */
 @Name("sideEffectHome")
+@LogInfo(roleName="ADV_EFFECTS", entityClass=CaseSideEffect.class)
 public class SideEffectHome extends WsEntityHome<CaseSideEffect>{
 	private static final long serialVersionUID = 4590228131339634325L;
 
@@ -82,7 +84,7 @@ public class SideEffectHome extends WsEntityHome<CaseSideEffect>{
 			name += " "+it.getSubstance2().getAbbrevName().getName1();
 		it.setMedicines(name);
 
-		getEntityManager().persist(it);
+		persist();
 
 		TagsCasesHome.instance().updateTags(tbcase);
 		
@@ -182,4 +184,14 @@ public class SideEffectHome extends WsEntityHome<CaseSideEffect>{
 
         return substances;
     }
+
+	@Override
+	public String getLogEntityClass() {
+		return TbCase.class.getSimpleName();
+	}
+
+	@Override
+	protected Integer getLogEntityId() {
+		return getInstance().getTbcase().getId();
+	}
 }
