@@ -153,15 +153,7 @@ public class EntityHomeEx<E> extends EntityHome<E> {
 		initTransactionLog(RoleAction.DELETE);
 		saveTransactionLog();
 
-		if(getInstance() instanceof SyncKey){
-			if (((SyncKey)getInstance()).getId() != null) {
-				DeletedEntity ent = new DeletedEntity();
-				ent.setEntityId(((SyncKey)getInstance()).getId());
-				ent.setEntityName(getInstance().getClass().getSimpleName());
-				getEntityManager().persist(ent);
-				getEntityManager().flush();
-			}
-		}
+		App.registerDeletedSyncEntity(getInstance());
 
 		EntityQuery<E> entityQuery = getEntityQuery();
 		if (entityQuery != null)

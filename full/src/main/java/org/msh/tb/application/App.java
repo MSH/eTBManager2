@@ -94,6 +94,13 @@ public class App {
 
 	public static void registerDeletedSyncEntity(Object entity){
 		if (((SyncKey)entity).getId() != null) {
+			//Protect from double insertion
+			if(getEntityManager().createQuery("from DeletedEntity where entityName = :name and entityId = :id")
+					.setParameter("name", entity.getClass().getSimpleName())
+					.setParameter("id", ((SyncKey) entity).getId())
+					.getResultList().size() > 0)
+				return;
+
 			DeletedEntity ent = new DeletedEntity();
 			ent.setEntityId(((SyncKey) entity).getId());
 			ent.setEntityName(entity.getClass().getSimpleName());
