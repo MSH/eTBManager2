@@ -5,9 +5,11 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.TagsCasesHome;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.CaseComorbidity;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
+import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.misc.FieldsQuery;
 import org.msh.utils.ItemSelect;
@@ -114,6 +116,7 @@ public class ComorbidityHome {
 			else {
 				// item is removed
 				if (aux != null) {
+					App.registerDeletedSyncEntity(aux);
 					em.remove(aux);
 					tbcase.getComorbidities().remove(aux);
 				}
@@ -123,8 +126,10 @@ public class ComorbidityHome {
 		if(!tbcase.isTbContact())
 			tbcase.setPatientContactName(null);
 //		tbcase.setComorbidities(lst);
-		
+
+		caseHome.setTransactionLogActive(false);
 		String s = caseHome.persist();
+
 		if ("persisted".equals(s))
 			TagsCasesHome.instance().updateTags(tbcase);
 		
@@ -158,12 +163,20 @@ public class ComorbidityHome {
 		
 //		logService.setCaseClassification(tbcase.getClassification());
 
-		atx.setRoleAction( RoleAction.EDIT)
+		TransactionLog tl = atx.setRoleAction( RoleAction.EDIT)
 				.setEntityClass( TbCase.class.getSimpleName() )
 				.setDescription( tbcase.toString() )
 				.setEntity( tbcase )
 				.setEntityId( tbcase.getId() )
 				.end();
+
+		// update last transaction
+		if(tl!=null) {
+			for (CaseComorbidity fld : newComorbidities) {
+				fld.setLastTransaction(tl);
+			}
+		}
+
 //		logService.save("COMORBIDITIES", RoleAction.EDIT, tbcase.toString(), tbcase.getId(), TbCase.class.getSimpleName(), tbcase);
 	}
 
