@@ -4,6 +4,7 @@
 package org.msh.tb.sync;
 
 import com.rmemoria.datastream.*;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
 import org.jboss.seam.Component;
@@ -73,7 +74,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from HealthSystem a where a.workspace.id = :wsid");
 		hqls.add("from Source a where a.workspace.id = :wsid");
 		hqls.add("from Tbunit a where a.workspace.id = :wsid");
-		hqls.add("select id, authorizerUnit.id, firstLineSupplier.id, secondLineSupplier.id from Tbunit where workspace.id = :wsid");
+		hqls.add("select a.id, a.authorizerUnit.id, a.firstLineSupplier.id, a.secondLineSupplier.id from Tbunit a where a.workspace.id = :wsid");
 		unitLinkIndex = hqls.size() - 1;
 		hqls.add("from Substance a where a.workspace.id = :wsid");
 		hqls.add("from Medicine a where a.workspace.id = :wsid");
@@ -294,7 +295,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
             processDeletedEntities(hql);
         }
 
-        List lst = loadList(hql, firstResult);
+		List lst = loadList(hql, firstResult);
 
         // if there is nothing to return, move to the next list
         if (lst.size() == 0) {
@@ -389,11 +390,13 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	 */
 	protected String retrieveEntityName(String hql) {
 		String[] s = hql.split(" ");
-		// is an entity query
-		if ((s.length == 0) || (!s[0].equals("from")))
-			return null;
-		
-		return s[1];
+
+		for(int i = 0; i<s.length ; i++){
+			if(s[i].equals("from"))
+				return s[i+1];
+		}
+
+		return null;
 	}
 
 
