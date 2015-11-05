@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Name("caseDispensingHome")
 @Scope(ScopeType.CONVERSATION)
-@LogInfo(roleName="CASE_TREAT", entityClass=TreatmentMonitoring.class)
+@LogInfo(roleName="CASE_INTAKEMED", entityClass=TreatmentMonitoring.class)
 public class CaseDispensingHome extends EntityHomeEx<TreatmentMonitoring>{
 
 	@In(required=true)
