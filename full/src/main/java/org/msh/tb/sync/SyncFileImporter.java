@@ -17,10 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 
@@ -214,7 +211,9 @@ public class SyncFileImporter {
 		}
 
 		if (id != null) {
-			return App.getEntityManager().find(objectType, id);
+			Object o = App.getEntityManager().find(objectType, id);
+			checkObjectCollection(o, params);
+			return o;
 		}
 
         if (params.size() == 0) {
@@ -229,9 +228,43 @@ public class SyncFileImporter {
 			if (tbcase != null) {
 				PropertyUtils.setProperty(obj, "tbcase", tbcase);
 			}
+
+			checkObjectCollection(obj, params);
+
 			return obj;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * It will check if any param of the object is a list, if it is, it will get each object from the list and
+	 * will delete it.
+	 * @param o object to have its params checked
+	 * @param params params from the o
+	 */
+	private void checkObjectCollection(Object o, Map<String, Object> params){
+		List<String> lst = new ArrayList<String>();
+
+		for(String s : params.keySet()){
+			Object value = params.get(s);
+			if(value instanceof Collection){
+				lst.add(s);
+			}
+		}
+
+		for(String s : lst){
+			try{
+				Collection c = (Collection)PropertyUtils.getProperty(o, s);
+				if(c!=null){
+					for(Object item : c){
+						App.getEntityManager().remove(item);
+					}
+					c.clear();
+				}
+			}catch(Exception e){
+				throw new RuntimeException(e);
+			}
 		}
 	}
 	

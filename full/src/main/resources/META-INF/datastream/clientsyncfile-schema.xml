@@ -64,18 +64,14 @@
             <property name="numResistant" use="IGNORE" />
             <property name="numContaminated" use="IGNORE" />
             <property name="numSusceptible" use="IGNORE" />
-            <property name="results" use="IGNORE"/>
+            <property name="results">
+                <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult" parentProperty="exam">
+                    <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="result" use="REQUIRED" xmlAttribute="true"/>
+                </objectGraph>
+            </property>
             <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
             <property name="method.id" elementName="method" xmlAttribute="true"/>
-        </objectGraph>
-
-        <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult">
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
-            <property name="id" elementName="id" xmlAttribute="true" />
-            <property name="exam.id" elementName="exam" xmlAttribute="true" />
-            <property name="exam.clientId" elementName="cl_exam" xmlAttribute="true" use="REQUIRED"/>
-            <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
-            <property name="result" use="REQUIRED" xmlAttribute="true"/>
         </objectGraph>
 
         <objectGraph name="exammicroscopy" class="org.msh.tb.entities.ExamMicroscopy">

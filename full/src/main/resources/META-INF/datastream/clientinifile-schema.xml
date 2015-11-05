@@ -267,7 +267,14 @@
             <property name="numResistant" use="IGNORE" />
             <property name="numContaminated" use="IGNORE" />
             <property name="numSusceptible" use="IGNORE" />
-            <property name="results" use="IGNORE" />
+            <property name="results">
+                <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult" parentProperty="exam">
+                    <property name="id" xmlAttribute="true" use="IGNORE"/>
+                    <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="result" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="clientId" use="IGNORE" />
+                </objectGraph>
+            </property>
             <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
             <property name="method.id" elementName="method" xmlAttribute="true"/>
 		    <property name="lastTransaction" use="IGNORE" />
@@ -283,14 +290,6 @@
             <property name="result" xmlAttribute="true" />
             <property name="lastTransaction" use="IGNORE" />
             <property name="request" use="IGNORE" />
-            <property name="clientId" use="IGNORE" />
-        </objectGraph>
-
-        <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult">
-            <property name="id" xmlAttribute="true" use="REQUIRED"/>
-            <property name="exam.id" elementName="exam" xmlAttribute="true" />
-            <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
-            <property name="result" use="REQUIRED" xmlAttribute="true"/>
             <property name="clientId" use="IGNORE" />
         </objectGraph>
         
