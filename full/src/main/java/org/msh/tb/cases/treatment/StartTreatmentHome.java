@@ -71,14 +71,7 @@ public class StartTreatmentHome {
 			return "error";
 		}
 
-		List<PrescribedMedicine> pms = entityManager.createQuery("from PrescribedMedicine pm where pm.tbcase.id = " + tbcase.getId()).getResultList();
-		for(PrescribedMedicine pm : pms)
-			App.registerDeletedSyncEntity(pm);
 		entityManager.createQuery("delete from PrescribedMedicine pm where pm.tbcase.id = " + tbcase.getId()).executeUpdate();
-
-		List<PrescribedMedicine> thus = entityManager.createQuery("from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).getResultList();
-		for(PrescribedMedicine thu : thus)
-			App.registerDeletedSyncEntity(thu);
 		entityManager.createQuery("delete from TreatmentHealthUnit hu where hu.tbcase.id = " + tbcase.getId()).executeUpdate();
 		
 		caseRegimenHome.setUseDefaultDoseUnit(useDefaultDoseUnit);

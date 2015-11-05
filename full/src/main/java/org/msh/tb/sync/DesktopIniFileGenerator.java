@@ -78,8 +78,8 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		// case data
 		hqls.add("from TbCase a join fetch a.patient left join fetch a.regimen left join fetch a.notifAddress.adminUnit "
 				+ "where a.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
-		hqls.add("from PrescribedMedicine a join fetch a.tbcase join fetch a.medicine join fetch a.source where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
-		hqls.add("from TreatmentHealthUnit a join fetch a.tbunit join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		//hqls.add("from PrescribedMedicine a join fetch a.tbcase join fetch a.medicine join fetch a.source where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		//hqls.add("from TreatmentHealthUnit a join fetch a.tbunit join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamCulture a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamMicroscopy a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamXpert a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
@@ -87,8 +87,8 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		hqls.add("from ExamHIV a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamXRay a join fetch a.tbcase left join fetch a.presentation where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamDST a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
-		hqls.add("from ExamDSTResult a join fetch a.substance join fetch a.exam where a.exam.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
-		hqls.add("from TreatmentMonitoring a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		//hqls.add("from ExamDSTResult a join fetch a.substance join fetch a.exam where a.exam.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		//hqls.add("from TreatmentMonitoring a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
