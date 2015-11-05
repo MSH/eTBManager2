@@ -66,6 +66,8 @@ public class CaseDispensingHome extends EntityHomeEx<TreatmentMonitoring>{
 		//To save transactionlog on the tbcase that is beeing edited, so it will be sync with desktop
 		super.initTransactionLog(RoleAction.NEW);
 		super.getActionTX().setEntity(caseDispensingInfo.getTreatmentMonitoring().getTbcase());
+		super.getActionTX().setEntity(getInstance().getTbcase());
+		super.getActionTX().setEntityId(getInstance().getTbcase().getId());
 		super.saveTransactionLog();
 
 		return "dispensing-saved";
@@ -208,7 +210,7 @@ public class CaseDispensingHome extends EntityHomeEx<TreatmentMonitoring>{
 
 	@Override
 	protected Integer getLogEntityId() {
-		return getInstance().getId();
+		return getInstance().getTbcase().getId();
 	}
 
 }
