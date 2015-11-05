@@ -5,8 +5,14 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.msh.etbm.commons.transactionlog.Operation;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
+import org.msh.tb.EntityHomeEx;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.CaseSideEffect;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.TreatmentMonitoring;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.entities.enums.TreatmentDayOption;
 
 import javax.persistence.EntityManager;
@@ -24,7 +30,8 @@ import java.util.List;
  */
 @Name("caseDispensingHome")
 @Scope(ScopeType.CONVERSATION)
-public class CaseDispensingHome {
+@LogInfo(roleName="CASE_TREAT", entityClass=TreatmentMonitoring.class)
+public class CaseDispensingHome extends EntityHomeEx<TreatmentMonitoring>{
 
 	@In(required=true)
 	protected CaseHome caseHome;
@@ -36,7 +43,11 @@ public class CaseDispensingHome {
 
 	protected CaseDispensingInfo caseDispensingInfo;
 
-	
+	@Override
+	public TreatmentMonitoring getInstance() {
+		return caseDispensingInfo.getTreatmentMonitoring();
+	}
+
 	/**
 	 * Save dispensing for the month/year of the selected case
 	 * @return "dispensing-saved" if it was successfully saved
@@ -51,6 +62,11 @@ public class CaseDispensingHome {
 		TreatmentMonitoring treatMonitoring = caseDispensingInfo.getTreatmentMonitoring();
 		entityManager.persist(treatMonitoring);
 		entityManager.flush();
+
+		//To save transactionlog on the tbcase that is beeing edited, so it will be sync with desktop
+		super.initTransactionLog(RoleAction.NEW);
+		super.getActionTX().setEntity(caseDispensingInfo.getTreatmentMonitoring().getTbcase());
+		super.saveTransactionLog();
 
 		return "dispensing-saved";
 	}
@@ -184,5 +200,15 @@ public class CaseDispensingHome {
 	public void setYear(Integer year) {
 		this.year = year;
 	}
-	
+
+	@Override
+	public String getLogEntityClass() {
+		return TbCase.class.getSimpleName();
+	}
+
+	@Override
+	protected Integer getLogEntityId() {
+		return getInstance().getId();
+	}
+
 }
