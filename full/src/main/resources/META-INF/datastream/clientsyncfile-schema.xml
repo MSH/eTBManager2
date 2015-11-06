@@ -40,14 +40,32 @@
             <property name="extrapulmonaryType2.value" elementName="extrapulmonaryType2" />
             <property name="extrapulmonaryType2.complement" elementName="extrapulmonaryType2Compl" />
             <property name="notificationUnit.id" elementName="notificationUnit" />
-            <property name="healthUnits" use="IGNORE" />
-            <property name="prescribedMedicines" use="IGNORE" />
+            <property name="healthUnits">
+                <objectGraph name="healthunit" class="org.msh.tb.entities.TreatmentHealthUnit" parentProperty="tbcase">
+                    <property name="tbunit.id" elementName="tbunit" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="transferring" elementName="transf" xmlAttribute="true" />
+                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
+                    <property name="period.endDate" elementName="endDate" use="REQUIRED" />
+                </objectGraph>
+            </property>
+            <property name="prescribedMedicines" >
+                <objectGraph name="presc-med" class="org.msh.tb.entities.PrescribedMedicine" parentProperty="tbcase">
+                    <property name="medicine.id" elementName="medicine" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
+                    <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="source.id" elementName="source" use="REQUIRED" />
+                    <property name="doseUnit" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="frequency" use="REQUIRED" xmlAttribute="true"/>
+                </objectGraph>
+            </property>
             <property name="sideEffects" use="IGNORE" />
             <property name="comorbidities" use="IGNORE" />
             <property name="examinations" use="IGNORE" />
             <property name="resXRay" use="IGNORE" />
             <property name="contacts" use="IGNORE" />
-            <property name="treatmentMonitoring" use="IGNORE" />
+            <property name="treatmentMonitoring">
+                <objectGraph name="treatmonitoring" class="org.msh.tb.entities.TreatmentMonitoring" parentProperty="tbcase" />
+            </property>
             <property name="resHIV" use="IGNORE" />
             <property name="examsCulture" use="IGNORE" />
             <property name="examsMicroscopy" use="IGNORE" />
