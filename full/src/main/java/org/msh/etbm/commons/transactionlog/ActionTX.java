@@ -140,7 +140,7 @@ public class ActionTX {
                 }
             }
         }
-        return result;
+        return result || !detailWriter.isEmpty();
     }
 
     /**

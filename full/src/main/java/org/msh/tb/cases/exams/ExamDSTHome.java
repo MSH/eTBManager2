@@ -6,20 +6,21 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.SubstancesQuery;
 import org.msh.tb.entities.ExamDST;
 import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Substance;
+import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.DrugResistanceType;
 import org.msh.tb.entities.enums.DstResult;
 import org.msh.tb.entities.enums.ExamStatus;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.resistpattern.ResistancePatternService;
 
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Handle basic operations of a DST exam test - New, edit, remove and open the 
@@ -36,8 +37,11 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	private List<ExamDSTResult> items;
 
 	@In(create=true) SubstancesQuery substances;
-	
-	@Factory("examDST")
+
+    // store the hash of the exams to track changed results
+    private Map<Integer, Integer> resHash;
+
+    @Factory("examDST")
 	public ExamDST getExamDST() {
 		return getInstance();
 	}
@@ -53,8 +57,17 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 		
 		return items;
 	}
-	
-	/**
+
+    /**
+     * Initialize the form
+     */
+    @Override
+    public void initializeForm() {
+        super.initializeForm();
+
+    }
+
+    /**
 	 * Find an instance of the {@link ExamDSTResult} of the current case 
 	 * by its {@link Substance} instance
 	 * @param s
@@ -198,10 +211,47 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 
 		if(!validateAndPrepareFields())
 			return "error";
-		
+
+        checkResultsChanged();
+
 		return persistWithoutValidation();
 	}
-	
+
+
+    /**
+     * Check results that changed, to be included in the log
+     */
+    protected void checkResultsChanged() {
+        if (!isTransactionLogActive()) {
+            return;
+        }
+
+        initTransactionLog(isManaged()? RoleAction.EDIT: RoleAction.NEW);
+
+        ExamDST exam = getInstance();
+
+        ActionTX act = getActionTX();
+
+        act.setEntityId(caseHome.getInstance().getId());
+        act.setEntityClass(TbCase.class.getSimpleName());
+
+        for (ExamDSTResult res: exam.getResults()) {
+            String txt = res.getSubstance().getAbbrevName() + " - " + res.getResult();
+            if (res.getId() == null) {
+                act.addRow("form.new", txt);
+            }
+            else {
+                if (resHash != null) {
+                    Integer hash = resHash.get(res.getId());
+                    if (hash != null && res.hashCode() != hash) {
+                        act.addRow("form.edit", txt);
+                    }
+                }
+            }
+        }
+    }
+
+
 	/**
 	 * Persist the DST result without validation
 	 * @return
@@ -337,8 +387,17 @@ public class ExamDSTHome extends LaboratoryExamHome<ExamDST> {
 	public void setId(Object id) {
 		super.setId(id);
 		items = null;
+        ExamDST exam = getInstance();
+
+        // generate hash of the results to check what changed when saving
+        resHash = new HashMap<Integer, Integer>();
+        for (ExamDSTResult res: exam.getResults()) {
+            resHash.put(res.getId(), res.hashCode());
+        }
 	}
-	
+
+
+
 	public void refreshSubstances() {
 		substances.refresh();
 	}

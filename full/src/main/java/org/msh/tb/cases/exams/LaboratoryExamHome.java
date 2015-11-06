@@ -7,6 +7,7 @@ import org.jboss.seam.security.AuthorizationException;
 import org.msh.tb.application.App;
 import org.msh.tb.application.ViewService;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.entities.ExamDSTResult;
 import org.msh.tb.entities.Laboratory;
 import org.msh.tb.entities.LaboratoryExam;
 import org.msh.tb.entities.TbCase;
@@ -16,7 +17,9 @@ import org.msh.tb.laboratories.LaboratorySelection;
 import org.msh.tb.misc.EntityEvent;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Home class for laboratory exam handling (culture, microscopy and DST)
@@ -28,7 +31,7 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 	private static final long serialVersionUID = 3707328854678910174L;
 
 	@In(required=true) CaseHome caseHome;
-	
+
 	private LaboratorySelection labselection;
 	
 	public LaboratoryExam getExamResult() {
@@ -99,6 +102,8 @@ public abstract class LaboratoryExamHome<E> extends ExamHome<E>{
 		if (labselection != null) {
 			getLaboratoryExam().setLaboratory(labselection.getSelected());
 		}
+
+        caseHome.setTransactionLogActive(false);
 
         persistSample();
 

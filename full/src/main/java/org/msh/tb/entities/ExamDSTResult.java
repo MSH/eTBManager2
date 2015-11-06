@@ -28,8 +28,33 @@ public class ExamDSTResult implements Serializable, SyncKey {
 	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
 	// map an XML node to a property in the model
 	private Integer clientId;
-	
-	/**
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ExamDSTResult that = (ExamDSTResult) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (substance != null ? !substance.equals(that.substance) : that.substance != null) return false;
+        if (exam != null ? !exam.equals(that.exam) : that.exam != null) return false;
+        if (result != that.result) return false;
+        return !(clientId != null ? !clientId.equals(that.clientId) : that.clientId != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result1 = id != null ? id.hashCode() : 0;
+        result1 = 31 * result1 + (substance != null ? substance.hashCode() : 0);
+        result1 = 31 * result1 + (exam != null ? exam.hashCode() : 0);
+        result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
+        result1 = 31 * result1 + (clientId != null ? clientId.hashCode() : 0);
+        return result1;
+    }
+
+    /**
 	 * @return
 	 */
 	public Integer getClientId() {
