@@ -113,6 +113,8 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		unitId = unit.getId();
 		workspaceId = unit.getWorkspace().getId();
 
+		processDeletedEntityVersion();
+
         // initial state of the list of objects to serialize
         list = null;
         listStep = ListStep.QUERY;
@@ -229,7 +231,8 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
                 break;
 
             case DELETEDENTITIES:
-                list = getDeletedList();
+                /* DeletedEntitys being controled in another kind of control
+				list = getDeletedList();*/
                 listStep = null;
                 break;
         }
@@ -292,7 +295,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
         // is the first list of the entity ?
         if (firstResult == 0) {
             processEntityVersion(hql);
-            processDeletedEntities(hql);
+            //processDeletedEntities(hql);
         }
 
 		List lst = loadList(hql, firstResult);
@@ -321,14 +324,20 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		String entityName = retrieveEntityName(hql);
 
 		if ((clientEntityVersions != null) && (entityName != null)) {
-			Class entClass = getEntityClass(entityName);
-			if ((entClass != null) && (Transactional.class.isAssignableFrom(entClass))) {
+			if("DeletedEntity".equals(entityName)){
 				ver = findClientLastVersion(entityName);
-				if (ver != null)
-					 hql = hql.replace("where ", "where a.lastTransaction.id > :txid and ");
-				else hql = hql.replace("where ", "where a.lastTransaction.id is not null and ");
+				if(ver != null)
+					hql = hql + " where id > :txid ";
+			}else{
+				Class entClass = getEntityClass(entityName);
+				if ((entClass != null) && (Transactional.class.isAssignableFrom(entClass))) {
+					ver = findClientLastVersion(entityName);
+					if (ver != null)
+						 hql = hql.replace("where ", "where a.lastTransaction.id > :txid and ");
+					else hql = hql.replace("where ", "where a.lastTransaction.id is not null and ");
+				}
+				else return new ArrayList();
 			}
-			else return new ArrayList();
 		}
 
 		// create the query
@@ -409,7 +418,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
     /**
      * Retrieve the deleted entities of the given entity class being processed
      * @param hql
-     */
+     * UNSING ANOTHER CONTROL***
     protected void processDeletedEntities(String hql) {
         if (!isEntityQuery(hql)) {
             return;
@@ -439,7 +448,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 
             deletedEntities.add(item);
         }
-    }
+    }*/
 
 	/**
 	 * Get the last version of the entity
@@ -466,6 +475,36 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		EntityLastVersion  ver = new EntityLastVersion();
 		ver.setEntityClass(entityName);
 		ver.setLastVersion(val);
+
+		if (entityVersions == null)
+			entityVersions = new ArrayList<EntityLastVersion>();
+		entityVersions.add(ver);
+	}
+
+	/**
+	 * Get the last DeletedEntity and include this on entityVersion
+	 */
+	protected void processDeletedEntityVersion(){
+		EntityLastVersion lastDelEntProcessed = findClientLastVersion("DeletedEntity");
+		Integer lastIdProcessed = new Integer(0);
+
+		if(lastDelEntProcessed!=null)
+			lastIdProcessed = lastDelEntProcessed.getLastVersion();
+
+		Integer val = (Integer)entityManager.createNativeQuery("select max(id) from DeletedEntity where id > :lastIdProcessed")
+				.setParameter("lastIdProcessed", lastIdProcessed)
+				.getSingleResult();
+
+		EntityLastVersion  ver = new EntityLastVersion();
+
+		if(val == null && lastDelEntProcessed == null) {
+			return;
+		}else if(val == null && lastDelEntProcessed != null){
+			ver = lastDelEntProcessed;
+		}else if(val!=null){
+			ver.setEntityClass("DeletedEntity");
+			ver.setLastVersion(val);
+		}
 
 		if (entityVersions == null)
 			entityVersions = new ArrayList<EntityLastVersion>();

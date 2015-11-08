@@ -115,7 +115,8 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		// initialize variables
 		unitId = unit.getId();
 		workspaceId = unit.getWorkspace().getId();
-		
+		processDeletedEntityVersion();
+
 		initialized = false;
 
 		context = DataStreamUtils.createContext("clientinifile-schema.xml");
@@ -268,15 +269,34 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		String entityName = s[1];
 
 		String sql = "select max(id) from transactionlog where entityClass = :ent and workspacelog_id = :id";
-		Integer val = (Integer)em.createNativeQuery(sql)
+		Integer val = (Integer) em.createNativeQuery(sql)
 				.setParameter("id", workspaceId)
 				.setParameter("ent", entityName)
 				.getSingleResult();
 		if (val == null)
 			return;
 
-		EntityLastVersion  ver = new EntityLastVersion();
+		EntityLastVersion ver = new EntityLastVersion();
 		ver.setEntityClass(entityName);
+		ver.setLastVersion(val);
+
+		if (entityVersions == null)
+			entityVersions = new ArrayList<EntityLastVersion>();
+		entityVersions.add(ver);
+	}
+
+	/**
+	 * Get the last DeletedEntity and include this on entityVersion
+	 */
+	protected void processDeletedEntityVersion(){
+		Integer val = (Integer)entityManager.createNativeQuery("select max(id) from DeletedEntity ")
+				.getSingleResult();
+
+		if (val == null)
+			return;
+
+		EntityLastVersion  ver = new EntityLastVersion();
+		ver.setEntityClass("DeletedEntity");
 		ver.setLastVersion(val);
 
 		if (entityVersions == null)
