@@ -127,7 +127,8 @@ public class ComorbidityHome {
 			tbcase.setPatientContactName(null);
 //		tbcase.setComorbidities(lst);
 
-		caseHome.setTransactionLogActive(false);
+		//Need to save log on transaction log for tbcase to update Desktop System
+		//caseHome.setTransactionLogActive(false);
 		String s = caseHome.persist();
 
 		if ("persisted".equals(s))

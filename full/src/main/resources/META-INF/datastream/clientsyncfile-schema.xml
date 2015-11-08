@@ -59,7 +59,12 @@
                 </objectGraph>
             </property>
             <property name="sideEffects" use="IGNORE" />
-            <property name="comorbidities" use="IGNORE" />
+            <property name="comorbidities">
+                <objectGraph name="comorbidity" class="org.msh.tb.entities.CaseComorbidity" parentProperty="tbcase">
+                    <property name="comorbidity.id" elementName="comorbidity" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="duration" xmlAttribute="true" />
+                </objectGraph>
+            </property>
             <property name="examinations" use="IGNORE" />
             <property name="resXRay" use="IGNORE" />
             <property name="contacts" use="IGNORE" />
@@ -203,15 +208,6 @@
             <property name="sideEffect.complement" elementName="complement" />
             <property name="substance.id" elementName="substance" />
             <property name="substance2.id" elementName="substance2" />
-        </objectGraph>
-
-        <objectGraph name="comorbidity" class="org.msh.tb.entities.CaseComorbidity" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
-            <property name="id" elementName="id" xmlAttribute="true" />
-            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
-            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
-            <property name="comorbidity.id" elementName="comorbidity" use="REQUIRED" xmlAttribute="true"/>
-        	<property name="duration" xmlAttribute="true" />
         </objectGraph>
 
         <objectGraph name="deleted-entity" class="org.msh.tb.entities.DeletedEntity">
