@@ -387,6 +387,7 @@
         <objectGraph name="medexam" class="org.msh.tb.bd.cases.exams.MedicalExaminationBd" >
             <property name="id" xmlAttribute="true" use="REQUIRED"/>
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="dotTypeFv.id" elementName="dotTypeFv" />
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="clientId" use="IGNORE" />
             <property name="patientRefToFv" use="IGNORE" />
