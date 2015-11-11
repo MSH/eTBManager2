@@ -76,7 +76,7 @@ public class AuthenticatorService {
 			}
 
 			EntityManager em = (EntityManager)Component.getInstance("entityManager");
-			List<Object[]> lst = em.createQuery("select w.id, w.name.name1, w.name.name2, uw.tbunit.name.name1 " +
+			List<Object[]> lst = em.createQuery("select w.id, w.name.name1, w.name.name2, uw.tbunit.name.name1, w.extension " +
 					"from UserWorkspace uw join uw.workspace w where uw.user.id = :id " +
 					"order by w.name.name1")
 				.setParameter("id", userWorkspace.getUser().getId())
@@ -87,7 +87,8 @@ public class AuthenticatorService {
 				res.add(new WorkspaceInfo((Integer)vals[0],
 						(String)vals[1],
 						(String)vals[2],
-						(String)vals[3]));
+						(String)vals[3],
+                        (String)vals[4]));
 
 			resp.setResult(ObjectSerializer.serializeToXml(res));
 			

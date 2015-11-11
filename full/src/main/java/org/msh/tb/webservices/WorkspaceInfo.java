@@ -6,17 +6,19 @@ public class WorkspaceInfo {
 	private String name1;
 	private String name2;
 	private String healthUnitName;
+    private String extension;
 	
 	public WorkspaceInfo() {
 		super();
 	}
 
-	public WorkspaceInfo(Integer id, String name1, String name2, String healthUnit) {
+	public WorkspaceInfo(Integer id, String name1, String name2, String healthUnit, String extension) {
 		super();
 		this.id = id;
 		this.name1 = name1;
 		this.name2 = name2;
 		this.healthUnitName = healthUnit;
+        this.extension = extension;
 	}
 	/**
 	 * @return the id
@@ -68,4 +70,12 @@ public class WorkspaceInfo {
 	public void setHealthUnitName(String healthUnitName) {
 		this.healthUnitName = healthUnitName;
 	}
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
 }

@@ -308,7 +308,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 	/**
 	 * Return object containing the links between units. They can't be represented in the TB Unit object
 	 * because it may have multiple dependencies
-	 * @param list2
+	 * @param lst
 	 * @return
 	 */
 	private List getUnitLinks(List<Object[]> lst) {
