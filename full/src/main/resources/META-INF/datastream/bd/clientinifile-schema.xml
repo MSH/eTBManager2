@@ -295,6 +295,7 @@
             <property name="tags" use="IGNORE" />
             <property name="movedSecondLineTreatment" use="IGNORE" />
             <property name="clientId" use="IGNORE" />
+            <property name="patientRefToFv.id" elementName="patientRefToFv" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
@@ -317,7 +318,6 @@
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="request" use="IGNORE" />
             <property name="clientId" use="IGNORE" />
-            <property name="patientRefToFv.id" elementName="patientRefToFv" />
         </objectGraph>
 
         <objectGraph name="examxpert" class="org.msh.tb.entities.ExamXpert">

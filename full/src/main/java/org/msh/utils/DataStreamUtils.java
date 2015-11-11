@@ -4,6 +4,7 @@
 package org.msh.utils;
 
 import com.rmemoria.datastream.*;
+import org.msh.tb.login.UserSession;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -26,32 +27,22 @@ public class DataStreamUtils {
 	 * @return implementation of {@link StreamContext} interface to the given schema
 	 */
 	public static StreamContext createContext(String schemaFileName) {
-		URL schema = DataStreamUtils.class.getClassLoader().getResource("META-INF/datastream/" + schemaFileName);
-		StreamContext context = StreamContextFactory.createContext(schema);
-		return context;
-	}
-
-	/**
-	 * Create a new context from a XML schema file name assuming that schemas are
-	 * located in the META-INF/datastream folder
-	 * @param schemaFileName the name of the file name relative to the META-INF/datastream folder
-	 * @return implementation of {@link StreamContext} interface to the given schema
-	 */
-	public static StreamContext createContext(String schemaFileName, String workspaceExtension) {
 		URL schema = null;
+
+		String workspaceExtension = UserSession.getWorkspace().getExtension();
 
 		if(workspaceExtension != null){
 			schema = DataStreamUtils.class.getClassLoader().getResource("META-INF/datastream/" + workspaceExtension + "/" + schemaFileName);
 		}
 
-		if(schema == null || workspaceExtension == null){
-			createContext(schemaFileName);
+		if(schema == null){
+			schema = DataStreamUtils.class.getClassLoader().getResource("META-INF/datastream/" + schemaFileName);
 		}
 
 		StreamContext context = StreamContextFactory.createContext(schema);
 		return context;
 	}
-	
+
 	/**
 	 * Create an XML marshaller from the given schema file located in the META-INF/datastream folder  
 	 * @param schemaFileName name of the schema file name

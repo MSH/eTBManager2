@@ -118,8 +118,8 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		processDeletedEntityVersion();
 
 		initialized = false;
-		//TODO: second parameter TEMPORARY hard coded
-		context = DataStreamUtils.createContext("clientinifile-schema.xml",null);
+
+		context = DataStreamUtils.createContext("clientinifile-schema.xml");
 		context.addInterceptor(this);
 		addConverter(context);
 		DataMarshaller m = DataStreamUtils.createXMLMarshaller(context);
