@@ -85,8 +85,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		hqls.add("from ExamXRay a join fetch a.tbcase left join fetch a.presentation where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from ExamDST a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
-		//TODO: casesideeffect hql temporary commented
-		//hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("select a.id, b.id from TbCase a join a.tags b where a.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 
 		caseTagIndex = hqls.size() - 1;
