@@ -118,8 +118,8 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		processDeletedEntityVersion();
 
 		initialized = false;
-
-		context = DataStreamUtils.createContext("clientinifile-schema.xml");
+		//TODO: second parameter TEMPORARY hard coded
+		context = DataStreamUtils.createContext("clientinifile-schema.xml",null);
 		context.addInterceptor(this);
 		addConverter(context);
 		DataMarshaller m = DataStreamUtils.createXMLMarshaller(context);
@@ -369,6 +369,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 	 */
 	@Override
 	public Class getObjectClass(Object obj) {
+		/*Commented, so the Desktop should accept customized entity classes
 		if (obj instanceof TbCase)
 			return TbCase.class;
 		if (obj instanceof ExamCulture)
@@ -383,7 +384,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 			return ExamMicroscopy.class;
 		
 		if (obj instanceof TbContact)
-			return TbContact.class;
+			return TbContact.class;*/
 
 		if (obj instanceof HibernateProxy)
 			return Hibernate.getClass(obj);

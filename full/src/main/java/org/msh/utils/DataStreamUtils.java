@@ -30,6 +30,27 @@ public class DataStreamUtils {
 		StreamContext context = StreamContextFactory.createContext(schema);
 		return context;
 	}
+
+	/**
+	 * Create a new context from a XML schema file name assuming that schemas are
+	 * located in the META-INF/datastream folder
+	 * @param schemaFileName the name of the file name relative to the META-INF/datastream folder
+	 * @return implementation of {@link StreamContext} interface to the given schema
+	 */
+	public static StreamContext createContext(String schemaFileName, String workspaceExtension) {
+		URL schema = null;
+
+		if(workspaceExtension != null){
+			schema = DataStreamUtils.class.getClassLoader().getResource("META-INF/datastream/" + workspaceExtension + "/" + schemaFileName);
+		}
+
+		if(schema == null || workspaceExtension == null){
+			createContext(schemaFileName);
+		}
+
+		StreamContext context = StreamContextFactory.createContext(schema);
+		return context;
+	}
 	
 	/**
 	 * Create an XML marshaller from the given schema file located in the META-INF/datastream folder  
