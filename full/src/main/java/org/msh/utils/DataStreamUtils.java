@@ -4,6 +4,7 @@
 package org.msh.utils;
 
 import com.rmemoria.datastream.*;
+import org.msh.tb.entities.Workspace;
 import org.msh.tb.login.UserSession;
 
 import java.io.ByteArrayInputStream;
@@ -28,11 +29,12 @@ public class DataStreamUtils {
 	 */
 	public static StreamContext createContext(String schemaFileName) {
 		URL schema = null;
+		Workspace ws = null;
 
-		String workspaceExtension = UserSession.getWorkspace().getExtension();
+		ws = UserSession.getWorkspace();
 
-		if(workspaceExtension != null){
-			schema = DataStreamUtils.class.getClassLoader().getResource("META-INF/datastream/" + workspaceExtension + "/" + schemaFileName);
+		if(ws != null){
+			schema = DataStreamUtils.class.getClassLoader().getResource("META-INF/datastream/" + ws.getExtension() + "/" + schemaFileName);
 		}
 
 		if(schema == null){
