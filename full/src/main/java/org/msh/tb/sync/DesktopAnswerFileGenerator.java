@@ -73,7 +73,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from AdministrativeUnit a where a.workspace.id = :wsid order by code");
 		hqls.add("from HealthSystem a where a.workspace.id = :wsid");
 		hqls.add("from Source a where a.workspace.id = :wsid");
-		hqls.add("from Tbunit a where a.workspace.id = :wsid order by a.code");
+		hqls.add("from Tbunit a where a.workspace.id = :wsid ");
 		hqls.add("select a.id, a.authorizerUnit.id, a.firstLineSupplier.id, a.secondLineSupplier.id from Tbunit a where a.workspace.id = :wsid");
 		unitLinkIndex = hqls.size() - 1;
 		hqls.add("from Substance a where a.workspace.id = :wsid");
