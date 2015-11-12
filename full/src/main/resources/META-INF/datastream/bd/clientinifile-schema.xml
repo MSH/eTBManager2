@@ -415,5 +415,29 @@
             <property name="id" use="IGNORE" />
         </objectGraph>
 
+        <objectGraph name="examskin" class="org.msh.tb.bd.cases.exams.ExamSkin" >
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="result" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+
+        <objectGraph name="exambiopsy" class="org.msh.tb.bd.cases.exams.ExamBiopsy" >
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="result" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+
     </objectCollection>
 </graphSchema>

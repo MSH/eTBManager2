@@ -12,6 +12,7 @@ import org.jboss.seam.annotations.Name;
 import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.entities.*;
+import org.msh.tb.login.UserSession;
 import org.msh.utils.DataStreamUtils;
 
 import javax.persistence.EntityManager;
@@ -86,11 +87,21 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		hqls.add("from ExamDST a join fetch a.tbcase where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
-		hqls.add("select a.id, b.id from TbCase a join a.tags b where a.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 
+		addSpecificWorkspacesEntities();
+
+		hqls.add("select a.id, b.id from TbCase a join a.tags b where a.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
 		caseTagIndex = hqls.size() - 1;
 	}
 
+
+	private void addSpecificWorkspacesEntities(){
+		//Specific entities of Bangladesh
+		if("bd".equals(UserSession.getWorkspace().getExtension())){
+			hqls.add("from ExamSkin a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+			hqls.add("from ExamBiopsy a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = #{desktopIniFileGenerator.unitId}");
+		}
+	}
 
 	/**
 	 * Add the queries to be executed
