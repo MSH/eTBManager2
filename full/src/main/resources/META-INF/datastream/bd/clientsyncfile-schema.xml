@@ -11,7 +11,7 @@
         </objectGraph>
         
         <!-- TB CASES -->
-        <objectGraph name="tbcase" class="org.msh.tb.entities.TbCase">
+        <objectGraph name="tbcase" class="org.msh.tb.bd.entities.TbCaseBD">
             <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
             <property name="id" elementName="id" xmlAttribute="true" />
             <property name="version" use="IGNORE" />
@@ -192,14 +192,14 @@
             <property name="presentation.id" elementName="presentation" />
         </objectGraph>
         
-        <objectGraph name="medexam" class="org.msh.tb.entities.MedicalExamination" >
+        <objectGraph name="medexam" class="org.msh.tb.bd.cases.exams.MedicalExaminationBD" >
             <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
             <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
         </objectGraph>
         
-        <objectGraph name="sideEffect" class="org.msh.tb.entities.CaseSideEffect" >
+        <objectGraph name="sideEffect" class="org.msh.tb.bd.entities.CaseSideEffectBD" >
             <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
             <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />

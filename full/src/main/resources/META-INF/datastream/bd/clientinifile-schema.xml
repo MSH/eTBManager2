@@ -384,7 +384,7 @@
             <property name="clientId" use="IGNORE" />
         </objectGraph>
         
-        <objectGraph name="medexam" class="org.msh.tb.bd.cases.exams.MedicalExaminationBd" >
+        <objectGraph name="medexam" class="org.msh.tb.bd.cases.exams.MedicalExaminationBD" >
             <property name="id" xmlAttribute="true" use="REQUIRED"/>
             <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
             <property name="dotTypeFv.id" elementName="dotTypeFv" />

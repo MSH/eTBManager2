@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="medicalexaminationbd")
 @DiscriminatorValue("bd")
-public class MedicalExaminationBd extends MedicalExamination {
+public class MedicalExaminationBD extends MedicalExamination {
 	private static final long serialVersionUID = 2760727118134685773L;
 
 	private DotProvider dotType;

@@ -11,8 +11,8 @@ import org.msh.tb.entities.MedicalExamination;
 
 
 @Name("medicalExaminationBdHome")
-@LogInfo(roleName="CASE_MED_EXAM", entityClass=MedicalExaminationBd.class)
-public class MedicalExaminationBdHome extends ExamHome<MedicalExaminationBd>{
+@LogInfo(roleName="CASE_MED_EXAM", entityClass=MedicalExaminationBD.class)
+public class MedicalExaminationBdHome extends ExamHome<MedicalExaminationBD>{
 
 	
 	/**
@@ -21,7 +21,7 @@ public class MedicalExaminationBdHome extends ExamHome<MedicalExaminationBd>{
 	private static final long serialVersionUID = -2680118113742531608L;
 
 	@Factory("medicalExaminationBd")
-	public MedicalExaminationBd getMedicalExaminationBd() {
+	public MedicalExaminationBD getMedicalExaminationBd() {
 		return getInstance();
 	}
 	
@@ -49,8 +49,8 @@ public class MedicalExaminationBdHome extends ExamHome<MedicalExaminationBd>{
 		if ((age == null) || (age < 18))
 			return;
 
-		Float height = (Float)getEntityManager().createQuery("select max(a.height) from MedicalExaminationBd a where a.tbcase.id = :id " +
-				"and a.date = (select max(a.date) from MedicalExaminationBd b where b.tbcase.id=a.tbcase.id and b.height is not null)")
+		Float height = (Float)getEntityManager().createQuery("select max(a.height) from MedicalExaminationBD a where a.tbcase.id = :id " +
+				"and a.date = (select max(a.date) from MedicalExaminationBD b where b.tbcase.id=a.tbcase.id and b.height is not null)")
 				.setParameter("id", caseHome.getId())
 				.getSingleResult();
 
