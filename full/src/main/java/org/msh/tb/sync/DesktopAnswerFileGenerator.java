@@ -561,7 +561,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	 */
 	@Override
 	public Class getObjectClass(Object obj) {
-		if (obj instanceof TbCase)
+		/*if (obj instanceof TbCase)
 			return TbCase.class;
 		if (obj instanceof ExamCulture)
 			return ExamCulture.class;
@@ -573,7 +573,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 			return ExamHIV.class;
 		if (obj instanceof ExamMicroscopy)
 			return ExamMicroscopy.class;
-
+		*/
 		if (obj instanceof HibernateProxy)
 			return Hibernate.getClass(obj);
 		
