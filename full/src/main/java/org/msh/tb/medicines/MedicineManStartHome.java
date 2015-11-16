@@ -285,6 +285,7 @@ public class MedicineManStartHome {
 
 		ActionTX.begin("MED_INIT_REM")
 				.setEntity( unit )
+				.setRoleAction(RoleAction.EXEC)
 				.setEntityClass( unit.getClass().getSimpleName() )
 				.setDescription( unit.toString() )
 				.setEntityId( unit.getId() )
