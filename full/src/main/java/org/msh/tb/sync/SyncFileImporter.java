@@ -179,6 +179,8 @@ public class SyncFileImporter {
 	 * @return instance of the object class
 	 */
 	protected Object createNewObject(Class objectType, Map<String, Object> params) {
+		objectType = ETB.getWorkspaceClass(objectType);
+
 		// is information about the last version used in each entity?
 		if (objectType == EntityLastVersion.class) {
 			// let the library create the instance
