@@ -14,6 +14,7 @@ import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
+import org.msh.tb.login.UserSession;
 import org.msh.utils.DataStreamUtils;
 
 import javax.persistence.EntityManager;
@@ -101,7 +102,18 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = :unitid");
 		//hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = :unitid");
+
+		addSpecificWorkspacesEntities();
+
 		hqls.add("from DeletedEntity");
+	}
+
+	private void addSpecificWorkspacesEntities(){
+		//Specific entities of Bangladesh
+		if("bd".equals(UserSession.getWorkspace().getExtension())){
+			hqls.add("from ExamSkin a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = :unitid");
+			hqls.add("from ExamBiopsy a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = :unitid");
+		}
 	}
 
 	
@@ -366,7 +378,12 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	 */
 	private Class getEntityClass(String entityName) {
 		try {
-			Class clazz = Class.forName("org.msh.tb.entities." + entityName);
+			//TODO: [MAURICIO] fazer melhor, voce consegue!
+			String pkg = "org.msh.tb.entities.";
+			if("ExamSkin".equals(entityName) || "ExamBiopsy".equals(entityName))
+				pkg = "org.msh.tb.bd.cases.exams.";
+
+			Class clazz = Class.forName( pkg + entityName);
 			return clazz;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

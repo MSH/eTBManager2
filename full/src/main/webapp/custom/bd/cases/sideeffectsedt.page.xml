@@ -5,7 +5,7 @@
 
 		<restrict>#{userSession.canEditCases}</restrict>
 		<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer"/>
-		<param name="idSideEffect" value="#{sideEffectBDHome.id}" converterId="javax.faces.Integer"/>
+		<param name="idSideEffect" value="#{sideEffectBDHome.idWithLog}" converterId="javax.faces.Integer"/>
 		<navigation>
 			<rule if="#{not caseHome.managed}">
 				<redirect view-id="/cases/index.xhtml" />

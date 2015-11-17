@@ -6,6 +6,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.faces.FacesMessages;
+import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.bd.entities.CaseSideEffectBD;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Name("sideEffectBDHome")
 @Scope(ScopeType.CONVERSATION)
+@LogInfo(roleName="ADV_EFFECTS", entityClass=CaseSideEffectBD.class)
 public class SideEffectBDHome extends EntityHomeEx<CaseSideEffectBD>{
 
 	private static final long serialVersionUID = -4954787062161078703L;
@@ -180,5 +182,14 @@ public class SideEffectBDHome extends EntityHomeEx<CaseSideEffectBD>{
 		
 		return !validationError;
 	}
-		
+
+	@Override
+	public String getLogEntityClass() {
+		return TbCase.class.getSimpleName();
+	}
+
+	@Override
+	protected Integer getLogEntityId() {
+		return getInstance().getTbcase().getId();
+	}
 }
