@@ -7,7 +7,7 @@
 	<action execute="#{medicalExaminationBdHome.initialize}" />
 
 	<param name="id" value="#{caseHome.id}" converterId="javax.faces.Integer" />
-	<param name="examid" value="#{medicalExaminationBdHome.id}" converterId="javax.faces.Integer" />
+	<param name="examid" value="#{medicalExaminationBdHome.idWithLog}" converterId="javax.faces.Integer" />
 
 	<navigation>
 		<rule if="#{not caseHome.managed}">
