@@ -44,6 +44,9 @@ public class TagHome extends EntityHomeEx<Tag> {
 
         try {
             UserTransaction transaction = Transaction.instance();
+            if(transaction.isActive())
+                transaction.commit();
+
             transaction.begin();
 
             String ret = super.persist();
