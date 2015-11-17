@@ -294,7 +294,19 @@ public class SyncFileImporter {
 	 */
 	protected void handleDeletedEntity(DeletedEntity obj){
 		EntityManager em = App.getEntityManager();
-		em.createQuery("delete from " + obj.getEntityName() + " where id = " + obj.getEntityId()).executeUpdate();
+		Object o = null;
+
+		List<Object> l = em.createQuery("from " + obj.getEntityName() + " where id = :EntityId")
+				.setParameter("EntityId", obj.getEntityId())
+				.getResultList();
+
+		if(l!=null && l.size() > 0)
+			o = l.get(0);
+
+		if(o!=null) {
+			em.remove(o);
+			em.flush();
+		}
 	}
 
 	/**
