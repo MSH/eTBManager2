@@ -69,6 +69,7 @@ public class ReportResources {
 		add(grp, new EnumFieldVariable("state", "CaseState", "tbcase.state", CaseState.class, "#{globalLists.caseStates}"));
 		add(grp, new SuspectConfirmedVariable());
 		add(grp, new AdminUnitVariable("notifaddr", "Address", "tbcase.notif_adminunit_id"));
+        add(grp, new NotifTreatmentSiteVariable());
 		add(grp, new TbunitVariable("notifunit", "TbCase.notificationUnit", "tbcase.notification_unit_id"));
 		add(grp, new EnumFieldVariable("val", "ValidationState", "tbcase.validationState", ValidationState.class));
 		add(grp, new EnumFieldVariable("res", "DrugResistanceType", "tbcase.drugresistancetype", DrugResistanceType.class, "#{drugResistanceTypes}"));

@@ -19,6 +19,8 @@ public class FilterFactory implements FilterConstructor{
 	public final static String FILTER_PERIOD = "period";
 	public final static String FILTER_REMOTE_OPTS = "rem_opts";
 	public final static String FILTER_TBUNIT = "tbunit";
+    public final static String FILTER_ADMINUNIT = "adminunit";
+
 	
 	private static final FilterFactory instance = new FilterFactory();
 	private Map<String, FilterConstructor> filterConstructors = new HashMap<String, FilterConstructor>();
@@ -30,6 +32,7 @@ public class FilterFactory implements FilterConstructor{
 		registerFilter(FILTER_PERIOD, this);
 		registerFilter(FILTER_REMOTE_OPTS, this);
 		registerFilter(FILTER_TBUNIT, this);
+        registerFilter(FILTER_ADMINUNIT, this);
 	}
 
 	/**
@@ -112,13 +115,18 @@ public class FilterFactory implements FilterConstructor{
 		if (FILTER_PERIOD.equals(ftype))
 			return new PeriodFilter();
 		
-		if (FILTER_REMOTE_OPTS.equals(ftype))
-			return new RemoteOptionsFilter(filter.isMultiSels());
+		if (FILTER_REMOTE_OPTS.equals(ftype)) {
+            return new RemoteOptionsFilter(filter.isMultiSels());
+        }
 
 		if (FILTER_TBUNIT.equals(ftype)) {
 			return new TbunitFilter();
 		}
-		
+
+        if (FILTER_ADMINUNIT.equals(ftype)) {
+            return new AdminUnitFilter();
+        }
+
 		return null;
 	}
 }

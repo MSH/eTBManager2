@@ -1,15 +1,18 @@
 package org.msh.tb.reports2.variables;
 
 import org.jboss.seam.Component;
+import org.msh.reports.FilterValue;
 import org.msh.reports.filters.FilterOperation;
 import org.msh.reports.filters.FilterOption;
 import org.msh.reports.filters.ValueHandler;
 import org.msh.reports.query.SQLDefs;
+import org.msh.tb.application.App;
 import org.msh.tb.entities.AdministrativeUnit;
 import org.msh.tb.reports2.FilterType;
 import org.msh.tb.reports2.VariableImpl;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,8 @@ import java.util.List;
 public class AdminUnitVariable extends VariableImpl {
 
 	private List<AdministrativeUnit> adminUnits;
+
+    private String parentCode;
 	
 	public AdminUnitVariable(String id, String label, String field) {
 		super(id, label, field);
@@ -34,10 +39,18 @@ public class AdminUnitVariable extends VariableImpl {
 	public List<AdministrativeUnit> getAdminUnits() {
 		if (adminUnits == null) {
 			EntityManager em = (EntityManager)Component.getInstance("entityManager");
-			adminUnits = em
-					.createQuery("from AdministrativeUnit where parent is null and workspace.id = #{defaultWorkspace.id})")
-					.getResultList();
+            Query qry;
+            if (parentCode != null) {
+                qry = em.createQuery("from AdministrativeUnit where parent.id in (select id from AdministrativeUnit " +
+                        " where code = :code and workspace.id = #{defaultWorkspace.id})")
+                        .setParameter("code", parentCode);
+            }
+            else {
+                qry = em.createQuery("from AdministrativeUnit where parent is null and workspace.id = #{defaultWorkspace.id}");
+            }
+			adminUnits = qry.getResultList();
 		}
+
 		return adminUnits;
 	}
 
@@ -91,7 +104,16 @@ public class AdminUnitVariable extends VariableImpl {
 		def.table(s[0])
 			.join(s[1], "administrativeunit.id")
 			.select("code");
-		
+
+        FilterValue val = def.getFilterValue(getId());
+        if (val != null && val.getValue() != null) {
+            adminUnits = null;
+            parentCode = val.getValue();
+        }
+        else {
+            parentCode = null;
+        }
+
 /*		TableJoin join = def.addJoin("administrativeunit", "id", s[0], s[1]);
 		def.selectField(join.getAlias() + ".code");
 */	}
@@ -102,7 +124,6 @@ public class AdminUnitVariable extends VariableImpl {
 	 */
 	@Override
 	public void prepareFilterQuery(final SQLDefs def, FilterOperation oper, ValueHandler value) {
-
 		final String alias = def.join("administrativeunit.id", getFieldName()).getAlias();
         final String p = getFieldName().replace('.', '_');
 
@@ -154,7 +175,7 @@ public class AdminUnitVariable extends VariableImpl {
 	 */
 	@Override
 	public String getFilterType() {
-		return FilterType.REMOTE_OPTIONS;
+		return FilterType.ADMINUNIT;
 	}
 
 
@@ -182,11 +203,26 @@ public class AdminUnitVariable extends VariableImpl {
 	 */
 	@Override
 	public List<FilterOption> getFilterOptions(Object param) {
-		List<AdministrativeUnit> lst = getAdminUnits();
+		List<AdministrativeUnit> lst;
 		List<FilterOption> options = new ArrayList<FilterOption>();
-		for (AdministrativeUnit adm: lst) {
-			options.add(new FilterOption(adm.getCode(), adm.getName().toString()));
-		}
+
+        if (param == null) {
+            lst = getAdminUnits();
+        }
+        else {
+            EntityManager em = App.getEntityManager();
+
+            lst = App.getEntityManager().createQuery("from AdministrativeUnit where parent.id = (select min(id)" +
+                    "from AdministrativeUnit where code = :code and workspace.id=#{defaultWorkspace.id}) " +
+                    "order by name.name1")
+                    .setParameter("code", param)
+                    .getResultList();
+        }
+
+        // fill the options
+        for (AdministrativeUnit adm: lst) {
+            options.add(new FilterOption(adm.getCode(), adm.getName().toString()));
+        }
 
 		return options;
 	}
