@@ -249,10 +249,15 @@ public class SyncFileImporter {
 		List<String> lst = new ArrayList<String>();
 
 		for(String s : params.keySet()){
-			Object value = params.get(s);
-			if(value instanceof Collection){
-				lst.add(s);
-			}
+            try {
+                Class clazz = PropertyUtils.getPropertyType(o, s);
+                if (Collection.class.isAssignableFrom(clazz)) {
+                    lst.add(s);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
 		}
 
 		for(String s : lst){
