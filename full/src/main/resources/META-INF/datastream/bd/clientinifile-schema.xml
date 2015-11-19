@@ -279,13 +279,7 @@
             <property name="examinations" use="IGNORE" />
             <property name="resXRay" use="IGNORE" />
             <property name="contacts" use="IGNORE" />
-            <property name="treatmentMonitoring">
-                <objectGraph name="treatmonitoring" class="org.msh.tb.entities.TreatmentMonitoring" parentProperty="tbcase">
-                    <property name="id" use="IGNORE"/>
-                    <property name="lastTransaction" use="IGNORE" />
-                    <property name="clientId" use="IGNORE" />
-                </objectGraph>
-            </property>
+            <property name="treatmentMonitoring" use="IGNORE"/>
             <property name="resHIV" use="IGNORE" />
             <property name="examsCulture" use="IGNORE" />
             <property name="examsMicroscopy" use="IGNORE" />
