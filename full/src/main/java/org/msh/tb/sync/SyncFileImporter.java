@@ -250,9 +250,12 @@ public class SyncFileImporter {
 
 		for(String s : params.keySet()){
             try {
-                Class clazz = PropertyUtils.getPropertyType(o, s);
-                if (Collection.class.isAssignableFrom(clazz)) {
-                    lst.add(s);
+                // check if it is not a nested property
+                if (!s.contains(".")) {
+                    Class clazz = PropertyUtils.getPropertyType(o, s);
+                    if (Collection.class.isAssignableFrom(clazz)) {
+                        lst.add(s);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -341,7 +344,8 @@ public class SyncFileImporter {
 		if (obj instanceof SyncKey)
 			objKeys = (SyncKey)obj;
 		boolean bNew = (objKeys != null) && (objKeys.getId() == null);
-		
+
+        System.out.println("Saving " + obj.getClass() + " => " + obj);
 		// save the entity
 		em.persist(obj);
 		em.flush();
