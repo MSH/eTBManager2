@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+				template="admintemplate.xhtml">
+
+	<ui:param name="title" value="#{messages['admin.repdesktoptbunitsync']}" />
+
+	<ui:param name="submenu" value="1" />
+
+
+	<ui:define name="content">
+		<h1><i class="icon-table" />#{title}</h1>
+
+		<h:form id="main">
+
+			<s:fragment rendered="#{not empty syncDateDesktopUnitsReport.items}">
+				<b>#{syncDateDesktopUnitsReport.items.size}</b> #{messages['form.resultlist']}.<p/>
+			</s:fragment>
+			<s:decorate template="/layout/display.xhtml" rendered="#{userSettings.multipleUserWorkspaces}">
+				<ui:define name="label">#{messages['Workspace']}:</ui:define>
+				<h:selectOneMenu value="#{reportSelection.userWorkspace}" >
+					<s:selectItems value="#{userSettings.userWorkspaces}" var="c" label="#{c.workspace.name}" noSelectionLabel="-" />
+					<s:convertEntity/>
+					<a:support event="onchange" reRender="main" action="#{syncDateDesktopUnitsReport.refresh}"/>
+				</h:selectOneMenu>
+			</s:decorate>
+
+			<h:dataTable value="#{syncDateDesktopUnitsReport.items}" var="it" border="0" width="95%" styleClass="table1"
+						 columnClasses="colc,colc,colc,coll,coll,colc,colc" rowClasses="lin1,lin2" rendered="#{not empty syncDateDesktopUnitsReport.items}" style="margin-top:4px;">
+				<h:column>
+					<f:facet name="header">#{messages['Tbunit']}</f:facet>
+					#{it.name.name1}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{messages['UserView.ADMINUNIT']}</f:facet>
+					#{it.adminUnit.fullDisplayName}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">#{messages['Tbunit.lastSyncDate']}</f:facet>
+					<h:outputText value="#{it.lastSyncDate}">
+						<f:convertDateTime type="date" timeZone="#{timeZoneSelector.getTimeZoneId()}"/>
+					</h:outputText>
+					<h:outputText value="#{it.lastSyncDate}" styleClass="hint" converter="periodConverter">
+						<f:param name="type" value="elapsed-time" />
+					</h:outputText>
+				</h:column>
+
+			</h:dataTable>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>  

@@ -131,6 +131,12 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="SHIP_ADMINUNIT_ID")
     private AdministrativeUnit shipAdminUnit;
+
+	/**
+	 * The last time that this unit was initialized (only by direct internet connection) or synchronized with Desktop.
+	 */
+	@Temporal(TemporalType.DATE)
+	private Date lastSyncDate;
     
     
     /**
@@ -551,5 +557,12 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	public void setShipAdminUnit(AdministrativeUnit shipAdminUnit) {
 		this.shipAdminUnit = shipAdminUnit;
 	}
-	
+
+	public Date getLastSyncDate() {
+		return lastSyncDate;
+	}
+
+	public void setLastSyncDate(Date lastSyncDate) {
+		this.lastSyncDate = lastSyncDate;
+	}
 }

@@ -470,4 +470,15 @@
         </sql>
     </changeSet>
 
+    <!-- Add specific permission to allow or deny the user to log into the desktop version -->
+    <changeSet id="2.2-4.2" author="msantos">
+        <sql>update userrole set code = '060000' where id = 301</sql>
+    </changeSet>
+
+    <changeSet id="2.2-5" author="msantos">
+        <addColumn tableName="tbunit">
+            <column name="lastSyncDate" type="date" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

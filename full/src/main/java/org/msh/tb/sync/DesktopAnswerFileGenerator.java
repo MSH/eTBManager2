@@ -16,6 +16,7 @@ import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.DataStreamUtils;
+import org.msh.utils.date.DateUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -151,6 +152,13 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+
+		if(unitId == null)
+			throw new RuntimeException("unit id should not be null");
+
+		Tbunit synchronizedUnit = App.getEntityManager().find(Tbunit.class, unitId);
+		synchronizedUnit.setLastSyncDate(DateUtils.getDate());
+		App.getEntityManager().merge(synchronizedUnit);
 	}
 
 	/** {@inheritDoc}

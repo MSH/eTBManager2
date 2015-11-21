@@ -99,9 +99,12 @@
     	<s:link view="/admin/reptranstats.xhtml"  propagation="none" rendered="#{s:hasRole('LOGREP')}">
     		<i class="icon-table" />#{messages['admin.reports.transactionstats']}
     	</s:link>
-    	<s:link view="/admin/errorlogreport.xhtml" propagation="none" rendered="#{s:hasRole('ERRORLOGREP')}">
-    		<i class="icon-table" />#{messages['userrole.ERRORLOGREP']}
-    	</s:link>
+		<s:link view="/admin/errorlogreport.xhtml" propagation="none" rendered="#{s:hasRole('ERRORLOGREP')}">
+			<i class="icon-table" />#{messages['userrole.ERRORLOGREP']}
+		</s:link>
+		<s:link view="/admin/repdesktoptbunitssync.xhtml" propagation="none">
+			<i class="icon-table" />#{messages['admin.repdesktoptbunitsync']}
+		</s:link>
     </s:fragment>
 
 

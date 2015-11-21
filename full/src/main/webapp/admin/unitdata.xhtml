@@ -123,6 +123,16 @@
     	</s:div>
     </s:decorate>
 
+	<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbunit.lastSyncDate}">
+		<ui:define name="label">#{messages['Tbunit.lastSyncDate']}:</ui:define>
+		<h:outputText value="#{tbunit.lastSyncDate}">
+			<f:convertDateTime type="date" timeZone="#{timeZoneSelector.getTimeZoneId()}"/>
+		</h:outputText>
+		<h:outputText value="#{tbunit.lastSyncDate}" styleClass="hint" converter="periodConverter">
+			<f:param name="type" value="elapsed-time" />
+		</h:outputText>
+	</s:decorate>
+
     <s:decorate template="/layout/display.xhtml">
     	<ui:define name="label">#{messages['HealthSystem']}:</ui:define>
     	#{tbunit.healthSystem.name}

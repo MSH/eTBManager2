@@ -14,6 +14,7 @@ import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.entities.*;
 import org.msh.tb.login.UserSession;
 import org.msh.utils.DataStreamUtils;
+import org.msh.utils.date.DateUtils;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -142,6 +143,14 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+
+		if(unitId == null)
+			throw new RuntimeException("unit id should not be null");
+
+		Tbunit synchronizedUnit = entityManager.find(Tbunit.class, unitId);
+		synchronizedUnit.setLastSyncDate(DateUtils.getDate());
+		entityManager.merge(synchronizedUnit);
+		entityManager.flush();
 	}
 
 	/** {@inheritDoc}
