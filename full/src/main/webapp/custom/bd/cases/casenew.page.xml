@@ -7,8 +7,16 @@
 		<action execute="#{caseEditingHome.initializeNewNotification}"/>
 		<param name="pacid" value="#{patientHome.id}" converterId="javax.faces.Integer"/>
 		<param name="cla" value="#{tbcase.classification}" />
+		<param name="type" value="#{tbcase.diagnosisType}" />
 		<begin-conversation join="true"/>
 		<navigation>
+			<rule if="#{empty tbcase.classification}">
+				<end-conversation before-redirect="true"/>
+				<redirect view-id="/cases/index.xhtml">
+					<message>No classification informed</message>
+				</redirect>
+			</rule>
+
 			<rule if-outcome="patient-searching">
 				<end-conversation before-redirect="true"/>
 				<redirect view-id="/cases/index.xhtml">
@@ -25,6 +33,12 @@
 			<rule if-outcome="individualized">
 				<redirect view-id="/cases/starttreatmentind.xhtml">
 					<param name="id" value="#{caseHome.id}"/>
+				</redirect>
+			</rule>
+
+			<rule if="#{tbcase.diagnosisType==null}">
+				<redirect view-id="/cases/index.xhtml">
+					<message>No diagnosis type informed</message>
 				</redirect>
 			</rule>
 		</navigation>
