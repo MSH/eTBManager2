@@ -8,6 +8,7 @@ import org.msh.etbm.commons.transactionlog.mapping.LogInfo;
 import org.msh.tb.EntityHomeEx;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.MovementType;
+import org.msh.tb.entities.enums.RoleAction;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.medicines.SourceMedicineTree.MedicineNode;
 import org.msh.tb.medicines.SourceMedicineTree.SourceNode;
@@ -110,6 +111,10 @@ public class MedicineReceivingHome extends EntityHomeEx<MedicineReceiving> {
 		rec.setTotalPrice(totalPrice);
 
 		// register log
+		boolean bNew = !isManaged();
+		if (bNew) {
+			initTransactionLog(RoleAction.NEW);
+		}
 		getLogDetailWriter().addTableRow("Source", rec.getSource());
 		getLogDetailWriter().addTableRow(".receivingDate", rec.getReceivingDate());
 		getLogDetailWriter().addTableRow("global.totalPrice", rec.getTotalPrice());
