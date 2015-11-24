@@ -66,7 +66,7 @@ public class CaseStateReport  {
 				" where c.state not in (" + CaseState.ONTREATMENT.ordinal() + ',' + CaseState.TRANSFERRING.ordinal() + ") " +
 				conds +
 				" and u.workspace_id = " + defaultWorkspace.getId() + 
-				" group by c.state, c.validationState, c.diagnosisType " +
+				" group by c.state, c.diagnosisType " +
 				"union " +
 				"select c.state, c.diagnosisType, count(*) " +
 				"from tbcase c " +
