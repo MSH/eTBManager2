@@ -501,7 +501,7 @@ function showPulmonaryTypes(cb){
 				</a:repeat>
 				<td class="colcb">
 					<s:validateAll>
-					<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}">
+					<h:selectOneMenu id="oc" value="#{it.prevTBTreatment.outcome}" required="true">
 						<s:selectItems var="v" value="#{globalLists_bd.getPrevTBTreatmentOutcomes()}" label="#{messages[v.key]}" noSelectionLabel="-" />
 						<s:convertEnum />
 					</h:selectOneMenu>
