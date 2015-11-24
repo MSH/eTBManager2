@@ -5,7 +5,9 @@ package org.msh.tb.sync;
 
 import com.rmemoria.datastream.*;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jboss.seam.Component;
 import org.msh.tb.ETB;
+import org.msh.tb.TagsCasesHome;
 import org.msh.tb.application.App;
 import org.msh.tb.application.TransactionManager;
 import org.msh.tb.entities.*;
@@ -36,6 +38,7 @@ public class SyncFileImporter {
 	private EntityKeyList entityKeys;
 	// list of last versions in use by the client (will be used to generate response file)
 	private List<EntityLastVersion> entityVersions;
+	private List<Integer> casesUpdatedOrCriatedIds;
 
 
 	/**
@@ -167,6 +170,13 @@ public class SyncFileImporter {
 			// if it's active that's because there was an error
 			if (getTransaction().isActive())
 				getTransaction().rollback();
+		}
+
+		/*TODO: [MAURICIO] ver com o Ricardo como implementar isso de forma mais adequada*/
+		TagsCasesHome tagsCasesHome = (TagsCasesHome) Component.getInstance(TagsCasesHome.class);
+		for(Integer id : casesUpdatedOrCriatedIds){
+			TbCase c = App.getEntityManager().find(TbCase.class, id);
+			tagsCasesHome.updateTags(c);
 		}
 	}
 
@@ -349,6 +359,12 @@ public class SyncFileImporter {
 		// save the entity
 		em.persist(obj);
 		em.flush();
+
+		if(obj instanceof TbCase){
+			if(casesUpdatedOrCriatedIds == null)
+				casesUpdatedOrCriatedIds = new ArrayList<Integer>();
+			casesUpdatedOrCriatedIds.add(((TbCase)obj).getId());
+		}
 
 		// if it's a new entity, get the id to be sent back to the client
 		if (bNew)
