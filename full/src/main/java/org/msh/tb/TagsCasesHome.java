@@ -59,10 +59,10 @@ public class TagsCasesHome {
 		}
 		sql = "insert into tags_case (case_id, tag_id) " + sql;
 		entityManager.createNativeQuery(sql).executeUpdate();
+		entityManager.flush();
 
 		updated = true;
 	}
-	
 	
 	/**
 	 * Update the cases of an auto generated tag
