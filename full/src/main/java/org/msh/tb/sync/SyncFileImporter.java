@@ -174,9 +174,11 @@ public class SyncFileImporter {
 
 		/*TODO: [MAURICIO] ver com o Ricardo como implementar isso de forma mais adequada*/
 		TagsCasesHome tagsCasesHome = (TagsCasesHome) Component.getInstance(TagsCasesHome.class);
-		for(Integer id : casesUpdatedOrCriatedIds){
-			TbCase c = App.getEntityManager().find(TbCase.class, id);
-			tagsCasesHome.updateTags(c);
+		if(casesUpdatedOrCriatedIds!=null) {
+			for (Integer id : casesUpdatedOrCriatedIds) {
+				TbCase c = App.getEntityManager().find(TbCase.class, id);
+				tagsCasesHome.updateTags(c);
+			}
 		}
 	}
 
