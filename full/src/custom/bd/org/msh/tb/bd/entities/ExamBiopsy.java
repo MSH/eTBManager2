@@ -1,4 +1,4 @@
-package org.msh.tb.bd.cases.exams;
+package org.msh.tb.bd.entities;
 
 import org.msh.tb.bd.entities.enums.BiopsyResult;
 import org.msh.tb.entities.LaboratoryExam;

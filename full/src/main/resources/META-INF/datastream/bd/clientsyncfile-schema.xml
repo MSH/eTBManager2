@@ -227,7 +227,7 @@
             <property name="workspace" use="IGNORE" />
         </objectGraph>
 
-        <objectGraph name="examskin" class="org.msh.tb.bd.cases.exams.ExamSkin" >
+        <objectGraph name="examskin" class="org.msh.tb.bd.entities.ExamSkin" >
             <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
             <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
@@ -238,7 +238,7 @@
             <property name="method.id" elementName="method" xmlAttribute="true"/>
         </objectGraph>
 
-        <objectGraph name="exambiopsy" class="org.msh.tb.bd.cases.exams.ExamBiopsy" >
+        <objectGraph name="exambiopsy" class="org.msh.tb.bd.entities.ExamBiopsy" >
             <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
             <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />

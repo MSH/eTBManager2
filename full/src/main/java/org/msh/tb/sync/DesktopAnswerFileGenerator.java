@@ -10,6 +10,7 @@ import org.hibernate.proxy.HibernateProxy;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.msh.tb.ETB;
 import org.msh.tb.application.App;
 import org.msh.tb.application.EtbmanagerApp;
 import org.msh.tb.entities.*;
@@ -385,14 +386,22 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	 * @return
 	 */
 	private Class getEntityClass(String entityName) {
-		try {
-			//TODO: [MAURICIO] fazer melhor, voce consegue!
-			String pkg = "org.msh.tb.entities.";
-			if("ExamSkin".equals(entityName) || "ExamBiopsy".equals(entityName))
-				pkg = "org.msh.tb.bd.cases.exams.";
+		String pkg = "org.msh.tb.entities.";
+		Class clazz = null;
+		String ext = UserSession.getWorkspace().getExtension();
 
-			Class clazz = Class.forName( pkg + entityName);
-			return clazz;
+		try {
+			try {
+				clazz = Class.forName( pkg + entityName);
+			} catch (ClassNotFoundException e) {
+				//If it is an entity that is not customized from generic, that was created only to the workspace
+				//Like ExamSkin and ExamBiopsy for Bangladesh.
+				pkg = "org.msh.tb."+ext+".entities.";
+				clazz = Class.forName( pkg + entityName);
+				return clazz;
+			}
+			//If it is a customized class for the workspace, get the right class on this method.
+			return ETB.getWorkspaceClass(clazz);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
