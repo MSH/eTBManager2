@@ -53,6 +53,7 @@ public class ValueHandler {
         return multiselection && value.indexOf(";") >= 0;
     }
 
+
     /**
      * Return the list of elements in the value (only available if elements
      * are separated by semi-comma)

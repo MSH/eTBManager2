@@ -226,6 +226,7 @@ public class ReportResources {
 		addVariable(grp, new InterimOutcomeVariable());
 		addFilter(grp, new InterimMonthFilter());
         add(grp, new RifResistanceDetectionVariable());
+        addFilter(grp, new UserViewFilter());
 		return grp;
 	}
 

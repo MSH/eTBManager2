@@ -54,7 +54,7 @@ public class ReportDAO {
 	 */
 	public List<Report> getDashboardIndicators() {
         return entityManager
-                .createQuery("from Report where dashboard = true and workspace.id = #{defaultWorkspace.id} order by title")
+                .createQuery("from Report where dashboard = true and published=true and workspace.id = #{defaultWorkspace.id} order by title")
                 .getResultList();
 	}
 	

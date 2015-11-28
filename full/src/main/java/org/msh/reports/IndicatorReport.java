@@ -132,9 +132,9 @@ public class IndicatorReport {
 		
 		sqlBuilder.setFilters(filters);
 
-        if (limitToUserView) {
-            applyUserViewRestrictions(sqlBuilder);
-        }
+//        if (limitToUserView) {
+//            applyUserViewRestrictions(sqlBuilder);
+//        }
 
 		// create an empty table
 		DataTableImpl tbl = new DataTableImpl();
@@ -522,7 +522,7 @@ public class IndicatorReport {
         return limitToUserView;
     }
 
-    public void setLimitToUserView(boolean limitToUserView) {
-        this.limitToUserView = limitToUserView;
-    }
+//    public void setLimitToUserView(boolean limitToUserView) {
+//        this.limitToUserView = limitToUserView;
+//    }
 }

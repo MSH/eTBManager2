@@ -2,6 +2,7 @@ package org.msh.tb.client.commons;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.StatusCodeException;
 
 /**
  * Standard callback handler
@@ -15,7 +16,14 @@ public abstract class StandardCallback<T> implements AsyncCallback<T>{
 	 * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
 	 */
 	public void onFailure(Throwable except) {
-		Window.alert("Error : " + except.toString());
+        int code = -1;
+        if (except instanceof StatusCodeException) {
+            code = ((StatusCodeException) except).getStatusCode();
+        }
+
+        if (code != 0) {
+            Window.alert("Error : " + except.toString());
+        }
 	}
 
 }
