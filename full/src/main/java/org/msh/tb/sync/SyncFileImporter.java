@@ -173,6 +173,7 @@ public class SyncFileImporter {
 		}
 
 		/*TODO: [MAURICIO] ver com o Ricardo como implementar isso de forma mais adequada*/
+		//Ricardo aprova que isso fique aqui, e que seja gerado um novo lasttransaction id para esses individuos.
 		TagsCasesHome tagsCasesHome = (TagsCasesHome) Component.getInstance(TagsCasesHome.class);
 		if(casesUpdatedOrCriatedIds!=null) {
 			for (Integer id : casesUpdatedOrCriatedIds) {
