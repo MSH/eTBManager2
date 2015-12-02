@@ -216,8 +216,6 @@
             <property name="conduct.id" elementName="conduct" />
             <property name="gender" xmlAttribute="true" />
             <property name="dateOfExamination" xmlAttribute="true" />
-            <property name="effectSt" xmlAttribute="true" />
-            <property name="effectEnd" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examxray" class="org.msh.tb.entities.ExamXRay">
