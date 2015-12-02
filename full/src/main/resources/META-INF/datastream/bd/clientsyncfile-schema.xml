@@ -266,6 +266,8 @@
             <property name="seriousness" xmlAttribute="true" />
             <property name="outcome" xmlAttribute="true" />
             <property name="resolved" xmlAttribute="true" />
+            <property name="effectSt" xmlAttribute="true" />
+            <property name="effectEnd" xmlAttribute="true" />
         </objectGraph>
 
         <objectGraph name="deleted-entity" class="org.msh.tb.entities.DeletedEntity">
