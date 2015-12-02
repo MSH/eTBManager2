@@ -246,8 +246,8 @@
             <property name="patientType" xmlAttribute="true" />
             <property name="diagnosisType" xmlAttribute="true" />
             <property name="infectionSite" xmlAttribute="true" />
-            <property name="treatmentPeriod.iniDate" elementName="iniTreatDate"/>
-            <property name="treatmentPeriod.endDate" elementName="endTreatDate"/>
+            <property name="treatmentPeriod.iniDate" elementName="iniTreatDate" xmlAttribute="true"/>
+            <property name="treatmentPeriod.endDate" elementName="endTreatDate" xmlAttribute="true"/>
             <property name="regimen.id" elementName="regimen" />
             <property name="regimenIni.id" elementName="regimenini" />
             <property name="ownerUnit.id" elementName="ownerunit" xmlAttribute="true"/>
@@ -262,8 +262,8 @@
                     <property name="id" use="IGNORE"/>
                     <property name="tbunit.id" elementName="tbunit" use="REQUIRED" xmlAttribute="true"/>
                     <property name="transferring" elementName="transf" xmlAttribute="true" />
-                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
-                    <property name="period.endDate" elementName="endDate" use="REQUIRED" />
+                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
                     <property name="lastTransaction" use="IGNORE" />
                     <property name="clientId" use="IGNORE" />
                 </objectGraph>
@@ -272,7 +272,7 @@
                 <objectGraph name="presc-med" class="org.msh.tb.entities.PrescribedMedicine" parentProperty="tbcase">
                     <property name="id" use="IGNORE"/>
                     <property name="medicine.id" elementName="medicine" use="REQUIRED" xmlAttribute="true"/>
-                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
+                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" xmlAttribute="true"/>
                     <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
                     <property name="source.id" elementName="source" use="REQUIRED" />
                     <property name="doseUnit" use="REQUIRED" xmlAttribute="true"/>
@@ -323,6 +323,7 @@
             <property name="outcomeDate" xmlAttribute="true" />
             <property name="iniContinuousPhase" xmlAttribute="true" />
             <property name="lastBmuDateTbRegister" xmlAttribute="true" />
+            <property name="refToDate" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
@@ -418,6 +419,7 @@
             <property name="lastTransaction" use="IGNORE" />
             <property name="clientId" use="IGNORE" />
             <property name="gender" xmlAttribute="true" />
+            <property name="dateOfExamination" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examxray" class="org.msh.tb.entities.ExamXRay">
@@ -449,6 +451,9 @@
             <property name="patientRefTo" xmlAttribute="true" />
             <property name="dotDurinIntPhase" xmlAttribute="true" />
             <property name="clinicalEvolution" xmlAttribute="true" />
+            <property name="refByDate" xmlAttribute="true" />
+            <property name="refToDate" xmlAttribute="true" />
+            <property name="date" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="sideEffect" class="org.msh.tb.bd.entities.CaseSideEffectBD" >
@@ -465,6 +470,8 @@
             <property name="seriousness" xmlAttribute="true" />
             <property name="outcome" xmlAttribute="true" />
             <property name="resolved" xmlAttribute="true" />
+            <property name="effectSt" xmlAttribute="true" />
+            <property name="effectEnd" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="casetag" class="org.msh.tb.sync.CaseTag">
