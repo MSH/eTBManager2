@@ -37,16 +37,16 @@
                         </h:selectOneRadio>
                     </s:decorate>
 
-                    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification == 'TB'}">
-                        <h:selectBooleanCheckbox id="movedToSecondLine" value="#{tbcase.movedSecondLineTreatment}"/>#{messages['CaseState.MOVED_SECONDLINE']}
-                    </s:decorate>
-
                     <div id="comments" style="display:block;clear:both;" >
                         <s:decorate template="/layout/edit.xhtml" >
                             <ui:define name="label">#{messages['TbCase.otherOutcome']}:</ui:define>
                             <h:inputText value="#{caseCloseHome.comment}" maxlength="100" style="width:300px;"/>
                         </s:decorate>
                     </div>
+
+                    <s:decorate template="/layout/edit.xhtml" rendered="#{tbcase.classification == 'TB'}">
+                        <h:selectBooleanCheckbox id="movedToSecondLine" value="#{tbcase.movedSecondLineTreatment}"/>#{messages['CaseState.MOVED_SECONDLINE']}
+                    </s:decorate>
                 </div>
 
                 <div class="form-footer">
