@@ -57,6 +57,10 @@ public class DownloadDesktopFileAction {
 		if (unit == null)
 			throw new RuntimeException("Unit id not valid: " + unitId);
 
+		String workspaceExtension = unit.getWorkspace().getExtension();
+		if(workspaceExtension == null || workspaceExtension.isEmpty())
+			workspaceExtension = "xx";
+
 		File file = File.createTempFile("etbm", ".pkg");
 		BufferedOutputStream fout = new BufferedOutputStream( new FileOutputStream(file) );
 		try {
@@ -72,7 +76,7 @@ public class DownloadDesktopFileAction {
     	filename = filename.replaceAll("[^a-zA-Z0-9.]", "_");
     	if (filename.length() > 10)
     		filename.substring(0, 9);
-    	filename += ".etbm.pkg";
+    	filename += ".etbm."+workspaceExtension+".pkg";
 
 		sendFile(file, filename);
 		

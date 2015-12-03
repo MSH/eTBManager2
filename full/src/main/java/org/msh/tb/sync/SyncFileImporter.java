@@ -38,7 +38,7 @@ public class SyncFileImporter {
 	private EntityKeyList entityKeys;
 	// list of last versions in use by the client (will be used to generate response file)
 	private List<EntityLastVersion> entityVersions;
-	private List<Integer> casesUpdatedOrCriatedIds;
+	private List<Integer> updatedOrCreatedCasesIds;
 
 
 	/**
@@ -172,11 +172,18 @@ public class SyncFileImporter {
 				getTransaction().rollback();
 		}
 
-		/*TODO: [MAURICIO] ver com o Ricardo como implementar isso de forma mais adequada*/
-		//Ricardo aprova que isso fique aqui, e que seja gerado um novo lasttransaction id para esses individuos.
+		updateTagsForUpdatedAndNewCases();
+
+	}
+
+	/**
+	 * calculates the auto-generated tags for cases that was updated or created
+	 * as this information don't comes from the Desktop on sync (and should not come).
+	 */
+	private void updateTagsForUpdatedAndNewCases(){
 		TagsCasesHome tagsCasesHome = (TagsCasesHome) Component.getInstance(TagsCasesHome.class);
-		if(casesUpdatedOrCriatedIds!=null) {
-			for (Integer id : casesUpdatedOrCriatedIds) {
+		if(updatedOrCreatedCasesIds !=null) {
+			for (Integer id : updatedOrCreatedCasesIds) {
 				TbCase c = App.getEntityManager().find(TbCase.class, id);
 				tagsCasesHome.updateTags(c);
 			}
@@ -364,9 +371,15 @@ public class SyncFileImporter {
 		em.flush();
 
 		if(obj instanceof TbCase){
-			if(casesUpdatedOrCriatedIds == null)
-				casesUpdatedOrCriatedIds = new ArrayList<Integer>();
-			casesUpdatedOrCriatedIds.add(((TbCase)obj).getId());
+			addUpdatedOrCreatedCaseId(((TbCase) obj).getId());
+		}else if(obj instanceof LaboratoryExam){
+			addUpdatedOrCreatedCaseId(((LaboratoryExam)obj).getTbcase().getId());
+		}else if(obj instanceof CaseData){
+			addUpdatedOrCreatedCaseId(((CaseData)obj).getTbcase().getId());
+		}else if(obj instanceof CaseSideEffect){
+			addUpdatedOrCreatedCaseId(((CaseSideEffect)obj).getTbcase().getId());
+		}else if(obj instanceof TbContact){
+			addUpdatedOrCreatedCaseId(((TbContact)obj).getTbcase().getId());
 		}
 
 		// if it's a new entity, get the id to be sent back to the client
@@ -400,6 +413,21 @@ public class SyncFileImporter {
 	 */
 	public List<EntityLastVersion> getEntityVersions() {
 		return entityVersions;
+	}
+
+	private void addUpdatedOrCreatedCaseId(Integer id){
+		if(updatedOrCreatedCasesIds == null)
+			updatedOrCreatedCasesIds = new ArrayList<Integer>();
+
+		if(id == null)
+			return;
+
+		for(Integer i: updatedOrCreatedCasesIds){
+			if(i.equals(id))
+				return;
+		}
+
+		updatedOrCreatedCasesIds.add(id);
 	}
 	
 	
