@@ -248,6 +248,7 @@
             <property name="refByDate" xmlAttribute="true" />
             <property name="refToDate" xmlAttribute="true" />
             <property name="date" xmlAttribute="true" />
+            <property name="dotTypeFv.id" elementName="dotTypeFv" xmlAttribute="true"/>
         </objectGraph>
         
         <objectGraph name="sideEffect" class="org.msh.tb.bd.entities.CaseSideEffectBD" >
