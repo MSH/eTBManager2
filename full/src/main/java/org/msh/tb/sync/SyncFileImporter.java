@@ -15,10 +15,12 @@ import org.msh.tb.login.UserSession;
 import org.msh.utils.DataStreamUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ManyToMany;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 
@@ -234,7 +236,9 @@ public class SyncFileImporter {
 
 		if (id != null) {
 			Object o = App.getEntityManager().find(objectType, id);
-			checkObjectCollection(o, params);
+			//Avoid deleting lists of a case when handling embedded cases in the object
+			if(params.size() > 2)
+				checkObjectCollection(o);
 			return o;
 		}
 
@@ -251,8 +255,6 @@ public class SyncFileImporter {
 				PropertyUtils.setProperty(obj, "tbcase", tbcase);
 			}
 
-			checkObjectCollection(obj, params);
-
 			return obj;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -260,27 +262,24 @@ public class SyncFileImporter {
 	}
 
 	/**
-	 * It will check if any param of the object is a list, if it is, it will get each object from the list and
-	 * will delete it.
+	 * The object will be checked if any field is annotated with @SyncClear, if the is any field anotated with this
+	 * type and if it is a list all objects from this list will be removed from the DB and the list will be cleared.
 	 * @param o object to have its params checked
-	 * @param params params from the o
 	 */
-	private void checkObjectCollection(Object o, Map<String, Object> params){
+	private void checkObjectCollection(Object o){
+		Class clazz = o.getClass();
 		List<String> lst = new ArrayList<String>();
 
-		for(String s : params.keySet()){
-            try {
-                // check if it is not a nested property
-                if (!s.contains(".")) {
-                    Class clazz = PropertyUtils.getPropertyType(o, s);
-                    if (Collection.class.isAssignableFrom(clazz)) {
-                        lst.add(s);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
+		while(clazz != null){
+			for(Field f : clazz.getDeclaredFields()){
+				if(f.getAnnotation(SyncClear.class) != null){
+					if(f.getAnnotation(ManyToMany.class) != null)
+						throw new RuntimeException("Sync Clear can not be assigned to a Many to Many field. Need to implement for those cases.");
+					lst.add(f.getName());
+				}
+			}
+
+			clazz = clazz.getSuperclass();
 		}
 
 		for(String s : lst){

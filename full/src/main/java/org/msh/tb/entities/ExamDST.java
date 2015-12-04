@@ -2,6 +2,7 @@ package org.msh.tb.entities;
 
 import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.DstResult;
+import org.msh.tb.sync.SyncClear;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class ExamDST extends LaboratoryExam implements Serializable {
 	private static final long serialVersionUID = -1911463378908689952L;
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="exam")
+	@SyncClear
 	private List<ExamDSTResult> results = new ArrayList<ExamDSTResult>();
 
 	@PropertyLog(ignore=true)
