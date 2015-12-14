@@ -71,6 +71,8 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 //		MAX_RESULTS = 50;
 		hqls = new ArrayList<String>();
 
+		hqls.add("from DeletedEntity a where ( a.unitToBeDeleted is null or a.unitToBeDeleted.id = :unitid )");
+
 		hqls.add("from UserProfile a where a.workspace.id = :wsid");
 		hqls.add("from CountryStructure a where a.workspace.id = :wsid");
 		hqls.add("from AdministrativeUnit a where a.workspace.id = :wsid order by code");
@@ -106,8 +108,6 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		//hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = :unitid");
 
 		addSpecificWorkspacesEntities();
-
-		hqls.add("from DeletedEntity");
 	}
 
 	private void addSpecificWorkspacesEntities(){
@@ -252,7 +252,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
                 break;
 
             case DELETEDENTITIES:
-                /* DeletedEntitys being controled in another kind of control
+                /* DeletedEntities being controled in another way
 				list = getDeletedList();*/
                 listStep = null;
                 break;
@@ -348,7 +348,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 			if("DeletedEntity".equals(entityName)){
 				ver = findClientLastVersion(entityName);
 				if(ver != null)
-					hql = hql + " where id > :txid ";
+					hql = hql + " and id > :txid ";
 			}else{
 				Class entClass = getEntityClass(entityName);
 				if ((entClass != null) && (Transactional.class.isAssignableFrom(entClass))) {

@@ -8,6 +8,7 @@ import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.OwnerUnitChecker;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.Regimen;
 import org.msh.tb.entities.TbCase;
@@ -80,9 +81,6 @@ public class StartTreatmentHome {
 		// save the initial regimen information
 		tbcase.setRegimenIni(tbcase.getRegimen());
 
-		// save the treatment health unit
-		tbcase.setOwnerUnit(tbunitselection.getSelected());
-
 		// initialize case data
 		tbcase.setState(CaseState.ONTREATMENT);
 
@@ -92,7 +90,9 @@ public class StartTreatmentHome {
 		}
 		
 		Events.instance().raiseEvent("treatment-started", new EntityEvent(EntityEvent.EventType.NEW, tbcase));
-		
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
+
 		return "treatment-started";
 	}
 

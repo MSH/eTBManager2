@@ -13,6 +13,7 @@ import org.msh.tb.SourcesQuery;
 import org.msh.tb.TagsCasesHome;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.OwnerUnitChecker;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.*;
 import org.msh.tb.login.UserSession;
@@ -120,7 +121,6 @@ public class TreatmentHome {
 		healthUnit.setTbunit( unit );
 		TbCase tbcase = caseHome.getInstance();
 
-		tbcase.setOwnerUnit(unit);
 		caseHome.getInstance().updateDaysTreatPlanned();
 
 		refreshPrescriptionTable();
@@ -138,7 +138,9 @@ public class TreatmentHome {
 		
 		PrescriptionTable tbl = (PrescriptionTable)Component.getInstance("prescriptionTable");
 		tbl.setEditing(false);
-		
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
+
 		return s;
 	}
 	
@@ -538,7 +540,6 @@ public class TreatmentHome {
 		
 		tbcase.setState(CaseState.WAITING_TREATMENT);
 		tbcase.setTreatmentPeriod(null);
-		tbcase.setOwnerUnit(null);
 		tbcase.setIniContinuousPhase(null);
 		tbcase.setRegimen(null);
 		tbcase.setRegimenIni(null);
@@ -554,8 +555,6 @@ public class TreatmentHome {
 		tbcase.getHealthUnits().clear();
 		tbcase.getPrescribedMedicines().clear();
 
-		tbcase.setOwnerUnit(tbcase.getNotificationUnit());
-		
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();
 
@@ -564,7 +563,9 @@ public class TreatmentHome {
 				.executeUpdate();
 
 		facesMessages.addFromResourceBundle("cases.treat.undo.executed");
-		
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
+
 		return "treatment-undone";
 	}
 

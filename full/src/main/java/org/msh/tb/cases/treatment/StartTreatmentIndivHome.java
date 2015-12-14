@@ -8,6 +8,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Events;
 import org.jboss.seam.faces.FacesMessages;
 import org.msh.tb.SourcesQuery;
+import org.msh.tb.cases.OwnerUnitChecker;
 import org.msh.tb.entities.Medicine;
 import org.msh.tb.entities.PrescribedMedicine;
 import org.msh.tb.entities.TbCase;
@@ -74,7 +75,6 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 
 		// update case
 		tbcase.setTreatmentPeriod(treatPeriod);
-		tbcase.setOwnerUnit(getTbunitselection().getSelected());
 		tbcase.setState(CaseState.ONTREATMENT);
 		tbcase.setRegimen(null);
 		tbcase.setIniContinuousPhase( DateUtils.incMonths(iniTreatmentDate, monthsIntPhase) );
@@ -113,6 +113,8 @@ public class StartTreatmentIndivHome extends StartTreatmentHome {
 			caseHome.persist();
 		
 		Events.instance().raiseEvent("treatment-started", new EntityEvent(EntityEvent.EventType.NEW, tbcase));
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
 
 		return "treatment-started";
 		

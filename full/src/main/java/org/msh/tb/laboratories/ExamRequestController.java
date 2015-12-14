@@ -13,6 +13,7 @@ import org.msh.tb.ETB;
 import org.msh.tb.adminunits.AdminUnitSelection;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.OwnerUnitChecker;
 import org.msh.tb.cases.PatientHome;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.CaseState;
@@ -142,11 +143,15 @@ public class ExamRequestController {
 
         if (editCaseData) {
             req.setTbunit(getUnitselection().getSelected());
-            req.getTbcase().setOwnerUnit(getUnitselection().getSelected());
+			req.getTbcase().setOwnerUnit(getUnitselection().getSelected());
             req.getTbcase().setNotificationUnit(getUnitselection().getSelected());
         }
 
-        return  requestHome.persist();
+		String s = requestHome.persist();
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
+
+        return  s;
     }
 
 
@@ -185,12 +190,12 @@ public class ExamRequestController {
 		// is this a suspect not registered yet ?
 		if (tbcase.getId() == null) {
 			tbcase.setNotificationUnit(unitselection.getTbunit());
+			tbcase.setOwnerUnit(unitselection.getTbunit());
 			tbcase.getNotifAddress().setAdminUnit(auselection.getSelectedUnit());
 			tbcase.getCurrentAddress().copy(tbcase.getNotifAddress());
 			tbcase.setRegistrationDate(requestDate);
 			tbcase.setState(CaseState.WAITING_TREATMENT);
 			tbcase.setValidationState(ValidationState.WAITING_VALIDATION);
-            tbcase.setOwnerUnit(unitselection.getTbunit());
 //			tbcase.setDiagnosisType(DiagnosisType.SUSPECT);
 		}
 		
@@ -261,7 +266,9 @@ public class ExamRequestController {
 
 //		CaseHome caseHome = (CaseHome)Component.getInstance("caseHome", true);
 //		caseHome.setId(tbcase.getId());
-		
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
+
 		return "persisted";
 	}
 

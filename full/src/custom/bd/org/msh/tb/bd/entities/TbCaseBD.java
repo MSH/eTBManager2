@@ -11,7 +11,9 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.YesNoType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -44,6 +46,12 @@ public class TbCaseBD extends TbCase{
     private Date refToDate;
 
 	private SmearStatus followUpSmearStatus;
+
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
+	private List<ExamSkin> examsSkin = new ArrayList<ExamSkin>();
+
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
+	private List<ExamBiopsy> examsBiopsy = new ArrayList<ExamBiopsy>();
 
     public FieldValue getPatientRefToFv() {
         return patientRefToFv;
@@ -121,5 +129,21 @@ public class TbCaseBD extends TbCase{
 
 	public void setFollowUpSmearStatus(SmearStatus followUpSmearStatus) {
 		this.followUpSmearStatus = followUpSmearStatus;
+	}
+
+	public List<ExamSkin> getExamsSkin() {
+		return examsSkin;
+	}
+
+	public void setExamsSkin(List<ExamSkin> examsSkin) {
+		this.examsSkin = examsSkin;
+	}
+
+	public List<ExamBiopsy> getExamsBiopsy() {
+		return examsBiopsy;
+	}
+
+	public void setExamsBiopsy(List<ExamBiopsy> examsBiopsy) {
+		this.examsBiopsy = examsBiopsy;
 	}
 }

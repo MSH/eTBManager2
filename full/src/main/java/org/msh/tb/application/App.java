@@ -5,10 +5,12 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.international.Messages;
 import org.msh.tb.entities.SyncKey;
+import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.Workspace;
 import org.msh.tb.entities.DeletedEntity;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Base controller where business components can use to execute common operations dependent of containers. 
@@ -93,18 +95,16 @@ public class App {
 	}
 
 	public static void registerDeletedSyncEntity(Object entity) {
+		registerDeletedSyncEntity(entity, null);
+	}
+
+	public static void registerDeletedSyncEntity(Object entity, Tbunit unit) {
 		if (entity instanceof SyncKey) {
 			if (((SyncKey) entity).getId() != null) {
-				//Protect from double insertion
-				if (getEntityManager().createQuery("from DeletedEntity where entityName = :name and entityId = :id")
-						.setParameter("name", entity.getClass().getSimpleName())
-						.setParameter("id", ((SyncKey) entity).getId())
-						.getResultList().size() > 0)
-					return;
-
 				DeletedEntity ent = new DeletedEntity();
 				ent.setEntityId(((SyncKey) entity).getId());
 				ent.setEntityName(entity.getClass().getSimpleName());
+				ent.setUnitToBeDeleted(unit);
 				getEntityManager().persist(ent);
 			}
 		}

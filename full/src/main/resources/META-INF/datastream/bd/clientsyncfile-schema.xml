@@ -69,7 +69,43 @@
             <property name="examinations" use="IGNORE" />
             <property name="resXRay" use="IGNORE" />
             <property name="contacts" use="IGNORE" />
-            <property name="treatmentMonitoring" use="IGNORE"/>
+            <property name="treatmentMonitoring">
+                <objectGraph name="treatMonitoring" class="org.msh.tb.entities.TreatmentMonitoring" parentProperty="tbcase">
+                    <property name="month" xmlAttribute="true" />
+                    <property name="year" xmlAttribute="true" />
+                    <property name="day1" xmlAttribute="true" />
+                    <property name="day2" xmlAttribute="true" />
+                    <property name="day3" xmlAttribute="true" />
+                    <property name="day4" xmlAttribute="true" />
+                    <property name="day5" xmlAttribute="true" />
+                    <property name="day6" xmlAttribute="true" />
+                    <property name="day7" xmlAttribute="true" />
+                    <property name="day8" xmlAttribute="true" />
+                    <property name="day9" xmlAttribute="true" />
+                    <property name="day10" xmlAttribute="true" />
+                    <property name="day11" xmlAttribute="true" />
+                    <property name="day12" xmlAttribute="true" />
+                    <property name="day13" xmlAttribute="true" />
+                    <property name="day14" xmlAttribute="true" />
+                    <property name="day15" xmlAttribute="true" />
+                    <property name="day16" xmlAttribute="true" />
+                    <property name="day17" xmlAttribute="true" />
+                    <property name="day18" xmlAttribute="true" />
+                    <property name="day19" xmlAttribute="true" />
+                    <property name="day20" xmlAttribute="true" />
+                    <property name="day21" xmlAttribute="true" />
+                    <property name="day22" xmlAttribute="true" />
+                    <property name="day23" xmlAttribute="true" />
+                    <property name="day24" xmlAttribute="true" />
+                    <property name="day25" xmlAttribute="true" />
+                    <property name="day26" xmlAttribute="true" />
+                    <property name="day27" xmlAttribute="true" />
+                    <property name="day28" xmlAttribute="true" />
+                    <property name="day29" xmlAttribute="true" />
+                    <property name="day30" xmlAttribute="true" />
+                    <property name="day31" xmlAttribute="true" />
+                </objectGraph>
+            </property>
             <property name="resHIV" use="IGNORE" />
             <property name="examsCulture" use="IGNORE" />
             <property name="examsMicroscopy" use="IGNORE" />
@@ -93,6 +129,7 @@
             <property name="iniContinuousPhase" xmlAttribute="true" />
             <property name="lastBmuDateTbRegister" xmlAttribute="true" />
             <property name="refToDate" xmlAttribute="true" />
+            <property name="movedSecondLineTreatment" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
@@ -169,37 +206,6 @@
             <property name="startedARTdate" xmlAttribute="true" />
             <property name="startedCPTdate" xmlAttribute="true" />
             <property name="date" xmlAttribute="true" />
-        </objectGraph>
-        
-        <objectGraph name="treatmonitoring" class="org.msh.tb.entities.TreatmentMonitoring" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
-            <property name="id" elementName="id" xmlAttribute="true" />
-            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
-            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
-        </objectGraph>
-        
-        <objectGraph name="healthunit" class="org.msh.tb.entities.TreatmentHealthUnit" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
-            <property name="id" elementName="id" xmlAttribute="true" />
-            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
-            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
-            <property name="tbunit.id" elementName="tbunit" use="REQUIRED" xmlAttribute="true"/>
-            <property name="transferring" elementName="transf" xmlAttribute="true" />
-            <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
-            <property name="period.endDate" elementName="endDate" use="REQUIRED" />
-        </objectGraph>
-        
-        <objectGraph name="presc-med" class="org.msh.tb.entities.PrescribedMedicine" >
-            <property name="clientId" elementName="cl_id" xmlAttribute="true" use="REQUIRED" />
-            <property name="id" elementName="id" xmlAttribute="true" />
-            <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
-            <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
-            <property name="medicine.id" elementName="medicine" use="REQUIRED" xmlAttribute="true"/>
-            <property name="period.iniDate" elementName="iniDate" use="REQUIRED" />
-            <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
-            <property name="source.id" elementName="source" use="REQUIRED" />
-            <property name="doseUnit" use="REQUIRED" xmlAttribute="true"/>
-            <property name="frequency" use="REQUIRED" xmlAttribute="true"/>
         </objectGraph>
         
         <objectGraph name="address" class="org.msh.tb.entities.Address">

@@ -88,9 +88,6 @@ public class CaseMoveHome extends Controller {
 		newhu.setTransferring(true);
 		tbcase.getHealthUnits().add(newhu);
 		newhu.setTbunit(tbunit);
-		
-		// change health unit on treatment
-		tbcase.setOwnerUnit(tbunit);
 
 		currentHealthUnit.getPeriod().intersect(prevPeriod);
 		
@@ -107,6 +104,8 @@ public class CaseMoveHome extends Controller {
 			prescriptionTable.refresh();
 
 		Events.instance().raiseEvent("case.transferout");
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
 
 		return "transferred-out";
 	}
@@ -186,7 +185,6 @@ public class CaseMoveHome extends Controller {
 			}
 */		}
 
-		tbcase.setOwnerUnit(tout.getTbunit());
 		tbcase.setState(CaseState.ONTREATMENT);
 		caseHome.persist();
 		
@@ -198,7 +196,9 @@ public class CaseMoveHome extends Controller {
 		Contexts.getEventContext().set("transferunit", tin.getTbunit());
 		
 		Events.instance().raiseEvent("case.transferout.rollback");
-		
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
+
 		return "success";
 	}
 	
@@ -268,13 +268,14 @@ public class CaseMoveHome extends Controller {
 		TbCase tbcase = caseHome.getInstance();
 		
 		tbcase.setState(CaseState.ONTREATMENT);
-		tbcase.setOwnerUnit(hu.getTbunit());
-		
+
 		caseHome.setDisplayMessage(false);
 		caseHome.persist();
 
 		Events.instance().raiseEvent("case.transferin");
-		
+
+		OwnerUnitChecker.checkOwnerId(tbcase);
+
 		return "trasnferred-in";
 	}
 	

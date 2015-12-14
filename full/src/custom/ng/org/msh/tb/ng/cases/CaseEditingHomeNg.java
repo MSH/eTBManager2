@@ -11,6 +11,7 @@ import org.jboss.seam.international.StatusMessage;
 import org.msh.tb.application.App;
 import org.msh.tb.cases.CaseEditingHome;
 import org.msh.tb.cases.CaseHome;
+import org.msh.tb.cases.OwnerUnitChecker;
 import org.msh.tb.cases.PatientHome;
 import org.msh.tb.cases.exams.CultureActions;
 import org.msh.tb.cases.exams.MicroscopyActions;
@@ -233,7 +234,7 @@ public class CaseEditingHomeNg {
 
         //fix the inconsistence when owner unit is null.
         if(tbcase.getOwnerUnit() == null){
-            caseEditingHome.updateOwnerUnit(tbcase);
+            tbcase.setOwnerUnit(OwnerUnitChecker.selectOwnerUnit(tbcase));
         }
 
         caseEditingHome.updatePatientAge();
@@ -262,7 +263,7 @@ public class CaseEditingHomeNg {
 
         //fix the inconsistence when owner unit is null.
         if(tbcase.getOwnerUnit() == null){
-            caseEditingHome.updateOwnerUnit(tbcase);
+            tbcase.setOwnerUnit(OwnerUnitChecker.selectOwnerUnit(tbcase));
         }
 
         caseEditingHome.updatePatientAge();

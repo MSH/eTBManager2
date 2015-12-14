@@ -481,4 +481,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="2.2-6" author="msantos">
+        <addColumn tableName="deletedentity">
+            <column name="UNIT_TO_BE_DELETED_ID" type="int"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

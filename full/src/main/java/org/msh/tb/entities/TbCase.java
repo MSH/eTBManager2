@@ -236,6 +236,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	private List<TbContact> contacts = new ArrayList<TbContact>();
 	
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase", fetch=FetchType.LAZY)
+	@SyncClear
 	private List<TreatmentMonitoring> treatmentMonitoring = new ArrayList<TreatmentMonitoring>();
 	
 

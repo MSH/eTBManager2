@@ -267,6 +267,8 @@ public class SyncFileImporter {
 	 * @param o object to have its params checked
 	 */
 	private void checkObjectCollection(Object o){
+		if(o==null)
+			return;
 		Class clazz = o.getClass();
 		List<String> lst = new ArrayList<String>();
 

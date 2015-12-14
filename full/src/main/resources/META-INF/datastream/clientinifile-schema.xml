@@ -295,7 +295,46 @@
             <property name="examinations" use="IGNORE" />
             <property name="resXRay" use="IGNORE" />
             <property name="contacts" use="IGNORE" />
-            <property name="treatmentMonitoring" use="IGNORE"/>
+            <property name="treatmentMonitoring">
+                <objectGraph name="treatMonitoring" class="org.msh.tb.entities.TreatmentMonitoring" parentProperty="tbcase">
+                    <property name="id" use="IGNORE"/>
+                    <property name="month" xmlAttribute="true" />
+                    <property name="year" xmlAttribute="true" />
+                    <property name="day1" xmlAttribute="true" />
+                    <property name="day2" xmlAttribute="true" />
+                    <property name="day3" xmlAttribute="true" />
+                    <property name="day4" xmlAttribute="true" />
+                    <property name="day5" xmlAttribute="true" />
+                    <property name="day6" xmlAttribute="true" />
+                    <property name="day7" xmlAttribute="true" />
+                    <property name="day8" xmlAttribute="true" />
+                    <property name="day9" xmlAttribute="true" />
+                    <property name="day10" xmlAttribute="true" />
+                    <property name="day11" xmlAttribute="true" />
+                    <property name="day12" xmlAttribute="true" />
+                    <property name="day13" xmlAttribute="true" />
+                    <property name="day14" xmlAttribute="true" />
+                    <property name="day15" xmlAttribute="true" />
+                    <property name="day16" xmlAttribute="true" />
+                    <property name="day17" xmlAttribute="true" />
+                    <property name="day18" xmlAttribute="true" />
+                    <property name="day19" xmlAttribute="true" />
+                    <property name="day20" xmlAttribute="true" />
+                    <property name="day21" xmlAttribute="true" />
+                    <property name="day22" xmlAttribute="true" />
+                    <property name="day23" xmlAttribute="true" />
+                    <property name="day24" xmlAttribute="true" />
+                    <property name="day25" xmlAttribute="true" />
+                    <property name="day26" xmlAttribute="true" />
+                    <property name="day27" xmlAttribute="true" />
+                    <property name="day28" xmlAttribute="true" />
+                    <property name="day29" xmlAttribute="true" />
+                    <property name="day30" xmlAttribute="true" />
+                    <property name="day31" xmlAttribute="true" />
+                    <property name="lastTransaction" use="IGNORE" />
+                    <property name="clientId" use="IGNORE" />
+                </objectGraph>
+            </property>
             <property name="resHIV" use="IGNORE" />
             <property name="examsCulture" use="IGNORE" />
             <property name="examsMicroscopy" use="IGNORE" />
@@ -303,7 +342,7 @@
             <property name="examsXpert" use="IGNORE" />
 		    <property name="lastTransaction" use="IGNORE" />
             <property name="tags" use="IGNORE" />
-            <property name="movedSecondLineTreatment" use="IGNORE" />
+            <property name="movedSecondLineTreatment" xmlAttribute="true" />
             <property name="clientId" use="IGNORE" />
             <property name="suspectClassification" xmlAttribute="true" />
             <property name="validationState" xmlAttribute="true" />
@@ -468,6 +507,7 @@
             <property name="entityName" elementName="entity" xmlAttribute="true" />
             <property name="entityId" elementName="serverId" xmlAttribute="true" />
             <property name="id" use="IGNORE" />
+            <property name="unitToBeDeleted" use="IGNORE" />
         </objectGraph>
 
     </objectCollection>

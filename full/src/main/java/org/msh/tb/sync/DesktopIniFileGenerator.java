@@ -121,6 +121,7 @@ public class DesktopIniFileGenerator implements ObjectProvider, DataInterceptor 
 		// initialize variables
 		unitId = unit.getId();
 		workspaceId = unit.getWorkspace().getId();
+
 		processDeletedEntityVersion();
 
 		initialized = false;

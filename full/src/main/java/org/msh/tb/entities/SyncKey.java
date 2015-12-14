@@ -17,10 +17,16 @@ public interface SyncKey {
 	 * @return
 	 */
 	Integer getId();
-	
+
 	/**
 	 * Store the ID of the entity from the client side (temporarily in memory)
 	 * @return
 	 */
 	Integer getClientId();
+
+	/**
+	 * Set the ID of the entity from the client side (temporarily in memory)
+	 * @return
+	 */
+	void setClientId(Integer clientId);
 }
