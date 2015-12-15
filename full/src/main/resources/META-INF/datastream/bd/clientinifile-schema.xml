@@ -365,6 +365,7 @@
             <property name="refToDate" xmlAttribute="true" />
             <property name="examsSkin" use="IGNORE" />
             <property name="examsBiopsy" use="IGNORE" />
+            <property name="patientRefToFv.id" elementName="patientRefToFv" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">

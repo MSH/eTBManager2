@@ -487,4 +487,85 @@
         </addColumn>
     </changeSet>
 
+    <!-- updates field case definition field according to exams, the logic has changed -->
+    <changeSet id="2.2-7" author="msantos">
+        <sql>
+            update tbcase
+            set casedefinition = null;
+
+            update tbcase
+            set casedefinition = 1
+            where diagnosisType = 1;
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is not null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.datecollected &lt; DATE_SUB(tbcase.iniContinuousPhase,INTERVAL 8 DAY));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is not null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.datecollected &lt; DATE_SUB(tbcase.iniContinuousPhase,INTERVAL 8 DAY));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is not null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.datecollected &lt; DATE_SUB(tbcase.iniContinuousPhase,INTERVAL 8 DAY));
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

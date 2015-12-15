@@ -130,6 +130,7 @@
             <property name="lastBmuDateTbRegister" xmlAttribute="true" />
             <property name="refToDate" xmlAttribute="true" />
             <property name="movedSecondLineTreatment" xmlAttribute="true" />
+            <property name="patientRefToFv.id" elementName="patientRefToFv" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
