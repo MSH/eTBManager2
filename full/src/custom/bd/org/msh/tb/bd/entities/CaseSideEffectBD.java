@@ -6,6 +6,7 @@ import org.msh.tb.bd.entities.enums.SideEffectGrading;
 import org.msh.tb.bd.entities.enums.SideEffectOutcome;
 import org.msh.tb.bd.entities.enums.SideEffectSeriousness;
 import org.msh.tb.entities.CaseSideEffect;
+import org.msh.tb.sync.Sync;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 import org.msh.utils.date.DateUtils;
 
@@ -29,6 +30,7 @@ public class CaseSideEffectBD extends CaseSideEffect{
 	private SideEffectSeriousness seriousness;
 	
 	@Temporal(TemporalType.DATE)
+	@Sync(keyAttribute = true)
 	private Date effectSt;
 
 	@Temporal(TemporalType.DATE)

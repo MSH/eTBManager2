@@ -3,6 +3,7 @@ package org.msh.tb.entities;
 import org.hibernate.validator.NotNull;
 import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.sync.Sync;
 
 import javax.persistence.*;
 
@@ -27,16 +28,19 @@ public class CaseSideEffect implements Transactional, SyncKey {
 	@AssociationOverrides({ @AssociationOverride(name = "value", joinColumns = @JoinColumn(name = "SIDEEFFECT_ID")) })
 	@AttributeOverrides({ @AttributeOverride(name = "complement", column = @Column(name = "otherAdverseEffect")) })
 	@NotNull
+	@Sync(keyAttribute = true, internalKeyAttribute = "value.id")
 	private FieldValueComponent sideEffect;
 	
 	@ManyToOne
 	@JoinColumn(name="CASE_ID")
 	@NotNull
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private TbCase tbcase;
 	
 	private String medicines;
 	
 	@Column(name="SE_MONTH")
+	@Sync(keyAttribute = true)
 	private int month;
 	
 	private YesNoType resolved;
