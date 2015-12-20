@@ -385,9 +385,31 @@ public class CasesQuery extends EntityQuery<CaseResultItem> {
 		// check if search is by case ID
 		Workspace ws = getDefaultWorkspace();
 		if ((ws.getSuspectCaseNumber() == DisplayCaseNumber.CASE_ID) || (ws.getConfirmedCaseNumber() == DisplayCaseNumber.CASE_ID)) {
+			String[] s = key.split("-");
+			if (s.length == 1) {
+				Integer patnum = stringToNumber(s[0]);
+				if (patnum != null) {
+					if (!hql.isEmpty())
+						hql += " or ";
+					hql += "(p.recordNumber = " + patnum + " or ";
+				}
+			}
+			else {
+				if (s.length == 2) {
+					Integer patnum = stringToNumber(s[0]);
+					Integer digit = stringToNumber(s[1]);
+					if ((patnum != null) && (digit != null)) {
+						if (!hql.isEmpty())
+							hql += " or ";
+						hql += "((p.recordNumber = " + patnum + " and c.caseNumber = " + digit + ") or ";
+					}
+				}
+			}
+
 			Integer caseId = stringToNumber(key);
+
 			if (caseId != null)
-				hql += "c.id = " + caseId;
+				hql += "c.id = " + caseId + ")";
 		}
 
 		// check if search is by record number

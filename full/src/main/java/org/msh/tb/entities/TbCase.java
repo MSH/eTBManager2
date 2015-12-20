@@ -526,30 +526,34 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	 * @return
 	 */
 	public String getDisplayCaseNumber() {
-		Workspace ws = (patient != null? patient.getWorkspace() : null);
+		Workspace ws = (getPatient() != null? getPatient().getWorkspace() : null);
 
 		if (ws == null)
-			return id != null? id.toString(): "null";
+			return getId() != null? getId().toString(): "null";
 
 		DisplayCaseNumber dcn;
-		if (diagnosisType == DiagnosisType.SUSPECT)
-			 dcn = ws.getSuspectCaseNumber();
+		if (getDiagnosisType().equals(DiagnosisType.SUSPECT))
+			dcn = ws.getSuspectCaseNumber();
 		else dcn = ws.getConfirmedCaseNumber();
 
 		switch (dcn) {
-		case USER_DEFINED: {
-			String code;
-			if (diagnosisType == DiagnosisType.SUSPECT)
-				 code = suspectRegistrationCode;
-			else code = registrationCode;
-			if ((code == null) || (code.isEmpty()))
-				code = Messages.instance().get("cases.nonumber");
-			return code;
-		}
-		case VALIDATION_NUMBER:
-            return getDisplayValidationNumber();
-		default:
-			return id != null? id.toString(): Messages.instance().get("cases.nonumber");
+			case USER_DEFINED: {
+				String code;
+				if (getDiagnosisType().equals(DiagnosisType.SUSPECT))
+					code = getSuspectRegistrationCode();
+				else code = getRegistrationCode();
+				if ((code == null) || (code.isEmpty()))
+					code = Messages.instance().get("cases.nonumber");
+				return code;
+			}
+			case VALIDATION_NUMBER:
+				return getDisplayValidationNumber();
+			default: {
+				String r = getId() != null ? getId().toString() : Messages.instance().get("cases.nonumber");
+				if ((getCaseNumber() != null) && (getValidationState() != ValidationState.WAITING_VALIDATION))
+					r+=" ("+getDisplayValidationNumber()+")";
+				return r;
+			}
 		}
 	}
 
