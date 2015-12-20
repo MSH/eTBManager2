@@ -9,6 +9,7 @@ import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.YesNoType;
+import org.msh.tb.sync.Sync;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class TbCaseBD extends TbCase{
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="PATIENTREFTO_ID")
     @PropertyLog(messageKey="MedicalExamination.ReferredTo")
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
     private FieldValue patientRefToFv;
 
     @Column(length=100)

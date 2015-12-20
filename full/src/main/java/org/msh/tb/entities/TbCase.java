@@ -55,9 +55,10 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	@NotNull
 	@PropertyLog(logEntityFields=true)
 	@InnerValidation
-	@Sync(keyAttribute = true, internalKeyAttribute = "id")
+	@Sync(keyAttribute = true, internalKeyAttribute = "name,gender")
 	private Patient patient;
-	
+
+	@Sync(keyAttribute = true)
 	private Integer age;
 
 	@NotNull
@@ -96,6 +97,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="OWNER_UNIT_ID")
 	@NotNull
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private Tbunit ownerUnit ;
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
@@ -169,6 +171,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="NOTIFICATION_UNIT_ID")
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private Tbunit notificationUnit;
 	
 	private boolean notifAddressChanged;

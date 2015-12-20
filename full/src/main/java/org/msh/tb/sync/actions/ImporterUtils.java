@@ -7,6 +7,7 @@ import org.msh.tb.sync.Sync;
 import javax.persistence.ManyToMany;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,13 +36,24 @@ public abstract class ImporterUtils {
             for(Field f : clazz.getDeclaredFields())
                 if (f.getAnnotation(Sync.class) != null && f.getAnnotation(Sync.class).keyAttribute()) {
                     String keyAttributeName = f.getName();
-                    if(!f.getAnnotation(Sync.class).internalKeyAttribute().isEmpty())
-                        keyAttributeName += "." + f.getAnnotation(Sync.class).internalKeyAttribute();
-                    //Check if keyAttribute exists on params list. It has to exist, can only be a keyAttibute required fields
-                    if (params.get(keyAttributeName) == null){
-                        throw new RuntimeException("No parameter found for key attribute! " + keyAttributeName);
+                    if(!f.getAnnotation(Sync.class).internalKeyAttribute().isEmpty()){
+                        //if has internalKeyAttributes
+                        String[] internalAttributeList = f.getAnnotation(Sync.class).internalKeyAttribute().trim().split(",");
+                        for(String s : internalAttributeList) {
+                            String internalAttribute = keyAttributeName;
+                            internalAttribute += "." + s;
+                            if (params.get(internalAttribute) == null && params.get(keyAttributeName) == null) {
+                                throw new RuntimeException("No parameter found for key attribute! " + internalAttributeList);
+                            }
+                            keyAttributeLst.add(internalAttribute);
+                        }
+                    }else {
+                        //Check if keyAttribute exists on params list. It has to exist, can only be a keyAttibute required fields
+                        if (params.get(keyAttributeName) == null) {
+                            throw new RuntimeException("No parameter found for key attribute! " + keyAttributeName);
+                        }
+                        keyAttributeLst.add(keyAttributeName);
                     }
-                    keyAttributeLst.add(keyAttributeName);
                 }
 
             clazz = clazz.getSuperclass();
@@ -58,7 +70,18 @@ public abstract class ImporterUtils {
 
         Query query = App.getEntityManager().createQuery(queryString);
         for(String key : keyAttributeLst){
-            query.setParameter(key.replace(".", ""),params.get(key));
+            Object value = params.get(key);
+            if(value==null) {
+                //if don't find the value as a param, look for it inside an object, eg Patient
+                Object embeddedObject = params.get(key.substring(0, key.lastIndexOf(".")));
+                try{
+                    value = PropertyUtils.getProperty(embeddedObject, key.substring(key.lastIndexOf(".")+1, key.length()));
+                }catch(Exception e){
+                    e.printStackTrace();
+                    throw new RuntimeException("value not found on parameters list:" + key.substring(key.lastIndexOf(".")+1, key.length()));
+                }
+            }
+            query.setParameter(key.replace(".", ""),value);
         }
 
         List<Object> resultList = query.getResultList();

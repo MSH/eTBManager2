@@ -258,10 +258,14 @@ public class SyncFileImporter {
 				PropertyUtils.setProperty(obj, "tbcase", tbcase);
 			}
 
-			Object similarObject = ImporterUtils.findDuplicity(obj, params);
+			// TODO resolver problema relatado no 1670
+			//Object similarObject = ImporterUtils.findDuplicity(obj, params);
 
-			if(similarObject!= null)
-				return similarObject;
+			//if(similarObject!= null)
+			//	return similarObject;
+
+			if(obj instanceof ExamMicroscopy)
+				System.out.println("aqui!");
 
 			return obj;
 		} catch (Exception e) {
