@@ -12,6 +12,7 @@ import org.msh.tb.application.App;
 import org.msh.tb.application.TransactionManager;
 import org.msh.tb.entities.*;
 import org.msh.tb.login.UserSession;
+import org.msh.tb.sync.actions.ImporterUtils;
 import org.msh.utils.DataStreamUtils;
 
 import javax.persistence.EntityManager;
@@ -23,6 +24,8 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
+import javax.persistence.Entity;
+import javax.persistence.Query;
 
 
 /**
@@ -238,7 +241,7 @@ public class SyncFileImporter {
 			Object o = App.getEntityManager().find(objectType, id);
 			//Avoid deleting lists of a case when handling embedded cases in the object
 			if(params.size() > 2)
-				checkObjectCollection(o);
+				ImporterUtils.cleanObjectCollections(o);
 			return o;
 		}
 
@@ -255,47 +258,14 @@ public class SyncFileImporter {
 				PropertyUtils.setProperty(obj, "tbcase", tbcase);
 			}
 
+			Object similarObject = ImporterUtils.findDuplicity(obj, params);
+
+			if(similarObject!= null)
+				return similarObject;
+
 			return obj;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * The object will be checked if any field is annotated with @SyncClear, if the is any field anotated with this
-	 * type and if it is a list all objects from this list will be removed from the DB and the list will be cleared.
-	 * @param o object to have its params checked
-	 */
-	private void checkObjectCollection(Object o){
-		if(o==null)
-			return;
-		Class clazz = o.getClass();
-		List<String> lst = new ArrayList<String>();
-
-		while(clazz != null){
-			for(Field f : clazz.getDeclaredFields()){
-				if(f.getAnnotation(SyncClear.class) != null){
-					if(f.getAnnotation(ManyToMany.class) != null)
-						throw new RuntimeException("Sync Clear can not be assigned to a Many to Many field. Need to implement for those cases.");
-					lst.add(f.getName());
-				}
-			}
-
-			clazz = clazz.getSuperclass();
-		}
-
-		for(String s : lst){
-			try{
-				Collection c = (Collection)PropertyUtils.getProperty(o, s);
-				if(c!=null){
-					for(Object item : c){
-						App.getEntityManager().remove(item);
-					}
-					c.clear();
-				}
-			}catch(Exception e){
-				throw new RuntimeException(e);
-			}
 		}
 	}
 	

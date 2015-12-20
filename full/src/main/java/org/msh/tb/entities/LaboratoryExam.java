@@ -5,6 +5,7 @@ import org.jboss.seam.international.LocaleSelector;
 import org.msh.etbm.commons.transactionlog.Operation;
 import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.ExamStatus;
+import org.msh.tb.sync.Sync;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 import javax.persistence.*;
@@ -35,6 +36,7 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	@NotNull
 	@Past
 	@PropertyLog(messageKey="PatientSample.dateCollected", operations={Operation.NEW, Operation.DELETE})
+	@Sync(keyAttribute = true)
 	private Date dateCollected;
 	
 	@Column(length=50)
@@ -61,11 +63,13 @@ public abstract class LaboratoryExam implements Serializable, Transactional, Syn
 	@JoinColumn(name="CASE_ID")
 	@PropertyLog(ignore=true)
 	@NotNull
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private TbCase tbcase;
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="LABORATORY_ID")
 	@PropertyLog(messageKey="Laboratory", operations={Operation.NEW, Operation.DELETE})
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private Laboratory laboratory;
 
 	@Temporal(TemporalType.DATE)

@@ -4,6 +4,7 @@ import org.hibernate.validator.NotNull;
 import org.msh.etbm.commons.transactionlog.Operation;
 import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.Gender;
+import org.msh.tb.sync.Sync;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,15 +25,19 @@ public class TbContact implements Serializable, Transactional, SyncKey {
 	@ManyToOne
 	@JoinColumn(name="CASE_ID")
 	@NotNull
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private TbCase tbcase;
 
 	@PropertyLog(operations={Operation.ALL})
+	@Sync(keyAttribute = true)
 	private String name;
 	
 	@PropertyLog(messageKey="Gender")
+	@Sync(keyAttribute = true)
 	private Gender gender;
 	
 	@PropertyLog(messageKey="TbCase.age", operations={Operation.NEW})
+	@Sync(keyAttribute = true)
 	private String age;
 	
 	//VR: adding 'date of examination'
@@ -41,6 +46,7 @@ public class TbContact implements Serializable, Transactional, SyncKey {
 	@ManyToOne
 	@JoinColumn(name="CONTACTTYPE_ID")
 	@PropertyLog(operations={Operation.NEW})
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private FieldValue contactType;
 	
 	private boolean examinated;

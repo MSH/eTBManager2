@@ -14,6 +14,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(ElementType.FIELD)
 @Retention(RUNTIME)
 @Documented
-public @interface SyncClear {
-
+public @interface Sync {
+    boolean clearList() default false;
+    boolean keyAttribute() default false;
+    String internalKeyAttribute() default "";
 }

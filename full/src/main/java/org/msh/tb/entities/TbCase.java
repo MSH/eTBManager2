@@ -5,7 +5,7 @@ import org.jboss.seam.international.Messages;
 import org.msh.etbm.commons.transactionlog.Operation;
 import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.tb.entities.enums.*;
-import org.msh.tb.sync.SyncClear;
+import org.msh.tb.sync.Sync;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
 import org.msh.validators.InnerValidation;
@@ -55,6 +55,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	@NotNull
 	@PropertyLog(logEntityFields=true)
 	@InnerValidation
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private Patient patient;
 	
 	private Integer age;
@@ -62,6 +63,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	@NotNull
 	@Temporal(TemporalType.DATE) 
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
+	@Sync(keyAttribute = true)
 	private Date registrationDate;
 	
 	@Temporal(TemporalType.DATE) 
@@ -98,12 +100,12 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	@PropertyLog(ignore=true)
-	@SyncClear
+	@Sync(clearList = true)
 	private List<TreatmentHealthUnit> healthUnits = new ArrayList<TreatmentHealthUnit>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase")
 	@PropertyLog(ignore=true)
-	@SyncClear
+	@Sync(clearList = true)
 	private List<PrescribedMedicine> prescribedMedicines = new ArrayList<PrescribedMedicine>();
 
 	@NotNull
@@ -122,6 +124,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
     private CaseDefinition caseDefinition;
 
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
+	@Sync(keyAttribute = true)
 	private DiagnosisType diagnosisType;
 	
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
@@ -222,7 +225,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	private List<CaseSideEffect> sideEffects = new ArrayList<CaseSideEffect>();
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@SyncClear
+	@Sync(clearList = true)
 	private List<CaseComorbidity> comorbidities = new ArrayList<CaseComorbidity>();
 	
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
@@ -236,7 +239,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	private List<TbContact> contacts = new ArrayList<TbContact>();
 	
 	@OneToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="tbcase", fetch=FetchType.LAZY)
-	@SyncClear
+	@Sync(clearList = true)
 	private List<TreatmentMonitoring> treatmentMonitoring = new ArrayList<TreatmentMonitoring>();
 	
 

@@ -4,6 +4,7 @@ import org.hibernate.validator.NotNull;
 import org.jboss.seam.international.LocaleSelector;
 import org.msh.etbm.commons.transactionlog.Operation;
 import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
+import org.msh.tb.sync.Sync;
 import org.msh.tb.workspaces.customizable.WorkspaceCustomizationService;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class CaseData implements Transactional, SyncKey {
 	@Temporal(TemporalType.DATE)
 	@Column(name="EVENT_DATE")
 	@PropertyLog(operations={Operation.NEW, Operation.DELETE})
+	@Sync(keyAttribute = true)
 	private Date date;
 	
 	@Lob
@@ -36,6 +38,7 @@ public class CaseData implements Transactional, SyncKey {
 	@ManyToOne
 	@JoinColumn(name="CASE_ID")
 	@NotNull
+	@Sync(keyAttribute = true, internalKeyAttribute = "id")
 	private TbCase tbcase;
 	
 	
