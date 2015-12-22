@@ -23,6 +23,7 @@
 		            <property name="lastTransaction" use="IGNORE" />
             		<property name="workspace" use="IGNORE" />
                     <property name="gender" xmlAttribute="true" />
+                    <property name="birthDate" xmlAttribute="true" />
                 </objectGraph>
             </property>
             <property name="classification" xmlAttribute="true" />
@@ -32,15 +33,15 @@
             <property name="infectionSite" xmlAttribute="true" />
             <property name="treatmentPeriod.iniDate" elementName="iniTreatDate" xmlAttribute="true"/>
             <property name="treatmentPeriod.endDate" elementName="endTreatDate" xmlAttribute="true"/>
-            <property name="regimen.id" elementName="regimen" />
-            <property name="regimenIni.id" elementName="regimenini" />
+            <property name="regimen.id" elementName="regimen" xmlAttribute="true"/>
+            <property name="regimenIni.id" elementName="regimenini" xmlAttribute="true"/>
             <property name="ownerUnit.id" elementName="ownerunit" xmlAttribute="true"/>
-            <property name="pulmonaryType.id" elementName="pulmonaryType" />
-            <property name="extrapulmonaryType.value" elementName="extrapulmonaryType" />
+            <property name="pulmonaryType.id" elementName="pulmonaryType" xmlAttribute="true"/>
+            <property name="extrapulmonaryType.value.id" elementName="extrapulmonaryType" xmlAttribute="true"/>
             <property name="extrapulmonaryType.complement" elementName="extrapulmonaryTypeCompl" />
-            <property name="extrapulmonaryType2.value" elementName="extrapulmonaryType2" />
+            <property name="extrapulmonaryType2.value.id" elementName="extrapulmonaryType2" xmlAttribute="true"/>
             <property name="extrapulmonaryType2.complement" elementName="extrapulmonaryType2Compl" />
-            <property name="notificationUnit.id" elementName="notificationUnit" />
+            <property name="notificationUnit.id" elementName="notificationUnit" xmlAttribute="true"/>
             <property name="healthUnits">
                 <objectGraph name="healthunit" class="org.msh.tb.entities.TreatmentHealthUnit" parentProperty="tbcase">
                     <property name="tbunit.id" elementName="tbunit" use="REQUIRED" xmlAttribute="true"/>
@@ -54,7 +55,7 @@
                     <property name="medicine.id" elementName="medicine" use="REQUIRED" xmlAttribute="true"/>
                     <property name="period.iniDate" elementName="iniDate" use="REQUIRED" xmlAttribute="true"/>
                     <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
-                    <property name="source.id" elementName="source" use="REQUIRED" />
+                    <property name="source.id" elementName="source" use="REQUIRED" xmlAttribute="true"/>
                     <property name="doseUnit" use="REQUIRED" xmlAttribute="true"/>
                     <property name="frequency" use="REQUIRED" xmlAttribute="true"/>
                 </objectGraph>
@@ -124,6 +125,25 @@
             <property name="iniContinuousPhase" xmlAttribute="true" />
             <property name="lastBmuDateTbRegister" xmlAttribute="true" />
             <property name="movedSecondLineTreatment" xmlAttribute="true" />
+            <property name="secDrugsReceived" xmlAttribute="true" />
+            <property name="caseNumber" xmlAttribute="true" />
+            <property name="age" xmlAttribute="true" />
+            <property name="notifAddressChanged" xmlAttribute="true" />
+            <property name="tbContact" xmlAttribute="true" />
+            <property name="issueCounter" xmlAttribute="true" />
+            <property name="notifAddress">
+                <objectGraph name="notifAddress" class="org.msh.tb.entities.Address">
+                    <property name="localityType" xmlAttribute="true" />
+                    <property name="adminUnit.id" elementName="adminUnit" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="currentAddress">
+                <objectGraph name="currentAddress" class="org.msh.tb.entities.Address">
+                    <property name="localityType" xmlAttribute="true" />
+                    <property name="adminUnit.id" elementName="adminUnit" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="daysTreatPlanned" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
@@ -160,6 +180,7 @@
             <property name="visualAppearance" xmlAttribute="true" />
             <property name="status" xmlAttribute="true" />
             <property name="dateRelease" xmlAttribute="true" />
+            <property name="numberOfAFB" xmlAttribute="true" />
         </objectGraph>
 
         
@@ -189,6 +210,7 @@
             <property name="sampleType" xmlAttribute="true" />
             <property name="status" xmlAttribute="true" />
             <property name="dateRelease" xmlAttribute="true" />
+            <property name="numberOfColonies" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examhiv" class="org.msh.tb.entities.ExamHIV">
@@ -200,6 +222,10 @@
             <property name="startedARTdate" xmlAttribute="true" />
             <property name="startedCPTdate" xmlAttribute="true" />
             <property name="date" xmlAttribute="true" />
+            <property name="cd4Count" xmlAttribute="true" />
+            <property name="cd4StDate" xmlAttribute="true" />
+            <property name="partnerResult" xmlAttribute="true" />
+            <property name="partnerResultDate" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="address" class="org.msh.tb.entities.Address">
@@ -212,10 +238,14 @@
             <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
-            <property name="contactType.id" elementName="contactType" />
-            <property name="conduct.id" elementName="conduct" />
+            <property name="contactType.id" elementName="contactType" xmlAttribute="true"/>
+            <property name="conduct.id" elementName="conduct" xmlAttribute="true"/>
             <property name="gender" xmlAttribute="true" />
             <property name="dateOfExamination" xmlAttribute="true" />
+            <property name="contactType" xmlAttribute="true" />
+            <property name="conduct" xmlAttribute="true" />
+            <property name="age" xmlAttribute="true" />
+            <property name="examinated" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="examxray" class="org.msh.tb.entities.ExamXRay">
@@ -223,11 +253,12 @@
             <property name="id" elementName="id" xmlAttribute="true" />
             <property name="tbcase.id" elementName="tbcase" xmlAttribute="true" />
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
-            <property name="presentation.id" elementName="presentation" />
+            <property name="presentation.id" elementName="presentation" xmlAttribute="true"/>
             <property name="result" xmlAttribute="true" />
             <property name="evolution" xmlAttribute="true" />
             <property name="baseline" xmlAttribute="true" />
             <property name="date" xmlAttribute="true" />
+            <property name="destruction" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="medexam" class="org.msh.tb.entities.MedicalExamination" >
@@ -247,6 +278,14 @@
             <property name="refByDate" xmlAttribute="true" />
             <property name="refToDate" xmlAttribute="true" />
             <property name="date" xmlAttribute="true" />
+            <property name="weight" xmlAttribute="true" />
+            <property name="height" xmlAttribute="true" />
+            <property name="heartRate" xmlAttribute="true" />
+            <property name="bloodPressureMin" xmlAttribute="true" />
+            <property name="bloodPressureMax" xmlAttribute="true" />
+            <property name="respRateRest" xmlAttribute="true" />
+            <property name="temperature" xmlAttribute="true" />
+            <property name="surgicalProcedureDesc" xmlAttribute="true" />
         </objectGraph>
         
         <objectGraph name="sideEffect" class="org.msh.tb.entities.CaseSideEffect" >
@@ -256,9 +295,10 @@
             <property name="tbcase.clientId" elementName="cl_case" xmlAttribute="true" use="REQUIRED"/>
             <property name="sideEffect.value.id" elementName="sideeffect" xmlAttribute="true"/>
             <property name="sideEffect.complement" elementName="complement" />
-            <property name="substance.id" elementName="substance" />
-            <property name="substance2.id" elementName="substance2" />
+            <property name="substance.id" elementName="substance" xmlAttribute="true"/>
+            <property name="substance2.id" elementName="substance2" xmlAttribute="true"/>
             <property name="resolved" xmlAttribute="true" />
+            <property name="month" xmlAttribute="true" />
         </objectGraph>
 
         <objectGraph name="deleted-entity" class="org.msh.tb.entities.DeletedEntity">
