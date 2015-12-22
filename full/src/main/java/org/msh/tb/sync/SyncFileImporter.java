@@ -16,16 +16,12 @@ import org.msh.tb.sync.actions.ImporterUtils;
 import org.msh.utils.DataStreamUtils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.ManyToMany;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
-import javax.persistence.Entity;
-import javax.persistence.Query;
 
 
 /**
@@ -217,11 +213,20 @@ public class SyncFileImporter {
 		
 		// handle embedded cases in the object
 		TbCase tbcase = null;
-		if ((id == null) && (params.containsKey("tbcase.id") && (params.containsKey("tbcase.clientId")))) {
-			Map<String, Object> paramsCase = new HashMap<String, Object>();
-			paramsCase.put("id", params.get("tbcase.id"));
-			paramsCase.put("clientId", params.get("tbcase.clientId"));
-			tbcase = (TbCase)createNewObject(TbCase.class, paramsCase);
+
+		if((!params.containsKey("tbcase.id")) && (params.containsKey("tbcase.clientId"))){
+			EntityKey key = entityKeys.findEntityKey(ETB.getWorkspaceClass(TbCase.class), (Integer)params.get("tbcase.clientId"));
+			if (key != null) {
+				// register the keys of the object
+				params.put("tbcase.id", key.getServerId());
+			}
+
+			if ((id == null) && (params.containsKey("tbcase.id") && (params.containsKey("tbcase.clientId")))) {
+				Map<String, Object> paramsCase = new HashMap<String, Object>();
+				paramsCase.put("id", params.get("tbcase.id"));
+				paramsCase.put("clientId", params.get("tbcase.clientId"));
+				tbcase = (TbCase)createNewObject(TbCase.class, paramsCase);
+			}
 		}
 
 		// if there is a client ID, so the object is to be sync
@@ -258,14 +263,13 @@ public class SyncFileImporter {
 				PropertyUtils.setProperty(obj, "tbcase", tbcase);
 			}
 
-			// TODO resolver problema relatado no 1670
-			//Object similarObject = ImporterUtils.findDuplicity(obj, params);
+			//if is creating an object and not handling  embedded objects
+			if(params.size() > 2) {
+				Object similarObject = ImporterUtils.findDuplicity(obj, params);
 
-			//if(similarObject!= null)
-			//	return similarObject;
-
-			if(obj instanceof ExamMicroscopy)
-				System.out.println("aqui!");
+				if (similarObject != null)
+					return similarObject;
+			}
 
 			return obj;
 		} catch (Exception e) {
@@ -338,7 +342,7 @@ public class SyncFileImporter {
 		SyncKey objKeys = null;
 		if (obj instanceof SyncKey)
 			objKeys = (SyncKey)obj;
-		boolean bNew = (objKeys != null) && (objKeys.getId() == null);
+		//boolean bNew = (objKeys != null) && (objKeys.getId() == null);
 
         System.out.println("Saving " + obj.getClass() + " => " + obj);
 		// save the entity
@@ -358,8 +362,8 @@ public class SyncFileImporter {
 		}
 
 		// if it's a new entity, get the id to be sent back to the client
-		if (bNew)
-			entityKeys.updateServerKey(obj.getClass(), objKeys.getClientId(), objKeys.getId());
+		//if (bNew)
+		entityKeys.updateServerKey(obj.getClass(), objKeys.getClientId(), objKeys.getId());
 		
 		em.clear();
 	}

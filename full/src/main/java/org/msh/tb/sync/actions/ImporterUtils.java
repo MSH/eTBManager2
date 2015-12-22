@@ -34,14 +34,15 @@ public abstract class ImporterUtils {
 
         while(clazz != null){
             for(Field f : clazz.getDeclaredFields())
+                //if the field is a keyAttribute stores this field on a list
                 if (f.getAnnotation(Sync.class) != null && f.getAnnotation(Sync.class).keyAttribute()) {
                     String keyAttributeName = f.getName();
+                    //if the field has an internal attribute that should be used, check it
                     if(!f.getAnnotation(Sync.class).internalKeyAttribute().isEmpty()){
-                        //if has internalKeyAttributes
+                        //if has more than one internalKeyAttributes run this list of atributtes adding to the list of key parameters
                         String[] internalAttributeList = f.getAnnotation(Sync.class).internalKeyAttribute().trim().split(",");
                         for(String s : internalAttributeList) {
-                            String internalAttribute = keyAttributeName;
-                            internalAttribute += "." + s;
+                            String internalAttribute = keyAttributeName + "." + s;
                             if (params.get(internalAttribute) == null && params.get(keyAttributeName) == null) {
                                 throw new RuntimeException("No parameter found for key attribute! " + internalAttributeList);
                             }
