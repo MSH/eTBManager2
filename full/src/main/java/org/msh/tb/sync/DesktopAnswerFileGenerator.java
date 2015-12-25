@@ -86,14 +86,12 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from Regimen a where a.workspace.id = :wsid");
 		hqls.add("from Laboratory a where a.workspace.id = :wsid");
 		hqls.add("from FieldValue a where a.workspace.id = :wsid");
+		hqls.add("from Tag a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
 		hqls.add("from UserWorkspace a join fetch a.user left join fetch a.adminUnit where a.tbunit.id = :wsid");
-//		hqls.add("from TbCase a join fetch a.patient where a.ownerUnit.id = #{desktopIniGeneratorService.unitId}");
 
 		// case data
 		hqls.add("from TbCase a join fetch a.patient left join fetch a.regimen left join fetch a.notifAddress.adminUnit "
 				+ "where a.ownerUnit.id = :unitid");
-		//hqls.add("from PrescribedMedicine a join fetch a.tbcase join fetch a.medicine join fetch a.source where a.tbcase.ownerUnit.id = :unitid");
-		//hqls.add("from TreatmentHealthUnit a join fetch a.tbunit join fetch a.tbcase where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from ExamCulture a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from ExamXpert a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from ExamMicroscopy a join fetch a.tbcase left join fetch a.method left join fetch a.laboratory where a.tbcase.ownerUnit.id = :unitid");
@@ -101,11 +99,8 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from ExamHIV a join fetch a.tbcase where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from ExamXRay a join fetch a.tbcase left join fetch a.presentation where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from ExamDST a join fetch a.tbcase where a.tbcase.ownerUnit.id = :unitid");
-		//hqls.add("from ExamDSTResult a join fetch a.substance join fetch a.exam where a.exam.tbcase.ownerUnit.id = :unitid");
-		//hqls.add("from TreatmentMonitoring a join fetch a.tbcase where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from TbContact a join fetch a.tbcase left join fetch a.contactType left join fetch a.conduct where a.tbcase.ownerUnit.id = :unitid");
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = :unitid");
-		//hqls.add("from CaseComorbidity a join fetch a.tbcase left join fetch a.comorbidity where a.tbcase.ownerUnit.id = :unitid");
 
 		addSpecificWorkspacesEntities();
 	}

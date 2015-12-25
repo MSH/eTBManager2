@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="tbunit")
-public class Tbunit extends WSObject implements Serializable, EntityState {
+public class Tbunit extends WSObject implements Serializable, EntityState, SyncKey {
 	private static final long serialVersionUID = 7444534501216755257L;
 
 	@Id
@@ -137,7 +137,21 @@ public class Tbunit extends WSObject implements Serializable, EntityState {
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date lastSyncDate;
-    
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
     
     /**
      * Check if medicine management was already started for this TB Unit

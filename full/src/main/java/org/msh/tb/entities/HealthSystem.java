@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="healthsystem")
-public class HealthSystem extends WSObject {
+public class HealthSystem extends WSObject implements SyncKey {
 	private static final long serialVersionUID = 8006343659248774062L;
 
 	@Id
@@ -20,7 +20,22 @@ public class HealthSystem extends WSObject {
 	@Column(length=50)
 	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
-	
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */

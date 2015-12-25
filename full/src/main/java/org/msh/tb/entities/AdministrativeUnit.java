@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @javax.persistence.Table(name="administrativeunit")
 @Table(appliesTo="administrativeunit",indexes={@Index(name="idxcode", columnNames={"code"})})
-public class AdministrativeUnit extends WSObject {
+public class AdministrativeUnit extends WSObject implements SyncKey{
 	private static final long serialVersionUID = 7777075173601864769L;
 
 	@Id
@@ -49,7 +49,11 @@ public class AdministrativeUnit extends WSObject {
 	@JoinColumn(name="COUNTRYSTRUCTURE_ID")
 	@PropertyLog(operations={Operation.ALL})
 	private CountryStructure countryStructure;
-	
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
 
 	/**
 	 * Return the parent list including the own object
@@ -226,6 +230,16 @@ public class AdministrativeUnit extends WSObject {
 	 */
 	public Integer getId() {
 		return id;
+	}
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
 	}
 
 	/**

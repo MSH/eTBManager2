@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="countrystructure")
-public class CountryStructure extends WSObject implements Serializable{
+public class CountryStructure extends WSObject implements Serializable, SyncKey{
 	private static final long serialVersionUID = -9182467866935116572L;
 
 	@Id
@@ -22,8 +22,21 @@ public class CountryStructure extends WSObject implements Serializable{
 	@Column(name="STRUCTURE_LEVEL")
 	@PropertyLog(messageKey="global.level")
 	private int level;
-	
 
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
 
 	/**
 	 * @return the id

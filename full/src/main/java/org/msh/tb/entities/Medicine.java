@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name="medicine")
-public class Medicine extends WSObject implements Serializable{
+public class Medicine extends WSObject implements Serializable, SyncKey{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -48,7 +48,22 @@ public class Medicine extends WSObject implements Serializable{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="GROUP_ID")
 	private ProductGroup group;
-	
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
+
 	public String getTbInfoKey() {
 		return line != null? line.getKey(): null;
 	}

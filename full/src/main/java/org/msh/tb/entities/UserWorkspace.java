@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="userworkspace")
-public class UserWorkspace extends WSObject implements Serializable{
+public class UserWorkspace extends WSObject implements Serializable, SyncKey{
 	private static final long serialVersionUID = 8975350130212905881L;
 	
 	@Id
@@ -56,6 +56,21 @@ public class UserWorkspace extends WSObject implements Serializable{
 	private AdministrativeUnit adminUnit;
     
     private boolean playOtherUnits;
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

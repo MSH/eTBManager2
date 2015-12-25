@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="source")
-public class Source extends WSObject implements Serializable {
+public class Source extends WSObject implements Serializable, SyncKey {
 	private static final long serialVersionUID = -8115568635572935159L;
 
 	@Id
@@ -31,6 +31,21 @@ public class Source extends WSObject implements Serializable {
 	@Column(length=50)
 	@PropertyLog(messageKey="global.legacyId", operations={Operation.NEW, Operation.DELETE})
 	private String legacyId;
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
 
 	@Override
 	public boolean equals(Object other) {

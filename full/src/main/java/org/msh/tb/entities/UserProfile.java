@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name="userprofile")
-public class UserProfile extends WSObject implements Serializable, Comparable<UserProfile> {
+public class UserProfile extends WSObject implements Serializable, Comparable<UserProfile>, SyncKey {
 	private static final long serialVersionUID = -1798192936426485144L;
 
 	@Id
@@ -29,6 +29,11 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 	@Column(length=50)
 	@PropertyLog(messageKey="global.legacyId")
 	private String legacyId;
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -63,6 +68,16 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 	
 	public Integer getId() {
 		return id;
+	}
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
 	}
 
 	public void setId(Integer id) {

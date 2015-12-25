@@ -22,7 +22,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="tag")
-public class Tag extends WSObject implements Serializable {
+public class Tag extends WSObject implements Serializable, SyncKey {
 	private static final long serialVersionUID = 7625442925460611740L;
 
 	public enum TagType { MANUAL, AUTOGEN, AUTOGEN_CONSISTENCY	}
@@ -51,6 +51,21 @@ public class Tag extends WSObject implements Serializable {
 
 	@PropertyLog(messageKey = "form.summary")
 	private boolean summary;
+
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
 
 	/**
 	 * Return true if tag is auto generated and maintained by the system

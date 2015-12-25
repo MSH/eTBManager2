@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="fieldvalue")
-public class FieldValue extends WSObject implements Serializable {
+public class FieldValue extends WSObject implements Serializable, SyncKey {
 	private static final long serialVersionUID = -754148519681677704L;
 
 	@Id
@@ -46,8 +46,21 @@ public class FieldValue extends WSObject implements Serializable {
 
 	@PropertyLog(messageKey="form.displayorder")
 	private Integer displayOrder;
-	
 
+	@Transient
+	// Ricardo: TEMPORARY UNTIL A SOLUTION IS FOUND. Just to attend a request from the XML data model to
+	// map an XML node to a property in the model
+	private Integer clientId;
+
+	@Override
+	public Integer getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
