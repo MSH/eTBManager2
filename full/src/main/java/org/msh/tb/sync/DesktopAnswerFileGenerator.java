@@ -86,7 +86,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from Regimen a where a.workspace.id = :wsid");
 		hqls.add("from Laboratory a where a.workspace.id = :wsid");
 		hqls.add("from FieldValue a where a.workspace.id = :wsid");
-		hqls.add("from Tag a where a.workspace.id = #{desktopIniFileGenerator.workspaceId}");
+		hqls.add("from Tag a where a.workspace.id = :wsid");
 		hqls.add("from UserWorkspace a join fetch a.user left join fetch a.adminUnit where a.tbunit.id = :wsid");
 
 		// case data
