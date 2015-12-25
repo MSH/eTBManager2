@@ -116,7 +116,6 @@ public class ComorbidityHome {
 			else {
 				// item is removed
 				if (aux != null) {
-					App.registerDeletedSyncEntity(aux);
 					em.remove(aux);
 					tbcase.getComorbidities().remove(aux);
 				}
