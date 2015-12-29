@@ -1,10 +1,7 @@
 package org.msh.tb.cases;
 
-import org.msh.tb.ETB;
-import org.msh.tb.bd.entities.TbCaseBD;
 import org.msh.tb.entities.Patient;
 import org.msh.tb.entities.TbCase;
-import org.msh.tb.entities.WSObject;
 import org.msh.utils.date.DateUtils;
 
 
