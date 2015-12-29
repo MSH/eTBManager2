@@ -1473,4 +1473,19 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 	public void setInitialRegimenWithSecondLineDrugs(Boolean initialRegimenWithSecondLineDrugs) {
 		this.initialRegimenWithSecondLineDrugs = initialRegimenWithSecondLineDrugs;
 	}
+
+	public List<LaboratoryExam> getAllLaboratoryExams(){
+		List<LaboratoryExam> list = new ArrayList<LaboratoryExam>();
+
+		for(LaboratoryExam l : getExamsCulture())
+			list.add(l);
+		for(LaboratoryExam l : getExamsDST())
+			list.add(l);
+		for(LaboratoryExam l : getExamsMicroscopy())
+			list.add(l);
+		for(LaboratoryExam l : getExamsXpert())
+			list.add(l);
+
+		return list;
+	}
 }

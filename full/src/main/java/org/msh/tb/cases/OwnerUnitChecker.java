@@ -3,9 +3,6 @@ package org.msh.tb.cases;
 import org.jboss.seam.international.Messages;
 import org.msh.etbm.commons.transactionlog.ActionTX;
 import org.msh.tb.application.App;
-import org.msh.tb.bd.entities.ExamBiopsy;
-import org.msh.tb.bd.entities.ExamSkin;
-import org.msh.tb.bd.entities.TbCaseBD;
 import org.msh.tb.entities.*;
 import org.msh.tb.entities.enums.RoleAction;
 
@@ -68,16 +65,6 @@ public class OwnerUnitChecker {
         TransactionLog transactionLog = registerLog(tbcase, oldOwnerUnit);
 
         //Updates related entities
-        for(MedicalExamination o : tbcase.getExaminations())
-            updateRelatedObjects(o, transactionLog);
-        for(ExamCulture o : tbcase.getExamsCulture())
-            updateRelatedObjects(o, transactionLog);
-        for(ExamDST o : tbcase.getExamsDST())
-            updateRelatedObjects(o, transactionLog);
-        for(ExamMicroscopy o : tbcase.getExamsMicroscopy())
-            updateRelatedObjects(o, transactionLog);
-        for(ExamXpert o : tbcase.getExamsXpert())
-            updateRelatedObjects(o, transactionLog);
         for(ExamHIV o : tbcase.getResHIV())
             updateRelatedObjects(o, transactionLog);
         for(ExamXRay o : tbcase.getResXRay())
@@ -86,13 +73,11 @@ public class OwnerUnitChecker {
             updateRelatedObjects(o, transactionLog);
         for(CaseSideEffect o : tbcase.getSideEffects())
             updateRelatedObjects(o, transactionLog);
-        //Specific entities of Bangladesh
-        if(tbcase instanceof TbCaseBD){
-            for(ExamBiopsy o : ((TbCaseBD)tbcase).getExamsBiopsy())
-                updateRelatedObjects(o, transactionLog);
-            for(ExamSkin o : ((TbCaseBD)tbcase).getExamsSkin())
-                updateRelatedObjects(o, transactionLog);
-        }
+        for(MedicalExamination o : tbcase.getExaminations())
+            updateRelatedObjects(o, transactionLog);
+
+        for(LaboratoryExam o : tbcase.getAllLaboratoryExams())
+            updateRelatedObjects(o, transactionLog);
     }
 
     /**

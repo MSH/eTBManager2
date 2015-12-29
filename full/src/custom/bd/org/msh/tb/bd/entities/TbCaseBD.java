@@ -7,6 +7,7 @@ import org.msh.tb.bd.entities.enums.SalaryRange;
 import org.msh.tb.bd.entities.enums.SmearStatus;
 import org.msh.tb.entities.CaseSideEffect;
 import org.msh.tb.entities.FieldValue;
+import org.msh.tb.entities.LaboratoryExam;
 import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.enums.YesNoType;
 import org.msh.tb.sync.Sync;
@@ -147,5 +148,17 @@ public class TbCaseBD extends TbCase{
 
 	public void setExamsBiopsy(List<ExamBiopsy> examsBiopsy) {
 		this.examsBiopsy = examsBiopsy;
+	}
+
+	@Override
+	public List<LaboratoryExam> getAllLaboratoryExams(){
+		List<LaboratoryExam> list = super.getAllLaboratoryExams();
+
+		for(LaboratoryExam l : getExamsSkin())
+			list.add(l);
+		for(LaboratoryExam l : getExamsBiopsy())
+			list.add(l);
+
+		return list;
 	}
 }
