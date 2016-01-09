@@ -311,6 +311,8 @@ public class SyncFileImporter {
 			o = l.get(0);
 
 		if(o!=null) {
+			addUpdatedOrCreatedCaseId(o);
+
 			em.remove(o);
 			em.flush();
 		}
@@ -349,17 +351,7 @@ public class SyncFileImporter {
 		em.persist(obj);
 		em.flush();
 
-		if(obj instanceof TbCase){
-			addUpdatedOrCreatedCaseId(((TbCase) obj).getId());
-		}else if(obj instanceof LaboratoryExam){
-			addUpdatedOrCreatedCaseId(((LaboratoryExam)obj).getTbcase().getId());
-		}else if(obj instanceof CaseData){
-			addUpdatedOrCreatedCaseId(((CaseData)obj).getTbcase().getId());
-		}else if(obj instanceof CaseSideEffect){
-			addUpdatedOrCreatedCaseId(((CaseSideEffect)obj).getTbcase().getId());
-		}else if(obj instanceof TbContact){
-			addUpdatedOrCreatedCaseId(((TbContact)obj).getTbcase().getId());
-		}
+		addUpdatedOrCreatedCaseId(obj);
 
 		// if it's a new entity, get the id to be sent back to the client
 		//if (bNew)
@@ -394,7 +386,20 @@ public class SyncFileImporter {
 		return entityVersions;
 	}
 
-	private void addUpdatedOrCreatedCaseId(Integer id){
+	private void addUpdatedOrCreatedCaseId(Object obj){
+		Integer id = null;
+		if(obj instanceof TbCase){
+			id = ((TbCase) obj).getId();
+		}else if(obj instanceof LaboratoryExam){
+			id = ((LaboratoryExam)obj).getTbcase().getId();
+		}else if(obj instanceof CaseData){
+			id = ((CaseData)obj).getTbcase().getId();
+		}else if(obj instanceof CaseSideEffect){
+			id = ((CaseSideEffect)obj).getTbcase().getId();
+		}else if(obj instanceof TbContact){
+			id = ((TbContact)obj).getTbcase().getId();
+		}
+
 		if(updatedOrCreatedCasesIds == null)
 			updatedOrCreatedCasesIds = new ArrayList<Integer>();
 

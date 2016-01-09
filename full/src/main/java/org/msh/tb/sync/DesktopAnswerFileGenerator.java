@@ -65,6 +65,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 	private List<EntityLastVersion> clientEntityVersions;
     private ListStep listStep;
     private List<DeletedEntity> deletedEntities = new ArrayList<DeletedEntity>();
+	private int caseTagIndex = -1;
 	
 	
 	public DesktopAnswerFileGenerator() {
@@ -103,6 +104,9 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		hqls.add("from CaseSideEffect a join fetch a.tbcase left join fetch a.substance left join fetch a.substance2 where a.tbcase.ownerUnit.id = :unitid");
 
 		addSpecificWorkspacesEntities();
+
+		hqls.add("select a.id, b.id from TbCase a join a.tags b where a.ownerUnit.id = :unitid");
+		caseTagIndex = hqls.size() - 1;
 	}
 
 	private void addSpecificWorkspacesEntities(){
@@ -325,6 +329,9 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
         if (queryIndex == unitLinkIndex)
             return getUnitLinks((List<Object[]>)lst);
 
+		if (queryIndex == caseTagIndex)
+			return getCaseTags((List<Object[]>)lst);
+
         return lst;
     }
 	
@@ -339,7 +346,7 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		EntityLastVersion ver = null;
 		String entityName = retrieveEntityName(hql);
 
-		if ((clientEntityVersions != null) && (entityName != null)) {
+		if (queryIndex != caseTagIndex && (clientEntityVersions != null) && (entityName != null)) {
 			if("DeletedEntity".equals(entityName)){
 				ver = findClientLastVersion(entityName);
 				if(ver != null)
@@ -551,6 +558,19 @@ public class DesktopAnswerFileGenerator implements ObjectProvider, DataIntercept
 		List<TBUnitLinks> res = new ArrayList<TBUnitLinks>();
 		for (Object[] vals: lst) {
 			res.add(new TBUnitLinks((Integer)vals[0], (Integer)vals[1], (Integer)vals[2], (Integer)vals[3]));
+		}
+		return res;
+	}
+
+	/**
+	 * Return object containing the tags of all cases
+	 * because it may have multiple dependencies
+	 * @return
+	 */
+	private List getCaseTags(List<Object[]> lst) {
+		List<CaseTag> res = new ArrayList<CaseTag>();
+		for (Object[] vals: lst) {
+			res.add(new CaseTag((Integer)vals[0], (Integer)vals[1]));
 		}
 		return res;
 	}
