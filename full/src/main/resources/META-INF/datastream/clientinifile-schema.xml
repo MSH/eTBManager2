@@ -41,7 +41,7 @@
             <property name="permissions">
                 <objectGraph name="permission" class="org.msh.tb.entities.UserPermission" parentProperty="userProfile">
                     <property name="userRole.id" elementName="role_id" use="REQUIRED" xmlAttribute="true"/>
-                    <property name="id" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="id" xmlAttribute="true" use="IGNORE" />
                     <property name="canChange" use="REQUIRED" xmlAttribute="true"/>
                     <property name="canExecute" use="REQUIRED" xmlAttribute="true"/>
                     <property name="grantPermission" elementName="grant" use="REQUIRED" xmlAttribute="true"/>
