@@ -140,7 +140,7 @@
             <property name="abbrevName" elementName="abbrevname" use="REQUIRED" />
             <property name="components">
                 <objectGraph name="component" class="org.msh.tb.entities.MedicineComponent" parentProperty="medicine">
-                    <property name="id" xmlAttribute="true" />
+                    <property name="id" xmlAttribute="true" use="IGNORE"/>
                     <property name="substance.id" elementName="substance" xmlAttribute="true" />
                     <property name="strength" xmlAttribute="true" />
                 </objectGraph>
