@@ -40,6 +40,7 @@ public class SyncFileImporter {
 	// list of last versions in use by the client (will be used to generate response file)
 	private List<EntityLastVersion> entityVersions;
 	private List<Integer> updatedOrCreatedCasesIds;
+	private boolean shouldSave = true;
 
 
 	/**
@@ -210,7 +211,20 @@ public class SyncFileImporter {
 
 		Integer clientId = (Integer)params.get("clientId");
 		Integer id = (Integer)params.get("id");
-		
+
+		//check if object was deleted previously on web side, if so, don't import it again.
+		if(id != null) {
+			List<Object> testList = App.getEntityManager().createQuery("from DeletedEntity where entityId = :id and entityName like :entityName and unitToBeDeleted is null")
+					.setParameter("id", id)
+					.setParameter("entityName", objectType.getSimpleName())
+					.getResultList();
+
+			if(testList.size() > 0) {
+				shouldSave = false;
+				return null;
+			}
+		}
+
 		// handle embedded cases in the object
 		TbCase tbcase = null;
 
@@ -292,7 +306,10 @@ public class SyncFileImporter {
 			return;
 		}
 
-		saveEntity(obj);
+		if(shouldSave)
+			saveEntity(obj);
+
+		shouldSave = true;
 	}
 
 	/**
