@@ -24,6 +24,7 @@ public class UserProfile extends WSObject implements Serializable, Comparable<Us
 	private String name;
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="userProfile",cascade={CascadeType.ALL})
+	@PropertyLog(alwaysLog = true)
     private List<UserPermission> permissions = new ArrayList<UserPermission>();
 
 	@Column(length=50)

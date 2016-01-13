@@ -3,12 +3,14 @@ package org.msh.etbm.commons.transactionlog;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.msh.etbm.commons.transactionlog.mapping.EntityLogManager;
 import org.msh.etbm.commons.transactionlog.mapping.EntityLogMapping;
+import org.msh.etbm.commons.transactionlog.mapping.PropertyLog;
 import org.msh.etbm.commons.transactionlog.mapping.PropertyMapping;
 import org.msh.etbm.services.commons.EntityUtils;
 import org.msh.tb.application.App;
 import org.msh.tb.entities.TransactionLog;
 import org.msh.tb.entities.enums.RoleAction;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -140,7 +142,28 @@ public class ActionTX {
                 }
             }
         }
-        return result || !detailWriter.isEmpty();
+
+        boolean ret = result || !detailWriter.isEmpty();
+
+        // if result is false check if should always log
+        if(!ret){
+            boolean shouldAlwaysLog = false;
+            Class clazz = entity.getClass();
+
+            while(clazz != null){
+                for(Field f : clazz.getDeclaredFields()) {
+                    if (f.getAnnotation(PropertyLog.class) != null && f.getAnnotation(PropertyLog.class).alwaysLog()) {
+                        shouldAlwaysLog = true;
+                        detailWriter.addText("Transaction Log registered because of field "+f.getName()+" is annotated as should always log.");
+                    }
+                }
+                clazz = clazz.getSuperclass();
+            }
+
+            return shouldAlwaysLog;
+        }
+
+        return ret;
     }
 
     /**

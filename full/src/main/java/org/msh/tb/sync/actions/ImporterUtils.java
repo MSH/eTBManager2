@@ -7,7 +7,6 @@ import org.msh.tb.sync.Sync;
 import javax.persistence.ManyToMany;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,22 +32,22 @@ public abstract class ImporterUtils {
         List<String> keyAttributeLst = new ArrayList<String>();
 
         while(clazz != null){
-            for(Field f : clazz.getDeclaredFields())
+            for(Field f : clazz.getDeclaredFields()) {
                 //if the field is a keyAttribute stores this field on a list
                 if (f.getAnnotation(Sync.class) != null && f.getAnnotation(Sync.class).keyAttribute()) {
                     String keyAttributeName = f.getName();
                     //if the field has an internal attribute that should be used, check it
-                    if(!f.getAnnotation(Sync.class).internalKeyAttribute().isEmpty()){
+                    if (!f.getAnnotation(Sync.class).internalKeyAttribute().isEmpty()) {
                         //if has more than one internalKeyAttributes run this list of atributtes adding to the list of key parameters
                         String[] internalAttributeList = f.getAnnotation(Sync.class).internalKeyAttribute().trim().split(",");
-                        for(String s : internalAttributeList) {
+                        for (String s : internalAttributeList) {
                             String internalAttribute = keyAttributeName + "." + s;
                             if (params.get(internalAttribute) == null && params.get(keyAttributeName) == null) {
                                 throw new RuntimeException("No parameter found for key attribute! " + internalAttributeList);
                             }
                             keyAttributeLst.add(internalAttribute);
                         }
-                    }else {
+                    } else {
                         //Check if keyAttribute exists on params list. It has to exist, can only be a keyAttibute required fields
                         if (params.get(keyAttributeName) == null) {
                             throw new RuntimeException("No parameter found for key attribute! " + keyAttributeName);
@@ -56,6 +55,7 @@ public abstract class ImporterUtils {
                         keyAttributeLst.add(keyAttributeName);
                     }
                 }
+            }
 
             clazz = clazz.getSuperclass();
         }

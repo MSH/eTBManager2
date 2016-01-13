@@ -43,6 +43,7 @@ public class Medicine extends WSObject implements Serializable, SyncKey{
 	private MedicineLine line;
 
 	@OneToMany(mappedBy="medicine", cascade={CascadeType.ALL})
+	@PropertyLog(alwaysLog = true)
 	private List<MedicineComponent> components = new ArrayList<MedicineComponent>();
 
 	@ManyToOne(fetch=FetchType.LAZY)

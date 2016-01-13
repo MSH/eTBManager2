@@ -29,6 +29,7 @@ public class Regimen extends WSObject implements Serializable, SyncKey {
 
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="REGIMEN_ID")
+	@PropertyLog(alwaysLog = true)
 	private List<MedicineRegimen> medicines = new ArrayList<MedicineRegimen>();
 	
 	@Transient

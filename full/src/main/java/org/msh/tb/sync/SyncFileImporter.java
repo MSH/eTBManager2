@@ -187,7 +187,8 @@ public class SyncFileImporter {
 		if(updatedOrCreatedCasesIds !=null) {
 			for (Integer id : updatedOrCreatedCasesIds) {
 				TbCase c = App.getEntityManager().find(TbCase.class, id);
-				tagsCasesHome.updateTags(c);
+				if(c!=null && c.getId()!=null)
+					tagsCasesHome.updateTags(c);
 			}
 		}
 	}

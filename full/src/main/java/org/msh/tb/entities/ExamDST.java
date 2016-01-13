@@ -19,6 +19,7 @@ public class ExamDST extends LaboratoryExam implements Serializable {
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="exam")
 	@Sync(clearList = true)
+	@PropertyLog(alwaysLog = true)
 	private List<ExamDSTResult> results = new ArrayList<ExamDSTResult>();
 
 	@PropertyLog(ignore=true)

@@ -27,6 +27,14 @@ public @interface PropertyLog {
 	boolean ignore() default false;
 
 	/**
+	 * The class that stores this field will always be logged also if no changes is detected.
+	 * Some fields changes are not detected by the TransactionLog, this parameter has to be set
+	 * on those kind of fields (lists)
+	 * @return
+	 */
+	boolean alwaysLog() default false;
+
+	/**
 	 * Force log value to use this key when logging value. This key must match a key in the messages file
 	 * @return
 	 */
