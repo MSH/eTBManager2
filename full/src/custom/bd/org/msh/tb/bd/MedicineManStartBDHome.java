@@ -22,9 +22,7 @@ public class MedicineManStartBDHome{
 
 	@In(required=true) MedicineManStartHome medicineManStartHome;
 	@In(create=true) TbUnitHome tbunitHome;
-	
-	private Quarter selectedQuarter;
-	
+
 	/**
 	 * Start the medicine management control, specifying the starting date of the control
 	 * and initializing the stock in unit based on the medicines and batches selected by the user in the UI
@@ -32,36 +30,14 @@ public class MedicineManStartBDHome{
 	 * @return
 	 */
 	public String startMedicineManagement() {
-		if(selectedQuarter == null || selectedQuarter.getYear() == 0)
-			return "error";
-		
-		medicineManStartHome.setStartDate(selectedQuarter.getIniDate());
-		
 		String s = medicineManStartHome.startMedicineManagement();
 		
 		Tbunit unit = medicineManStartHome.getUnit();
 		tbunitHome.setInstance(unit);
-		tbunitHome.getInstance().setLimitDateMedicineMovement(selectedQuarter.getIniDate());
+		tbunitHome.getInstance().setLimitDateMedicineMovement(medicineManStartHome.getStartDate());
 		tbunitHome.persist();
 		tbunitHome.clearInstance();
 		
 		return s;
 	}
-
-	/**
-	 * @return the selectedQuarter
-	 */
-	public Quarter getSelectedQuarter() {
-		if(selectedQuarter == null)
-			this.selectedQuarter = new Quarter();
-		return selectedQuarter;
-	}
-
-	/**
-	 * @param selectedQuarter the selectedQuarter to set
-	 */
-	public void setSelectedQuarter(Quarter selectedQuarter) {
-		this.selectedQuarter = selectedQuarter;
-	}
-
 }

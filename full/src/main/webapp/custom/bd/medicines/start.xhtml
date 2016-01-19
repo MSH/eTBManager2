@@ -24,18 +24,12 @@
     <table width="100%">
     <tr><td>
 
-	<s:decorate template="/layout/edit.xhtml">
-    	<ui:define name="label">#{messages['Quarter']}:</ui:define>
-    	<ui:param name="redasterisk" value="true" />
-		<h:selectOneMenu value="#{medicineManStartBDHome.selectedQuarter.quarter}">
-  			<s:selectItems value="#{quarter}" var="r" label="#{messages[r.key]}" />
-  			<s:convertEnum />
-		</h:selectOneMenu>
-		/
-		<h:selectOneMenu value="#{medicineManStartBDHome.selectedQuarter.year}">
-  			<s:selectItems value="#{quarterYears}" var="r" label="#{r}" />
-		</h:selectOneMenu>
-	</s:decorate>
+		<s:decorate template="/layout/dateedit.xhtml" >
+			<ui:define name="label">#{messages['Tbunit.medManStartDate']}:</ui:define>
+			<ui:param name="required" value="true" />
+			<ui:param name="future" value="false" />
+			<ui:param name="datefield" value="#{medicineManStartHome.startDate}" />
+		</s:decorate>
 	<p/>
 
 	</td></tr>
