@@ -24,6 +24,9 @@
 			<a:commandLink reRender="main,messages" action="#{tagsCasesHome.fixTagsConsolidation}" rendered="#{userLogin.user.login=='RICARDO' or userLogin.user.login=='MSANTOS'}" styleClass="button-alt">
 				<span>Fix Tags Consolidation</span>
 			</a:commandLink>
+			<a:commandLink reRender="main,messages" action="#{fixDataHome.fixNulledDaysTreatPlanned}" rendered="#{userLogin.user.login=='RICARDO' or userLogin.user.login=='MSANTOS'}" styleClass="button-alt">
+				<span>Fix c.daysTreatPlanned as null</span>
+			</a:commandLink>
 			<p/>
 			<h:dataTable id="tbl" value="#{tagsQuery.resultList}" var="r" border="0" columnClasses="coll,colc,colc,coll"
 						 width="700px"  styleClass="table1" rowClasses="lin1,lin2" rendered="#{not empty tagsQuery.resultList}" style="margin-top:4px;">
