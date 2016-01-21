@@ -11,8 +11,12 @@
 			<redirect view-id="/medicines/index.xhtml" />
 		</rule>
 		<rule if-outcome="medman-started">
-			<end-conversation/>
+			<end-conversation before-redirect="true"/>
 			<redirect view-id="/medicines/index.xhtml" />
 		</rule>
+        <rule if-outcome="cancel">
+            <end-conversation before-redirect="true" />
+            <redirect view-id="/medicines/index.xhtml" />
+        </rule>
 	</navigation>
 </page>

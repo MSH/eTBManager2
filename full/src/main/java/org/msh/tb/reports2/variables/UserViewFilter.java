@@ -11,7 +11,6 @@ import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.UserWorkspace;
 import org.msh.tb.entities.enums.UserView;
 import org.msh.tb.login.UserSession;
-import org.msh.tb.reports2.VariableImpl;
 
 /**
  * Filter to restrict user data access. There are two options:
@@ -36,7 +35,6 @@ public class UserViewFilter extends EnumFieldVariable {
     }
 
 
-    @Override
     public void prepareFilterQuery(SQLDefs def, FilterOperation oper, ValueHandler value) {
         Integer index = value.asInteger();
         if (index == null) {

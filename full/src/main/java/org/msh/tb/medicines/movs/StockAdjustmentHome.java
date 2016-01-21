@@ -6,6 +6,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.Controller;
 import org.msh.etbm.commons.transactionlog.ActionTX;
@@ -209,6 +210,9 @@ public class StockAdjustmentHome extends Controller {
 		facesMessages.addFromResourceBundle("Batch.adjustBatchSuccess");
 
         items = null;
+
+//        Conversation.instance().end(true);
+//        entityManager.clear();
 		
 		return "batches-adjusted";
 	}
@@ -230,7 +234,10 @@ public class StockAdjustmentHome extends Controller {
 		StockPositionItem item = findStockPosition(stockPosition.getMedicine());
 		getBatchSelection().setSelectedBatches(getBatchesMap(item, true));
 		actionExecuted = false;
-	}
+
+        // start the conversation
+        Conversation.instance().begin(true, false);
+    }
 
 
 	/**

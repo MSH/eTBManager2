@@ -47,7 +47,6 @@ public class StockPositionList {
 	 * Return the list of batches available grouped by medicine
 	 * @param unit
 	 * @param source
-	 * @param date
 	 * @return
 	 */
 	public List<BatchQuantity> getBatchAvailable(Tbunit unit, Source source) {

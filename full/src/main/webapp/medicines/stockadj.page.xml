@@ -4,7 +4,7 @@
 
 		<restrict>#{s:hasRole('STOCKPOS')}</restrict>
 		<param name="srcid" value="#{stockAdjustmentHome.sourceId}" />
-		<begin-conversation join="true"/>
+
 		<navigation>
 			<rule if-outcome="success">
 				<end-conversation/>
@@ -12,6 +12,9 @@
 					<message>#{messages['meds.movs.adjustok']}</message>
 				</redirect>
 			</rule>
+            <rule if-outcome="batches-adjusted">
+                <end-conversation before-redirect="true"/>
+            </rule>
 		</navigation>
 	
 </page>

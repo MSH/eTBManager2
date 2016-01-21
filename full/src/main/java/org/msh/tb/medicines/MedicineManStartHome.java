@@ -182,7 +182,9 @@ public class MedicineManStartHome {
 		entityManager.flush();
 
 		registerStartManLog();
-		
+
+        entityManager.clear();
+
 		return "medman-started";
 	}
 
