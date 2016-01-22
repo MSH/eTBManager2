@@ -246,6 +246,7 @@ public class QSPExcelUtils {
 			excel.lineBreak();
 		}
 		
+		/*BANGLADESH TEAM ASKED TO DISABLE THIS
 		if(unitsNotInitialized != null && unitsNotInitialized.size() > 0){
 			String m = messages.get("quarter.notinitializedunit");
 			m = m.replace("{0}", new Integer(unitsNotInitialized.size()).toString());
@@ -258,7 +259,7 @@ public class QSPExcelUtils {
 			}
 			excel.lineBreak();
 			excel.lineBreak();
-		}
+		}*/
 	}
 
 }

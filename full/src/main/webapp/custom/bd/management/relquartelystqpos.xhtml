@@ -79,17 +79,18 @@
 		<h:outputText styleClass="error" value="#{messages['quarter.openquarterunit2']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit != null}"/>
 	</s:div>
 	
-	<!-- Alerts if there are units with the medicine control not started -->
+	<!-- Alerts if there are units with the medicine control not started
+	BANGLADESH TEAM ASKED TO DISABLE THIS
 	<s:div style="padding:1px;display:block" rendered="#{not empty quarterStockPositionReport.unitsNotInitialized}" styleClass="noprint">
-		<!-- When selecting an administrative unit -->
+		<! When selecting an administrative unit
 		<h:outputFormat styleClass="error" value="#{messages['quarter.notinitializedunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
 			<f:param value="#{quarterStockPositionReport.unitsNotInitialized.size()}" />
 		</h:outputFormat>
 		<a:commandLink value=" #{messages['global.clicktoseelist']}" onclick="showNotInitializedUnts();" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}"/>
 
-		<!-- When selecting a specific unit -->
+		<! When selecting a specific unit
 		<h:outputText styleClass="error" value="#{messages['quarter.notinitializedunit2']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit != null}"/>
-	</s:div>
+	</s:div> -->
 	
 	<br/>
 	
@@ -200,6 +201,7 @@
 
 	<br/>
 
+	<!-- BANGLADESH TEAM ASKED TO DISABLE THIS
 	<div class="printonly">
 		<h:outputFormat styleClass="error" value="#{messages['quarter.notinitializedunit']}" rendered="#{quarterStockPositionReport.tbunitselection.tbunit == null}">
 			<f:param value="#{quarterStockPositionReport.unitsNotInitialized.size()}" />
@@ -210,7 +212,7 @@
 				<h:outputText value="#{unit.name} - #{unit.adminUnit.fullDisplayName}" /><br/>
 			</a:repeat>
 		</div>
-	</div>
+	</div>-->
 
 	</s:fragment>
 
@@ -237,7 +239,8 @@
 		</div>
 	</rich:modalPanel>
 	
-	<!-- Modal panel with the not initialized units. -->
+	<!-- Modal panel with the not initialized units.
+	BANGLADESH TEAM ASKED TO DISABLE THIS
 	<rich:modalPanel id="notInitializedUnitsList" autosized="true" width="700" zindex="2000" style="background-color:#F2F5F0">
 		<f:facet name="header">
 			<h:outputText value="#{messages['quarter.listnotiniunits']}" />
@@ -258,7 +261,7 @@
 				<span>#{messages['form.close']}</span>
 			</s:link>
 		</div>
-	</rich:modalPanel>
+	</rich:modalPanel>-->
 	
 	<script type="text/javascript">
 	function showOpenQuarterunitList() {
@@ -267,12 +270,13 @@
 	function hideOpenQuarterunitList() {
 		Richfaces.hideModalPanel('openQuarterunitList');
 	}
+	/*BANGLADESH TEAM ASKED TO DISABLE THIS
 	function showNotInitializedUnts() {
 		Richfaces.showModalPanel('notInitializedUnitsList');
 	}
 	function hideNotInitializedUnts() {
 		Richfaces.hideModalPanel('notInitializedUnitsList');
-	}
+	}*/
 	function refreshresult(){
 		document.getElementById('refreshlink').click();
 	}

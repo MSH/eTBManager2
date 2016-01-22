@@ -68,7 +68,7 @@ public class QuarterBatchExpiringReport {
 			unitBatchDetails.add(createBatchDetailedUnit(tbunitselection.getTbunit()));
 			batchDetailsConsolidated = null;
 		}else if(tbunitselection.getAuselection().getSelectedUnit() != null){
-			List<Tbunit> units = entityManager.createQuery(" from Tbunit u where u.adminUnit.code like :code and u.treatmentHealthUnit = :true " +
+			List<Tbunit> units = entityManager.createQuery(" from Tbunit u where u.adminUnit.code like :code and u.treatmentHealthUnit = :true and u.medManStartDate is not null " +
 					"and u.workspace.id = :workspaceId " +
 					"order by u.adminUnit.code, u.name.name1")
 					.setParameter("true", true)
@@ -80,7 +80,7 @@ public class QuarterBatchExpiringReport {
 					}			
 					updateConsolidatedBatchList();
 		}else{
-			List<Tbunit> units = entityManager.createQuery(" from Tbunit u where u.treatmentHealthUnit = :true " +
+			List<Tbunit> units = entityManager.createQuery(" from Tbunit u where u.treatmentHealthUnit = :true and u.medManStartDate is not null " +
 							"and u.workspace.id = :workspaceId " +
 							"order by u.adminUnit.code, u.name.name1")
 				.setParameter("true", true)
