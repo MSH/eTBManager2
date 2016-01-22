@@ -33,7 +33,7 @@ public class MedicineManStartBDHome{
 		String s = medicineManStartHome.startMedicineManagement();
 		
 		Tbunit unit = medicineManStartHome.getUnit();
-		tbunitHome.setInstance(unit);
+		tbunitHome.setId(unit.getId());
 		tbunitHome.getInstance().setLimitDateMedicineMovement(medicineManStartHome.getStartDate());
 		tbunitHome.persist();
 		tbunitHome.clearInstance();
