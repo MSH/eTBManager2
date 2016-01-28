@@ -144,6 +144,20 @@
                 </objectGraph>
             </property>
             <property name="daysTreatPlanned" xmlAttribute="true" />
+            <property name="prevTbTreats">
+                <objectGraph name="prevTreat" class="org.msh.tb.entities.PrevTBTreatment" parentProperty="tbcase">
+                    <property name="month" xmlAttribute="true"/>
+                    <property name="year" xmlAttribute="true"/>
+                    <property name="outcomeMonth" xmlAttribute="true"/>
+                    <property name="outcomeYear" xmlAttribute="true"/>
+                    <property name="outcome" xmlAttribute="true"/>
+                    <property name="substances">
+                        <objectGraph name="subst" class="org.msh.tb.entities.Substance">
+                            <property name="id" xmlAttribute="true" use="REQUIRED" />
+                        </objectGraph>
+                    </property>
+                </objectGraph>
+            </property>
         </objectGraph>
         
         <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">

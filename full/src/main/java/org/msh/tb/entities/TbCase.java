@@ -262,6 +262,10 @@ public class TbCase implements Serializable, Transactional, SyncKey {
     @OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
     private List<ExamXpert> examsXpert = new ArrayList<ExamXpert>();
 
+	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
+	@Sync(clearList = true)
+	private List<PrevTBTreatment> prevTbTreats = new ArrayList<PrevTBTreatment>();
+
     @PropertyLog(operations={Operation.NEW, Operation.DELETE})
     private SecDrugsReceived secDrugsReceived;
 
@@ -1422,41 +1426,41 @@ public class TbCase implements Serializable, Transactional, SyncKey {
         return previouslyTreatedType;
     }
 
-    public void setPreviouslyTreatedType(PatientType previouslyTreatedType) {
-        this.previouslyTreatedType = previouslyTreatedType;
-    }
+   public void setPreviouslyTreatedType(PatientType previouslyTreatedType) {
+       this.previouslyTreatedType = previouslyTreatedType;
+   }
 
-    public CaseDefinition getCaseDefinition() {
-        return caseDefinition;
-    }
+	public CaseDefinition getCaseDefinition() {
+		return caseDefinition;
+	}
 
-    public void setCaseDefinition(CaseDefinition caseDefinition) {
-        this.caseDefinition = caseDefinition;
-    }
+	public void setCaseDefinition(CaseDefinition caseDefinition) {
+		this.caseDefinition = caseDefinition;
+	}
 
-    public Date getLastBmuDateTbRegister() {
-        return lastBmuDateTbRegister;
-    }
+	public Date getLastBmuDateTbRegister() {
+		return lastBmuDateTbRegister;
+	}
 
-    public void setLastBmuDateTbRegister(Date lastBmuDateTbRegister) {
-        this.lastBmuDateTbRegister = lastBmuDateTbRegister;
-    }
+	public void setLastBmuDateTbRegister(Date lastBmuDateTbRegister) {
+		this.lastBmuDateTbRegister = lastBmuDateTbRegister;
+	}
 
-    public String getLastBmuTbRegistNumber() {
-        return lastBmuTbRegistNumber;
-    }
+	public String getLastBmuTbRegistNumber() {
+		return lastBmuTbRegistNumber;
+	}
 
-    public void setLastBmuTbRegistNumber(String lastBmuTbRegistNumber) {
-        this.lastBmuTbRegistNumber = lastBmuTbRegistNumber;
-    }
+	public void setLastBmuTbRegistNumber(String lastBmuTbRegistNumber) {
+		this.lastBmuTbRegistNumber = lastBmuTbRegistNumber;
+	}
 
-    public boolean isMovedSecondLineTreatment() {
-        return movedSecondLineTreatment;
-    }
+	public boolean isMovedSecondLineTreatment() {
+		return movedSecondLineTreatment;
+	}
 
-    public void setMovedSecondLineTreatment(boolean movedSecondLineTreatment) {
-        this.movedSecondLineTreatment = movedSecondLineTreatment;
-    }
+	public void setMovedSecondLineTreatment(boolean movedSecondLineTreatment) {
+		this.movedSecondLineTreatment = movedSecondLineTreatment;
+	}
 
 	public TreatmentCategory getTreatmentCategory() {
 		return treatmentCategory;
@@ -1487,5 +1491,13 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 			list.add(l);
 
 		return list;
+	}
+
+	public List<PrevTBTreatment> getPrevTbTreats() {
+		return prevTbTreats;
+	}
+
+	public void setPrevTbTreats(List<PrevTBTreatment> prevTbTreats) {
+		this.prevTbTreats = prevTbTreats;
 	}
 }
