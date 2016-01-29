@@ -264,6 +264,7 @@ public class TbCase implements Serializable, Transactional, SyncKey {
 
 	@OneToMany(cascade={CascadeType.ALL}, mappedBy="tbcase", fetch=FetchType.LAZY)
 	@Sync(clearList = true)
+	@PropertyLog(alwaysLog = true)
 	private List<PrevTBTreatment> prevTbTreats = new ArrayList<PrevTBTreatment>();
 
     @PropertyLog(operations={Operation.NEW, Operation.DELETE})
