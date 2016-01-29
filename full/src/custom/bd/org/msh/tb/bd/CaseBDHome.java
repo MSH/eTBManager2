@@ -100,7 +100,7 @@ public class CaseBDHome {
 		if (medicalExaminationBdHome == null)
 			return "error";
 
-		medicalExaminationBdHome.setTransactionLogActive(false);
+		medicalExaminationBdHome.setTransactionLogActive(true);
 
 		medicalExaminationBdHome.setDisplayMessage(false);
 		return medicalExaminationBdHome.persist();
