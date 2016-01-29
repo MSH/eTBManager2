@@ -353,6 +353,10 @@ public class CaseEditingHome {
 		
 		updatePatientAge();
 
+		//if it is a new case need to set owner before save to avoid error.
+		if(tbcase.getId() == null)
+			tbcase.setOwnerUnit(tbcase.getNotificationUnit());
+
 		// treatment was defined ?
 		caseHome.setTransactionLogActive(true);
 		if (!caseHome.persist().equals("persisted"))
