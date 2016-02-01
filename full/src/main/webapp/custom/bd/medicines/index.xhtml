@@ -40,8 +40,8 @@
 <h2><s:link value="#{messages['meds.movs.newadjust']}" view="/medicines/stockadj.xhtml" rendered="#{userSession.canAdjustStock}" style="float:right" styleClass="noprint">
 	<f:param name="srcid" value="#{s.source.id}"/>
 </s:link>
-#{s.source.abbrevName}
-<span class="text-small">(#{s.source.name})</span></h2>
+<s:fragment rendered="#{s:hasRole('RECEIV')}"> #{s.source.abbrevName}
+<span class="text-small">(#{s.source.name})</span></s:fragment></h2>
 
 <table id="tblinv" class="table1 regular">
 	<tr><th width="48%" rowspan="2" colspan="2">
