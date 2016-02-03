@@ -8,7 +8,9 @@ import org.msh.tb.entities.Batch;
 import org.msh.tb.entities.Source;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.export.ExcelCreator;
+import org.msh.utils.date.DateUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,29 +20,29 @@ public class QSPExcelUtils {
 	private ExcelCreator excel;
 	private final static int MAX_CASES_PER_SHEET = 65500; // max: 65536 in excel 2003 or later
 	private final static int TITLE_ROW = 1;
-	
+
 	public void downloadQuarterlyConsolidatedSP(Source source, Quarter quarter, AdministrativeUnit adminunit, Tbunit unit, List<QSPMedicineRow> rows, List<Tbunit> pendCloseQuarterUnits, List<Tbunit> unitsNotInitialized){
 		int iSheets = 0;
 		excel = new ExcelCreator();
 		excel.setFileName(messages.get("manag.rel7") + " " + (messages.get(quarter.getQuarter().getKey()) + "-" + quarter.getYear()));
 		excel.createWorkbook();
-		
+
 		excel.addSheet(messages.get("QCSP")+" - pg. " + iSheets+1, iSheets);
 		excel.setRow(TITLE_ROW);
-		
+
 		//Add Super Tittle
 		excel.addGroupHeaderFromResource("manag.rel7", 11, "title");
 		excel.lineBreak();
-		
+
 		//Add Filters Used
 		excel.addText(messages.get("Source") + ":");
 		excel.addText(source == null ? messages.get("form.noselection") : source.getName().getName1());
 		excel.lineBreak();
-		
+
 		excel.addText(messages.get("Quarter") + ":");
 		excel.addText(messages.get(quarter.getQuarter().getKey()) + "/" + quarter.getYear());
 		excel.lineBreak();
-		
+
 		if (unit != null){
 			excel.addText(messages.get("Tbunit") + ":");
 			excel.addText(unit.getName().getName1() + " - " + unit.getAdminUnit().getFullDisplayName2());
@@ -54,25 +56,84 @@ public class QSPExcelUtils {
 			excel.addText(messages.get("form.noselection"));
 			excel.lineBreak();
 		}
-		
+
 		excel.lineBreak();
-		
+
 		addTitlesQuarterlyConsolidatedSP();
-		
+
 		//Add Content
 		for(QSPMedicineRow r : rows){
 			excel.lineBreak();
 			addContentQuarterlyConsolidatedSP(r);
-			
+
 			if(excel.getRow() == MAX_CASES_PER_SHEET){
 				iSheets += 1;
 				excel.addSheet(messages.get("cases")+" - pg. " + iSheets+1, iSheets);
 				addTitlesQuarterlyConsolidatedSP();
 			}
 		}
-		
+
 		includePendAndNotInitializedUnits(pendCloseQuarterUnits, unitsNotInitialized);
-		
+
+		excel.sendResponse();
+	}
+
+	public void downloadQuarterlyConsolidatedSP(Source source, Date iniDate, Date endDate, AdministrativeUnit adminunit, Tbunit unit, List<QSPMedicineRow> rows){
+		int iSheets = 0;
+		excel = new ExcelCreator();
+		excel.setFileName(messages.get("manag.rel7"));
+		excel.createWorkbook();
+
+		excel.addSheet(messages.get("QCSP")+" - pg. " + iSheets+1, iSheets);
+		excel.setRow(TITLE_ROW);
+
+		//Add Super Tittle
+		excel.addGroupHeaderFromResource("manag.rel7", 11, "title");
+		excel.lineBreak();
+
+		//Add Filters Used
+		excel.addText(messages.get("Source") + ":");
+		excel.addText(source == null ? messages.get("form.noselection") : source.getName().getName1());
+		excel.lineBreak();
+
+		excel.addText(messages.get("Period.iniDate") + ":");
+		excel.addText(DateUtils.formatAsLocale(iniDate, false));
+		excel.lineBreak();
+
+		excel.addText(messages.get("Period.endDate") + ":");
+		excel.addText(DateUtils.formatAsLocale(endDate, false));
+		excel.lineBreak();
+
+		if (unit != null){
+			excel.addText(messages.get("Tbunit") + ":");
+			excel.addText(unit.getName().getName1() + " - " + unit.getAdminUnit().getFullDisplayName2());
+			excel.lineBreak();
+		}else if(adminunit != null){
+			excel.addText(messages.get("AdministrativeUnit") + ":");
+			excel.addText(adminunit.getFullDisplayName2());
+			excel.lineBreak();
+		}else if(unit == null && adminunit == null){
+			excel.addText(messages.get("AdministrativeUnit") + ":");
+			excel.addText(messages.get("form.noselection"));
+			excel.lineBreak();
+		}
+
+		excel.lineBreak();
+
+		addTitlesQuarterlyConsolidatedSP();
+
+		//Add Content
+		for(QSPMedicineRow r : rows){
+			excel.lineBreak();
+			addContentQuarterlyConsolidatedSP(r);
+
+			if(excel.getRow() == MAX_CASES_PER_SHEET){
+				iSheets += 1;
+				excel.addSheet(messages.get("cases")+" - pg. " + iSheets+1, iSheets);
+				addTitlesQuarterlyConsolidatedSP();
+			}
+		}
+
 		excel.sendResponse();
 	}
 	

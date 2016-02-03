@@ -22,6 +22,7 @@ public class QSPMedicineRow {
 	private boolean highlight;
 	private Long unitQtdForAmcCalc;
 	private Long transferedOutQtd;
+	private Long daysQtdInPeriod;
 	
 	/**
 	 * Calculates the closingBalance according to the values of the others parameters.
@@ -251,29 +252,53 @@ public class QSPMedicineRow {
 	}
 
 	/**
-	 * @return the amc
+	 * @return the amc calculated based on a Quarter information
 	 */
 	public Long getAmc() {
 		Long amc = new Long(0);
-		
+
 		if(getDispensedForAmcCalc() == 0 || getOutOfStockAverage() >= 90 || getUnitQtdForAmcCalc() == 0)
 			return new Long(0);
-		
+
 		double disp = getDispensedForAmcCalc();
 		double days = 90 - getOutOfStockAverage();
 		double result = disp / days;
-		
+
 		result = result * 30;
-		
+
 		amc = (new Double(result)).longValue();
-		
-		
+
+
 		if(amc == null) amc = new Long (0);
 		if(amc < 0) amc = amc * -1;
-		
+
 		return amc;
 	}
-	
+
+	/**
+	 * @return the amc based on a ini date and end date Information
+	 */
+	public Long getAmc2() {
+		Long amc = new Long(0);
+
+		if(getDispensed() == 0 || getDaysQtdInPeriod() == 0)
+			return amc;
+
+		double disp = getDispensed();
+		double days = getDaysQtdInPeriod();
+		double result = disp / days;
+
+		result = result * 30;
+
+		amc = (new Double(result)).longValue();
+
+
+		if(amc == null) amc = new Long (0);
+		if(amc < 0) amc = amc * -1;
+
+		return amc;
+	}
+
 	/**
 	 * @return the Estimated Months Of Stock rounded
 	 */
@@ -281,14 +306,32 @@ public class QSPMedicineRow {
 		Double months = new Double(0);
 		Double amc = new Double(getAmc());
 		Double closBal = new Double(getClosingBalance());
-		
+
 		if(amc == 0)
 			return null;
-		
+
 		//Calculates the amount of months
 		months = closBal / amc;
 		months = roundRule(months);
-		
+
+		return months;
+	}
+
+	/**
+	 * @return the Estimated Months Of Stock rounded
+	 */
+	public Double getEstimatedMonthsOfStock2() {
+		Double months;
+		Double amc = new Double(getAmc2());
+		Double closBal = new Double(getClosingBalance());
+
+		if(amc == 0)
+			return null;
+
+		//Calculates the amount of months
+		months = closBal / amc;
+		months = roundRule(months);
+
 		return months;
 	}
 	
@@ -331,5 +374,13 @@ public class QSPMedicineRow {
 		}
 		
 		return number;
+	}
+
+	public Long getDaysQtdInPeriod() {
+		return daysQtdInPeriod;
+	}
+
+	public void setDaysQtdInPeriod(Long daysQtdInPeriod) {
+		this.daysQtdInPeriod = daysQtdInPeriod;
 	}
 }
