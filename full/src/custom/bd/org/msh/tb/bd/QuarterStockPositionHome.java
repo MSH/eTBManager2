@@ -491,7 +491,8 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 * Returns true if the selected quarter is opened.
 	 */
 	public boolean isOpenedQuarter(){		
-		return userSession.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <= 0;
+		Date limitDate = userSession.getTbunit().getLimitDateMedicineMovement();
+		return limitDate.compareTo(selectedQuarter.getEndDate()) <= 0;
 	}
 	
 	

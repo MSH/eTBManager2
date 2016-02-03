@@ -21,32 +21,32 @@ public class QSPUtils {
 		if(tbunitselection.getTbunit() != null){
 			ret = null;
 		
-			if(tbunitselection.getTbunit().getLimitDateMedicineMovement() != null && tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getIniDate()) <=0){
+			if(tbunitselection.getTbunit().getLimitDateMedicineMovement() != null && tbunitselection.getTbunit().getLimitDateMedicineMovement().compareTo(selectedQuarter.getEndDate()) <=0){
 				ret = new ArrayList<Tbunit>();
 				ret.add(tbunitselection.getTbunit());
 			}
 			
 		}else if(tbunitselection.getAuselection().getSelectedUnit()!=null){
 			String queryString = "from Tbunit u where u.adminUnit.code like :code and u.workspace.id = :workspaceId " +
-								"and u.limitDateMedicineMovement <= :iniQuarterDate " +
+								"and u.limitDateMedicineMovement <= :endQuarterDate " +
 								"and u.treatmentHealthUnit = :true and u.medManStartDate is not null and u.active = :true " +
 								"order by u.adminUnit.code, u.name.name1";
 			
 			ret = entityManager.createQuery(queryString)
 								.setParameter("code", tbunitselection.getAuselection().getSelectedUnit().getCode()+'%')
 								.setParameter("workspaceId", UserSession.getWorkspace().getId())
-								.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
+								.setParameter("endQuarterDate", selectedQuarter.getEndDate())
 								.setParameter("true", true)
 								.getResultList();
 		}else{
 			String queryString = "from Tbunit u where u.workspace.id = :workspaceId " +
-					"and u.limitDateMedicineMovement <= :iniQuarterDate " +
+					"and u.limitDateMedicineMovement <= :endQuarterDate " +
 					"and u.treatmentHealthUnit = :true and u.medManStartDate is not null and u.active = :true " +
 					"order by u.adminUnit.code, u.name.name1 ";
 
 			ret = entityManager.createQuery(queryString)
 								.setParameter("workspaceId", UserSession.getWorkspace().getId())
-								.setParameter("iniQuarterDate", selectedQuarter.getIniDate())
+								.setParameter("endQuarterDate", selectedQuarter.getEndDate())
 								.setParameter("true", true)
 								.getResultList();
 		}
