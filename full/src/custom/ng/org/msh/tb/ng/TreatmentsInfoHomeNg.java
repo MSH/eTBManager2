@@ -35,7 +35,7 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome {
             "from TreatmentMonitoring tm0 where tm0.tbcase.id = c.id) as medicineTakenDays " +
             "from TbCase c " +
             "join c.patient p left join c.pulmonaryType pt " +
-            "where c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal() +
+            "where c.state <= " + CaseState.TRANSFERRING.ordinal() + " and c.diagnosisType = " + DiagnosisType.CONFIRMED.ordinal() +
             " and c.ownerUnit.id = :unitId " +
             "group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification ";
 
@@ -43,7 +43,7 @@ public class TreatmentsInfoHomeNg extends TreatmentsInfoHome {
             "c.daysTreatPlanned, c.classification, c.patientType, p.gender, c.infectionSite, pt.name.name1, c.registrationDate " +
             "from TbCase c " +
             "join c.patient p left join c.pulmonaryType pt " +
-            "where c.state = " + CaseState.ONTREATMENT.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal() +
+            "where c.state <= " + CaseState.TRANSFERRING.ordinal() + " and c.diagnosisType = " + DiagnosisType.SUSPECT.ordinal() +
             " and c.ownerUnit.id = :unitId " +
             "group by c.id, p.name, p.middleName, p.lastName, c.treatmentPeriod, c.daysTreatPlanned, c.classification ";
 
