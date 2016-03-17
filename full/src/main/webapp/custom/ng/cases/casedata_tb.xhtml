@@ -72,10 +72,10 @@
 			</rich:tabPanel>
 
 
-			<a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
+			<a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}" ajaxSingle="true">
 				<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
 			</a:jsFunction>
-			<a:jsFunction name="updateTabSelection">
+			<a:jsFunction name="updateTabSelection" ajaxSingle="true">
 				<a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
 			</a:jsFunction>
 			<script type="text/javascript">

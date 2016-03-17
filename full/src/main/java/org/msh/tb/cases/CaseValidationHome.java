@@ -43,7 +43,7 @@ public class CaseValidationHome {
 
 
 	public void initialize() {
-		caseHome.getTbCase().setDiagnosisType(DiagnosisType.CONFIRMED);
+//		caseHome.getTbCase().setDiagnosisType(DiagnosisType.CONFIRMED);
 	}
 	
 	
@@ -62,6 +62,7 @@ public class CaseValidationHome {
 			return "error";
 
 		tbcase.setValidationState(ValidationState.VALIDATED);
+        tbcase.setDiagnosisType(DiagnosisType.CONFIRMED);
 
 		Patient p = tbcase.getPatient();
 		if (p.getRecordNumber() == null) {

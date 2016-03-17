@@ -282,7 +282,7 @@
             </h:selectOneMenu>
         </s:decorate>
 
-        <div id="hivdata" style="#{tbcase.hivPosition == 'POSITIVE' ? '' : 'display:none'}">
+        <div id="hivdata" style="#{tbcase.hivPosition == 'UNKNOWN' ? '' : 'display:none'}">
             <s:decorate template="/layout/edit.xhtml" id="hivdetaildec" >
                 <ui:define name="label">#{messages['TbCase.resultdate']}:</ui:define>
                 <ui:param name="redasterisk" value="true" />
@@ -398,7 +398,7 @@
             else jQuery('#' + elem).slideUp(immediate?0:500);
         }
         function hivStatusChanged(cb, elem, immediate) {
-            if (cb.selectedIndex !== 1)
+            if (cb.selectedIndex == 3)
                 jQuery('#'+ elem).slideUp(immediate?0:500)
             else {
                 jQuery('#' + elem).slideDown(immediate ? 0 : 500);
