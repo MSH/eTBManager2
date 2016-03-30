@@ -186,7 +186,7 @@ public class SyncFileImporter {
 		TagsCasesHome tagsCasesHome = (TagsCasesHome) Component.getInstance(TagsCasesHome.class);
 		if(updatedOrCreatedCasesIds !=null) {
 			for (Integer id : updatedOrCreatedCasesIds) {
-				TbCase c = App.getEntityManager().find(TbCase.class, id);
+				TbCase c = (TbCase) App.getEntityManager().createQuery("from TbCase where id = :id").setParameter("id", id).getSingleResult();
 				if(c!=null && c.getId()!=null)
 					tagsCasesHome.updateTags(c);
 			}
