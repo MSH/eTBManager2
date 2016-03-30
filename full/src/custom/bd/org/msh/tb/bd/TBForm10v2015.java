@@ -44,7 +44,7 @@ public abstract class TBForm10v2015 extends Indicator2D{
      */
     protected String getHQLWhereBlock_3_4(){
         // cases has to be Tb and suspect - do not consider filters and has to be one of type of patients considered on TB 10
-        return " where c.classification = 0 and c.diagnosisType = 0 and p.workspace.id = " + getWorkspace().getId();
+        return super.getHQLWhere() + " and c.classification = 0 and c.diagnosisType = 0 and p.workspace.id = " + getWorkspace().getId();
     }
 
     /**
