@@ -64,7 +64,11 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	
 	private boolean allResults;
 
-	
+	public void initAdminRep(){
+		if(this.iniDate == null)
+			this.iniDate = DateUtils.getDate();
+	}
+
 	/**
 	 * Initialize report to display changes in a specific case
 	 */
@@ -228,6 +232,8 @@ public class TransactionLogReport extends EntityQuery<TransactionLog> {
 	 * @return the iniDate
 	 */
 	public Date getIniDate() {
+		if(iniDate == null)
+			iniDate = DateUtils.getDate();
 		return iniDate;
 	}
 
