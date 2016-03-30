@@ -429,7 +429,7 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 				}
 			}
 			
-			dispensingHome.getInstance().setDispensingDate(selectedQuarter.getEndDate());
+			dispensingHome.getInstance().setDispensingDate(getDispensingDate());
 			dispensingHome.saveDispensing();
 		}
 		dispensingHome.clearInstance();
@@ -552,5 +552,15 @@ public class QuarterStockPositionHome extends EntityHomeEx<QuarterlyReportDetail
 	 */
 	public void setSelectedQuarter(Quarter selectedQuarter) {
 		this.selectedQuarter = selectedQuarter;
+	}
+
+	public Date getDispensingDate() {
+		Date dt = DateUtils.getDate();
+
+		if(dt.after(selectedQuarter.getEndDate())){
+			dt = selectedQuarter.getEndDate();
+		}
+
+		return dt;
 	}
 }
