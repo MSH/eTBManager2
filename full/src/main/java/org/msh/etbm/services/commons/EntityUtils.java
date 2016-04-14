@@ -1,5 +1,8 @@
 package org.msh.etbm.services.commons;
 
+import org.msh.etbm.services.cases.exams.MicroscopyServices;
+import org.msh.tb.ng.cases.MicroscopyServicesNG;
+
 import javax.persistence.Entity;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -17,6 +20,10 @@ public class EntityUtils {
      * @return the type declared in the given generic class
      */
     public static Class getDeclaredGenericType(Class clazz) {
+        if(clazz.getSimpleName().equals("MicroscopyServicesNG")){
+            clazz = MicroscopyServices.class;
+        }
+
         Type type = clazz.getGenericSuperclass();
         if (type instanceof ParameterizedType) {
             ParameterizedType paramType = (ParameterizedType) type;

@@ -58,24 +58,44 @@ public class App {
 		return Component.getInstance(name, create);
 	}
 
-    /**
-     * Return an instance of a component. The name of the component must be composed of the name parameter
-     * plus the suffix _ws, where _ws is the extension of the default workspace on upper case letters.
-     * @param name
-     * @return
-     */
-    public static Object getComponentFromDefaultWorkspaceOrGeneric(String name) {
-        Object ret;
-        Workspace ws = (Workspace) App.getComponent("defaultWorkspace",true);
+	/**
+	 * Return an instance of a component. The name of the component must be composed of the name parameter
+	 * plus the suffix _ws, where _ws is the extension of the default workspace on upper case letters.
+	 * @param name
+	 * @return
+	 */
+	public static Object getComponentFromDefaultWorkspaceOrGeneric(String name) {
+		Object ret;
+		Workspace ws = (Workspace) App.getComponent("defaultWorkspace",true);
 
-        String s = name + "_" + ws.getExtension();
-        ret = Component.getInstance(s, true);
+		String s = name + "_" + ws.getExtension();
+		ret = Component.getInstance(s, true);
 
-        if(ret == null)
-            ret = Component.getInstance(name, true);
+		if(ret == null)
+			ret = Component.getInstance(name, true);
 
-        return ret;
-    }
+		return ret;
+	}
+
+	/**
+	 * Return an instance of a component. The name of the component must be composed of the name parameter
+	 * plus the suffix WS, where WS is the extension of the default workspace on upper case letters.
+	 * @param name
+	 * @return
+	 */
+	public static Object getGenericWorkspaceComponent(String name) {
+		Object ret;
+		Workspace ws = (Workspace) App.getComponent("defaultWorkspace",true);
+
+		String s = name.replace(ws.getExtension().toUpperCase(), "");
+		s = s.substring(0,1).toLowerCase() + s.substring(1);
+		ret = Component.getInstance(s, true);
+
+		if(ret == null)
+			ret = Component.getInstance(name, true);
+
+		return ret;
+	}
 
 	/**
 	 * Return a component of a specified class
