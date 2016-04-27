@@ -276,7 +276,38 @@ public class CaseEditingHomeNg {
         return s;
     }
 
+    /**
+     * Save changes made to a DRTB case
+     * @return
+     */
+    public String saveEditingDrtbCase() {
+        /**
+         * TODO: This method didn't existed and it was causing an error. I just copied the saveEditingTbCase and changed
+         * it names. Need to check and apply the right rules to save a DRTB case.
+         */
 
+        if (!validate())
+            return "error";
+
+        TbCaseNG tbcase = (TbCaseNG) caseHome.getInstance();
+
+        tbcase.setNotificationUnit(caseEditingHome.getTbunitselection().getSelected());
+        tbcase.getNotifAddress().setAdminUnit(caseEditingHome.getTbunitselection().getAuselection().getSelectedUnit());
+
+        //fix the inconsistence when owner unit is null.
+        if(tbcase.getOwnerUnit() == null){
+            tbcase.setOwnerUnit(OwnerUnitChecker.selectOwnerUnit(tbcase));
+        }
+
+        caseEditingHome.updatePatientAge();
+
+        String s = caseHome.persist();
+
+        if ("persisted".equals(s))
+            caseHome.updateCaseTags();
+
+        return s;
+    }
 
     /**
      * Overrides parent method to apply validation manually
@@ -325,7 +356,7 @@ public class CaseEditingHomeNg {
         else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.TB))
             result = saveEditingTbCase();
         else if(caseHome.getInstance().getDiagnosisType().equals(DiagnosisType.CONFIRMED) && caseHome.getInstance().getClassification().equals(CaseClassification.DRTB))
-            result = "TODO MY FRIEND";
+            result = saveEditingDrtbCase();
         else
             result = "error";
 
