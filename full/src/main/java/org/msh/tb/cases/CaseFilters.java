@@ -181,7 +181,7 @@ public class CaseFilters {
                 if (classifications != null){
                     classifications.selectAll();
                 }
-				diagnosisTypes.selectAll();
+				getDiagnosisTypes().selectAll();
 				break;
 
 			case PATIENT:
@@ -202,7 +202,7 @@ public class CaseFilters {
                 if (classifications != null){
                     classifications.selectAll();
                 }
-				diagnosisTypes.selectAll();
+				getDiagnosisTypes().selectAll();
 				break;
 			
 			case CASE_TAG:
@@ -214,7 +214,7 @@ public class CaseFilters {
                 if (classifications != null){
                     classifications.selectAll();
                 }
-				diagnosisTypes.selectAll();
+				getDiagnosisTypes().selectAll();
 				break;
 			
 			case CUSTOM_FILTER:
@@ -225,7 +225,7 @@ public class CaseFilters {
                 if (classifications != null){
                     classifications.selectAll();
                 }
-				diagnosisTypes.selectAll();
+				getDiagnosisTypes().selectAll();
 				break;
 
 			case CASE_UNIT_STATE:
