@@ -16,9 +16,9 @@
 <s:fragment rendered="#{browserInfo.validBrowser}">
 <h:panelGroup id="loginpanel" >
 
-	<div id="msgdiv" class="container login-container" style="#{etbmanagerApp.countryCode == 'BD' ? 'display:block' : 'display:none'}">
+	<div id="msgdiv" class="container login-container" style="#{etbmanagerApp.countryCode != 'BD' ? 'display:block' : 'display:none'}">
 		<h3>INVITATION</h3>
-		<h4>e-TB Manager anonymous user satisfaction survey</h4>
+		<h4>e-TB Manager anonymous user satisfaction <a href="https://www.surveygizmo.com/s3/2319377/Bangladesh">survey</a></h4>
 		<h5><b>It takes only 5 to 10 minutes!</b></h5>
 		<p>If you have not yet completed the anonymous e-TB Manager survey, please click this link:
 			<a href="https://www.surveygizmo.com/s3/2319377/Bangladesh">https://www.surveygizmo.com/s3/2319377/Bangladesh</a>
@@ -32,7 +32,7 @@
 	</div>
 
 
-	<div id="logindiv" class="container login-container" style="#{etbmanagerApp.countryCode == 'BD' ? 'display:none' : 'display:block'}">
+	<div id="logindiv" class="container login-container" style="#{etbmanagerApp.countryCode != 'BD' ? 'display:none' : 'display:block'}">
 	<h4>#{messages['login.msg1']}</h4>
 	<h:form id="main" role="form" styleClass="form-horizontal">
 	<h:panelGroup id="msg">
