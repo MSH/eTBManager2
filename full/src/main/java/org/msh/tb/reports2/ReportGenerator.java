@@ -16,6 +16,7 @@ import org.msh.reports.variables.Variable;
 import org.msh.tb.application.App;
 import org.msh.tb.client.shared.model.*;
 import org.msh.tb.entities.*;
+import org.msh.tb.entities.enums.DiagnosisType;
 import org.msh.tb.login.UserSession;
 import org.msh.tb.reports2.variables.DateFieldVariable;
 import org.msh.tb.reports2.variables.EmptyVariable;
@@ -316,7 +317,7 @@ public class ReportGenerator {
 		}
 
 		DataTableQuery tbl = rep.getDetailedReport("tbcase.id, patient.patient_name, patient.middlename, " +
-				"patient.lastname, patient.gender, patient.recordnumber, tbcase.casenumber, tbcase.registrationCode, tbcase.suspectRegistrationCode",
+				"patient.lastname, patient.gender, patient.recordnumber, tbcase.casenumber, tbcase.registrationCode, tbcase.suspectRegistrationCode, tbcase.diagnosisType",
 				"patient_name", page, pageSize);
 
 		// prepare mock tbcase to display the proper name and case number according to the configuration
@@ -337,6 +338,9 @@ public class ReportGenerator {
 			tbcase.setCaseNumber((Integer)row.getValue(6));
 			tbcase.setRegistrationCode((String)row.getValue(7));
 			tbcase.setSuspectRegistrationCode((String)row.getValue(8));
+			if(row.getValue(9) == null)
+				System.out.println("asdfasd");
+			tbcase.setDiagnosisType(DiagnosisType.values()[(Integer)row.getValue(9)]);
 
 			CPatient pac= new CPatient();
 			pac.setId(id);
