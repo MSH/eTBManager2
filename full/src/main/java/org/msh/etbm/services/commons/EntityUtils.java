@@ -1,7 +1,6 @@
 package org.msh.etbm.services.commons;
 
 import org.msh.etbm.services.cases.exams.MicroscopyServices;
-import org.msh.tb.ng.cases.MicroscopyServicesNG;
 
 import javax.persistence.Entity;
 import java.lang.reflect.ParameterizedType;
