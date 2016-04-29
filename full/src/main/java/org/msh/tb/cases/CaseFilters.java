@@ -191,7 +191,7 @@ public class CaseFilters {
                 if (classifications != null){
                     classifications.selectAll();
                 }
-				diagnosisTypes.selectAll();
+				getDiagnosisTypes().selectAll();
 				break;
 			
 			case VALIDATION_STATE:
