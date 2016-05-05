@@ -68,8 +68,8 @@ public class CaseLogService {
 		ActionTX atx = beginTX("CASE_TRANSFEROUT", tbcase);
 
 		atx.getDetailWriter().addTableRow("cases.movdate", caseMoveHome.getMoveDate());
-		atx.getDetailWriter().addTableRow("patients.desthu", caseMoveHome.getTbunitselection().getSelected().toString());
-		atx.getDetailWriter().addTableRow("AdministrativeUnit", caseMoveHome.getTbunitselection().getSelected().getAdminUnit().getFullDisplayName());
+		atx.getDetailWriter().addTableRow("patients.desthu", caseMoveHome.getTbunitselection2().getSelected().toString());
+		atx.getDetailWriter().addTableRow("AdministrativeUnit", caseMoveHome.getTbunitselection2().getSelected().getAdminUnit().getFullDisplayName());
 
 		atx.end();
 	}

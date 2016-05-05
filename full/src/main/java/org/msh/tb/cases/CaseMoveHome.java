@@ -17,7 +17,7 @@ import org.msh.tb.entities.TbCase;
 import org.msh.tb.entities.Tbunit;
 import org.msh.tb.entities.TreatmentHealthUnit;
 import org.msh.tb.entities.enums.CaseState;
-import org.msh.tb.tbunits.TBUnitSelection;
+import org.msh.tb.tbunits.TBUnitSelection2;
 import org.msh.tb.tbunits.TBUnitType;
 import org.msh.utils.date.DateUtils;
 import org.msh.utils.date.Period;
@@ -46,7 +46,7 @@ public class CaseMoveHome extends Controller {
 	@In(create=true) PrescribedMedicineHome prescribedMedicineHome;
 	
 	private Date moveDate;
-	private TBUnitSelection tbunitselection;
+	private TBUnitSelection2 tbunitselection2;
 	private TreatmentHealthUnit currentHealthUnit;
 
 
@@ -58,7 +58,7 @@ public class CaseMoveHome extends Controller {
 		if (ViewService.instance().isFormPost())
 			return;
 		
-		getTbunitselection().setAdminUnit(null);
+		getTbunitselection2().setAdminUnit(null);
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class CaseMoveHome extends Controller {
 			return "error";
 		
 		TbCase tbcase = caseHome.getInstance();
-		Tbunit tbunit = getTbunitselection().getSelected();
+		Tbunit tbunit = getTbunitselection2().getSelected();
 //		Tbunit unitFrom = tbcase.getOwnerUnit();
 
 		// create the period of treatment for the new health unit
@@ -116,7 +116,7 @@ public class CaseMoveHome extends Controller {
 	 * @return true if transfer out can be executed
 	 */
 	protected boolean validateTransferOut() {
-		Tbunit tbunit = getTbunitselection().getSelected();
+		Tbunit tbunit = getTbunitselection2().getSelected();
 		if (tbunit == null)
 			return false;
 		
@@ -309,14 +309,14 @@ public class CaseMoveHome extends Controller {
 		this.moveDate = moveDate;
 	}
 
-	public TBUnitSelection getTbunitselection() {
-		if (tbunitselection == null) {
-			tbunitselection = new TBUnitSelection("unitid", false, TBUnitType.HEALTH_UNITS);
-			tbunitselection.setApplyHealthSystemRestrictions(false);
+	public TBUnitSelection2 getTbunitselection2() {
+		if (tbunitselection2 == null) {
+			tbunitselection2 = new TBUnitSelection2("unitid", false, TBUnitType.HEALTH_UNITS);
+			tbunitselection2.setApplyHealthSystemRestrictions(false);
 //			tbunitselection.setHealthSystem(null);
 //			tbunitselection.setIgnoreReadOnlyRule(true);
 		}
-		return tbunitselection;
+		return tbunitselection2;
 	}
 	
 	/**

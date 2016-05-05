@@ -4,6 +4,9 @@
                 xmlns:s="http://jboss.com/products/seam/taglib"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+				xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:h="http://java.sun.com/jsf/html"
                 template="/layout/template_new.xhtml">
 
 <ui:param name="title" value="#{messages['mdrtbsys']}" />
@@ -63,6 +66,23 @@
 			<div class="wait-icon2"></div>#{messages['global.wait']}
 		</div>	
 	</div>
+
+	<rich:modalPanel id="message" width="730" zindex="2000" autosized="true">
+			<f:facet name="header">
+				<h:outputText id="title1" value="INVITATION" />
+			</f:facet>
+			<h4>e-TB Manager anonymous user satisfaction <a href="https://www.surveygizmo.com/s3/2319377/Nigeria">survey</a></h4>
+			<h5><b>It takes only 5 to 10 minutes!</b></h5>
+			<p>If you have not yet completed the anonymous e-TB Manager survey, please click this link:
+				<a href="https://www.surveygizmo.com/s3/2319377/Nigeria">https://www.surveygizmo.com/s3/2319377/Nigeria</a>
+			</p>
+			<p>Every user has to complete the survey, even if sharing the same login/password or sharing the same computer in the health facility.</p>
+			<p>Do not forget to click the <b>submit button</b> at the end of the survey to make your responses valid.</p>
+			<p>Your feedback will greatly help the NTBLCP and partners better guide the planned expansion of e-TB Manager to more health facilities in Nigeria.</p>
+			<h4>THANK YOU!</h4>
+			<hr/>
+			<a href="#" onClick="Richfaces.hideModalPanel('message');">If you already completed the survey - thank you! Click here close this window.</a>
+	</rich:modalPanel>
 
 </ui:define> 
 </ui:composition>

@@ -48,11 +48,12 @@
 		<b>#{messages['patients.transfinfo']}</b>
 	</div>
 
-    <s:decorate template="/custom/ng/layout/tbselectionfortransfer.xhtml" >
-    	<ui:define name="label">#{messages['patients.desthu']}:</ui:define>
-    	<ui:param name="tbunitselection" value="#{caseMoveHome.tbunitselection}" />
-    	<ui:param name="required" value="true" />
-    </s:decorate>
+	<s:decorate template="/layout/tbselection2.xhtml">
+		<ui:define name="label">#{messages['patients.desthu']}:</ui:define>
+		<ui:param name="tbunitselection" value="#{caseMoveHome.tbunitselection2}" />
+		<ui:param name="unitlabel" value="#{messages['form.name']}" />
+		<ui:param name="required" value="true" />
+	</s:decorate>
 
     <s:decorate template="/layout/dateedit.xhtml" >
     	<ui:define name="label">#{messages['cases.movdate']}:</ui:define>

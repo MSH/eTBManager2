@@ -47,9 +47,15 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 		//AdministrativeUnit parent = adminUnit.getParent();
 		AdministrativeUnit parent = getAuselectionparent().getSelectedUnit();
 		String ret = null;
-		
+
 		if ((parent != null) && (parent.getLevel() == 5)) {
 			facesMessages.add("Maximum level reached");
+			return "error";
+		}
+
+		int acceptedLevel = parent!= null ?  parent.getLevel() + 1 : 1;
+		if (getInstance().getCountryStructure().getLevel() != acceptedLevel) {
+			facesMessages.addToControl("structuresel", "Level is not valid comparing to the parent level");
 			return "error";
 		}
 		
@@ -153,11 +159,21 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 	 */
 	public List<CountryStructure> getStructures() {
 		if (structures == null) {
+			structures = getEntityManager().createQuery("from CountryStructure c where c.workspace.id = #{defaultWorkspace.id} order by c.level")
+					.getResultList();
+		}
+		return structures;
+
+		/*MSANTOS:
+		JSF was creating some trouble when trying to change the admin unit level.
+		So I simplified this method, so it will return a list filled with all levels
+		And I start to validate the level during the persist process.
+		if (structures == null) {
 			int level;
 			//AdministrativeUnit parent = getInstance().getParent();
 			AdministrativeUnit parent = getAuselectionparent().getSelectedUnit();
 			if (parent == null)
-				 level = 1;
+				level = 1;
 			else level = parent.getLevel() + 1;
 
 			structures = getEntityManager().createQuery("from CountryStructure c where c.level = :level " +
@@ -165,7 +181,7 @@ public class AdminUnitHome extends EntityHomeEx<AdministrativeUnit> {
 					.setParameter("level", level)
 					.getResultList();
 		}
-		return structures;
+		return structures;*/
 	}
 
 
