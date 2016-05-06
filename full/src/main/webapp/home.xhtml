@@ -84,5 +84,13 @@
 			<a href="#" onClick="Richfaces.hideModalPanel('message');">If you already completed the survey - thank you! Click here close this window.</a>
 	</rich:modalPanel>
 
+	<script type="text/javascript">
+		<!--
+		if( #{etbmanagerApp.countryCode == 'NG'} ){
+			Richfaces.showModalPanel('message');
+		}
+		-->
+	</script>
+
 </ui:define> 
 </ui:composition>
