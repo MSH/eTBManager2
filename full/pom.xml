@@ -56,10 +56,6 @@
 								<source>src/main/java</source>
 								<source>src/client/java</source>
                                 <source>src/custom/bd</source>
-                                <source>src/custom/kh</source>
-								<source>src/custom/na</source>
-								<source>src/custom/md</source>
-								<source>src/custom/ng</source>
 							</sources>
 						</configuration>
 					</execution>
