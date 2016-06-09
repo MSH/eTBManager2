@@ -69,14 +69,14 @@ public class TBForm8v2016Block2 extends Indicator2D {
                 + " group by c.patientType ";
         result = entityManager.createQuery(query).getResultList();
         populateInterfaceRows(result, "PULBAC");
-
+/*
         query = "select c.patientType, count(*) "
                 + " from TbCase c join c.patient p "
                 + getHQLWhere() + " and c.classification = 1 and c.infectionSite = 0 and c.caseDefinition = 0 and c.patientType in (64,65,66) " // pulmonary bacteriollogically confirmed DRTB cases (others registration group)
                 + " group by c.patientType ";
         result = entityManager.createQuery(query).getResultList();
         populateInterfaceRows(result, "PULBAC");
-
+*/
         query = "select c.patientType, count(*) "
                 + " from TbCase c join c.patient p "
                 + getHQLWhere() + " and c.classification = 1 and c.infectionSite = 1 and c.patientType in (64,65,66) " // extrapulmonary bacteriollogically confirmed DRTB cases (others registration group)
@@ -102,7 +102,6 @@ public class TBForm8v2016Block2 extends Indicator2D {
 
             if(allPatientTypes.contains(pt)) {
                 addValue(superColumn + msgs.get(pt.getKey()), msgs.get(pt.getKey()), "singlerow", qtd.floatValue());
-
                 //total column
                 addValue("TOTAL", "Total", "singlerow", qtd.floatValue());
             }
