@@ -11,7 +11,7 @@ public enum CaseState {
 	DIED,
 	TRANSFERRED_OUT,
 	DIAGNOSTIC_CHANGED,
-	OTHER,
+	OTHER, //10
 	MDR_CASE,
 	TREATMENT_INTERRUPTION,
 	NOT_CONFIRMED, 
@@ -35,7 +35,7 @@ public enum CaseState {
 	TREATMENT_REFUSED,
 
     //New Generic Options
-    NOT_EVALUATED,
+    NOT_EVALUATED, //27
     MOVED_SECONDLINE
 	
 	;

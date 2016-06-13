@@ -56,7 +56,8 @@ public class CaseCloseHome extends Controller{
 		CaseState.NOT_TB, 
 		CaseState.DIED, 
 		CaseState.DEFAULTED, 
-		CaseState.OTHER};
+		CaseState.OTHER
+	};
 	
 
 

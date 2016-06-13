@@ -64,4 +64,12 @@
         </sql>
     </changeSet>
 
+    <changeSet id="13.28" author="msantos" context="BD">
+        <sql>
+            update tbcase
+            set state = 27
+            where state = 10;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
