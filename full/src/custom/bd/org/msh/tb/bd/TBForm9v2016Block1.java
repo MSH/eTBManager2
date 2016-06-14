@@ -2,14 +2,17 @@ package org.msh.tb.bd;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.international.Messages;
 import org.msh.tb.AgeRangeHome;
 import org.msh.tb.entities.AgeRange;
 import org.msh.tb.entities.enums.*;
 import org.msh.tb.indicators.core.Indicator2D;
 
 import javax.persistence.EntityManager;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Name("TBForm9v2016Block1")
 public class TBForm9v2016Block1 extends Indicator2D {
@@ -29,16 +32,19 @@ public class TBForm9v2016Block1 extends Indicator2D {
     private final String GRANT_TOTAL_ROW = "Grant Total";
 
     private final String TOTAL_COLUMN = "Total";
-    private final String TOTAL_REGISTERED_COLUMN = "Total ";
+    private final String TOTAL_REGISTERED_COLUMN = "Total number of DR TB patients registered during the quarter";
 
-    protected static final CaseState[] outcomesMDR = {
+    private List<CaseState> suportedStates;
+
+    protected static final CaseState[] reportStates = {
             CaseState.CURED,
             CaseState.TREATMENT_COMPLETED,
             CaseState.FAILED,
             CaseState.DIED,
             CaseState.DEFAULTED,
             CaseState.NOT_EVALUATED,
-            CaseState.OTHER
+            CaseState.ONTREATMENT,
+            CaseState.WAITING_TREATMENT
     };
 
     /**
@@ -47,6 +53,8 @@ public class TBForm9v2016Block1 extends Indicator2D {
     public void initialize(){
         this.getIndicatorFilters().setUseIniTreatmentDate(false);
         this.getIndicatorFilters().setUseRegistrationDate(true);
+
+        suportedStates = Arrays.asList(reportStates);
 
         if(rowKeys == null || rowKeys.size() == 0){
             rowKeys.put(DrugResistanceType.MONO_RESISTANCE, OTHER_ROW);
@@ -62,96 +70,88 @@ public class TBForm9v2016Block1 extends Indicator2D {
     protected void createIndicators() {
         initializeInterface();
 
-        List<Object[]> result = null;
-        String query = "";
+        List<Object[]> result;
+        String query;
 
-        query = "select ar, p.gender, c.drugResistanceType, count(*) "
-                + " from TbCase c, AgeRange ar join c.patient p "
-                + getHQLWhere() + " and ar.workspace.id = " + getWorkspace().getId().toString() + " and (c.age >= ar.iniAge and c.age <= ar.endAge) "
-                + " and c.diagnosisType = 1 and c.classification = 1 and c.treatmentPeriod.iniDate is not null " // confirmed DRTB cases not waiting treatment
-                + " group by ar, p.gender, c.drugResistanceType ";
+        query = "select c.diagnosisType, c.state, c.drugResistanceType, count(*) "
+                + " from TbCase c join c.patient p "
+                + getHQLWhere() + " and c.classification = 1 " // DRTB cases
+                + " group by c.diagnosisType, c.state, c.drugResistanceType ";
         result = entityManager.createQuery(query).getResultList();
-        populateInterfaceRowsConfCases(result);
-
-        query = "select ar, p.gender, count(*) "
-                + " from TbCase c, AgeRange ar join c.patient p "
-                + getHQLWhere() + " and ar.workspace.id = " + getWorkspace().getId().toString() + " and (c.age >= ar.iniAge and c.age <= ar.endAge) "
-                + " and c.diagnosisType = 0 and c.classification = 1 and c.treatmentPeriod.iniDate is not null " // presumptive DRTB cases not waiting treatment
-                + " group by ar, p.gender ";
-        result = entityManager.createQuery(query).getResultList();
-        populateInterfaceRowsPresCases(result);
+        populateInterfaceRowsCases(result);
     }
 
-    private void populateInterfaceRowsConfCases(List<Object[]> data){
+    private void populateInterfaceRowsCases(List<Object[]> data){
+        Map<String, String> msgs = Messages.instance();
+
         for(Object[] o : data){
-            AgeRange ar = (AgeRange)o[0];
-            Gender g = (Gender)o[1];
+            DiagnosisType dt = (DiagnosisType) o[0];
+            CaseState cs = (CaseState)o[1];
             DrugResistanceType dr = (DrugResistanceType) o[2];
             Long qtd = (Long) o[3];
 
-            addValue(g.name() + ar.toString(), g.getAbbrev(), rowKeys.get(dr), qtd.floatValue());
+            String csColumn = msgs.get(cs.getKey());
 
-            //total column
-            addValue(g.name() + TOTAL_COLUMN, g.getAbbrev(), rowKeys.get(dr), qtd.floatValue());
+            if(DiagnosisType.SUSPECT.equals(dt)){
+                if(isSupportedState(cs)) {
+                    //enrroled as presumptive row
+                    addValue(csColumn, ENRR_PRESUMPTIVE_ROW, qtd.floatValue());
+                    addValue(TOTAL_COLUMN, ENRR_PRESUMPTIVE_ROW, qtd.floatValue());
+                }
 
-            //sub total row
-            addValue(g.name() + ar.toString(), g.getAbbrev(), SUBTOTAL_ROW, qtd.floatValue());
-            addValue(g.name() + TOTAL_COLUMN, g.getAbbrev(), SUBTOTAL_ROW, qtd.floatValue());
+                // Total registered column
+                addValue(TOTAL_REGISTERED_COLUMN, ENRR_PRESUMPTIVE_ROW, qtd.floatValue());
+            }else {
+                if(isSupportedState(cs)) {
+                    addValue(csColumn, rowKeys.get(dr), qtd.floatValue());
 
-            //enrroled as confirmed row
-            addValue(g.name() + ar.toString(), g.getAbbrev(), ENRR_CONFIRMED_ROW, qtd.floatValue());
-            addValue(g.name() + TOTAL_COLUMN, g.getAbbrev(), ENRR_CONFIRMED_ROW, qtd.floatValue());
+                    //total column
+                    addValue(TOTAL_COLUMN, rowKeys.get(dr), qtd.floatValue());
 
-            //grand total row
-            addValue(g.name() + ar.toString(), g.getAbbrev(), GRANT_TOTAL_ROW, qtd.floatValue());
-            addValue(g.name() + TOTAL_COLUMN, g.getAbbrev(), GRANT_TOTAL_ROW, qtd.floatValue());
-        }
-    }
+                    //sub total row
+                    addValue(csColumn, SUBTOTAL_ROW, qtd.floatValue());
+                    addValue(TOTAL_COLUMN, SUBTOTAL_ROW, qtd.floatValue());
 
-    private void populateInterfaceRowsPresCases(List<Object[]> data){
-        for(Object[] o : data){
-            AgeRange ar = (AgeRange)o[0];
-            Gender g = (Gender)o[1];
-            Long qtd = (Long) o[2];
+                    //enrroled as confirmed row
+                    addValue(csColumn, ENRR_CONFIRMED_ROW, qtd.floatValue());
+                    addValue(TOTAL_COLUMN, ENRR_CONFIRMED_ROW, qtd.floatValue());
 
-            //enrroled as presumptive row
-            addValue(g.name() + ar.toString(), g.getAbbrev(), ENRR_PRESUMPTIVE_ROW, qtd.floatValue());
-            addValue(g.name() + TOTAL_COLUMN, g.getAbbrev(), ENRR_PRESUMPTIVE_ROW, qtd.floatValue());
+                    //grand total row
+                    addValue(csColumn, GRANT_TOTAL_ROW, qtd.floatValue());
+                    addValue(TOTAL_COLUMN, GRANT_TOTAL_ROW, qtd.floatValue());
+                }
+
+                // Total registered column
+                addValue(TOTAL_REGISTERED_COLUMN, ENRR_CONFIRMED_ROW, qtd.floatValue());
+                addValue(TOTAL_REGISTERED_COLUMN, rowKeys.get(dr), qtd.floatValue());
+                addValue(TOTAL_REGISTERED_COLUMN, SUBTOTAL_ROW, qtd.floatValue());
+                addValue(TOTAL_REGISTERED_COLUMN, GRANT_TOTAL_ROW, qtd.floatValue());
+            }
         }
     }
 
     private void initializeInterface(){
-        int position = 0;
-        List<AgeRange> ars = ageRangeHome.getItems();
+        Map<String, String> msgs = Messages.instance();
+        int position = -1;
+        List<CaseState> states = Arrays.asList(this.reportStates);
 
-        while(position <= ars.size()) {
-            String superColumn = position == ars.size() ? TOTAL_COLUMN : ars.get(position).toString();
+        while(position <= states.size()) {
+            String column = position < 0 ? TOTAL_REGISTERED_COLUMN : position == states.size() ? TOTAL_COLUMN : msgs.get(states.get(position).getKey());
 
-            addValue(Gender.MALE.name() + superColumn, "M", ENRR_CONFIRMED_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", ENRR_CONFIRMED_ROW, new Float(0));
-
-            addValue(Gender.MALE.name() + superColumn, "M", MDR_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", MDR_ROW, new Float(0));
-
-            addValue(Gender.MALE.name() + superColumn, "M", XDR_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", XDR_ROW, new Float(0));
-
-            addValue(Gender.MALE.name() + superColumn, "M", RR_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", RR_ROW, new Float(0));
-
-            addValue(Gender.MALE.name() + superColumn, "M", OTHER_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", OTHER_ROW, new Float(0));
-
-            addValue(Gender.MALE.name() + superColumn, "M", SUBTOTAL_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", SUBTOTAL_ROW, new Float(0));
-
-            addValue(Gender.MALE.name() + superColumn, "M", ENRR_PRESUMPTIVE_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", ENRR_PRESUMPTIVE_ROW, new Float(0));
-
-            addValue(Gender.MALE.name() + superColumn, "M", GRANT_TOTAL_ROW, new Float(0));
-            addValue(Gender.FEMALE.name() + superColumn, "F", GRANT_TOTAL_ROW, new Float(0));
+            addValue(column, ENRR_CONFIRMED_ROW, new Float(0));
+            addValue(column, MDR_ROW, new Float(0));
+            addValue(column, XDR_ROW, new Float(0));
+            addValue(column, RR_ROW, new Float(0));
+            addValue(column, OTHER_ROW, new Float(0));
+            addValue(column, SUBTOTAL_ROW, new Float(0));
+            addValue(column, ENRR_PRESUMPTIVE_ROW, new Float(0));
+            addValue(column, GRANT_TOTAL_ROW, new Float(0));
 
             position++;
         }
+    }
+
+    private boolean isSupportedState(CaseState state){
+        return suportedStates.contains(state);
     }
 }
