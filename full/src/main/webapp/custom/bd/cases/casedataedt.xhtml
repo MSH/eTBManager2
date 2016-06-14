@@ -227,7 +227,7 @@
 
     <s:decorate template="/layout/edit.xhtml" rendered="#{tbcasebd.classification=='DRTB'}">
     	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
-    	<h:selectOneMenu value="#{tbcasebd.drugResistanceType}" >
+    	<h:selectOneMenu value="#{tbcasebd.drugResistanceType}" required="true">
     		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
     		<s:convertEnum />
     	</h:selectOneMenu>
