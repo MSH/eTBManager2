@@ -75,7 +75,8 @@ public class TBForm8v2016Block3 extends Indicator2D {
 
         //Generate Registration Group numbers
         result = entityManager.createQuery("select c.infectionSite, c.caseDefinition, c.patientType, c.age, count(*) from TbCase c join c.patient p "
-                + getHQLWhere() + " group by c.infectionSite, c.caseDefinition, c.patientType, c.age ")
+                + getHQLWhere() + " and c.infectionSite is not null and c.caseDefinition is not null and c.patientType is not null and c.age is not null " // prevent null pointer
+                + " group by c.infectionSite, c.caseDefinition, c.patientType, c.age ")
                 .getResultList();
         for(Object[] o : result){
             InfectionSite is = (InfectionSite) o[0];

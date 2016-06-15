@@ -57,6 +57,7 @@ public class TBForm8v2016Block1 extends Indicator2D {
                 + " from TbCase c, AgeRange ar join c.patient p "
                 + getHQLWhere() + " and ar.workspace.id = " + getWorkspace().getId().toString() + " and (c.age >= ar.iniAge and c.age <= ar.endAge) "
                 + " and c.diagnosisType = 1 and c.classification = 1 and c.treatmentPeriod.iniDate is not null " // confirmed DRTB cases not waiting treatment
+                + " and p.gender is not null and c.drugResistanceType is not null " // prevent null pointer
                 + " group by ar, p.gender, c.drugResistanceType ";
         result = entityManager.createQuery(query).getResultList();
         populateInterfaceRowsConfCases(result);
@@ -65,6 +66,7 @@ public class TBForm8v2016Block1 extends Indicator2D {
                 + " from TbCase c, AgeRange ar join c.patient p "
                 + getHQLWhere() + " and ar.workspace.id = " + getWorkspace().getId().toString() + " and (c.age >= ar.iniAge and c.age <= ar.endAge) "
                 + " and c.diagnosisType = 0 and c.classification = 1 and c.treatmentPeriod.iniDate is not null " // presumptive DRTB cases not waiting treatment
+                + " and p.gender is not null " // prevent null pointer
                 + " group by ar, p.gender ";
         result = entityManager.createQuery(query).getResultList();
         populateInterfaceRowsPresCases(result);

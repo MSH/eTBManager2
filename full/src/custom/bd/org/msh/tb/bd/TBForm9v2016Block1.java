@@ -76,6 +76,7 @@ public class TBForm9v2016Block1 extends Indicator2D {
         query = "select c.diagnosisType, c.state, c.drugResistanceType, count(*) "
                 + " from TbCase c join c.patient p "
                 + getHQLWhere() + " and c.classification = 1 " // DRTB cases
+                + " and c.diagnosisType is not null and c.state is not null " // prevent null pointer
                 + " group by c.diagnosisType, c.state, c.drugResistanceType ";
         result = entityManager.createQuery(query).getResultList();
         populateInterfaceRowsCases(result);

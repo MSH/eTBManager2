@@ -8,10 +8,7 @@ import org.msh.tb.entities.enums.*;
 import org.msh.tb.indicators.core.Indicator2D;
 
 import javax.persistence.EntityManager;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Name("TBForm9v2016Block2")
 public class TBForm9v2016Block2 extends Indicator2D {
@@ -38,13 +35,14 @@ public class TBForm9v2016Block2 extends Indicator2D {
             PatientType.HIV_INFECTED_WITHSS_PREVIOUSLY_TREATED
     };
 
+    private final String GRAND_TOTAL_ROW = "Grand Total";
     private final String TOTAL_COLUMN = "Total";
     private final String TOTAL_REGISTERED_COLUMN = "Total number of DR TB patients registered during the quarter";
 
     private List<CaseState> suportedStates;
     private List<PatientType> notDetailedPatientTypes;
 
-    protected static final CaseState[] reportStates = {
+    private static final CaseState[] reportStates = {
             CaseState.CURED,
             CaseState.TREATMENT_COMPLETED,
             CaseState.FAILED,
@@ -76,6 +74,7 @@ public class TBForm9v2016Block2 extends Indicator2D {
         query = "select c.patientType, c.infectionSite, c.caseDefinition, c.state, count(*) "
                 + " from TbCase c join c.patient p "
                 + getHQLWhere() + " and c.classification = 1 and c.diagnosisType = 1 " // confirmed DRTB cases
+                + " and c.patientType is not null and c.infectionSite is not null and c.caseDefinition is not null and c.state is not null "// prevent null pointer
                 + " group by c.patientType, c.infectionSite, c.caseDefinition, c.state ";
         result = entityManager.createQuery(query).getResultList();
         populateInterfaceRowsCases(result);
@@ -92,11 +91,23 @@ public class TBForm9v2016Block2 extends Indicator2D {
             Long qtd = (Long) o[4];
 
             addValue(TOTAL_REGISTERED_COLUMN, msgs.get(pt.getKey()), qtd.floatValue());
+            addValue(TOTAL_REGISTERED_COLUMN, GRAND_TOTAL_ROW, qtd.floatValue());
 
-            if(notDetailedPatientTypes.contains(pt)) {
-                addValue(msgs.get(cs.getKey()), msgs.get(pt.getKey()), qtd.floatValue());
-                //TODO: add to grandtotal row
-                addValue(TOTAL_COLUMN, msgs.get(pt.getKey()), qtd.floatValue());
+            if(suportedStates.contains(cs)) {
+                if (notDetailedPatientTypes.contains(pt)) {
+                    addValue(msgs.get(cs.getKey()), msgs.get(pt.getKey()), qtd.floatValue());
+                    addValue(msgs.get(cs.getKey()), GRAND_TOTAL_ROW, qtd.floatValue());
+
+                    addValue(TOTAL_COLUMN, msgs.get(pt.getKey()), qtd.floatValue());
+                    addValue(TOTAL_COLUMN, GRAND_TOTAL_ROW, qtd.floatValue());
+                }else{
+                    String row = msgs.get(pt.getKey()) + " - " + msgs.get(is.getKey()) + (InfectionSite.EXTRAPULMONARY.equals(is) ? "" : " - " + msgs.get(cd.getKey()));
+                    addValue(msgs.get(cs.getKey()), row, qtd.floatValue());
+                    addValue(msgs.get(cs.getKey()), GRAND_TOTAL_ROW, qtd.floatValue());
+
+                    addValue(TOTAL_COLUMN, row, qtd.floatValue());
+                    addValue(TOTAL_COLUMN, GRAND_TOTAL_ROW, qtd.floatValue());
+                }
             }
         }
 
@@ -114,11 +125,25 @@ public class TBForm9v2016Block2 extends Indicator2D {
                 addValue(column, msgs.get(pt.getKey()), new Float(0));
             }
 
+            //Just to simplify code understanding
+            ArrayList<String> otherRows = new ArrayList<String>();
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_UNKNOWN_HISTORY.getKey()) + " - " + msgs.get(InfectionSite.PULMONARY.getKey()) + " - " + msgs.get(CaseDefinition.CLINICALLY_DIAGNOSED.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_NEW.getKey()) + " - " + msgs.get(InfectionSite.PULMONARY.getKey()) + " - " + msgs.get(CaseDefinition.CLINICALLY_DIAGNOSED.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_PREVIOUSLY_TREATED.getKey()) + " - " + msgs.get(InfectionSite.PULMONARY.getKey()) + " - " + msgs.get(CaseDefinition.CLINICALLY_DIAGNOSED.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_UNKNOWN_HISTORY.getKey()) + " - " + msgs.get(InfectionSite.EXTRAPULMONARY.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_NEW.getKey()) + " - " + msgs.get(InfectionSite.EXTRAPULMONARY.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_PREVIOUSLY_TREATED.getKey()) + " - " + msgs.get(InfectionSite.EXTRAPULMONARY.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_UNKNOWN_HISTORY.getKey()) + " - " + msgs.get(InfectionSite.PULMONARY.getKey()) + " - " + msgs.get(CaseDefinition.BACTERIOLOGICALLY_CONFIRMED.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_NEW.getKey()) + " - " + msgs.get(InfectionSite.PULMONARY.getKey()) + " - " + msgs.get(CaseDefinition.BACTERIOLOGICALLY_CONFIRMED.getKey()));
+            otherRows.add(msgs.get(PatientType.DRTB_OTHER_PREVIOUSLY_TREATED.getKey()) + " - " + msgs.get(InfectionSite.PULMONARY.getKey()) + " - " + msgs.get(CaseDefinition.BACTERIOLOGICALLY_CONFIRMED.getKey()));
+
+            for(String row : otherRows){
+                addValue(column, row, new Float(0));
+            }
+
+            addValue(column, GRAND_TOTAL_ROW, new Float(0));
+
             position++;
         }
-    }
-
-    private boolean isSupportedState(CaseState state){
-        return suportedStates.contains(state);
     }
 }
