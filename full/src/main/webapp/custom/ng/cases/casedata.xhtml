@@ -51,6 +51,10 @@
 		<h:panelGroup id="leftmenu" styleClass="vertical-menu">
 			<h:form styleClass="vertical-menu">
 
+                <s:link view="/cases/suspectfollowup.xhtml" rendered="#{caseHome.suspectFollowupAvailable}">
+                    <i class="icon-double-angle-right"/>#{messages['cases.suspect.followup']}
+                </s:link>
+
 				<h:commandLink action="#{caseHome.remove}"
 							   onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"
 							   rendered="#{caseHome.canRemoveCaseData}">
