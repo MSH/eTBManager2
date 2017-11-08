@@ -52,6 +52,7 @@ A development environment of your choice (IntelliJ recommended)
 The source code is stored in a Git repository.
 To download the code, issue the git command.
 > git clone xxxxxxxxxxxxxxxxxxxxxx
+
 You will need a user name and password for that.
 Inside the repository, there are two main branches: master and development. The master contains the stable version, and should be merged with stable versions achieved in the development branch. So, if you want to change the code, move to the development branch:
 > git checkout development
