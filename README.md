@@ -56,6 +56,7 @@ To download the code, issue the git command.
 You will need a user name and password for that.
 Inside the repository, there are two main branches: master and development. The master contains the stable version, and should be merged with stable versions achieved in the development branch. So, if you want to change the code, move to the development branch:
 > git checkout development
+
 When you finish your changes, perform the following git sequence (as described in the git documentation):
 Add all changed files to be committed
 
