@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+				xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	<script src="#{request.contextPath}/js/jquery.overlabel.js" type="text/javascript" />
+
+	<div id="divpacname" class="prop">
+
+		<s:label styleClass="name" style="#{empty labelstyle? '': labelstyle}">
+			<ui:insert name="label"/>
+			<s:span style="color:red;" rendered="#{required or redasterisk}">*</s:span>
+		</s:label>
+
+        <span class="value #{invalid?'fielderror':''}">
+            <s:validateAll>
+
+				<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='FULLNAME'}">
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.fullname']}" styleClass="over"/>
+						<h:inputText id="pacname" value="#{patientdata.name}" style="width:300px;#{fieldStyle}" required="#{required}"/>
+					</s:decorate>
+				</s:fragment>
+
+				<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='FIRSTSURNAME'}">
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.firstname']}" styleClass="over"/>
+						<h:inputText id="pacname" value="#{patientdata.name}" style="width:120px;margin-right:6px;#{fieldStyle}" required="#{required}"/>
+					</s:decorate>
+
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.surname']}" styleClass="over" />
+						<!-- <h:inputText id="midname" value="#{patientdata.middleName}" style="width:120px;#{fieldStyle}" /> -->
+						<h:inputText id="paclastname" value="#{patientdata.lastName}" style="width:120px;#{fieldStyle}" />
+					</s:decorate>
+				</s:fragment>
+
+				<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='FIRST_MIDDLE_LASTNAME'}">
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.firstname']}" styleClass="over" />
+						<h:inputText id="pacname" value="#{patientdata.name}" style="width:120px;margin-right:6px;" required="#{required}"/>
+					</s:decorate>
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.middleName']}" styleClass="over" />
+						<h:inputText id="pacmidname" value="#{patientdata.middleName}" style="width:120px;margin-right:6px;" />
+					</s:decorate>
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.lastName']}" styleClass="over" />
+						<h:inputText id="paclastname" value="#{patientdata.lastName}" style="width:120px;" />
+					</s:decorate>
+				</s:fragment>
+
+				<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='LAST_FIRST_MIDDLENAME' || defaultWorkspace.patientNameComposition=='LAST_FIRST_MIDDLENAME_WITHOUT_COMMAS'}">
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.lastName']}" styleClass="over" />
+						<h:inputText id="paclastname" value="#{patientdata.lastName}" style="width:120px;" />
+					</s:decorate>
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.firstname']}" styleClass="over" />
+						<h:inputText id="pacname" value="#{patientdata.name}" style="width:120px;margin-right:6px;" required="#{required}"/>
+					</s:decorate>
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.middleName']}" styleClass="over" />
+						<h:inputText id="pacmidname" value="#{patientdata.middleName}" style="width:120px;margin-right:6px;" />
+					</s:decorate>
+				</s:fragment>
+
+				<s:fragment rendered="#{defaultWorkspace.patientNameComposition=='SURNAME_FIRSTNAME'}">
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.surname']}" styleClass="over" />
+						<h:inputText id="pacmidname" value="#{patientdata.middleName}" style="width:120px;" />
+					</s:decorate>
+
+					<s:decorate styleClass="label">
+						<s:label value="#{messages['Patient.firstname']}" styleClass="over"/>
+						<h:inputText id="pacname" value="#{patientdata.name}" style="width:120px;margin-right:6px;" required="#{required}"/>
+					</s:decorate>
+				</s:fragment>
+
+			</s:validateAll>
+        </span>
+
+		<s:message styleClass="error"/>
+
+	</div>
+	<rich:jQuery selector="#divpacname .label > label" query="labelOver('over');" />
+
+</ui:composition>

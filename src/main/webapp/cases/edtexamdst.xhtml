@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/layout/template_new.xhtml">
+
+    <ui:param name="title" value="#{messages['cases.examdst']}" />
+    <ui:param name="left" value="0" />
+
+    <ui:param name="topmenu" value="0" />
+    <ui:param name="labelstyle" value="width:200px;" />
+    <ui:param name="examTemplateWrapper" value="/cases/editlabexam-template.xhtml" />
+
+
+    <ui:define name="content">
+
+        <ui:decorate template="/layout/exams/edtdst.xhtml" />
+
+    </ui:define>
+
+</ui:composition>

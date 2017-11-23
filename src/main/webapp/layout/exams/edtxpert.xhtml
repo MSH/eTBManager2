@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+        >
+
+<ui:param name="title" value="#{messages['cases.examxpert']}" />
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:200px" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="examHome" value="#{examXpertHome}" />
+
+
+<s:decorate template="#{examTemplateWrapper}" id="dec2">
+
+    <s:decorate template="/layout/dateedit.xhtml" id="releasedec">
+    	<ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+    	<ui:param name="edtid" value="dtrelease" />
+    	<ui:param name="required" value="false" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{examGenexpert.dateRelease}" />
+		<ui:param name="id" value="daterelease"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" id="resultdec">
+    	<ui:define name="label">#{messages['cases.details.result']}:
+    	</ui:define>
+        <ui:param name="redasterisk" value="#{true}"/>
+    	<h:selectOneMenu id="resultfield" value="#{examGenexpert.result}" required="false" onchange="examResultChanged(this)">
+    		<s:selectItems value="#{examXpertHome.genexpertResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+	<rich:jQuery selector="#cbres" query="change( function(){ examResultChanged(this); })" />
+	<rich:jQuery selector="#cbres" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
+	
+	<div id="pnltbdet">
+	 <s:decorate template="/layout/edit.xhtml" id="rifresultdec">
+    	<ui:define name="label">#{messages['cases.details.result']}:
+    		<s:span style="color:red;">*</s:span>
+    	</ui:define>
+    	<h:selectOneMenu id="rifres" value="#{examGenexpert.rifResult}">
+    		<s:selectItems value="#{examXpertHome.rifResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+    </div>
+
+<script type="text/javascript">
+<!--
+function examResultChanged(cb, immediate) {
+	var s = cb.options[cb.selectedIndex].value;
+	if (s=='TB_DETECTED')
+	     jQuery('#pnltbdet').slideDown(immediate?0:500)
+	else jQuery('#pnltbdet').slideUp(immediate?0:500);
+}
+
+function clearHiddenFields() {
+	document.getElementById('dec1:dec2:dec3:formexam:releasedec:dtreleaseInputDate').value = '';
+	document.getElementById('dec1:dec2:dec3:formexam:resultdec:resultfield').options[0].selected = "true";
+	document.getElementById('dec1:dec2:dec3:formexam:rifresultdec:rifres').options[0].selected = "true";
+}
+-->
+</script>
+
+</s:decorate>
+
+</ui:composition>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="24.1" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="secDrugsReceived" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="24.2" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="rifampcinResistance" type="boolean" />
+        </addColumn>
+        <sql>
+            update tbcase set rifampcinResistance = false where tbcase.drugResistanceType != 4;
+            update tbcase set rifampcinResistance = true where tbcase.drugResistanceType = 4;
+        </sql>
+    </changeSet>
+
+    <changeSet id="24.2.1" author="msantos">
+        <sql>
+            update tbcase set rifampcinResistance = false where tbcase.drugResistanceType is null;
+        </sql>
+    </changeSet>
+
+    <changeSet id="24.3" author="msantos">
+        <addColumn tableName="exammicroscopy">
+            <column name="otherSampleType" type="varchar(50)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="24.4" author="msantos">
+        <addColumn tableName="exammicroscopy">
+            <column name="visualAppearance" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="24.5" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="previouslytreatedtype" type="int" />
+        </addColumn>
+        <sql>
+            <!-- TB cases selected as Other changes to Unknown previous TB treatment history -->
+            update tbcase set patientType = 48  where patientType = 5 and classification = 0;
+
+            <!-- TB cases selected as After default changes to PreviouslyTreated, and the
+                previouslytreated type changes to Treatment after loss to follow-up -->
+            update tbcase set previouslytreatedtype = 46  where patientType = 2 and classification = 0;
+            update tbcase set patientType = 44  where patientType = 2 and classification = 0;
+
+            <!-- TB cases selected as Failure 1st treatment or Failure re-treatment
+                changes to PreviouslyTreated, and the previouslytreated type changes to Treatment after failure -->
+            update tbcase set previouslytreatedtype = 45  where (patientType = 3 or patientType = 4) and classification = 0;
+            update tbcase set patientType = 44  where (patientType = 3 or patientType = 4) and classification = 0;
+
+            <!-- TB cases selected as Relapse changes to PreviouslyTreated, and the previouslytreated type changes to Relapse -->
+            update tbcase set previouslytreatedtype = 1  where patientType = 1 and classification = 0;
+            update tbcase set patientType = 44  where patientType = 1 and classification = 0;
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="24.6" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="caseDefinition" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="24.7" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="lastBmuDateTbRegister" type="date" />
+        </addColumn>
+
+        <addColumn tableName="tbcase">
+            <column name="lastBmuTbRegistNumber" type="varchar(50)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="24.8" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="movedSecondLineTreatment" type="boolean" />
+        </addColumn>
+        <sql>
+            update tbcase set movedSecondLineTreatment = false;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

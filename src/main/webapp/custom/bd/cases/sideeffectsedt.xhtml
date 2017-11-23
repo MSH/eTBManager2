@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.sideeffects']}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:160px" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate id="caseBody" template="/layout/casebody.xhtml">
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
+
+			<s:decorate template="/layout/editfield.xhtml" >
+		    	<ui:define name="label">#{messages['cases.sideeffects.desc']}:</ui:define>
+		    	<ui:param name="required" value="true" />
+		    	<ui:param name="id" value="sideEffect" />
+		    	<ui:param name="field" value="#{caseSideEffectBD.sideEffect}" />
+		    	<ui:param name="list" value="#{fieldsQuery.sideEffects}" />
+	    	</s:decorate>
+
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['Substance']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffectBD.substance}">
+						<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
+						<s:convertEntity />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['Substance']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffectBD.substance2}">
+					<s:selectItems var="s" value="#{substances}" label="#{s.abbrevName}" noSelectionLabel="-"/>
+					<s:convertEntity />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/dateedit.xhtml">
+				<ui:define name="label">#{messages['sideeffect.inidate']}:</ui:define>
+				<ui:param name="datefield" value="#{caseSideEffectBD.effectSt}" />
+				<ui:param name="required" value="true" />
+				<ui:param name="edtid" value="inidate" />
+				<ui:param name="future" value="false" />
+				<ui:param name="checkDeathDate" value="true" />
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.sideeffects.grade']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffectBD.grade}" >
+						<s:selectItems var="s" value="#{globalLists_bd.getSideEffectGradings()}" noSelectionLabel="-" label="#{messages[s.key]}"/>
+						<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.sideeffects.seriousness']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffectBD.seriousness}" >
+						<s:selectItems var="s" value="#{globalLists_bd.getSideEffectSeriousnesses()}" noSelectionLabel="-" label="#{messages[s.key]}"/>
+						<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.sideeffects.action']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffectBD.actionTaken}" >
+						<s:selectItems var="s" value="#{globalLists_bd.getSideEffectActions()}" noSelectionLabel="-" label="#{messages[s.key]}"/>
+						<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label">#{messages['cases.sideeffects.outcome']}:</ui:define>
+				<h:selectOneMenu value="#{caseSideEffectBD.outcome}" >
+						<s:selectItems var="s" value="#{globalLists_bd.getSideEffectOutcomes()}" noSelectionLabel="-" label="#{messages[s.key]}"/>
+						<s:convertEnum />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate template="/layout/dateedit.xhtml">
+				<ui:define name="label">#{messages['sideeffect.enddate']}:</ui:define>
+				<ui:param name="datefield" value="#{caseSideEffectBD.effectEnd}" />
+				<ui:param name="required" value="false" />
+				<ui:param name="future" value="false" />
+				<ui:param name="edtid" value="enddate" />
+				<ui:param name="checkDeathDate" value="true" />
+			</s:decorate>
+					    
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+		    	<h:inputTextarea value="#{caseSideEffectBD.comment}" style="width:500px;height:80px;" />
+		    </s:decorate>
+	</div>		
+		    
+	<div class="form-footer">
+		<a:commandLink action="#{sideEffectBDHome.save}" styleClass="button" reRender="main" onclick="if(!disableButton(this))return false;">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink> 
+
+	    <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+	       	<f:param name="id" value="#{caseHome.id}"/>
+	       	<span>#{messages['form.cancel']}</span>
+	    </s:link>
+	</div>
+</h:form>
+</s:decorate>
+</ui:define>
+
+</ui:composition>  

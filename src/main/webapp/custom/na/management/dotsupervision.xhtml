@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.dotsupervision']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:param name="indicator" value="#{dotSupervisionIndicator}" />
+<ui:param name="table" value="#{dotSupervisionIndicator.table}" />
+<ui:param name="useclassification" value="0" />
+
+
+<ui:define name="head">
+	<script type="text/javascript" src="#{request.contextPath}/js/json2.js"></script>
+	<script type="text/javascript" src="#{request.contextPath}/js/swfobject.js"></script>
+</ui:define>
+
+<ui:define name="naveg">
+	<s:link value="#{messages['manag']}" view="/custom/na/management/index.html" propagation="none" />
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main">
+<table style="border:2px solid #f0f0f0;" width="100%" cellspacing="4" cellpadding="4">
+<tr><td bgcolor="#f8f8f8">
+	<ui:include src="/custom/na/management/dotsupervisionfilters.xhtml" />
+	<!-- /custom/na/management/dotsupervisionfilters.xhtml" -->
+
+</td></tr>
+
+<!--  treatment result part -->
+<tr><td align="left">
+
+<h:panelGroup id="indicator">
+	<s:fragment rendered="#{indicatorController.executing}">
+	<div class="paragraph">#{messages['manag.ind.starttreat.title3']}</div>
+	<br/>
+	<table class="table1" width="100%">
+		<tr>
+			<th align="left">
+				#{messages['Patient']}
+			</th>
+			<th>#{messages['TbCase.registrationCode']}
+			</th>
+		<ui:repeat value="#{table.columns}" var="col">
+			<th>
+				#{col.title}
+			</th>
+		</ui:repeat>
+		</tr>
+		<ui:repeat value="#{table.rows}" var="row">
+		<tr>
+			<td class="colb">
+				#{row.title}
+			</td>
+			<td>
+				#{row.id.displayCaseNumber}
+			</td>
+			<ui:repeat value="#{row.cells}" var="val">
+			<td class="colcb">
+				<h:outputText value="#{val.value}" rendered="#{val.column.id==5}">
+					<f:convertNumber pattern="0.00"/>
+				</h:outputText>
+				<h:outputText value="#{val.value}" rendered="#{val.column.id!=5}">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</ui:repeat>
+		</tr>
+		</ui:repeat>
+	</table>
+	</s:fragment>
+
+</h:panelGroup>
+
+</td></tr>
+
+
+</table>
+<rich:jQuery selector="#charttypediv" query="hide()" />
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

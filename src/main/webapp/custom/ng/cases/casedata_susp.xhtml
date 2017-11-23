@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+        >
+
+
+
+    <h1>#{title}</h1>
+    <h:form id="main">
+        <s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+
+            <ui:define name="state-content">
+                <!--<s:div rendered="#{tbcase.state=='TRANSFERRING'}" styleClass="icon-hu-big" style="margin-top:1px;font-size:11px;max-width:500px;" >-->
+                <s:div rendered="#{tbcase.state=='TRANSFERRING'}" style="margin-top:1px;font-size:11px;max-width:500px;" >
+                    <b style="padding-right:4px;">#{messages['meds.movs.destunit']}:</b> <h:outputText value="#{caseHome.transferInHealthUnit.tbunit.name}" />
+                    <br/>
+                    <s:link value="#{messages['cases.move.regtransferin']}" view="/cases/casetransferin.xhtml"
+                            style="position:relative;" propagation="none"
+                            styleClass="right-icon">
+                        <f:param name="id" value="#{caseHome.id}" />
+                    </s:link>
+                    <br/>
+                    <a:commandLink value="#{messages['cases.move.cancel']}"
+                                   onclick="if (!confirm('#{caseMoveHome.confirmMsgRollbackTransfer}')) return false"
+                                   action="#{caseMoveHome.rollbackTransferOut}"
+                                   reRender="main,leftmenu,messages"
+                                   style="position:relative" styleClass="right-icon" >
+                        <f:param name="name" value="#{caseHome.transferInHealthUnit.tbunit.name}"/>
+                    </a:commandLink>
+                </s:div>
+            </ui:define>
+
+            <ui:include src="/custom/ng/cases/issues.xhtml" />
+
+            <div class="spacer" />
+
+            <rich:tabPanel switchType="client" id="tabCase">
+                <rich:tab label="#{messages['cases.details.case']}" id="tab1" ontabenter="updateTab(1)">
+                    <h:panelGroup id="pnltab1">
+                        <s:decorate template="data_susp.xhtml" rendered="#{caseFilters.caseTab==1}"/>
+                    </h:panelGroup>
+                </rich:tab>
+
+                <rich:tab label="#{messages['cases.details.treatment']}" id="tab3" ontabenter="updateTab(3)">
+                    <h:panelGroup id="pnltab3">
+                        <s:decorate template="treatment_tb.xhtml" rendered="#{caseFilters.caseTab==3}"/>
+                    </h:panelGroup>
+                </rich:tab>
+
+                <rich:tab label="#{messages['cases.details.followup']}" id="tab2" ontabenter="updateTab(2)">
+                    <h:panelGroup id="pnltab2">
+                        <s:decorate template="followup.xhtml" rendered="#{caseFilters.caseTab==2}"/>
+                    </h:panelGroup>
+                </rich:tab>
+
+                <rich:tab label="#{messages['cases.details.report1']}" id="tab6" ontabenter="updateTab(6)">
+                    <h:panelGroup id="pnltab6">
+                        <s:decorate template="/cases/drugogram.xhtml" rendered="#{caseFilters.caseTab==6}"/>
+                    </h:panelGroup>
+                </rich:tab>
+
+            </rich:tabPanel>
+
+
+            <a:jsFunction name="updateTabContent" reRender="pnltab#{caseFilters.caseTab}">
+                <a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+            </a:jsFunction>
+            <a:jsFunction name="updateTabSelection">
+                <a:actionparam name="param1" assignTo="#{caseFilters.caseTab}" converter="javax.faces.Integer" />
+            </a:jsFunction>
+            <script type="text/javascript">
+                <!--
+                window.tabLoaded = new Array();
+                window.inicasetab = #{caseFilters.caseTab};
+                jQuery().ready(function() {
+                    initTab();
+                });
+                function initTab() {
+                    var updt=window.inicasetab==0;
+                    if (updt)
+                        window.inicasetab=1;
+                    var tabid = 'tab' + window.inicasetab;
+                    var dest = 'main:bodydiv:tab' + window.inicasetab;
+                    RichFaces.switchTab('main:bodydiv:tabCase', dest, tabid);
+                    if (updt)
+                        updateTab(window.inicasetab);
+                }
+
+                function updateTab(tabIndex) {
+                    if (window.tabLoaded[tabIndex]==undefined) {
+                        window.updateTabContent(tabIndex);
+                        window.tabLoaded[tabIndex]=1;
+                    }
+                    else updateTabSelection(tabIndex);
+                }
+                -->
+            </script>
+
+        </s:decorate>
+
+    </h:form>
+
+</ui:composition>

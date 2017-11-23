@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.mantreatment']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="naveg"  >
+	<s:link value="#{messages['cases']}" view="/cases/index.xhtml" propagation="none"/>
+</ui:define>
+
+<ui:define name="left">
+<h:form>
+	<a:commandLink value="#{messages['cases.treat.dispedt']}" onclick="showMonthYearSelectionDlg(); return false;" 
+	   rendered="#{not empty treatmentsInfoHomeNg.groups}">
+	</a:commandLink>
+</h:form>
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title} - Nigeria </h1>
+<h:form>
+
+<s:decorate template="/layout/roundrect.xhtml" style="width:750px;margin-top:10px;">
+	<ui:param name="showfooter" value="0" />
+	<ui:param name="showheader" value="0" />
+	
+	<div class="hu-icon" style="margin-bottom:10px;display:block;">
+		<b>#{treatmentsInfoHomeNg.tbunit.name}</b><br/>
+		<h:outputText value="#{treatmentsInfoHomeNg.tbunit.adminUnit.parent.name} - " rendered="#{not empty treatmentsInfoHomeNg.tbunit.adminUnit.parent}" />
+		#{treatmentsInfoHomeNg.tbunit.adminUnit.name}
+	</div>
+
+	<table style="width:99%;z-index: 100;" class="table1" >
+	<a:repeat var="grp" value="#{treatmentsInfoHomeNg.groups}">
+	
+		<tr><th colspan="6">#{messages[grp.classification.key]}
+		</th></tr>
+		<tr>
+			<th rowspan="2" align="left">#{messages['Patient']}</th>
+			<th rowspan="2" align="left">#{messages['PatientType']}</th>
+			<th rowspan="2">#{messages['TbCase.iniTreatmentDate']}</th>
+			<th colspan="3">
+				#{messages['cases.details.treatment']}
+			</th>
+		</tr>
+		<tr>
+			<th>#{messages['cases.treat.presc']}</th>
+			<th>#{messages['cases.treat.disp']}</th>
+			<th>#{messages['cases.mantreatment']}</th>
+		</tr>		
+	<a:repeat value="#{grp.treatments}" var="it">
+		<tr>
+			<td>
+				<s:link value="#{it.patientName}" view="/custom/ng/cases/casedata.xhtml" >
+					<f:param name="id" value="#{it.caseId}"/>
+				</s:link>
+			</td>
+			<td>
+				<h:outputText value="#{messages[it.patientType.key]}" />
+			</td>
+			<td align="center">
+				<h:outputText value="#{it.iniTreatmentDate}" converter="localeDateConverter" />
+			</td>
+			<td align="center">
+				<h:outputText value="#{it.numDaysPlanned}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="center">
+				<h:outputText value="#{it.numDaysDone}" rendered="#{it.numDaysDone > 0}">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			<td align="left" width="155px">
+				<s:fragment rendered="#{it.progressPoints!=null}">
+				<div class="progress-icon" style="width:#{it.progressPoints}px;height:18px;display:block;min-height:16px;float:left;margin-left:2px;margin-right:2px;border:1px solid black;">
+					<!-- &nbsp;  -->
+				</div>
+				<h:outputText value="#{it.progress}" >
+						<f:convertNumber pattern="#,###,##0.0"/>
+				</h:outputText>%
+				</s:fragment>
+			</td>
+		</tr>
+	</a:repeat>
+	</a:repeat>
+	</table>
+</s:decorate>
+
+</h:form>
+
+
+<s:decorate id="regdisp" template="/layout/monthyearselection.xhtml">
+	<ui:param name="title" value="#{messages['cases.treat.dispedt']}" />
+	<ui:param name="month" value="#{registerDispensingHome.month}" />
+	<ui:param name="year" value="#{registerDispensingHome.year}" />
+	<h:inputHidden id="unitid" type="hidden" value="#{treatmentsInfoHomeNg.tbunitId}" />
+	<a:commandLink styleClass="button"
+	onclick="openRegisterDispensingPage(); return false;" >
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+	
+	<script type="text/javascript">
+	<!--
+	function openRegisterDispensingPage() {
+		cbmonth= document.getElementById('regdisp:selmyform:datesel:cbmonth');
+		cbyear= document.getElementById('regdisp:selmyform:datesel:cbyear');
+		if (cbmonth.selectedIndex == 0) {
+			alert('#{messages['global.month']}: #{messages['javax.faces.component.UIInput.REQUIRED']}');
+			return;
+		}
+		if (cbyear.selectedIndex == 0) {
+			alert('#{messages['global.year']}: #{messages['javax.faces.component.UIInput.REQUIRED']}');
+			return;
+		}
+		month=cbmonth.options[cbmonth.selectedIndex].value;
+		year=cbyear.options[cbyear.selectedIndex].value;
+		window.location='#{request.contextPath}/custom/ng/cases/regdispensing.seam?huid=#{treatmentsInfoHomeNg.tbunitId}&month=' + month + '&year=' + year;
+	}
+	-->
+	</script>
+</s:decorate>
+
+ 
+</ui:define>
+
+</ui:composition>  

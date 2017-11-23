@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="/layout/template_new.xhtml">
+        
+<!-- <ui:param name="title" value="#{messages['form.data_edit']} - #{messages['UserProfile']}" /> -->
+<ui:param name="title" value="#{profile.id==null? messages['admin.profiles.new']: messages['admin.profiles.edt']}" />
+<ui:param name="topmenu" value="3" />
+
+
+<ui:define name="head">
+<style type="text/css">
+.checkbox {
+float: right;
+width: 80px;
+text-align: center;
+margin: auto;
+min-height: 20px;
+overflow: hidden;
+padding: 2px;
+}
+</style>
+</ui:define>
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<s:fragment rendered="#{empty profileHome.roles}">
+<div class="warn">No permission available to edit/create profile</div>
+<s:link view="/admin/profiles.seam" value="#{messages['form.return']}" styleClass="button" />
+</s:fragment>
+<h:form id="main" rendered="#{not empty profileHome.roles}" styleClass="form1">
+    
+    <div class="form-content">
+    <s:decorate template="/layout/display.xhtml" rendered="#{profile.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{profile.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:inputText id="conta" value="#{profile.name}" maxlength="100" required="true" style="width:250px;"
+        	validator="#{profileHome.validateUniqueValue}">
+        	<f:param id="field" value="name"/>
+        </h:inputText>
+    </s:decorate>
+    
+
+	<div style="width:740px;" class="table1">
+	<div class="header">
+		#{messages['UserPermission']}
+		<div class="checkbox">
+			#{messages['UserPermission.grantPermission']}
+			<br/>
+			<input type="checkbox" onclick="changeChecks(this.checked, 'chk-grant');" />
+		</div>
+		<div class="checkbox">
+			#{messages['UserPermission.canChange']}
+			<br/>
+			<input type="checkbox" onclick="changeChecks(this.checked, 'chk-change');" />
+		</div>
+	</div>
+	
+	<a:repeat value="#{profileHome.nodes}" var="it">
+		<s:decorate template="permissionnode.xhtml">
+			<ui:param name="node" value="#{it}" />
+		</s:decorate>
+		
+		<s:fragment rendered="#{not empty it.children}">
+		<div id="div#{it.uniqueName}" style="display:#{it.checked?'block':'none'}" >
+		<a:repeat value="#{it.children}" var="it2">
+		
+			<s:decorate template="permissionnode.xhtml">
+				<ui:param name="node" value="#{it2}" />
+			</s:decorate>
+		
+			<s:fragment rendered="#{not empty it2.children}">
+			<div id="div#{it2.uniqueName}" style="display:#{it2.checked?'block':'none'}" >
+			<a:repeat value="#{it2.children}" var="it3">
+		
+				<s:decorate template="permissionnode.xhtml">
+					<ui:param name="node" value="#{it3}" />
+				</s:decorate>
+			</a:repeat>
+			</div>
+			</s:fragment>
+		
+		</a:repeat>
+		</div>
+		</s:fragment>
+	</a:repeat>
+	</div>
+
+<script type="text/javascript">
+function permissionClickHandler(checkbox, divname) {
+	var b = checkbox.checked;
+	var prop = jQuery(checkbox).closest('.prop');
+	var chkelem = prop.addClass('highlight');
+	if (b) {
+		chkelem.addClass('highlight');
+		prop.find('.chk-change').show();
+	}
+	else {
+		chkelem.removeClass('highlight');
+		prop.find('.chk-change').hide();
+	}
+
+	var divelem = document.getElementById(divname);
+	if (!divelem)
+		return;
+
+	if (b)
+		jQuery(divelem).slideDown(500);
+	else
+		jQuery(divelem).slideUp(500);
+}
+</script>
+
+</div>
+	<div class="form-footer">
+            <a:commandLink action="#{profileHome.persist}" styleClass="button"
+            	onclick="if (!disableButton(this)) return false;" reRender="main,messages">
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>  
+            <s:link view="/admin/profiles.xhtml" styleClass="button-alt" >
+            	<f:param name="id" value="#{null}" />
+            	 <span>#{messages['form.cancel']}</span>
+            </s:link>
+    </div>
+
+
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+
+	<ui:include src="/layout/tablerow.xhtml" />
+
+<script type="text/javascript">
+function changeChecks(checked, elemclass) {
+	elemclass = '.' + elemclass;
+	try {
+	elemclass = eval(elemclass);
+	} catch (e) {}
+	jQuery(elemclass).attr("checked", checked);
+}
+</script>
+
+</h:form>
+</ui:define>
+        
+</ui:composition> 

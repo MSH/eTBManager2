@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.examxray']}" />
+<ui:param name="left" value="0" />
+<ui:param name="topmenu" value="0" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml">
+	<a:form id="formexam" styleClass="form1">
+	<div class="form-content">
+    <table width="100%">
+    <tr><td>
+
+    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{examXRay.date}" /> 
+    	<ui:param name="checkDeathDate" value="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbField.XRAYPRESENTATION']}:</ui:define>
+    	<h:selectOneMenu value="#{examXRay.presentation}">
+    		<s:selectItems value="#{fieldsQuery.XRayPresentations}" var="it" noSelectionLabel="-" label="#{it.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['XRayEvolution']}:</ui:define>
+    	<h:selectOneMenu value="#{examXRay.evolution}">
+    		<s:selectItems value="#{xrayEvolutions}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputText value="#{examXRay.comments}" maxlength="200" style="width:350px;"/>
+    </s:decorate>
+
+	<h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+	</td></tr>
+	</table>
+	</div>
+	
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandLink action="#{examXRayHome.persist}" styleClass="button" reRender="formexam" 
+            	onclick="if (!disableButton(this)) return false;" >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link view="/custom/ng/cases/casedata.xhtml" styleClass="button-alt">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
+    </div>
+    
+	</a:form>
+</s:decorate>
+
+
+</ui:define>
+
+</ui:composition>  

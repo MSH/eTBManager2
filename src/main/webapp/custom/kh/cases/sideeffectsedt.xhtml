@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.sideeffects']}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:160px" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<rich:jQuery selector="document" query="ready(function() {updateRows();})" />
+
+<script type="text/javascript" >
+function checkClick(obj) {
+  if (obj.checked)
+	  selectall()
+  else unselectall();
+  updateRows();
+}
+
+function updateRows() {
+	jQuery("#tblse tr").removeClass("activerow");
+	jQuery("#tblse tr input[type='text'],select").hide();
+	jQuery("#tblse tr:has(:checked) input[type='text']").show();
+	jQuery("#tblse tr:has(:checked) select").show();
+	jQuery("#tblse tr:has(:checked)").addClass("activerow");
+}
+
+function validateForm() {
+	valOk=true;
+//	jQuery("#tblse tr:has(:checked) input[type='text']")
+		//.css("background-color", "white")
+		//.each(function() { validateMedicine(this); });
+
+	if (valOk)
+		jQuery("#tblse tr:has(:checked) select[class='xpto']")
+			.css("background-color", "transparent")
+			.each(function() { validateYesNo(this); });
+	
+	return valOk;
+}
+
+function validateMedicine(edt) {
+	if ((edt.value == null) || (edt.value.length==0)) {
+			window.alert("#{messages['cases.sideeffects.medicine']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
+			jQuery(edt).css("background-color", "#FFD2B4");
+			edt.focus();
+			valOk = false;
+			return false;
+	}
+}
+
+function validateYesNo(cb) {
+	if (cb.options[cb.selectedIndex].text == '-') {
+		window.alert("#{messages['cases.sideeffects.resolved']}: #{messages['javax.faces.component.UIInput.REQUIRED']}");
+		jQuery(cb).css("background-color", "#FFD2B4");
+		cb.focus();
+		valOk = false;
+		return false;
+	}
+}
+</script>
+<p/>
+<h:form id="main" styleClass="form1">
+
+<s:decorate template="/layout/casebody.xhtml">
+
+<div class="form-content">
+<table width="100%">
+<tr><td>
+	<div id="tblse">
+	<h:dataTable value="#{sideEffectKHHome.items}" var="it" width="100%" styleClass="table1">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.desc']}" styleClass="collh" />
+			</f:facet>
+			<h:selectBooleanCheckbox value="#{it.selected}" onclick="updateRows()" />
+			#{it.item.sideEffect.value.name}
+
+		</h:column>
+		
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.month']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu value="#{it.item.month}" >
+				<f:selectItems value="#{sideEffectKHHome.months}" />
+			</h:selectOneMenu>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['cases.sideeffects.grading']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu value="#{it.item.grade}" styleClass="xpto">
+				<s:selectItems value="#{gradeListKh}" var="v" noSelectionLabel="-" label="#{messages[v.key]}"/>
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</h:column>
+		
+	</h:dataTable>
+	</div>
+
+</td></tr>
+</table>
+
+<h:outputText value="#{messages['cases.sideeffects.grading.mild']}"/><br/>
+<h:outputText value="#{messages['cases.sideeffects.grading.moderate']}"/><br/>
+<h:outputText value="#{messages['cases.sideeffects.grading.severe']}" /><br/>
+<h:outputText value="#{messages['cases.sideeffects.grading.vsevere']}" /><br/>
+</div>
+
+<div class="form-footer">
+	<a:commandLink action="#{sideEffectKHHome.save}" 
+		styleClass="button" reRender="main"
+		onclick="if (!disableButton(this)) return false;if (!validateForm()) {enableButton();return false;}">
+		<span>#{messages['form.save']}</span>
+	</a:commandLink> 
+    <s:link view="/custom/kh/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+       	<f:param name="id" value="#{caseHome.id}"/>
+       	<span>#{messages['form.cancel']}</span>
+    </s:link>
+</div>
+</s:decorate>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

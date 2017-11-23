@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+        >
+
+	<a:repeat value="#{caseFilters.classifications}" var="it">
+		<span style="margin-right:20px;">
+			<h:selectBooleanCheckbox value="#{it.selected}">
+				<a:support event="onclick" ajaxSingle="true" reRender="pnlhealthunits"/>
+			</h:selectBooleanCheckbox>
+			#{messages[it.item.key]}
+		</span>
+	</a:repeat>
+
+	<a:repeat value="#{healthUnitsQuery.adminUnits}" var="adm">
+	<table class="table1" width="100%">
+		<tr><th colspan="6">
+			<div class="text-big">#{adm.adminUnit.name}</div>
+		</th></tr>
+		<tr>
+			<th width="250px">#{messages['cases.healthUnit']}</th>
+			<th align="center">#{messages['cases.ongoing.notifs']}</th>
+			<th align="center">#{messages['CaseState.ONTREATMENT']}</th>
+			<th align="center">#{messages['cases.trasnferin']}</th>
+			<th align="center">#{messages['cases.trasnferout']}</th>
+			<th></th>
+		</tr>		
+		<a:repeat value="#{adm.items}" var="it">
+		<tr>
+			<td class="highlight"><div class="icon-hu" />#{it.unitName}</td>
+			<td align="center">#{it.casesNotifs==null?'-':it.casesNotifs}</td>
+			<td align="center">#{it.casesOnTreatment==null?'-':it.casesOnTreatment}</td>
+			<td align="center">#{it.casesTransferIn==null?'-':it.casesTransferIn}</td>
+			<td align="center">#{it.casesTransferOut==null?'-':it.casesTransferOut}</td>
+			<td align="center"><s:link value="#{messages['cases.mantreatment']}" view="/custom/na/cases/treatments.xhtml">
+					<f:param name="huid" value="#{it.unitId}"/>
+				</s:link> 
+			</td>
+		</tr>
+		</a:repeat>
+	</table>
+	<div class="spacer" />
+	</a:repeat>
+    
+</ui:composition>

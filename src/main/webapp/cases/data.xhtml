@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+        >
+<h:form>
+	<div class="form1" style="width:100%">
+	<div class="form-content">
+
+		<s:link view="/cases/caseedt.xhtml" styleClass="button-alt" onclick="disableButton(this);" 
+			style="float:right;" rendered="#{caseHome.canEditCaseData and (tbcase.state=='WAITING_TREATMENT' or tbcase.state=='ONTREATMENT' or tbcase.state=='TRANSFERRING')}">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.edit']}</span>
+		</s:link>
+
+        <ui:include src="/layout/casereginfo.xhtml" />
+
+		<h2>#{messages['cases.patientdata']}</h2>
+		<table style="border-collapse:collapse;width:100%">
+		<tr><td>
+	
+			<s:decorate template="/layout/display.xhtml">
+		    	<ui:define name="label">#{messages['Gender']}:</ui:define>
+				#{messages[tbcase.patient.gender.key]}
+			</s:decorate>
+	
+		</td></tr>
+		<tr><td>
+	
+			<s:decorate template="/layout/display.xhtml">
+		    	<ui:define name="label">#{messages['Patient.birthDate']}:</ui:define>
+		    	<h:outputText id="dt" value="#{tbcase.patient.birthDate}" converter="localeDateConverter"/>
+			</s:decorate>
+	
+		</td><td>
+	
+			<s:decorate template="/layout/display.xhtml">
+		    	<ui:define name="label">#{messages['TbCase.ageAtReg']}:</ui:define>
+		    	<h:outputText value="#{tbcase.patientAge}" style="padding-right:4px;" />#{messages['global.age']}
+			</s:decorate>
+
+		</td></tr>
+	    <tr><td colspan="2">
+			<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.nationality != null}">
+    			<ui:define name="label">#{messages['Nationality']}:</ui:define>
+	    		<h:outputText value="#{messages[tbcase.nationality.key]}" />
+			</s:decorate>
+
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.patient.motherName}">
+	    		<ui:define name="label">#{messages['Patient.motherName']}:</ui:define>
+		    	#{tbcase.patient.motherName}
+	    	</s:decorate>
+	    </td></tr>
+	    <s:fragment rendered="#{not tbcase.notifAddress.emptyy}">
+	    <tr><td colspan="2">
+    		<h2>#{messages['cases.details.addressnotif']}</h2>
+
+            <s:decorate template="/layout/display.xhtml">
+                <ui:define name="label">#{messages['Address.address']}:</ui:define>
+                #{tbcase.notifAddress.address}
+            </s:decorate>
+            <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.notifAddress.complement}">
+                <ui:define name="label">#{messages['Address.complement']}:</ui:define>
+                #{tbcase.notifAddress.complement}
+            </s:decorate>
+			<s:decorate template="/layout/audisplay.xhtml">
+				<ui:param name="adminunit" value="#{tbcase.notifAddress.adminUnit}" />
+			</s:decorate>
+			<s:decorate template="/layout/display.xhtml">
+   				<ui:define name="label">#{messages['Address.zipCode']}:</ui:define>
+   				#{tbcase.notifAddress.zipCode}
+			</s:decorate>
+		</td></tr>
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
+  		  		<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
+   		 		#{tbcase.phoneNumber}
+			</s:decorate>
+		</td>
+		<td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
+	    		<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
+    			#{tbcase.mobileNumber}
+			</s:decorate>
+		</td></tr>
+		</s:fragment>
+		<s:fragment rendered="#{tbcase.notifAddressChanged}">
+		<tr><td colspan="2">
+			<h2>#{messages['cases.details.addresscurr']}</h2>
+	
+			<s:decorate template="/layout/display.xhtml">
+    			<ui:define name="label"><div style="height:34px;">#{messages['Address.address']}:</div></ui:define>
+    			#{tbcase.currentAddress.address}
+	    		<br/>
+    			#{tbcase.currentAddress.complement}
+			</s:decorate>
+			<s:decorate template="/layout/audisplay.xhtml">
+				<ui:param name="adminunit" value="#{tbcase.currentAddress.adminUnit}" />
+			</s:decorate>
+		</td></tr>
+		<tr><td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
+    			<ui:define name="label">#{messages['TbCase.phoneNumber']}:</ui:define>
+    			#{tbcase.phoneNumber}
+			</s:decorate>
+		</td>
+		<td>
+			<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.mobileNumber}">
+    			<ui:define name="label">#{messages['TbCase.mobileNumber']}:</ui:define>
+    			#{tbcase.mobileNumber}
+			</s:decorate>
+		</td></tr>
+		</s:fragment>
+		</table>
+	</div>
+
+
+	<div class="form-content">
+		<h2>#{messages['cases.generaldata']}</h2>
+		<table style="border-collapse:collapse;width:100%;" cellpadding="1" >
+		<tr><td>
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.notificationUnit!=null}">
+	    	<ui:define name="label">#{messages['TbCase.notificationUnit']}:</ui:define>
+	    	#{tbcase.notificationUnit.name}
+		</s:decorate>
+
+		</td></tr>
+		<tr>
+		
+		<s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED'}">
+		<td>
+		<s:decorate template="/layout/display.xhtml">
+	    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+		    <h:outputText id="dt" value="#{tbcase.diagnosisDate}" converter="localeDateConverter"/>
+		</s:decorate>
+		</td>
+		</s:fragment>
+		<td>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+		#{messages[tbcase.diagnosisType.key]}
+	</s:decorate>
+	</td></tr>
+	<tr>
+	<td>
+	<s:decorate id="dt" template="/layout/display.xhtml" rendered="#{not empty tbcase.treatmentPeriod.iniDate}">
+    	<ui:define name="label">#{messages['TbCase.iniTreatmentDate']}:</ui:define>
+    	<h:outputText id="dt" value="#{tbcase.treatmentPeriod.iniDate}" converter="localeDateConverter"/>
+	</s:decorate>
+	</td></tr>
+	
+	<tr><td	colspan="2">
+		<s:fragment rendered="#{tbcase.diagnosisType == 'CONFIRMED'}">
+
+        <s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.caseDefinition}">
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.caseDefinition"/>
+            <ui:define name="label">#{messages['CaseDefinition']}:</ui:define>
+            #{messages[tbcase.caseDefinition.key]}
+        </s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{(not empty tbcase.drugResistanceType) and (tbcase.classification=='DRTB')}">
+			<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+			#{messages[tbcase.drugResistanceType.key]}
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{not empty tbcase.infectionSite}">
+    		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+    		#{messages[tbcase.infectionSite.key]}
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.infectionSite == 'PULMONARY' and tbcase.pulmonaryType!=null}">
+    		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
+    		#{tbcase.pulmonaryType}
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.infectionSite == 'EXTRAPULMONARY' and tbcase.extrapulmonaryType.value!=null}">
+    		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
+    		#{tbcase.extrapulmonaryType} <h:outputText value=" / #{tbcase.extrapulmonaryType2}" rendered="#{tbcase.extrapulmonaryType2.value != null}" />
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.patientType!=null}">
+    		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+    		#{messages[tbcase.patientType.key]}
+            <h:outputText rendered="#{tbcase.patientType == 'PREVIOUSLY_TREATED' and not empty tbcase.previouslyTreatedType}" value=" - #{messages[tbcase.previouslyTreatedType.key]} "/>
+            <h:outputText rendered="#{tbcase.patientType == 'OTHER' and not empty tbcase.patientTypeOther}" value=" - #{tbcase.patientTypeOther} "/>
+		</s:decorate>
+
+		</s:fragment>
+
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['TreatmentCategory']}:</ui:define>
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.treatmentCategory"/>
+			<h:outputText value="#{messages[tbcase.treatmentCategory.key]}" rendered="#{not empty tbcase.treatmentCategory}"/>
+			<h:outputText value="#{messages['TreatmentCategory.undefined']}" rendered="#{empty tbcase.treatmentCategory}"/>
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml" rendered="#{tbcase.secDrugsReceived!=null and tbcase.classification == 'DRTB'}">
+			<ui:define name="label">#{messages['TbCase.seclineDrugsReceived']}:</ui:define>
+			<ui:param name="explanationmessagekey" value="ExplanationMessage.usedSecLineDrugs"/>
+			#{messages[tbcase.secDrugsReceived.key]}
+		</s:decorate>
+
+		<s:fragment rendered="#{not empty prevTBTreatmentHome.treatments}">
+		<h2>#{messages['cases.prevtreat']}</h2>
+		<table width="100%" class="table1">
+			<tr>
+				<th rowspan="2">#{messages['cases.prevtreat.num']}
+				</th>
+				<th rowspan="2">#{messages['cases.prevtreat.date']}
+				</th>
+				<th rowspan="#{prevTBTreatmentHome.substances.size == 0 ? 2 : 1}" colspan="#{prevTBTreatmentHome.substances.size == 0 ? 1 : prevTBTreatmentHome.substances.size}">
+					#{messages['cases.prevtreat.meds']}
+				</th>
+				<th rowspan="2">#{messages['PrevTBTreatment.outcome']}
+				</th>
+			</tr>
+			<tr>
+			<a:repeat value="#{prevTBTreatmentHome.substances}" var="s">
+				<th>#{s.abbrevName}
+				</th>
+			</a:repeat>
+			</tr>
+		<a:repeat value="#{prevTBTreatmentHome.treatments}" var="it">
+			<tr>
+				<td class="colcb">#{it.index}
+				</td>
+				<td class="colcb">
+					#{it.prevTBTreatment.month+1}/#{it.prevTBTreatment.year}
+				</td>
+				<a:repeat value="#{it.items}" var="sub">
+				<td class="colcb">
+					<h:outputText value="x" rendered="#{sub.selected}" />
+				</td>
+				</a:repeat>
+				<s:fragment rendered="#{prevTBTreatmentHome.substances.size == 0}">
+					<td class="colcb"> - </td>
+				</s:fragment>
+				<td class="colcb">
+					#{messages[it.prevTBTreatment.outcome.key]}
+				</td>
+			</tr>
+		</a:repeat>
+		</table>
+		</s:fragment>
+
+	</td></tr>
+	</table>
+	</div>
+	</div>
+
+
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="data" />
+	</s:decorate>
+</h:form>
+</ui:composition>

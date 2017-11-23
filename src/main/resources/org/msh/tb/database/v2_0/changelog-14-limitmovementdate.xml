@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Add specific permission to enable allow a user to generate movements out of limit date -->
+	<changeSet id="1" author="msantos">
+		<!-- Delete previous role created only for bangladesh -->
+		<sql>
+		DELETE FROM userpermission
+		WHERE role_id = 209
+		</sql>
+		
+		<sql>
+		DELETE FROM userrole
+		WHERE id = 209
+		</sql>
+		
+		<!-- Create permissions -->
+		<insert tableName="userrole">
+			<column name="id" valueNumeric="209"/>
+			<column name="changeable" valueBoolean="false" />
+			<column name="code" value="021007"/>
+			<column name="role_name" value="MED_MOV_EDIT_OUT_PERIOD" />
+			<column name="internalUse" valueBoolean="false" />
+			<column name="byCaseClassification" valueBoolean="false" />
+			<column name="messageKey" value="meds.movs.editoutofperiod" />
+		</insert>
+		
+		<!-- Insert the permission to all profiles that start with the name "administ" -->
+		<sql>
+		INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
+		SELECT false, true, true, id, 209 from userprofile
+		WHERE name like "%administ%"
+		AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=209 AND profile_id=userprofile.id)
+		</sql>
+	</changeSet>
+
+</databaseChangeLog>

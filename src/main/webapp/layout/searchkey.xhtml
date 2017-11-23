@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+	#{messages['global.searchkey']}:
+	<h:inputText id="edtsearchkey" value="#{list.searchKey}" style="width:70px"/>
+	<s:fragment rendered="#{empty brButton ? false : brButton}"><br/><br/></s:fragment>
+	<a:commandLink id="btnsearchkey" styleClass="button-alt" onclick="execSearch()">
+		<span>#{messages['form.search']}</span>
+	</a:commandLink>
+
+	<rich:jQuery timming="onload" selector="#edtsearchkey" query="focus()" />
+	<rich:hotKey selector="#edtsearchkey" key="return" handler="execSearch();" /> 
+	<a:jsFunction name="updtTable" reRender="#{tablepanel},messages" focus="edtsearchkey" oncomplete="enableButton()"/>
+
+	<script type="text/javascript"><!--
+	function execSearch() { 
+		disableButton(#{rich:element('btnsearchkey')});
+		jQuery('#main\\:tablepanel').hide();
+		updtTable(); 
+	}
+	--></script>
+
+
+</ui:composition>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:s="http://jboss.com/products/seam/taglib"
+xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+template="/layout/template_new.xhtml">
+      
+<ui:param name="title" value="#{messages['cases.mantreatment']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="waitdlg" value="1" />
+	  
+<ui:define name="content">
+<h1>#{title}</h1>
+<rich:jQuery name="updateChecks1" timing="onJScall" selector="#tbldays td" query="removeClass('activerow')"/>
+<rich:jQuery name="updateChecks2" timing="onJScall" selector="#tbldays td:has(:selected)" query="addClass('activerow')"/>
+<h:form id="main">
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Tbunit']}:</ui:define>
+		#{registerDispensingHome_Ng.tbunit.name}
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['global.month']} - #{messages['global.year']}:</ui:define>
+		<h:outputText value="#{registerDispensingHome_Ng.month}" converter="monthYearConverter" >
+			<f:param name="year" value="#{registerDispensingHome_Ng.year}"/>
+		</h:outputText>
+	</s:decorate>
+	
+	
+	
+	<h:panelGroup id="pnldata">
+	<table width="100%" class="table1" id="#tbldays">
+	
+	<tr>
+		<th rowspan="2" align="left">#{messages['Patient']}
+		</th>
+		<th colspan="7">
+		<table width="100%" style="border:none;">
+		<tr>
+		<a:repeat value="#{registerDispensingHome_Ng.weeks}" var="it">
+			<s:fragment rendered="#{registerDispensingHome_Ng.selectedWeek==it}">
+			<th>
+				#{messages['global.week']} #{it.week} <br/> #{it.iniDay} .. #{it.endDay}
+			</th>
+			</s:fragment>
+			<s:fragment rendered="#{registerDispensingHome_Ng.selectedWeek!=it}">
+			<td>
+				<a:commandLink reRender="pnldata">
+					<a:actionparam name="xpto" assignTo="#{registerDispensingHome_Ng.weekIndex}" value="#{it.week-1}" />
+					 #{messages['global.week']} #{it.week} <br/> #{it.iniDay} .. #{it.endDay}
+				</a:commandLink>
+			</td>
+			</s:fragment>
+			</a:repeat>
+			</tr>
+			</table>
+			</th>
+			</tr>
+	<tr>
+		<a:repeat value="#{registerDispensingHome_Ng.selectedWeek.days}" var="it">
+			<th width="65px">
+				<s:fragment rendered="#{it.dayOfMonth}">
+				#{it.day}
+				<br/>
+				<span style="font-weight:normal"> #{it.shortWeekname}</span>
+				<br/>
+				
+			<!--  	<input id="chkall" type="checkbox" onclick="selectAllDays(this, #{it.weekDay})" />-->
+			#{it.weekDay}
+			 <h:selectOneMenu value="#{it.selected}" id="selmain"  onchange="selectAllDays(this, #{it.weekDay})" styleClass="cbday cbsel#{it.weekDay}">
+			 <!-- onchange="updateChecks1();updateChecks2();" -->
+			    		<s:selectItems value="#{globalLists_ng.dot}" var="it" noSelectionLabel="" label="#{messages[it.key]}" />
+			    		<s:convertEnum/>
+			    	</h:selectOneMenu>
+				</s:fragment>
+			</th>
+		</a:repeat>
+	</tr>
+	<a:repeat value="#{registerDispensingHome_Ng.cases}" var="it">
+	<tr>
+		<th align="left">
+			#{it.caseDispensing.tbcase.patient.fullName}
+		</th>
+		<a:repeat value="#{it.selectedWeek.days}" var="item">
+		<td class="colcb#{item.selected!=null?' activerow':''}">
+    			<s:fragment rendered="#{item.available}">
+    			   #{item.day}<br/>#{d.weekDay}
+			    	<h:selectOneMenu value="#{item.selected}" id="selsub">
+			    		<s:selectItems value="#{globalLists_ng.dot}" var="it" noSelectionLabel="" label="#{messages[it.key]}" />
+			    		<s:convertEnum/>
+			    	</h:selectOneMenu>
+    			   
+    			</s:fragment>
+    		</td>
+		</a:repeat>
+	</tr>
+	</a:repeat>
+</table>
+
+	<div class="form-footer">
+	<a:commandLink styleClass="button" action="#{registerDispensingHome_Ng.save}">
+	<span>#{messages['form.save']}</span>
+	</a:commandLink>
+	<s:link styleClass="button-alt" propagation="end" view="/custom/ng/cases/treatments.xhtml">
+		<f:param name="huid" value="#{registerDispensingHome_Ng.tbunitId}"/>
+		<span>#{messages['form.cancel']}</span>
+	</s:link>
+	</div>
+	</h:panelGroup>
+	
+	<rich:jQuery selector="#selmain" query="each(function(){this.checkedIndex=false;})"/>
+	<script type="text/javascript">
+	<!--
+	function selectAllDays(chk, weekday) {
+		var selsub = '.cbsel' + weekday;
+		alert(selsub);
+//		var selsub = $('#selsub').get(0);
+		try {
+			selsub = eval(selsub);
+		} catch(e) {}
+		jQuery(selsub).change(function() {this.selectedIndex=chk.selectedIndex;});
+//		$('#selmain').change(function() {this.selectedIndex=selsub.selectedIndex;});
+	}
+	-->
+	</script>
+	
+
+	</h:form>
+      </ui:define>
+      </ui:composition>  

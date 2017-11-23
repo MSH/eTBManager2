@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:rf='urn:import:org.msh.tb.client.reports.filters'
+             xmlns:h='urn:import:org.msh.tb.client.ui'
+             xmlns:ind='urn:import:org.msh.tb.client.indicators'
+             xmlns:rep='urn:import:org.msh.tb.client.reports'>
+	
+	<ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
+	
+	<ui:style>
+		.panel {
+			background-color:#f8f8f8;
+			border: 1px solid #f0f0f0;
+			border-radius: 4px;
+			padding:4px 8px;
+			margin-bottom:8px;
+			margin-top:4px;
+		}
+		.openReport {
+			padding: 4px 4px 4px 8px;
+			margin-right:4px;
+			border-radius:16px;
+		}
+		.openReport i {
+			font-size:12px;
+		}
+		.iconButton {
+			color: #909090;
+			border-radius:2px;
+			padding:4px 2px 2px 4px;
+			top: 8px;
+			position: relative;
+		}
+		.iconButton:hover {
+			color: #5a5a5a;
+			background-color:#e0e0e0;
+		}
+	</ui:style>
+
+	<g:HTMLPanel ui:field="pnlContent" >
+		<h1><ui:text from="{msg.title}" /></h1>
+		<rep:ReportListPanel ui:field="pnlReportList">
+		    
+		</rep:ReportListPanel>
+		<g:HTMLPanel ui:field="pnlReport" styleName="report-panel">
+            <table width="100%" style="margin-bottom:8px">
+                <tr>
+                    <td>
+                        <g:Anchor ui:field="lnkOpen" styleName="gwt-Button {style.openReport}"><i class="icon-chevron-down"></i></g:Anchor>
+                        <h:LabelEditor ui:field="txtTitle" />
+                    </td>
+                    <td align="right">
+                        <g:Anchor ui:field="lnkSave" styleName="{style.iconButton}" title="{msg.saveReport}"><i class="icon-save"></i></g:Anchor>
+                        <g:Anchor ui:field="lnkMenu" styleName="{style.iconButton}" title="{msg.options}"><i class="icon-gear"></i></g:Anchor>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="panel">
+                <rf:FiltersPanel ui:field="pnlGlobalFilters" title="{msg.reportFilters}" />
+            </div>
+            <div class="pull-right">
+                <g:Button ui:field="btnGenerate" text="{msg.update}"/>
+            </div>
+            <div class="block"></div>
+
+            <h:MessagePanel ui:field="pnlMessage" visible="false" />
+
+            <ind:IndicatorsPanel ui:field="pnlIndicators">
+            </ind:IndicatorsPanel>
+            <div style="clear:both"></div>
+            <g:Button ui:field="lnkAddIndicator" ><i class="icon-plus-sign"><ui:text from="{msg.addIndicator}" /></i></g:Button>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+	
+</ui:UiBinder>

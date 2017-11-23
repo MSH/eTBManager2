@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+        >
+
+<s:decorate template="/layout/edit.xhtml" rendered="#{not tbunitselection.level1ReadOnly}">
+	<ui:define name="label">#{tbunitselection.labelAdminUnit}:</ui:define>
+	<ui:param name="labelstyle" value="#{labelstyle}" />
+	<h:selectOneMenu id="#{empty idcbselau ? 'cbselau' : idcbselau}" required="#{required}" value="#{tbunitselection.adminUnitId}">
+		<f:selectItems value="#{tbunitselection.adminUnitOptions}" />
+		<a:support event="onchange" ajaxSingle="true" reRender="pnlunits,#{auRerender}" focus="cbunits" />
+		<ui:insert name="eventsAu" />
+	</h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="pnlau2" template="/layout/display.xhtml" rendered="#{tbunitselection.level1ReadOnly}">
+	<ui:define name="label">#{messages['global.location']}:</ui:define>
+	<ui:param name="labelstyle" value="#{labelstyle}" /> 
+	<ui:repeat value="#{tbunitselection.parentUnits}" var="it">
+		<span class="right-icon"> #{it.name}</span>
+	</ui:repeat>
+</s:decorate>
+
+<h:panelGroup id="pnlunits">
+<s:decorate template="/layout/#{required or redasterisk?'edit':'display'}.xhtml" rendered="#{tbunitselection.adminUnitSelected}">
+	<ui:define name="label">#{empty unitLabel ? messages['form.name'] : unitLabel}:</ui:define>
+	<h:selectOneMenu id="#{empty idcbunits ? 'cbunits' : idcbunits}" value="#{tbunitselection.tbunit}" required="#{required}" rendered="#{!tbunitselection.readOnly}">
+        <s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
+      	<s:convertEntity/>
+      	<ui:insert name="events" />
+    </h:selectOneMenu>
+    <h:outputText value="#{tbunitselection.tbunit}" rendered="#{tbunitselection.readOnly}" />
+    <ui:insert />
+</s:decorate>
+
+</h:panelGroup>
+
+</ui:composition>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+	
+<h:form>
+	<s:fragment rendered="#{not caseHome.inTreatment}" >
+		<h:outputText value="#{messages['cases.details.notreatment']}" styleClass="warn" style="display:block;padding:30px;"/>
+		
+		<s:link onclick="showSelRegimenDlg();return false;" 
+			rendered="#{tbcase.state == 'WAITING_TREATMENT'}"
+			styleClass="button">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['cases.details.starttreatment']}</span>
+		</s:link>
+		
+		<rich:jQuery timing="onJScall" name="showSelRegimenDlg" selector="#seltttype" query="show(500)" />
+		<div id="seltttype" style="display:none;padding:20px;width:500px;">
+			
+			<s:decorate template="/layout/roundrect.xhtml">
+				<ui:param name="showfooter" value="0" />
+				<ui:define name="header">
+					<b>#{messages['cases.treat.selreg']}:</b><br/>
+				</ui:define>
+				
+				<div style="padding:20px">
+
+				<div style="display:block;padding:4px;">
+					<div class="linknaveg">
+					<s:link value="#{messages['regimens.standard']}" style="font-size:12px" view="/cases/starttreatment.xhtml">
+						<f:param name="id" value="#{caseHome.id}"/>
+					</s:link>
+					</div>
+				</div>
+				<br/>
+				<div style="display:block;padding:4px;">
+					<div class="linknaveg">
+					<s:link value="#{messages['regimens.individualized']}" style="font-size:12px" view="/cases/starttreatmentind.xhtml">
+						<f:param name="id" value="#{caseHome.id}"/>
+					</s:link>
+					</div>
+				</div>
+				</div>
+			</s:decorate>
+		</div>
+	</s:fragment>
+
+	<s:fragment rendered="#{caseHome.inTreatment}">
+
+	<h:panelGroup id="pnltreatment">
+		<rich:dropDownMenu style="width:auto;float:right;" rendered="#{(caseHome.canEditTreatment) and (tbcase.state!='TRANSFERRING')}" 
+			styleClass="dropdown-link" >
+			
+			<f:facet name="label">#{messages['form.options']}
+			</f:facet>
+			<rich:menuItem submitMode="client"
+				value="#{messages['form.edit']}" 
+				onclick="document.location.href='#{request.contextPath}/cases/treatmentedt.seam?id=#{caseHome.id}'"
+				rendered="#{prescriptionTable.valid}">
+			</rich:menuItem>
+			<rich:menuItem  rendered="#{caseHome.canTransferOut and prescriptionTable.valid}" submitMode="client">
+				<s:link value="#{messages['cases.move']}" view="/cases/casemove.xhtml">
+					<f:param name="id" value="#{caseHome.id}" />
+				</s:link>
+			</rich:menuItem>
+			<rich:menuItem value="#{messages['cases.move.cancel']}" 
+					onclick="if (!confirm('#{messages['cases.move.cancel-confirm']}')) return false"
+					action="#{caseMoveHome.rollbackTransferOut}"
+					reRender="main,leftmenu,messages"
+					rendered="#{prescriptionTable.transferredCase}" >
+					<f:param name="name" value="#{prescriptionTable.lastHealthUnit.tbunit.name}"/>
+			</rich:menuItem>
+			<rich:menuItem value="#{messages['cases.treat.undo']}"
+					onclick="if (!confirm('#{messages['cases.treat.undo.confirm']}')) return false;" 
+					action="#{treatmentHome.undoTreatment}" 
+					reRender="main,messages">
+			</rich:menuItem>
+		</rich:dropDownMenu>
+	<s:decorate template="/cases/treattable.xhtml">
+		<ui:param name="editing" value="false" />
+	</s:decorate>
+
+
+	<a:repeat value="#{treatmentCalendarHomeNA.phases}" var="phase">
+		<h3>
+			<h:outputText value="#{messages['cases.treat.intphase']}" rendered="#{phase.intensivePhase}"/>
+			<h:outputText value="#{messages['cases.treat.contphase']}" rendered="#{phase.continuousPhase}"/>
+		</h3>
+		<ui:decorate template="calendartreat.xhtml" >
+			<ui:param name="list" value="#{phase.months}" />
+		</ui:decorate>
+	</a:repeat>
+
+	</h:panelGroup>
+
+
+	</s:fragment>
+	<s:decorate template="/cases/comments.xhtml">
+		<ui:param name="panel" value="data" />
+	</s:decorate>
+</h:form>
+
+</ui:composition>

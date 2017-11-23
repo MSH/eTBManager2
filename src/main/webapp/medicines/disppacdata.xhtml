@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['drugs.disppac']}: #{caseDispensing.mdrCase.name}" />
+<ui:param name="show_menu" value="#{s:hasRole('DISPPAC_EDT')?'1':'0'}"/>
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:200px;" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['drugs']}" view="/drugs/index.html" propagation="none" />
+	<s:link value="#{messages['drugs.disppac']}" view="/drugs/disppac.xhtml" propagation="none"/>
+</ui:define>
+
+<ui:define name="left">
+	<s:link view="/drugs/edtdisppac.xhtml" value="#{messages['form.edit']}" propagation="begin" rendered="#{s:hasRole('DISPPAC_EDT')}">
+		<f:param name="id" value="#{caseDispensingHome.id}" />
+	</s:link>
+	<s:link action="#{caseDispensingHome.remove}" value="#{messages['form.remove']}" propagation="none" onclick="return confirm('#{messages['form.confirm_remove']}');" rendered="#{s:hasRole('DISPPAC_EDT')}">
+		<f:param name="id" value="#{caseDispensingHome.id}" />
+	</s:link>
+</ui:define>
+
+<ui:define name="content">
+<p/>
+<h:form id="main"> 
+<rich:panel style="width:600px;">
+    <s:decorate template="/layout/display.xhtml" rendered="#{drugOrder.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{caseDispensing.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['DrugStorage']}:</ui:define>
+    	#{caseDispensing.drugStorage.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['MdrCase.patient']}:</ui:define>
+    	#{caseDispensing.mdrCase.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['MdrCase.securityNumber']}:</ui:define>
+    	#{caseDispensing.mdrCase.securityNumber}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['CaseDispensing.iniDate']}:</ui:define>
+		<h:outputText value="#{caseDispensing.iniDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['CaseDispensing.endDate']}:</ui:define>
+		<h:outputText value="#{caseDispensing.endDate}" converter="localeDateConverter" />
+    </s:decorate>
+    
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['CaseDispensing.drugs']}:</ui:define>
+    </s:decorate>
+    
+    <h:dataTable value="#{caseDispensing.drugs}" var="r" styleClass="table1" width="100%" 
+    	columnClasses="coll,coll,coll,colr,colr,colr" rowClasses="lin1,lin2">
+    	<h:column>
+    		<f:facet name="header">
+    			<h:outputText value="#{messages['Product']}" styleClass="collh" />
+    		</f:facet>
+    		#{r.product.name}
+    	</h:column>
+
+    	<h:column>
+    		<f:facet name="header">
+    			<h:outputText value="#{messages['Product.unit']}" styleClass="collh" />
+    		</f:facet>
+    		#{r.product.unit}
+    	</h:column>
+
+    	<h:column>
+    		<f:facet name="header">
+    			<h:outputText value="#{messages['Source']}" styleClass="collh" />
+    		</f:facet>
+    		#{r.source.name}
+    	</h:column>
+
+    	<h:column>
+    		<f:facet name="header">
+    			<h:outputText value="#{messages['Movement.quantity']}" styleClass="colrh" />
+    		</f:facet>
+    		#{r.quantity}
+    	</h:column>
+
+    	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+    		<f:facet name="header">
+    			<h:outputText value="#{messages['DrugDispensing.price']}" styleClass="colrh" />
+    		</f:facet>
+    		#{r.price}
+    	</h:column>
+
+    	<h:column rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+    		<f:facet name="header">
+    			<h:outputText value="#{messages['DrugDispensing.totalPrice']}" styleClass="colrh" />
+    		</f:facet>
+    		#{r.totalPrice}
+    	</h:column>
+    </h:dataTable>
+   
+</rich:panel>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:s="http://jboss.com/products/seam/taglib">
+
+<h:form style="margin:0px;">
+<table width="100%" cellspacing="0" cellpadding="0" class="header-table">
+<tr><td width="198px" height="53px" rowspan="2" valign="top" class="logo-icon">
+<s:link view="/home.xhtml" propagation="none" style="width:100%;height:100%;display:block;" >
+<img src="#{viewService.logoImage}" border="0"/>
+</s:link>
+</td>
+<td valign="top">
+	<span style="margin-top:4px;display:block;color:white;">
+	<b class="sep">#{userLogin.user.name}</b>
+	</span>
+</td>
+<td align="right" valign="top">
+<span style="margin-top:4px;display:block;padding-right:20px;">
+   	<s:link view="/usersettings.xhtml" value="#{messages['usersettings']}" styleClass="header-sep header-link"/>
+   	<h:commandLink action="#{authenticator.logout}" value="#{messages['form.exit']}" style="margin-left:12px;" styleClass="header-link"/>
+</span>
+</td>
+</tr>
+<tr>
+<td valign="bottom" colspan="2" style="vertical-align:bottom;">
+
+<div style="display:block;float:right;height:22px;min-height:22px;margin-right:16px;">
+	<s:fragment rendered="#{viewService.view.picture != null}">
+		<img src="#{request.contextPath}#{viewService.view.pictureURI}" style="float:left;margin-right:4px;" />
+	</s:fragment>
+	<h:outputText value="#{defaultWorkspace.name}" rendered="#{userLogin != null}" style="font-weight:bold;color:white;"/> 
+</div>
+
+<div class="tpmenu">
+<ul>
+	<s:fragment rendered="#{s:hasRole('CASEMAN')}">
+	<li class="#{topmenu=='0'?'selected':'unselected'}">
+		<s:link value="#{messages['cases']}" view="/cases/index.xhtml" propagation="none"/>
+	</li>
+	</s:fragment>
+	<s:fragment rendered="#{s:hasRole('MEDMAN')}">
+	<li class="#{topmenu=='1'?'selected':'unselected'}">
+		<s:link value="#{messages['medicines']}" view="/medicines/index.xhtml"  propagation="none"/>
+	</li>
+	</s:fragment>
+	<s:fragment rendered="#{s:hasRole('MANAGEMENT')}">
+	<li class="#{topmenu=='2'?'selected':'unselected'}">
+		<s:link value="#{messages['manag']}" view="/management/index.xhtml" propagation="none"/>
+	</li>
+	</s:fragment>
+	<s:fragment rendered="#{s:hasRole('ADMIN')}">
+	<li class="#{topmenu=='3'?'selected':'unselected'}">
+		<s:link value="#{messages['admin']}" view="/admin/index.xhtml" propagation="none"/>
+	</li>
+	</s:fragment>
+</ul>
+</div>
+
+
+</td>
+</tr>
+</table>
+</h:form>
+
+</ui:composition>

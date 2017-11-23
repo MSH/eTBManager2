@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['meds.orders.receive']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main">
+<rich:panel style="width:600px;">
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.unitFrom']}:</ui:define>
+    	#{order.unitFrom.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.unitTo']}:</ui:define>
+    	#{order.unitTo.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
+    	<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.approvingDate']}:</ui:define>
+    	<h:outputText value="#{order.approvingDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Order.receivingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" />
+    	<ui:param name="datefield" value="#{order.receivingDate}" /> 
+    </s:decorate>
+    
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+<p/>
+
+<b>#{messages['Order.items']}:</b>
+<table width="100%">
+	<c:forEach items="#{orderHome.sources}" var="s">
+	<tr><th style="height:25px;background-color:#E0E0E0;color:black;font-weight: bold;">#{s.source.name}  </th></tr>
+	<tr><td>
+		<h:dataTable value="#{s.items}" var="it" class="table1" width="100%" columnClasses="colb,colcb" rowClasses="lin1,lin2">
+			<h:column>
+				<f:facet name="header">#{messages['Medicine']}</f:facet>
+				#{it.item.medicine}
+			</h:column>
+			
+			<h:column>
+			<f:facet name="header">#{messages['OrderItem.shippedQuantity']}</f:facet>
+				<h:outputText value="#{it.item.shippedQuantity}" />
+			</h:column>
+			
+			<h:column>
+			<f:facet name="header">#{messages['OrderItem.receivedQuantity']}</f:facet>
+				<h:inputText value="#{it.item.receivedQuantity}" style="width:60px" />
+			</h:column>
+			
+			<h:column>
+			<f:facet name="header">#{messages['global.comments']}</f:facet>
+				<h:inputText value="#{it.item.comment}" style="width:200px" size="200" />
+			</h:column>
+		</h:dataTable>
+		<p/>
+	</td></tr>
+	</c:forEach>
+</table>
+
+<div >
+    <a:commandLink action="#{orderReceivingHome.notifyReceiving}" styleClass="button" 
+    	onclick="if (!disableButton(this)) return false;" oncomplete="enableButton()" reRender="main">
+    	<span>#{messages['form.ok']}</span>
+    </a:commandLink>
+    <s:link action="cancel" styleClass="button-alt" >
+    	<span>#{messages['form.cancel']}</span>
+    </s:link>
+</div>
+</rich:panel>
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

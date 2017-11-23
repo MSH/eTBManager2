@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.suspect.followup']}" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="left" value="0" />
+<ui:param name="labelstyle" value="width:150px" />
+
+<ui:define name="content">
+<h1><i class="icon-double-angle-right"/>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml" id="maindec">
+
+<script type="text/javascript">
+<!--
+function isPatientTypeOther(cb) {
+   return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'OTHER'));
+}
+function isPatientTypePrevTreat(cb) {
+	return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'PREVIOUSLY_TREATED'));
+}
+function showPatientTypeOther(cb) {
+  if (isPatientTypeOther(cb))
+  	jQuery('#patientTypeOther').show(500);
+  else {
+	  document.getElementById('maindec:form-confirmed:pattypeotherdec:otherinput').value = '';
+	  jQuery('#patientTypeOther').hide(500);
+  }
+}
+function showPrevTreatType(cb) {
+	if (isPatientTypePrevTreat(cb))
+		jQuery('#prevTreatType').show(500);
+	else{
+		document.getElementById('maindec:form-confirmed:prevTreatTypeDec:previouslyTreatedType').options[0].selected = "true";
+		jQuery('#prevTreatType').hide(500);
+	}
+}
+function showExtrapulmonary(cb) {
+  if (isExtrapulmonary(cb))
+  	jQuery('#extrapul').show(500);
+  else jQuery('#extrapul').hide(500);
+  if (isPulmonary(cb)) 
+	jQuery('#pulmonary').show(500);
+  else jQuery('#pulmonary').hide(500);
+}
+function isExtrapulmonary(cb) {
+  return ((cb.selectedIndex == 2) || (cb.selectedIndex == 3));
+}
+function isPulmonary(cb) {
+  return ((cb.selectedIndex == 1) || (cb.selectedIndex == 3));
+}
+function diagnosisTypeClick(radio) {
+	if (jQuery(radio).val() == 'NOT_CONFIRMED') {
+		jQuery('#div-notconfirmed').slideDown(500);
+		jQuery('#div-confirmed').slideUp(500);
+	}
+	else {
+		jQuery('#div-notconfirmed').slideUp(500);
+		jQuery('#div-confirmed').slideDown(500);
+	}
+	jQuery("#div-btncancel").hide();
+}
+-->
+</script>
+
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
+		<s:decorate template="/layout/edit.xhtml">
+			<ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+			<h:selectOneRadio value="#{suspectFollowupHome.dataModel.diagnosisType}" layout="pageDirection" onclick="diagnosisTypeClick(this)">
+				<f:selectItem itemValue="CONFIRMED" itemLabel="#{messages['DiagnosisType.CONFIRMED']}"/>
+				<f:selectItem itemValue="NOT_CONFIRMED" itemLabel="#{messages['CaseState.NOT_CONFIRMED']}"/>
+			</h:selectOneRadio>
+		</s:decorate>
+
+		<div id="div-btncancel">
+		<s:link styleClass="button-alt" style="float:right" view="/cases/casedata.xhtml" onclick="disableButton(this)">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+		</div>
+	</div>
+</h:form>
+
+<div id="div-confirmed" style="display:none;">
+<h:form id="form-confirmed" styleClass="form1">
+	<h2>#{messages['DiagnosisType.CONFIRMED']}</h2>
+	<div class="form-content">	
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Classification']}:</ui:define>
+		<h:selectOneRadio id="caseclassification" value="#{suspectFollowupHome.dataModel.classification}" layout="pageDirection" onclick="classifClick(this)">
+    		<s:selectItems var="it" value="#{globalLists.caseClassifications}" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+			<a:support event="onchange" reRender="patType1" ajaxSingle="true"/>
+		</h:selectOneRadio>
+	</s:decorate>
+		
+    <s:decorate template="/layout/dateedit.xhtml">
+    	<ui:define name="label">#{messages['TbCase.diagnosisDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{suspectFollowupHome.dataModel.diagnosisDate}" /> 
+    	<ui:param name="edtid" value="diagdateedt" />
+    	<ui:param name="checkDeathDate" value="true" />
+    </s:decorate>
+
+	<div id="div-resistance" style="display:#{suspectFollowupHome.dataModel.classification=='DRTB' ? '' : 'none'}">
+    <s:decorate template="/layout/edit.xhtml" id="decdrugresisttype">
+    	<ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+    	<h:selectOneMenu id="cbresistance" value="#{suspectFollowupHome.dataModel.drugResistanceType}" >
+    		<s:selectItems var="it" value="#{drugResistanceTypes}" noSelectionLabel="-" label="#{messages[it.key]}"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+    </div>
+
+	<s:decorate template="/layout/edit.xhtml" id="patType1Dec">
+		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+		<h:selectOneMenu id="patType1" value="#{suspectFollowupHome.dataModel.patientType}" required="#{true}" onchange="showPrevTreatType(this);showPatientTypeOther(this);">
+			<s:selectItems var="it" value="#{suspectFollowupHome.dataModel.classification=='TB' ? patientTypesTB : patientTypesDRTB}" noSelectionLabel="-" label="#{messages[it.key]}" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<div id="prevTreatType" style="#{suspectFollowupHome.dataModel.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+		<s:decorate template="/layout/edit.xhtml" id="prevTreatTypeDec">
+			<ui:define name="label">#{messages['PatientType.PREVIOUSLY_TREATED']}:</ui:define>
+			<ui:param name="redasterisk" value="#{true}"/>
+			<h:selectOneMenu value="#{suspectFollowupHome.dataModel.previouslyTreatedType}" id="previouslyTreatedType">
+				<s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+				<s:convertEnum />
+			</h:selectOneMenu>
+		</s:decorate>
+	</div>
+
+	<div id="patientTypeOther" style="#{tbcase.patientType != 'OTHER' ? 'display:none' : ''}">
+		<s:decorate template="/layout/edit.xhtml" id="pattypeotherdec">
+			<ui:define name="label">#{messages['TbCase.patientTypeOther']}</ui:define>
+			<h:inputText id="otherinput" value="#{suspectFollowupHome.dataModel.patientTypeOther}" style="width:200px;" maxlength="100" />
+		</s:decorate>
+	</div>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+		<h:selectOneMenu id="infectsite" value="#{suspectFollowupHome.dataModel.infectionSite}" required="true">
+			<s:selectItems var="it" value="#{infectionSites}" noSelectionLabel="-" label="#{messages[it.key]}" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<rich:jQuery selector="#infectsite" query="change(function(){showExtrapulmonary(this); })" />
+
+	<div id="extrapul" style="clear:both;">
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbField.EXTRAPULMONARY_TYPES']}:</ui:define>
+    		<h:selectOneMenu value="#{suspectFollowupHome.dataModel.extrapulmonaryType}" style="margin-right:4px;">
+    			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+
+    		<h:selectOneMenu id="cbextrapulmonary" value="#{tbcase.extrapulmonaryType2}">
+    			<s:selectItems var="it" value="#{fieldOptions.extrapulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+		</s:decorate>
+	</div>
+
+	<div id="pulmonary" style="clear:both;">
+		<s:decorate template="/layout/edit.xhtml">
+    		<ui:define name="label">#{messages['TbField.PULMONARY_TYPES']}:</ui:define>
+    		<h:selectOneMenu id="cbpulmonary" value="#{suspectFollowupHome.dataModel.pulmonaryType}" style="margin-right:4px;">
+    			<s:selectItems var="it" value="#{fieldOptions.pulmonaryTypes}" noSelectionLabel="-" label="#{it}" />
+    			<s:convertEntity />
+    		</h:selectOneMenu>
+		</s:decorate>
+	</div>
+	<rich:jQuery selector="#infectsite" query="each(function(){ if (!isExtrapulmonary(this)) {jQuery('#extrapul').hide(); }})" />
+	<rich:jQuery selector="#infectsite" query="each(function(){ if (!isPulmonary(this)) {jQuery('#pulmonary').hide(); }})" />
+	<rich:jQuery selector="#patType" query="each(function(){ if (!isPatientTypeOther(this)) {jQuery('#patientTypeOther').hide(); }})" />
+	</div>
+
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+		<a:commandLink action="#{suspectFollowupHome.registerConfirmedFollowup}" styleClass="button" 
+			onclick="if (!disableButton(this)) return false;" reRender="form-confirmed,messages" >
+			<span>#{messages['form.ok']}</span>
+		</a:commandLink>
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>	
+</h:form>
+</div>
+
+
+<div id="div-notconfirmed" style="display:none;">
+<h:form id="form-notconfirmed" styleClass="form1">
+	<h2>#{messages['CaseState.NOT_CONFIRMED']}</h2>
+	<div class="form-content">
+
+    	<s:decorate template="/layout/dateedit.xhtml" >
+			<ui:define name="label">#{messages['TbCase.outcomeDate']}:</ui:define>
+    		<ui:param name="required" value="true" /> 
+	    	<ui:param name="future" value="false" /> 
+	    	<ui:param name="datefield" value="#{caseCloseHome.date}" /> 
+	    	<ui:param name="edtid" value="outcomedateedt" />
+	    	<ui:param name="checkDeathDate" value="true" />
+	    </s:decorate>
+
+	    <s:decorate template="/layout/edit.xhtml" >
+			<ui:define name="label">#{messages['cases.outcome']}:</ui:define>
+			<h:selectOneRadio id="selstate" value="#{caseCloseHome.state}" layout="pageDirection">
+				<s:selectItems value="#{caseCloseHome.outcomes}" var="v" label="#{messages[v.key]}"/>
+				<s:convertEnum />
+			</h:selectOneRadio>
+	    </s:decorate>
+
+		<div id="comments" style="display:none;clear:both;" >
+	    <s:decorate template="/layout/edit.xhtml" id="commentsdec">
+			<ui:define name="label">#{messages['TbCase.otherOutcome']}:</ui:define>
+			<h:inputText id="commentsinput" value="#{caseCloseHome.comment}" maxlength="100" style="width:300px;"/>
+	    </s:decorate>
+    	</div>
+	</div>
+<rich:jQuery selector="#selstate input[type=radio]" query="click(function(){statecheckClick(this);})" />
+<script type="text/javascript">
+function statecheckClick(elem) {
+   if (elem.value=='OTHER')
+      jQuery('#comments').show(500);
+   else{
+	   jQuery('#comments').hide(500);
+	   document.getElementById('maindec:form-notconfirmed:commentsdec:commentsinput').value = '';
+   }
+}
+function classifClick(elem) {
+	if (jQuery(elem).val() == 'DRTB') {
+		document.getElementById('maindec:form-confirmed:prevTreatTypeDec:previouslyTreatedType').options[0].selected = "true";
+		jQuery('#prevTreatType').hide(500);
+		jQuery("#div-resistance").slideDown(500);
+	}else{
+		document.getElementById('maindec:form-confirmed:decdrugresisttype:cbresistance').options[0].selected = "true";
+		document.getElementById('maindec:form-confirmed:pattypeotherdec:otherinput').value = '';
+		jQuery('#patientTypeOther').hide(500);
+		jQuery("#div-resistance").slideUp(500);
+	}
+}
+</script>
+
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+		<a:commandLink action="#{suspectFollowupHome.registerNotConfirmedFollowup}" styleClass="button" 
+			onclick="if (!disableButton(this)) return false;" reRender="form-notconfirmed,messages" >
+			<span>#{messages['form.ok']}</span>
+		</a:commandLink>
+		<s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+			<f:param name="id" value="#{caseHome.id}" />
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>	
+</h:form>
+</div>
+
+</s:decorate>
+
+</ui:define>
+
+</ui:composition>  

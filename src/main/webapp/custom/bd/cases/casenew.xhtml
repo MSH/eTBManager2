@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.newnotif']} - #{tbcase.diagnosisType=='SUSPECT'? messages[tbcase.classification.keySuspect]: messages[tbcase.classification.key]}" />
+<ui:param name="left" value="0" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:160px" />
+<ui:param name="waitdlg" value="1" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<a:form id="main" styleClass="form1">
+
+	<ui:include src="casedataedt.xhtml" />	
+
+	<s:fragment rendered="#{tbcase.diagnosisType=='CONFIRMED'}">
+	<div class="form-content">
+		<h2>#{messages['MedicalExamination']}</h2>
+
+		<div><table width="100%" style="border-collapse:collapse;"><tr><td>
+    		<s:decorate template="/layout/dateedit.xhtml" >
+    			<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
+    			<ui:param name="required" value="true" /> 
+    			<ui:param name="datefield" value="#{medicalExaminationBd.date}" />
+    			<ui:param name="checkDeathDate" value="true" />
+    		</s:decorate>
+		
+		    <s:decorate template="/layout/edit.xhtml" >
+		    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
+		    	<h:inputText value="#{medicalExaminationBd.responsible}" required="true" style=" width : 340px;" maxlength="100"/>
+	    	</s:decorate>
+    
+    	<s:decorate template="/layout/edit.xhtml" >
+    		<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
+    		<h:inputText value="#{medicalExaminationBd.height}" required="false">
+    		</h:inputText>
+    		#{messages['MedicalExamination.height.unit']}
+    	</s:decorate>
+
+    
+    	<s:decorate template="/layout/edit.xhtml" >
+    		<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
+    		<h:inputText value="#{medicalExaminationBd.weight}" required="true"/>#{messages['MedicalExamination.weight.unit']}
+    	</s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml" id="cbdotprovdec" >
+            <ui:define name="label">#{messages['MedicalExamination.DOTProviderType']}</ui:define>
+            <h:selectOneMenu id="cbdotprov" value="#{medicalExaminationBd.dotTypeFv}" style="display:block;" onchange="showDotDetails(this)">
+                <s:selectItems value="#{fieldsQuery.dotTypes}" var="it" label="#{it.name.name1}" noSelectionLabel="-"/>
+                <s:convertEntity />
+            </h:selectOneMenu>
+
+            <div id="dotProvName">
+                <s:decorate template="/layout/edit.xhtml" id="dotnamedec">
+                    <ui:define name="label">#{messages['MedicalExamination.DOTProviderName']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:auto; text-align:left" />
+                    <h:inputText id="dotnameinput" value="#{medicalExaminationBd.dotProvName}" style=" width : 400px;" maxlength="100"/>
+                </s:decorate>
+                <s:decorate template="/layout/edit.xhtml" id="dotnumberdec">
+                    <ui:define name="label">#{messages['MedicalExamination.DOTProviderPhoneNumber']}:</ui:define>
+                    <ui:param name="labelstyle" value="width:auto; text-align:left" />
+                    <h:inputText id="dotnumberinput" value="#{medicalExaminationBd.dotPhoneNumber}" style=" width : 340px;" maxlength="100"/>
+                </s:decorate>
+            </div>
+
+        </s:decorate>
+
+            <s:decorate template="/layout/textarea.xhtml" >
+		    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+		    	<ui:param name="maxlength" value="250" />
+		    	<ui:param name="field" value="#{medicalExaminationBd.comments}" />
+		    	<ui:param name="style" value="width : 500px; height:100px;" />
+		    </s:decorate>
+		</td></tr></table>
+		</div>
+	</div>
+	</s:fragment>
+
+	<div class="form-footer">
+		<div style="float:right">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+		<a:commandLink action="#{caseBDHome.saveNew()}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
+			<span>#{messages['form.ok']}</span>
+		</a:commandLink>
+		<s:link view="/cases/index.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this);" >
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+	</div>
+
+</a:form>
+
+    <script type="text/javascript">
+		function showDotDetails(cb){
+			if (cb.selectedIndex!=0)
+				jQuery('#dotProvName').show(500);
+			else{
+				document.getElementById('main:cbdotprovdec:dotnamedec:dotnameinput').value = '';
+				document.getElementById('main:cbdotprovdec:dotnumberdec:dotnumberinput').value = '';
+				jQuery('#dotProvName').hide(500);
+			}
+		}
+		showDotDetails(document.getElementById('main:cbdotprovdec:cbdotprov'));
+    </script>
+
+</ui:define>
+
+</ui:composition>  

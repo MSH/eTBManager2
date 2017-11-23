@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/templatemed.xhtml">
+
+<ui:param name="title" value="#{messages['manag.rel3']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="pagestyle" value="width:90%" />
+
+<ui:define name="naveg" >
+	<div class="item">
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" propagation="none" />
+	</div>
+</ui:define>
+
+
+<ui:define name="content_unit">
+<h:form id="main">
+<table width="100%">
+<tr><td>
+	<s:decorate id="source" template="/layout/edit.xhtml" rendered="#{sources.resultList.size > 1 and s:hasRole('RECEIV')}">
+		<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu id="source" value="#{reportSelection.source}">
+            <s:selectItems value="#{sources.resultList}" noSelectionLabel="#{messages['form.noselection']}" var="s" label="#{s}"/>
+            <s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="ini" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
+		<h:selectOneMenu id="inimonth" value="#{reportSelection.iniMonth}" required="true">
+		<f:selectItems value="#{monthsAll}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{reportSelection.iniYear}" style="margin-left:6px;" required="true">
+			<f:selectItems value="#{yearsAll}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="end" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
+		<h:selectOneMenu id="endmonth" value="#{reportSelection.endMonth}" required="true">
+		<f:selectItems value="#{monthsAll}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{reportSelection.endYear}" style="margin-left:6px;" required="true">
+			<f:selectItems value="#{yearsAll}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+	<p/>
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</td></tr>
+</table>
+	<a:commandLink styleClass="button-alt" reRender="main" action="#{stockEvolutionReport.execute}" style="float:right;">
+		<span>#{messages['form.update']}</span>
+	</a:commandLink>
+
+<div style="margin-top:10px;">
+<s:fragment rendered="#{not empty stockEvolutionReport.itens}">
+<table class="table1" style="margin-top:10px;" width="100%">
+<tr>
+	<th align="left" class="colb">
+	#{messages['Medicine']}
+	</th>
+	<th align="right" class="colrb">
+		#{messages['reports.iniqtd']}
+	</th>
+	<th align="right" class="colrbb">
+		#{messages['reports.inqtd']}
+	</th>
+	<th align="right" class="colrbb">
+		#{messages['reports.outqtd']}
+	</th>
+	<th align="right" class="colrbb">
+		#{messages['reports.finalqtd']}
+	</th>
+</tr>
+<ui:repeat value="#{stockEvolutionReport.itens}" var="it">
+<tr>
+	<td class="colb">
+		#{it.medicine}
+	</td>
+	<td class="colrb" width="15%">
+		<h:outputText value="#{it.initialQuantity}" >
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+	</td>
+	<td class="colrb" width="15%">
+		<h:outputText value="#{it.inQuantity}" >
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+	</td>
+	<td class="colrb" width="15%">
+		<h:outputText value="#{it.outQuantity}" >
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+	</td>
+	<td class="colrb" width="15%">
+		<h:outputText value="#{it.finalQuantity}" >
+			<f:convertNumber pattern="#,###,##0"/>
+		</h:outputText>
+	</td>
+</tr>
+</ui:repeat>
+</table>
+</s:fragment>
+</div>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

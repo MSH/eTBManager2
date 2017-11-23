@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+      
+	<ui:param name="title" value="#{messages['Quarter.editQuartelyReport']}" />
+	<ui:param name="topmenu" value="1" />
+	<ui:param name="labelstyle" value="width:210px;" />
+	<ui:param name="left" value="0" />
+	
+	<ui:define name="head">
+	<style type="text/css">
+		.posAdjust{
+			background-color: white;
+		}
+		.negAdjust{
+			background-color: white;
+		}
+		.expired{
+			background-color: white;
+		}
+  	</style>
+	</ui:define>
+
+	<ui:define name="naveg">
+		<div class="item">
+			<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
+		</div>
+		<div class="item selected">
+			<s:link value="#{messages['quarter.report']}" propagation="none" view="/custom/bd/medicines/quartelystqpos.xhtml" action="#{quarterStockPositionHome.initialize()}"/>
+		</div>
+	</ui:define>
+	
+	<ui:define name="content" id="content">
+	<s:decorate template="/custom/bd/layout/unitsel.xhtml" id="a">
+	<h:form id="main">
+	
+	<div id="tablediv">
+	<table class="table1">
+		<tr>
+			<th colspan="9" align="left"><h2>#{messages[quarterStockPositionReport.selectedQuarter.quarter.key]}/#{quarterStockPositionReport.selectedQuarter.year} - #{quarterStockPositionHome.editingMedicine.medicine}</h2></th>
+		</tr>
+		<tr>
+			<th>#{messages['quarter.openbal']}</th>
+			<th>#{messages['quarter.received']}</th>
+			<th>#{messages['quarter.posadjust']}</th>
+			<th>#{messages['quarter.negadjust']}</th>
+			<th>#{messages['manag.forecast.tabres2']}</th>
+			<th>#{messages['quarter.expired']}</th>
+			<th>#{messages['quarter.closbal']}</th>
+			<th>#{messages['quarter.outofstk']}</th>
+		</tr>
+		<tr>
+			<td><h:inputText id="openbal" value="#{quarterStockPositionHome.editingMedicine.openingBalance}" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText id="received" value="#{quarterStockPositionHome.editingMedicine.received}" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText id="posadjust" value="#{quarterStockPositionHome.editingMedicine.positiveAdjustment}" readonly="true" style="background-color: lightgray;"/></td>
+			<td>
+				<h:inputText id="negadjust" value="#{quarterStockPositionHome.editingMedicine.negativeAdjustment}" readonly="true" style="background-color: lightgray;"/>
+				<s:fragment rendered="#{quarterStockPositionHome.editingMedicine.transferedOutQtd != 0}">
+					<br/><h:outputText style="font-size:10px" value="#{messages['quarter.transferout']}: #{quarterStockPositionHome.editingMedicine.transferedOutQtd}" />
+				</s:fragment>
+			</td>
+			<td>
+				<!-- if the unit dispense by patient, can't edit a dispensing with this form -->
+				<h:inputText id="consumption" value="#{quarterStockPositionHome.editingMedicine.consumption}"  readonly="#{userSession.tbunit.patientDispensing}" 
+					style="#{userSession.tbunit.patientDispensing ? 'background-color: lightgray;' : ''}" onkeyup="updateCloseBalTotal();" onkeypress="return numbersOnly(this,event);" />
+			</td>
+			<td><h:inputText id="expired" value="#{quarterStockPositionHome.editingMedicine.expired}" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText id="closbal" value="0" readonly="true" style="background-color: lightgray;"/></td>
+			<td><h:inputText value="#{quarterStockPositionHome.editingMedicine.outOfStock}" onkeypress="return numbersOnly(this,event);"/></td>
+		</tr>
+			
+	</table>
+	<br/>
+	
+	<h:outputText value="#{messages['quarter.savingalert']}" styleClass="error" rendered="#{not userSession.tbunit.patientDispensing}"/>
+	<h:outputText value="#{messages['quarter.savingalert2']}" styleClass="error" rendered="#{userSession.tbunit.patientDispensing}"/>
+	
+	<br/>
+	<a:commandLink action="#{quarterStockPositionHome.save}" styleClass="button" 
+		onclick="if (!disableButton(this)) return false;">
+		<span>#{messages['form.save']}</span>
+	</a:commandLink>	
+	<s:link view="/custom/bd/medicines/quartelystqpos.xhtml" styleClass="button-alt" onclick="disableButton(this)">
+    	<span>#{messages['form.cancel']}</span>
+	</s:link>
+	
+	</div>
+	
+	</h:form>
+	</s:decorate>
+	
+	<script language="JavaScript" type="text/javascript">
+	<!--
+	updateCloseBalTotal();
+
+	function updateCloseBalTotal(){
+		var openbal = parseInt(document.getElementById('a:main:openbal').value); if(isNaN(openbal)) openbal = 0;
+		var received = parseInt(document.getElementById('a:main:received').value); if(isNaN(received)) received = 0;
+		var posadjust = parseInt(document.getElementById('a:main:posadjust').value); if(isNaN(posadjust)) posadjust = 0;
+		var negadjust = parseInt(document.getElementById('a:main:negadjust').value); if(isNaN(negadjust)) negadjust = 0;
+		var consumption = parseInt(document.getElementById('a:main:consumption').value); if(isNaN(consumption)) consumption = 0;
+		var expired = parseInt(document.getElementById('a:main:expired').value); if(isNaN(expired)) expired = 0;
+
+		var num = openbal + received + posadjust - negadjust - consumption - expired;
+
+		if(isNaN(num))
+			num = 0;
+		
+		document.getElementById('a:main:closbal').value = num;
+	}
+	-->
+	</script>
+	</ui:define>
+</ui:composition>

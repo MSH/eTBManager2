@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.details.medexam']}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml" id="formexamdec">
+	<a:form id="formexam" styleClass="form1">
+
+	<div class="form-content">
+    <s:decorate id="dt" template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['cases.details.date']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="true" /> 
+    	<ui:param name="datefield" value="#{medicalExaminationBd.date}" /> 
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedAppointmentType']}:</ui:define>
+    	<h:selectOneMenu value="#{medicalExaminationBd.appointmentType}" >
+    		<s:selectItems value="#{medAppointmentTypes}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.weight']}:</ui:define>
+   		<h:inputText value="#{medicalExaminationBd.weight}" required="true" converter="localeDoubleConverter"
+					 onkeypress="return numbersOnly(this,event, '#{timezones.decimalSeparator}',7,true);"
+					 style="width:80px;" >
+   		</h:inputText>#{messages['MedicalExamination.weight.unit']}
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.height']}:</ui:define>
+    	<h:inputText value="#{medicalExaminationBd.height}"
+					 onkeypress="return numbersOnly(this,event,'#{timezones.decimalSeparator}',6,true);">
+		</h:inputText>
+    	#{messages['MedicalExamination.height.unit']}
+    </s:decorate>
+
+
+    <s:decorate template="/layout/edit.xhtml" id="usingdec">
+    	<ui:define name="label">#{messages['MedicalExamination.usingPrescMedicines']}</ui:define>
+    	<h:selectOneMenu id="cbpresc" value="#{medicalExaminationBd.usingPrescMedicines}" required="true" style="display:block;" onchange="showReason(this)" >
+    		<s:selectItems value="#{yesNoList}" var="it" label="#{messages[it.key]}" noSelectionLabel="-"/>
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    	<div id="edtreason">
+	   	    <s:decorate template="/layout/edit.xhtml" id="reasondec" >
+	   			<ui:define name="label">#{messages['form.reason']}:</ui:define>
+	   			<ui:param name="labelstyle" value="width:auto; text-align:left" />
+	   			<h:inputText id="reasoninput" value="#{medicalExaminationBd.reasonNotUsingPrescMedicines}" style=" width : 340px;" maxlength="100"/>
+	  		</s:decorate>
+	  	</div>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['MedicalExamination.responsible']}:</ui:define>
+    	<h:inputText value="#{medicalExaminationBd.responsible}" style=" width : 340px;" maxlength="100"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" id="cbdotprovdec" >
+    	<ui:define name="label">#{messages['MedicalExamination.DOTProviderType']}</ui:define>
+        <h:selectOneMenu id="cbdotprov" value="#{medicalExaminationBd.dotTypeFv}" style="margin-right:4px;" onchange="showDotDetails(this)">
+            <s:selectItems var="it" value="#{fieldsQuery.dotTypes}" noSelectionLabel="-" label="#{it}" />
+            <s:convertEntity />
+        </h:selectOneMenu>
+
+   		<div id="dotProvName" style="display:#{medicalExaminationBd.dotTypeFv != null ? '' : 'none'}">
+	   	    <s:decorate template="/layout/edit.xhtml" id="dotnamedec">
+	   			<ui:define name="label">#{messages['MedicalExamination.DOTProviderName']}:</ui:define>
+	   			<ui:param name="labelstyle" value="width:auto; text-align:left" />
+	   			<h:inputText id="nameinput" value="#{medicalExaminationBd.dotProvName}" style=" width : 400px;" maxlength="100"/>
+	  		</s:decorate>
+	   	    <s:decorate template="/layout/edit.xhtml" id="dotnumberdec">
+	   			<ui:define name="label">#{messages['MedicalExamination.DOTProviderPhoneNumber']}:</ui:define>
+	   			<ui:param name="labelstyle" value="width:auto; text-align:left" />
+	   			<h:inputText id="dotnumberinput" value="#{medicalExaminationBd.dotPhoneNumber}" style=" width : 340px;" maxlength="100"/>
+	  		</s:decorate>  
+  		</div> 			 
+   			
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputText value="#{medicalExaminationBd.comments}" style=" width : 340px;" maxlength="100"/>
+    </s:decorate>
+
+	</div>
+
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandLink action="#{medicalExaminationBdHome.persist}" styleClass="button" reRender="formexam" 
+            	oncomplete="this.disabled=false;"
+            	onclick="if(!disableButton(this))return false;" >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" propagation="end" onclick="disableButton(this)">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
+    </div>
+    
+	</a:form>
+</s:decorate>
+
+<p/>
+
+<script type="text/javascript">
+	function showReason(cb){
+		if (cb.selectedIndex==2)
+			jQuery('#edtreason').show(500);
+		else{
+			document.getElementById('formexamdec:formexam:usingdec:reasondec:reasoninput').value = '';
+			jQuery('#edtreason').hide(500);
+		}
+	}
+	function showDotDetails(cb){
+		if (cb.selectedIndex!=0)
+			jQuery('#dotProvName').show(500);
+		else{
+			document.getElementById('formexamdec:formexam:cbdotprovdec:dotnamedec:nameinput').value = '';
+			document.getElementById('formexamdec:formexam:cbdotprovdec:dotnumberdec:dotnumberinput').value = '';
+			jQuery('#dotProvName').hide(500);
+		}
+	}
+	showDotDetails(document.getElementById('formexamdec:formexam:cbdotprovdec:cbdotprov'));
+	showReason(document.getElementById('formexamdec:formexam:usingdec:cbpresc'));
+</script>
+
+</ui:define>
+
+</ui:composition>  

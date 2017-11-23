@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+		>
+
+	<h:panelGroup id="tblres">
+		<table id="tblunits" class="table2">
+			<tr>
+				<th style="max-width: 200px">
+					Location
+				</th>
+				<th>
+					#{messages['DiagnosisType.SUSPECT']}
+				</th>
+				<th>
+					#{messages['CaseClassification.TB']}
+				</th>
+				<th>
+					#{messages['CaseClassification.DRTB']}
+				</th>
+				<th>
+					#{messages['global.total']}
+				</th>
+			</tr>
+			<tbody id="relbody">
+			</tbody>
+		</table>
+	</h:panelGroup>
+
+
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+//			window.$ = jQuery;
+			window.tree = {};
+
+			mountTree();
+			jQuery('#divreport tr').appendTo('#tblunits #relbody');
+		});
+
+		function findNode(id, pnode) {
+			var tree = pnode? pnode.items: window.tree;
+			for (var k in tree) {
+				var n = tree[k];
+				if (n.id === id) {
+					return n;
+				}
+				n = findNode(id, n);
+				if (n) {
+					return n;
+				}
+			}
+		}
+
+		// mount tree from the loaded HTML
+		function mountTree() {
+			// get the parent id
+			var pid = jQuery('#edtparent').val();
+			var items = !pid || pid === 0? window.tree: findNode(pid).items;
+			if (!pid || pid === 0) {
+				items = window.tree;
+			}
+			else {
+				var n = findNode(pid);
+				if (!n.items) {
+					n.items = {};
+				}
+				items = n.items;
+			}
+
+			// get all ids
+			jQuery('#divreport tr').each(function() {
+				var s = this.id.substring(3);
+				items[s] = {
+					id: s,
+					collapsed: true
+				};
+			});
+		}
+
+		function nodeClick(id) {
+			var node = findNode(id);
+			if (node.collapsed) {
+				expandNode(node);
+			}
+			else {
+				collapseNode(node);
+			}
+		}
+
+		// show child nodes of a given node
+		function expandNode(node) {
+			if (!node.items) {
+				loadNodes(node.id);
+				return;
+			}
+
+			for (var k in node.items) {
+				jQuery('#row' + k).show();
+			}
+
+			jQuery('#row' + node.id + ' .icon-plus-sign').removeClass('icon-plus-sign').addClass('icon-minus-sign');
+			node.collapsed = false;
+		}
+
+		function collapseNode(node) {
+			node.collapsed = true;
+			if (!node.items) {
+				return;
+			}
+
+			for (var id in node.items) {
+				jQuery('#row' + id).hide();
+				var child = node.items[id];
+				collapseNode(child);
+				child.collapsed = true;
+			}
+			jQuery('#row' + node.id + ' .icon-minus-sign').removeClass('icon-minus-sign').addClass('icon-plus-sign');
+		}
+
+		function childrenVisible(node, visible) {
+			if (!node.items) {
+				return;
+			}
+			node.items.forEach(function(item) {
+				var el = jQuery('#row' + item);
+				if (visible) {
+					el.show();
+				}
+				else {
+					el.hide();
+				}
+			});
+		}
+
+		function afterLoad() {
+			mountTree();
+			// get parent node list
+			var pid = jQuery('#edtparent').val();
+			jQuery('#divreport tr').insertAfter('#relbody #row' + pid);
+
+			var pnode = findNode(pid);
+			expandNode(pnode);
+		}
+
+
+
+		function toggleTreeNode(id) {
+			var node = window.tree[id];
+			if (node) {
+				if (node.collapsed) {
+					expandNode(node);
+				}
+				else {
+					collapseNode(node);
+				}
+			}
+			else {
+				node = {id: id};
+				loadNode(id);
+			}
+
+
+			window.selrow = id;
+			var node = getRow(id);
+			var lnk = node.hasClass('node-collapse'); jQuery('.node-collapsed', node);
+			var iscol = lnk.length > 0;
+
+			// is collapsed?
+			if (iscol) {
+				lnk.addClass('node-expanded').removeClass('node-collapsed');
+				jQuery('.icon-plus-sign', lnk).removeClass('icon-plus-sign').addClass('icon-minus-sign');
+
+				// add children
+				addNodes(id);
+			}
+			else {
+				lnk.removeClass('node-expanded').addClass('node-collapsed');
+				jQuery('.icon-minus-sign', lnk).addClass('icon-plus-sign').removeClass('icon-minus-sign');
+
+				// remove children
+				var res = jQuery('#tblunits #relbody .p' + id);
+				jQuery('#tblunits #relbody .p' + id).remove();
+			}
+		}
+
+		function getRow(id) {
+			var s = '#tblunits #relbody #row' + id;
+			return jQuery(s);
+		}
+
+		function afterResult() {
+			var s = '#tblunits #relbody';
+			var sel = '#divreport tr';
+			if (window.selrow) {
+				s += ' #row' + window.selrow;
+				jQuery('#divreport tr').insertAfter(s);
+			}
+			else {
+				jQuery(sel).appendTo(s);
+			}
+			console.log(s);
+		}
+	</script>
+
+	<a:jsFunction name="loadNodes"
+				  action="#{casesUnitReport.execute}"
+				  reRender="pnlresult"
+				  oncomplete="afterLoad()" ajaxSingle="true">
+		<a:actionparam name="param1" assignTo="#{casesUnitReport.admunitId}" converter="javax.faces.Integer" />
+	</a:jsFunction>
+
+
+	<h:panelGroup id="pnlresult">
+		<div id="divreport" style="display:block">
+			<input id="edtparent" type="hidden" value="#{casesUnitReport.admunitId}" />
+			<table>
+			<a:repeat value="#{casesUnitReport.items}" var="it" rendered="#{facesContext.renderResponse}">
+				<tr id="row#{it.id}" class="p#{casesUnitReport.admunitId}">
+					<td class="highlight">
+						<div id="divitem" style="float:left; padding-left:#{casesUnitReport.level * 24}px">
+							<s:fragment rendered="#{it.type=='ADMINUNIT'}">
+								<a:commandLink onclick="nodeClick('#{it.id}')" rendered="#{it.node}" styleClass="node-collapsed">
+									<i class="icon-plus-sign"></i>
+									#{it.name}
+								</a:commandLink>
+								<h:outputText value="#{it.name}" rendered="#{not it.node}" />
+							</s:fragment>
+							<s:link rendered="#{it.type == 'HEALTHFACILITY'}" value="#{it.name}">
+								<f:param name="id" value="#{it.id}" />
+								<div class="icon-hu"></div>
+							</s:link>
+						</div>
+					</td>
+					<td align="center">
+						#{it.numSuspects > 0? it.numSuspects : '-'}
+					</td>
+					<td align="center">
+						#{it.numTB > 0? it.numTB : '-'}
+					</td>
+					<td align="center">
+						#{it.numDRTB > 0? it.numDRTB : '-'}
+					</td>
+					<td align="center">
+						#{it.numSuspects + it.numTB + it.numDRTB > 0? it.numSuspects + it.numTB + it.numDRTB : '-'}
+					</td>
+				</tr>
+			</a:repeat>
+			</table>
+		</div>
+	</h:panelGroup>
+
+</ui:composition>

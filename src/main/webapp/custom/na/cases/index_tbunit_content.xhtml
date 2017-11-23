@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+        >
+
+	<table width="100%" class="table1">
+	<tr><th colspan="2">#{userWorkspace.tbunit.name}
+	</th></tr>
+	<tr>
+		<th align="left">#{messages['CaseState']}
+		</th>
+		<th align="right">#{messages['global.total']}
+		</th>
+	</tr>
+	<a:repeat value="#{caseStateReport.items}" var="it">
+		<tr><td>
+			<s:link value="#{it.description}"  view="/cases/searchresult.xhtml" disabled="#{it.stateIndex==null}">
+				<f:param name="stateIndex" value="#{it.stateIndex}"/>
+				<f:param name="sc" value="#{'CASE_STATE'}"/>
+				<f:param name="vs" />
+			</s:link>
+			</td>
+			<td align="right">
+			<h:outputText value="#{it.total}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</td>
+		</tr>
+	</a:repeat>
+	</table>
+    
+</ui:composition>

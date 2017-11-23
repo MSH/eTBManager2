@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+	<begin-conversation join="true"/>
+   	<restrict>#{s:hasRole('ADMINUNITS_EDT')}</restrict>
+	<param name="id" value="#{adminUnitHome.idWithLog}" converterId="javax.faces.Integer" />
+	<param name="parentid" value="#{adminUnitHome.parentId}" converterId="javax.faces.Integer" />
+	<navigation>
+		<rule if-outcome="persisted">
+		    <end-conversation/>
+			<redirect view-id="/admin/adminunits.xhtml" >
+				<param name="parentid" value="#{adminUnitHome.parentId}" />
+			</redirect>
+		</rule>
+	</navigation>
+</page>

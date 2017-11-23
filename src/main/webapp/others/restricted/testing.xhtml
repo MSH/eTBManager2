@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="Testing" />
+<ui:param name="topmenu" value="0" />
+<ui:param name="pagewidth" value="850px" />
+<ui:param name="left" value="0" />
+
+<ui:define name="content">
+
+<h:form style="padding:10px">
+	<a:commandLink value="Browser Info" action="#{browserInfo.isValidBrowser}" />
+</h:form>
+
+<div style="width:100%">
+<table class="table1" width="100%">
+	<tr>
+		<th>Period
+		</th>
+		<td>
+			<div style="float:right">01/12/2011</div>
+			01/01/2010
+		</td>
+	</tr>
+	<tr>
+		<th width="150px">Health Unit</th>
+		<td>
+			Health Unit 1
+		</td>
+	</tr>
+	<tr class="treatment-header">
+		<th>Treatment Regimen</th>
+		<td>
+			Category I
+		</td>
+	</tr>
+	<tr>
+		<td class="colb">
+			<div class="medicine-icon">R 400mg</div>
+		</td>
+		<td>
+			<div class="bar"  style="width:25%; margin-left:50%;">
+				<div class="bar-left"><div class="bar-right"><div class="bar-caption">2</div></div></div>
+				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
+					01/01/2010 .. 01/12/2011 <br/> 331 dias<br/>
+					<b>Dose Unit: </b> 1 <br/>	<b>Frequency: </b> 7/7 <p/>	<a>Editar</a> <a>Excluir</a>
+				</div></div></div>
+			</div>
+			<div class="bar" style="width:25%; margin-left:0%;">
+				<div class="bar-left"><div class="bar-right"><div class="bar-caption">1
+				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
+					01/01/2010 .. 01/12/2011 <br/> 331 dias<br/>
+					<b>Dose Unit: </b> 1 <br/>	<b>Frequency: </b> 7/7 <p/>	<a>Editar</a> <a>Excluir</a>
+				</div></div></div>
+				</div></div></div>
+			</div>
+		</td>
+	</tr><tr>
+		<td class="colb">
+			<div class="medicine-icon">Z 400mg</div>
+		</td>
+		<td>
+			<div class="bar"  style="width:100%; ">
+				<div class="bar-left"><div class="bar-right">
+					<div class="bar-caption"><div class="bar-comments"/>2
+					</div></div></div>
+				<div class="popup-long"><div id="closewin"/><div id="bottom"><div id="content">
+					01/01/2010 .. 01/12/2011 <br/> 331 dias<br/>
+					<b>Dose Unit: </b> 1 <br/>	<b>Frequency: </b> 7/7 <p/>	<a>Editar</a> <a>Excluir</a>
+				</div></div></div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="colb">
+			<div class="medicine-icon">H 400mg</div>
+		</td>
+		<td>
+			<div class="bar"  style="width:50%; left:50%;">
+				<div class="bar-left"><div class="bar-right"><div class="bar-caption">2</div></div></div>
+				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
+					01/01/2010 .. 01/12/2011 <br/> 331 dias<br/>
+					<b>Dose Unit: </b> 1 <br/>	<b>Frequency: </b> 7/7 <p/>	<a>Editar</a> <a>Excluir</a>
+				</div></div></div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="colb">
+			<div class="medicine-icon">H 400mg</div>
+		</td>
+		<td>
+			<div class="bar"  style="width:50%; left:0;">
+				<div class="bar-left"><div class="bar-right"><div class="bar-caption">2</div></div></div>
+				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
+					01/01/2010 .. 01/12/2011 <br/> 331 dias<br/>
+					<b>Dose Unit: </b> 1 <br/>	<b>Frequency: </b> 7/7 <p/>	<a>Editar</a> <a>Excluir</a>
+				</div></div></div>
+			</div>
+			<div class="bar"  style="width:50%; left:0%;">
+				<div class="bar-left"><div class="bar-right"><div class="bar-caption">2</div></div></div>
+				<div class="popup"><div id="closewin"/><div id="bottom"><div id="content">
+					01/01/2010 .. 01/12/2011 <br/> 331 dias<br/>
+					<b>Dose Unit: </b> 1 <br/>	<b>Frequency: </b> 7/7 <p/>	<a>Editar</a> <a>Excluir</a>
+				</div></div></div>
+			</div>
+		</td>
+	</tr>
+</table>
+</div>
+
+<script type="text/javascript"><!--
+
+jQuery(document).ready(function () {
+	popupTreatment = null;
+	popupLong = false;
+	
+	jQuery(".bar").click(function() {
+		var aux = jQuery(".popup", this);
+		// is long popup ?
+		if (aux.size() == 0) {
+			aux = jQuery(".popup-long", this);
+			if (aux.is(':hidden')) {
+				if (popupTreatment != null)
+					closePopupHint(popupTreatment);
+				popupLong = true;
+				aux.animate({opacity: "show", top: "-230px"}, "slow");
+				popupTreatment = aux;
+			}
+			else closePopupHint(aux);
+		}
+		else {
+			if (aux.is(':hidden')) {
+				if (popupTreatment != null)
+					closePopupHint(popupTreatment);
+				popupLong = false;
+				aux.animate({opacity: "show", top: "-90px"}, "slow");
+				popupTreatment = aux;
+			}
+			else closePopupHint(aux);
+		}
+	});
+
+	jQuery('.bar').mouseenter(function() {
+		jQuery(this).removeClass('bar');
+		var e = jQuery('.bar-left', this);
+		e.addClass('bar-left-active'); e.removeClass('bar-left');
+		jQuery('.bar-right', this).addClass('bar-right-active').removeClass('bar-right');
+
+		jQuery(this).addClass('bar-active');
+	});
+
+	jQuery('.bar').mouseleave(function() {
+		jQuery(this).removeClass('bar-active');
+		jQuery('.bar-left-active', this).addClass('bar-left').removeClass('bar-left-active');
+		jQuery('.bar-right-active', this).addClass('bar-right').removeClass('bar-right-active');
+
+		jQuery(this).addClass('bar');		
+	});
+
+	jQuery('.popup #closewin').click( function() {
+		closePopupHint(jQuery(this).parent('.popup'));
+	});
+	jQuery('.popup-long #closewin').click( function() {
+		closePopupHint(jQuery(this).parent('.popup'));
+	});
+});
+
+function closePopupHint(jqryElem, isLong) {
+	if (popupLong)
+		 jqryElem.animate({opacity: "hide", top: "-220px"}, "fast");
+	else jqryElem.animate({opacity: "hide", top: "-80px"}, "fast");
+	popupTreatment = null;	
+}
+
+--></script>
+
+</ui:define>
+</ui:composition>  

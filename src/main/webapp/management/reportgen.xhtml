@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="http://richfaces.org/a4j"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag']}" />
+
+<ui:param name="topmenu" value="2" />
+<ui:param name="left" value="0" />
+<ui:param name="ie9" value="true" />
+
+
+<ui:define name="head">
+      <a:loadScript src="/etbmapp/etbmapp.nocache.js?v=3" />
+      <a:loadScript src="/public/js/highchart/highcharts.js" />
+</ui:define>
+
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['home']}" view="/management/index.xhtml"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{messages['manag.reportgen']}" />
+	</div>
+</ui:define>
+
+
+<ui:define name="content">
+
+    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+	
+	<div id="entryPointId" >
+		<div style="text-align:center;font-size:1.4em;margin-top:50px;margn-bottom:50px;">
+			<div class="wait-icon2"></div>#{messages['global.wait']}
+		</div>	
+	</div>
+</ui:define>
+
+</ui:composition>  

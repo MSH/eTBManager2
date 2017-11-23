@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+        >
+                 
+    <div class="prop">                
+        <s:label styleClass="name" style="#{empty labelstyle? '': labelstyle}">
+            <ui:insert name="label"/>
+            <s:span style="color:red;" rendered="#{required or redasterisk}">*</s:span>
+        </s:label>
+        
+        <span class="value #{invalid?'fielderror':''}">
+            <s:validateAll>
+            	<h:panelGroup id="edtdatep">
+				<rich:calendar id="#{empty edtid?'edtdate':edtid}" enableManualInput="true" value="#{datefield}" 
+					required="#{required}" locale="#{locale}" datePattern="#{messages['locale.datePattern']}" 
+					timeZone="#{timezones.default}" validator="#{dateValidator.validate}" inputStyle="width:100px;" 
+					showWeeksBar="false">
+                    <ui:insert name="insidecalendartag"/>
+				</rich:calendar>
+				<f:param name="canBeFuture" value="#{future}" />
+				<f:param name="validatePatientDeathDate" value="#{checkDeathDate}" />
+				</h:panelGroup>
+    			<h:outputText value="(#{messages['locale.displayDatePattern']})" rendered="#{empty showPattern ? true : showPattern}"/>
+    			<rich:jQuery selector="#edtdatep .rich-calendar-input" query="mask('#{messages['locale.dateMask']}')" />
+    			<ui:insert />
+            </s:validateAll>
+        </span>
+        
+        <s:message styleClass="error"/>
+    </div>
+    
+</ui:composition>
