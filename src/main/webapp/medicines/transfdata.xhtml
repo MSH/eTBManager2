@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['meds.transfer.detail']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['meds.inventory']}" view="/medicines/index.html" propagation="none" />
+	<s:link view="#{transfer.status == 'WAITING_RECEIVING'? '/medicines/transfer.xhtml': '/medicines/transferhistory.xhtml'}" value="#{transfer.status == 'WAITING_RECEIVING'? messages['meds.transfer.viewopen']: messages['meds.transfer.viewhistory']}" propagation="none"/>
+	<div class="item selected">
+		<s:link view="/medicines/transfdata.xhtml" value="##{transfer.id}" propagation="none"/>
+	</div>
+</ui:define>
+
+
+<ui:define name="left">
+	<h:form class="vertical-menu">
+	<s:link view="/medicines/transfrec.xhtml" rendered="#{(transferHome.canReceive)}">
+		<f:param name="id" value="#{transfer.id}" />
+		<i class="icon-circle-arrow-right" />#{messages['meds.transfer.receive']}
+	</s:link>
+
+	<s:link view="/medicines/transfcancel.xhtml" rendered="#{transferHome.canCancel and transfer.status!='DONE'}" >
+		<f:param name="id" value="#{transfer.id}" />
+		<i class="icon-remove" />#{messages['meds.transfer.cancel']}
+	</s:link>
+	</h:form>
+</ui:define>
+
+
+<ui:define name="print-link">
+	<s:link view="/reports/transfdata.xhtml" value="#{messages['global.print']}" target="_blank" />
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+    <table width="100%" class="tabela3" style="margin-bottom:10px" cellpadding="8">
+    <tr><td class="header">
+    	<h2>#{messages['Transfer.unitFrom']}: </h2>
+    	<s:decorate template="/layout/unit.xhtml">
+    		<ui:param name="unit" value="#{transfer.unitFrom}" />
+    	</s:decorate>
+    </td>
+    <td class="header">
+    	<h2>#{messages['Transfer.unitTo']}: </h2>
+    	<s:decorate template="/layout/unit.xhtml">
+    		<ui:param name="unit" value="#{transfer.unitTo}" />
+    	</s:decorate>
+    </td></tr>
+
+    <tr><td style="font-size:11px;padding-top:5px" class="header">
+    <b>#{messages['Transfer.shippingDate']}: </b>
+	<h:outputText value="#{transfer.shippingDate}" converter="localeDateConverter" />
+    <br/>
+    <b>#{messages['form.by']}: </b> 
+    	#{transfer.userFrom.name}
+    </td>
+    <td class="header" style="font-size:11px;">
+    	<s:fragment rendered="#{transfer.status=='DONE'}">
+      		<b>#{messages['Transfer.receivingDate']}: </b>
+	  		<h:outputText value="#{transfer.receivingDate}" converter="localeDateConverter" />
+      		<br/>
+      		<b>#{messages['form.by']}: </b> #{transfer.userFrom.name}
+     	</s:fragment>
+    </td>
+    </tr>
+    <tr><td colspan="2">
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{transfer.status!='CANCELLED'}">
+    	<ui:define name="label">#{messages['TransferStatus']}:</ui:define>
+    	<h:outputText value="#{messages[transfer.status.key]}" />
+    </s:decorate>
+    
+    <h:outputText value="#{messages[transfer.status.key]}" rendered="#{transfer.status=='CANCELLED'}" style="font-weight:bold;font-size:24px;color:red;padding:10px;"/>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{not empty transfer.commentsFrom}">
+    	<ui:define name="label">#{messages['Transfer.commentsFrom']}:</ui:define>
+    	<h:outputText value="#{transfer.commentsFrom}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" rendered="#{not empty transfer.commentsTo}">
+    	<ui:define name="label">#{messages['Transfer.commentsTo']}:</ui:define>
+    	<h:outputText value="#{transfer.commentsTo}" />
+    </s:decorate>
+
+	<div  style="margin-top:30px;clear:left;">
+	<b>#{messages['meds.movs.itensmov']}</b><br/>
+	</div>
+	
+	<h:panelGroup id="pnlitems">
+	<table width="100%" class="table1">
+	<ui:repeat value="#{transferHome.sources}" var="s">
+		<tr style="background-color:#EDF7EF;"><td colspan="6" style="border:1px solid #B4E8BB;padding:5px;">
+			<b>#{s.source.name}</b>
+		</td></tr>
+		
+		<tr>
+		<th align="left">#{messages['Medicine']}</th>
+		<th align="center">#{messages['Batch.expiryDate']}</th>
+		<th align="right">#{messages['OrderItem.shippedQuantity']}</th>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+		<th align="right">#{messages['global.unitPrice']}</th>
+		<th align="right">#{messages['global.totalPrice']}</th>
+		</s:fragment>
+		<th align="right">#{messages['OrderItem.receivedQuantity']}</th>
+		</tr>
+		<ui:repeat value="#{s.items}" var="it">
+		<tr bgcolor="#f3f3f0"><td>
+				<div class="medicine-icon" />
+				#{it.medicine}
+		</td>
+		<td>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.quantity}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+		<td align="right">
+			<b><h:outputText value="#{it.unitPrice}">
+				<f:convertNumber pattern="#,###,##0.0000"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td align="right">
+			<b><h:outputText value="#{it.totalPrice}">
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+			</b>
+		</td>
+		</s:fragment>
+		<td align="right">
+			<b><h:outputText value="#{it.quantityReceived}">
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		</tr>
+		
+		<ui:repeat value="#{it.batches}" var="b">
+			<tr style="font-size:9px;">
+				<td class="colb" >
+					<s:decorate template="/layout/batch.xhtml" >
+						<ui:param name="batch" value="#{b.batch}" />
+					</s:decorate>
+				</td>
+				<td align="center" class="colb">
+					<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+				</td>
+				<td class="colb" align="right">
+					<h:outputText value="#{b.quantity}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+				<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+				<td align="right" class="colb">
+					<h:outputText value="#{b.batch.unitPrice}">
+						<f:convertNumber pattern="#,###,##0.0000"/>
+					</h:outputText>
+				</td>
+				<td align="right" class="colb">
+					<h:outputText value="#{b.totalPrice}">
+						<f:convertNumber pattern="#,###,###,##0.00"/>
+					</h:outputText>
+				</td>
+				</s:fragment>
+				<td class="colb" align="right">
+					<h:outputText value="#{b.quantityReceived}">
+						<f:convertNumber pattern="#,###,##0"/>
+					</h:outputText>
+				</td>
+			</tr>
+		</ui:repeat>
+		</ui:repeat>
+	</ui:repeat>
+	</table>
+	</h:panelGroup>		
+
+    </td></tr>
+    </table>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

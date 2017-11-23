@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="admintemplate.xhtml">
+
+<ui:param name="title" value="#{messages['admin.profiles']}" />
+<ui:param name="submenu" value="0" />
+
+
+<ui:define name="content">
+<h1><i class="icon-key" />#{title}</h1>
+<h:form id="main">
+<s:link view="/admin/edtprofile.xhtml" styleClass="button" >
+	<f:param name="id" value="#{null}" />
+	<span>#{messages['form.newf']}</span>
+</s:link>
+
+<p/>
+
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty profiles.resultList}" styleClass="warn" />
+<h:dataTable id="tbl" value="#{profiles.resultList}" var="p" border="0" 
+  styleClass="table1" rowClasses="lin1,lin2" width="500px"  columnClasses="coll,colc"
+  rendered="#{not empty profiles.resultList}" >
+  <h:column>
+  	<f:facet name="header">
+  		<s:link value="#{messages['form.name']}" style="padding-left:10px;" styleClass="collh">
+  			<f:param name="order" value="p.name#{profiles.order=='p.name'?' desc':''}" />
+  		</s:link>
+  	</f:facet>
+	<s:link view="/admin/edtprofile.xhtml" value="#{p.name}" style="padding-left:10px"> 
+		<f:param name="id" value="#{p.id}" />
+	</s:link>
+  </h:column>
+
+  <h:column>
+  	<f:facet name="header">#{messages['form.action']}</f:facet>
+	<a:commandLink action="#{profileHome.remove}" value="#{messages['form.remove']}" 
+		onclick="if (!confirm('#{messages['form.confirm_remove']}')) { return false;}" 
+		reRender="main,messages">
+		<a:actionparam assignTo="#{profileHome.id}" value="#{p.id}" name="id" converter="javax.faces.Integer"/>
+	</a:commandLink>
+  </h:column>
+</h:dataTable>
+</h:form>
+
+<ui:include src="/layout/tablerow.xhtml" />
+
+</ui:define>
+
+</ui:composition>  

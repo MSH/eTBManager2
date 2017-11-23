@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/templatemed.xhtml">
+
+<ui:param name="title" value="#{messages['meds.orders.viewall']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="naveg">
+	<div class="item">
+		<s:link value="#{messages['meds.inventory']}" view="/medicines/index.xhtml" propagation="none"/>
+	</div>
+	<div class="item selected">
+		<s:link value="#{title}" propagation="none" view="/medicines/ordershistory.xhtml"/>
+	</div>
+</ui:define>
+
+
+<ui:define name="content_unit">
+
+<h:form id="main" styleClass="form1">
+
+	<div class="form-content">
+		<s:decorate template="/layout/edit.xhtml" id="datedec">
+	    	<ui:define name="label">#{messages['global.month']} / #{messages['global.year']}:</ui:define>
+			<h:selectOneMenu value="#{ordersHistory.month}" id="month">
+				<f:selectItems value="#{monthsAll}"/>
+				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
+			</h:selectOneMenu>
+			<h:selectOneMenu value="#{ordersHistory.year}" style="margin-left:5px; width : 70px;" id="year">
+				<f:selectItems value="#{yearsAll}"/>
+				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
+			</h:selectOneMenu>
+		</s:decorate>
+		<s:decorate template="/layout/edit.xhtml" id="orderStatusdec">
+	    	<ui:define name="label">#{messages['OrderStatus']}:</ui:define>
+			<h:selectOneMenu id="orderStatus" value="#{ordersHistory.os}">
+				<s:selectItems var="v" value="#{ordersHistory.orderStatusList}" label="#{messages[v.key]}" noSelectionLabel="#{messages['form.noselection']}" />
+				<s:convertEnum />
+				<a:support event="onchange" reRender="pnlorders" process="difforder,orderStatus,month,year"/>
+			</h:selectOneMenu>
+		</s:decorate>
+		
+		<s:decorate template="/layout/edit.xhtml" id="difforderdec">
+	    	<ui:define name="label">#{messages['form.qttDiff']}:</ui:define>
+			<h:selectOneMenu id="difforder" value="#{ordersHistory.diffType}">
+				<s:selectItems var="v" value="#{globalLists.getShippedReceivedDiffType()}" label="#{messages[v.key]}" noSelectionLabel="#{messages['form.noselection']}"/>
+				<s:convertEnum />
+				<a:support event="onchange" reRender="pnlorders" />
+			</h:selectOneMenu>
+		</s:decorate>
+	</div>
+	
+<!-- Solve consistency problem when clicking on back from browser navigation -->
+<script type="text/javascript">
+window.onload = function () {
+	document.getElementById("page:main:datedec:month").selectedIndex=0;
+	document.getElementById("page:main:datedec:year").selectedIndex=0;
+	document.getElementById("page:main:orderStatusdec:orderStatus").selectedIndex=0;
+	document.getElementById("page:main:difforderdec:difforder").selectedIndex=0;
+	}
+</script>
+
+<h:panelGroup id="pnlorders">
+<s:decorate template="/layout/naveg.xhtml">
+	<ui:param name="list" value="#{ordersHistory}" />
+<s:fragment rendered="#{facesContext.renderResponse and not empty ordersHistory.resultList}">
+
+	<h:dataTable id="tbl" value="#{ordersHistory.resultList}" var="it" border="0" columnClasses="colb,colb,colb,colcb"
+  		styleClass="table2" rowClasses="lin1,lin2" width="100%">
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['form.id']}" styleClass="collh" />
+		</f:facet>
+		<s:link value="#{it.id}" view="/medicines/orderdata.xhtml">
+			<f:param name="id" value="#{it.id}" />
+		</s:link>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Order.orderDate']}" styleClass="collh" />
+		</f:facet>
+		<h:outputText value="#{it.orderDate}" converter="localeDateConverter"/>
+		<div class="text-small">
+   		<h:outputText value="#{it.orderDate}" converter="periodConverter" >
+   			<f:param name="type" value="elapsed-time" />
+   		</h:outputText>
+   		</div>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Order.unitFrom']}"  styleClass="collh"/>
+		</f:facet>
+		<s:decorate template="/layout/unit.xhtml">
+			<ui:param name="unit" value="#{it.unitFrom}" />
+		</s:decorate>
+		<div class="spacer"/>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['Order.unitTo']}"  styleClass="collh"/>
+		</f:facet>
+		<s:decorate template="/layout/unit.xhtml">
+			<ui:param name="unit" value="#{it.unitTo}" />
+		</s:decorate>
+	</h:column>
+
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="#{messages['OrderStatus']}"  styleClass="collh"/>
+		</f:facet>
+		<h:outputText value="#{messages[it.status.key]}" />
+	</h:column>
+	
+	</h:dataTable>
+	
+	<div class="spacer" />
+</s:fragment>
+</s:decorate>
+</h:panelGroup>
+
+</h:form>
+</ui:define>
+
+</ui:composition>  

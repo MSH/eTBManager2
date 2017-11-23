@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datastream-1.0.xsd">
+
+    <objectCollection name="dataset">
+
+        <objectGraph name="system" class="org.msh.tb.sync.ServerSignature" />
+        
+        <objectGraph name="workspace" class="org.msh.tb.entities.Workspace">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" />
+            <property name="view" use="IGNORE" />
+            <property name="users" use="IGNORE" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="expiredMedicineAdjustmentType" use="IGNORE" />
+            <property name="patientNameComposition" xmlAttribute="true" />
+            <property name="caseValidationTB" xmlAttribute="true" />
+            <property name="caseValidationDRTB" xmlAttribute="true" />
+            <property name="caseValidationNTM" xmlAttribute="true" />
+            <property name="suspectCaseNumber" xmlAttribute="true" />
+            <property name="confirmedCaseNumber" xmlAttribute="true" />
+            <property name="treatMonitoringInput" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="version" class="org.msh.tb.sync.EntityLastVersion">
+            <property name="entityClass" elementName="entity" xmlAttribute="true" />
+            <property name="lastVersion" elementName="number" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="entityKey" class="org.msh.tb.sync.EntityKey">
+            <property name="entityName" elementName="entity" xmlAttribute="true"/>
+            <property name="clientId" xmlAttribute="true"/>
+            <property name="serverId" xmlAttribute="true"/>
+            <property name="action" xmlAttribute="true" />
+            <property name="entityClass" use="IGNORE" />
+            <property name="newServerId" use="IGNORE" />
+        </objectGraph>
+
+        <objectGraph name="userprofile" class="org.msh.tb.entities.UserProfile">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="permissions">
+                <objectGraph name="permission" class="org.msh.tb.entities.UserPermission" parentProperty="userProfile">
+                    <property name="userRole.id" elementName="role_id" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="id" xmlAttribute="true" use="IGNORE" />
+                    <property name="canChange" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="canExecute" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="grantPermission" elementName="grant" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="caseClassification" elementName="classif" xmlAttribute="true"/>
+                </objectGraph>
+            </property>
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+
+        <objectGraph name="countrystructure" class="org.msh.tb.entities.CountryStructure">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="level" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" xmlAttribute="true" use="REQUIRED" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="adminunit" class="org.msh.tb.entities.AdministrativeUnit">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" xmlAttribute="true"/>
+            <property name="name.name2" elementName="name2" xmlAttribute="true"/>
+            <property name="countryStructure.id" elementName="struct" use="REQUIRED" xmlAttribute="true" />
+            <property name="code" xmlAttribute="true" use="REQUIRED" />
+            <property name="legacyId" xmlAttribute="true" />
+            <property name="parent.id" elementName="parent_id" xmlAttribute="true" />
+            <property name="unitsCount" xmlAttribute="true" />
+            <property name="units" use="IGNORE" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="healthsys" class="org.msh.tb.entities.HealthSystem">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" />
+            <property name="legacyId" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="source" class="org.msh.tb.entities.Source">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" />
+            <property name="abbrevName.name1" elementName="abbrevname1" use="REQUIRED" />
+            <property name="abbrevName.name2" elementName="abbrevname2" />
+            <property name="legacyId" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="tbunit" class="org.msh.tb.entities.Tbunit">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" />
+            <property name="adminUnit.id" elementName="adminunit" />
+            <property name="firstLineSupplier.id" elementName="firstlinesupplier" use="IGNORE"/>
+            <property name="secondLineSupplier.id" elementName="secondlinesupplier" use="IGNORE"/>
+            <property name="authorizerUnit.id" elementName="authorizer" use="IGNORE"/>
+            <property name="healthSystem.id" elementName="healthSystem" />
+            <property name="legacyId" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="lastSyncDate" use="IGNORE" />
+            <property name="dispensingFrequency" xmlAttribute="true" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="unit-link" class="org.msh.tb.sync.TBUnitLinks">
+        </objectGraph>
+        
+        <objectGraph name="substance" class="org.msh.tb.entities.Substance">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" />
+            <property name="abbrevName.name1" elementName="abbrevname1" use="REQUIRED" />
+            <property name="abbrevName.name2" elementName="abbrevname2" />
+            <property name="legacyId" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="line" xmlAttribute="true" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="medicine" class="org.msh.tb.entities.Medicine">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="genericName.name1" elementName="name1" use="REQUIRED" />
+            <property name="genericName.name2" elementName="name2" />
+            <property name="abbrevName" elementName="abbrevname" use="REQUIRED" />
+            <property name="components">
+                <objectGraph name="component" class="org.msh.tb.entities.MedicineComponent" parentProperty="medicine">
+                    <property name="id" xmlAttribute="true" use="IGNORE"/>
+                    <property name="substance.id" elementName="substance" xmlAttribute="true" />
+                    <property name="strength" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="legacyId" xmlAttribute="true" />
+            <property name="group" use="IGNORE" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="category" xmlAttribute="true" />
+            <property name="line" xmlAttribute="true" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="lab" class="org.msh.tb.entities.Laboratory">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name" elementName="name" use="REQUIRED" />
+            <property name="abbrevName" elementName="abbrevName" use="REQUIRED"/>
+            <property name="adminUnit.id" elementName="adminunit" />
+            <property name="healthSystem.id" elementName="healthsystem" />
+            <property name="legacyId" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        <objectGraph name="field" class="org.msh.tb.entities.FieldValue">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name.name1" elementName="name1" use="REQUIRED" />
+            <property name="name.name2" elementName="name2" />
+            <property name="shortName.name1" elementName="shortname1" use="REQUIRED" />
+            <property name="shortName.name2" elementName="shortname2" />
+            <property name="field" xmlAttribute="true" />
+            <property name="other" xmlAttribute="true" />
+            <property name="displayOrder" xmlAttribute="true" />
+            <property name="customId" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+        
+        <objectGraph name="tag" class="org.msh.tb.entities.Tag">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="name" elementName="name1" use="REQUIRED" />
+            <property name="sqlCondition" xmlAttribute="true" />
+            <property name="consistencyCheck" xmlAttribute="true" />
+            <property name="active" xmlAttribute="true" />
+            <property name="dailyUpdate" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="displayOrder" use="IGNORE" />
+            <property name="summary" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+
+        <!-- TREATMENT REGIMEN -->
+        <objectGraph name="regimen" class="org.msh.tb.entities.Regimen">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="medicines">
+                <objectGraph name="medicine" class="org.msh.tb.entities.MedicineRegimen">
+                    <property name="id" xmlAttribute="true" use="IGNORE"/>
+                    <property name="medicine.id" elementName="medicine" />
+                    <property name="defaultSource.id" elementName="source" />
+                    <property name="phase" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="workspace" use="IGNORE" />
+            <property name="intensivePhaseMedicines" use="IGNORE" />
+            <property name="continuousPhaseMedicines" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+        
+		<!-- USERS -->
+        <objectGraph name="userws" class="org.msh.tb.entities.UserWorkspace">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="healthSystem.id" elementName="healthsystem" xmlAttribute="true" />
+            <property name="tbunit.id" elementName="tbunit" xmlAttribute="true" />
+            <property name="profile.id" elementName="profile" xmlAttribute="true" />
+            <property name="adminUnit.id" elementName="adminunit" xmlAttribute="true" />
+            <property name="user">
+                <objectGraph name="user" class="org.msh.tb.entities.User">
+            		<property name="id" xmlAttribute="true" use="REQUIRED" />
+            		<property name="login" xmlAttribute="true" use="REQUIRED" />
+            		<property name="parentUser.id" use="IGNORE"/>
+            		<property name="defaultWorkspace" use="IGNORE" />
+            		<property name="workspaces" use="IGNORE" />
+            		<property name="theme" use="IGNORE" />
+                    <property name="state" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="workspace" use="IGNORE" />
+            <property name="laboratory" use="IGNORE" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="view" xmlAttribute="true" />
+            <property name="clientId" use="IGNORE" />
+        </objectGraph>
+
+        
+        <!-- TB CASES -->
+        <objectGraph name="tbcase" class="org.msh.tb.entities.TbCase">
+            <property name="id" xmlAttribute="true" use="REQUIRED" />
+            <property name="version" use="IGNORE" />
+            <property name="patient" >
+                <objectGraph name="patient" class="org.msh.tb.entities.Patient">
+            		<property name="id" xmlAttribute="true" use="REQUIRED" />
+            		<property name="cases" use="IGNORE" />
+		            <property name="lastTransaction" use="IGNORE" />
+            		<property name="workspace" use="IGNORE" />
+                    <property name="clientId" use="IGNORE" />
+                    <property name="gender" xmlAttribute="true" />
+                    <property name="birthDate" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="classification" xmlAttribute="true" />
+            <property name="state" xmlAttribute="true" />
+            <property name="patientType" xmlAttribute="true" />
+            <property name="diagnosisType" xmlAttribute="true" />
+            <property name="infectionSite" xmlAttribute="true" />
+            <property name="treatmentPeriod.iniDate" elementName="iniTreatDate" xmlAttribute="true"/>
+            <property name="treatmentPeriod.endDate" elementName="endTreatDate" xmlAttribute="true"/>
+            <property name="regimen.id" elementName="regimen" xmlAttribute="true"/>
+            <property name="regimenIni.id" elementName="regimenini" xmlAttribute="true"/>
+            <property name="ownerUnit.id" elementName="ownerunit" xmlAttribute="true"/>
+            <property name="pulmonaryType.id" elementName="pulmonaryType" xmlAttribute="true"/>
+            <property name="extrapulmonaryType.value.id" elementName="extrapulmonaryType" xmlAttribute="true"/>
+            <property name="extrapulmonaryType.complement" elementName="extrapulmonaryTypeCompl" />
+            <property name="extrapulmonaryType2.value.id" elementName="extrapulmonaryType2" xmlAttribute="true"/>
+            <property name="extrapulmonaryType2.complement" elementName="extrapulmonaryType2Compl" />
+            <property name="notificationUnit.id" elementName="notificationUnit" xmlAttribute="true" />
+            <property name="healthUnits">
+                <objectGraph name="healthunit" class="org.msh.tb.entities.TreatmentHealthUnit" parentProperty="tbcase">
+                    <property name="id" use="IGNORE"/>
+                    <property name="tbunit.id" elementName="tbunit" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="transferring" elementName="transf" xmlAttribute="true" />
+                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="lastTransaction" use="IGNORE" />
+                    <property name="clientId" use="IGNORE" />
+                </objectGraph>
+            </property>
+            <property name="prescribedMedicines">
+                <objectGraph name="presc-med" class="org.msh.tb.entities.PrescribedMedicine" parentProperty="tbcase">
+                    <property name="id" use="IGNORE"/>
+                    <property name="medicine.id" elementName="medicine" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="period.iniDate" elementName="iniDate" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="period.endDate" elementName="endDate" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="source.id" elementName="source" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="doseUnit" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="frequency" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="lastTransaction" use="IGNORE" />
+                    <property name="clientId" use="IGNORE" />
+                </objectGraph>
+            </property>
+            <property name="sideEffects" use="IGNORE" />
+            <property name="comorbidities">
+                <objectGraph name="comorbidity" class="org.msh.tb.entities.CaseComorbidity" parentProperty="tbcase">
+                    <property name="id" use="IGNORE"/>
+                    <property name="comorbidity.id" elementName="comorbidity" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="duration" xmlAttribute="true" />
+                    <property name="comorb" use="IGNORE" />
+                    <property name="lastTransaction" use="IGNORE" />
+                    <property name="clientId" use="IGNORE" />
+                </objectGraph>
+            </property>
+            <property name="examinations" use="IGNORE" />
+            <property name="resXRay" use="IGNORE" />
+            <property name="contacts" use="IGNORE" />
+            <property name="treatmentMonitoring">
+                <objectGraph name="treatMonitoring" class="org.msh.tb.entities.TreatmentMonitoring" parentProperty="tbcase">
+                    <property name="id" use="IGNORE"/>
+                    <property name="month" xmlAttribute="true" />
+                    <property name="year" xmlAttribute="true" />
+                    <property name="day1" xmlAttribute="true" />
+                    <property name="day2" xmlAttribute="true" />
+                    <property name="day3" xmlAttribute="true" />
+                    <property name="day4" xmlAttribute="true" />
+                    <property name="day5" xmlAttribute="true" />
+                    <property name="day6" xmlAttribute="true" />
+                    <property name="day7" xmlAttribute="true" />
+                    <property name="day8" xmlAttribute="true" />
+                    <property name="day9" xmlAttribute="true" />
+                    <property name="day10" xmlAttribute="true" />
+                    <property name="day11" xmlAttribute="true" />
+                    <property name="day12" xmlAttribute="true" />
+                    <property name="day13" xmlAttribute="true" />
+                    <property name="day14" xmlAttribute="true" />
+                    <property name="day15" xmlAttribute="true" />
+                    <property name="day16" xmlAttribute="true" />
+                    <property name="day17" xmlAttribute="true" />
+                    <property name="day18" xmlAttribute="true" />
+                    <property name="day19" xmlAttribute="true" />
+                    <property name="day20" xmlAttribute="true" />
+                    <property name="day21" xmlAttribute="true" />
+                    <property name="day22" xmlAttribute="true" />
+                    <property name="day23" xmlAttribute="true" />
+                    <property name="day24" xmlAttribute="true" />
+                    <property name="day25" xmlAttribute="true" />
+                    <property name="day26" xmlAttribute="true" />
+                    <property name="day27" xmlAttribute="true" />
+                    <property name="day28" xmlAttribute="true" />
+                    <property name="day29" xmlAttribute="true" />
+                    <property name="day30" xmlAttribute="true" />
+                    <property name="day31" xmlAttribute="true" />
+                    <property name="lastTransaction" use="IGNORE" />
+                    <property name="clientId" use="IGNORE" />
+                </objectGraph>
+            </property>
+            <property name="resHIV" use="IGNORE" />
+            <property name="examsCulture" use="IGNORE" />
+            <property name="examsMicroscopy" use="IGNORE" />
+            <property name="examsDST" use="IGNORE" />
+            <property name="examsXpert" use="IGNORE" />
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="tags" use="IGNORE" />
+            <property name="movedSecondLineTreatment" xmlAttribute="true" />
+            <property name="clientId" use="IGNORE" />
+            <property name="suspectClassification" xmlAttribute="true" />
+            <property name="validationState" xmlAttribute="true" />
+            <property name="previouslyTreatedType" xmlAttribute="true" />
+            <property name="caseDefinition" xmlAttribute="true" />
+            <property name="drugResistanceType" xmlAttribute="true" />
+            <property name="nationality" xmlAttribute="true" />
+            <property name="treatmentCategory" xmlAttribute="true" />
+            <property name="registrationDate" xmlAttribute="true" />
+            <property name="diagnosisDate" xmlAttribute="true" />
+            <property name="outcomeDate" xmlAttribute="true" />
+            <property name="iniContinuousPhase" xmlAttribute="true" />
+            <property name="lastBmuDateTbRegister" xmlAttribute="true" />
+            <property name="secDrugsReceived" xmlAttribute="true" />
+            <property name="caseNumber" xmlAttribute="true" />
+            <property name="age" xmlAttribute="true" />
+            <property name="notifAddressChanged" xmlAttribute="true" />
+            <property name="tbContact" xmlAttribute="true" />
+            <property name="issueCounter" xmlAttribute="true" />
+            <property name="notifAddress">
+                <objectGraph name="notifAddress" class="org.msh.tb.entities.Address">
+                    <property name="localityType" xmlAttribute="true" />
+                    <property name="adminUnit.id" elementName="adminUnit" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="currentAddress">
+                <objectGraph name="currentAddress" class="org.msh.tb.entities.Address">
+                    <property name="localityType" xmlAttribute="true" />
+                    <property name="adminUnit.id" elementName="adminUnit" xmlAttribute="true" />
+                </objectGraph>
+            </property>
+            <property name="daysTreatPlanned" xmlAttribute="true" />
+            <property name="prevTbTreats">
+                <objectGraph name="prevTreat" class="org.msh.tb.entities.PrevTBTreatment" parentProperty="tbcase">
+                    <property name="id" use="IGNORE"/>
+                    <property name="month" elementName="month" xmlAttribute="true"/>
+                    <property name="year" elementName="year" xmlAttribute="true"/>
+                    <property name="outcomeMonth" elementName="outcomeMonth" xmlAttribute="true"/>
+                    <property name="outcomeYear" elementName="outcomeYear" xmlAttribute="true"/>
+                    <property name="outcome" elementName="outcome" xmlAttribute="true"/>
+                    <property name="substances">
+                        <objectGraph name="subst" class="org.msh.tb.entities.Substance">
+                            <property name="id" xmlAttribute="true" use="REQUIRED" />
+                            <property name="name.name1" use="IGNORE" />
+                            <property name="name.name2" use="IGNORE" />
+                            <property name="abbrevName.name1" use="IGNORE" />
+                            <property name="abbrevName.name2" use="IGNORE" />
+                            <property name="legacyId" use="IGNORE" />
+                            <property name="lastTransaction" use="IGNORE" />
+                            <property name="workspace" use="IGNORE" />
+                            <property name="line" use="IGNORE" />
+                            <property name="prevTreatmentForm" use="IGNORE" />
+                            <property name="dstResultForm" use="IGNORE" />
+                            <property name="prevTreatmentOrder" use="IGNORE" />
+                            <property name="clientId" use="IGNORE" />
+                        </objectGraph>
+                    </property>
+                </objectGraph>
+            </property>
+        </objectGraph>
+        
+        <objectGraph name="examdst" class="org.msh.tb.entities.ExamDST">
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="numResistant" use="IGNORE" />
+            <property name="numContaminated" use="IGNORE" />
+            <property name="numSusceptible" use="IGNORE" />
+            <property name="results">
+                <objectGraph name="dstresult" class="org.msh.tb.entities.ExamDSTResult" parentProperty="exam">
+                    <property name="id" xmlAttribute="true" use="IGNORE"/>
+                    <property name="substance.id" elementName="substance" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="result" use="REQUIRED" xmlAttribute="true"/>
+                    <property name="clientId" use="IGNORE" />
+                </objectGraph>
+            </property>
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="status" xmlAttribute="true" />
+            <property name="dateRelease" xmlAttribute="true" />
+        </objectGraph>
+
+        <objectGraph name="examxpert" class="org.msh.tb.entities.ExamXpert">
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="result" xmlAttribute="true" />
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="rifResult" xmlAttribute="true" />
+            <property name="status" xmlAttribute="true" />
+            <property name="dateRelease" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="exammicroscopy" class="org.msh.tb.entities.ExamMicroscopy">
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="result" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="sampleType" xmlAttribute="true" />
+            <property name="visualAppearance" xmlAttribute="true" />
+            <property name="status" xmlAttribute="true" />
+            <property name="dateRelease" xmlAttribute="true" />
+            <property name="numberOfAFB" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="examculture" class="org.msh.tb.entities.ExamCulture" >
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="dateCollected" xmlAttribute="true" />
+            <property name="result" xmlAttribute="true" />
+            <property name="laboratory.id" elementName="lab" xmlAttribute="true"/>
+            <property name="method.id" elementName="method" xmlAttribute="true"/>
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="request" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="sampleType" xmlAttribute="true" />
+            <property name="status" xmlAttribute="true" />
+            <property name="dateRelease" xmlAttribute="true" />
+            <property name="numberOfColonies" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="examhiv" class="org.msh.tb.entities.ExamHIV">
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="result" xmlAttribute="true" />
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="startedARTdate" xmlAttribute="true" />
+            <property name="startedCPTdate" xmlAttribute="true" />
+            <property name="date" xmlAttribute="true" />
+            <property name="cd4Count" xmlAttribute="true" />
+            <property name="cd4StDate" xmlAttribute="true" />
+            <property name="partnerResult" xmlAttribute="true" />
+            <property name="partnerResultDate" xmlAttribute="true" />
+        </objectGraph>
+
+        <objectGraph name="address" class="org.msh.tb.entities.Address">
+            <property name="adminUnit.id" elementName="adminunit" />
+            <property name="localityType" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="contact" class="org.msh.tb.entities.TbContact" >
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="contactType.id" elementName="contactType" xmlAttribute="true"/>
+            <property name="conduct.id" elementName="conduct" xmlAttribute="true"/>
+            <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="gender" xmlAttribute="true" />
+            <property name="dateOfExamination" xmlAttribute="true" />
+            <property name="contactType" xmlAttribute="true" />
+            <property name="conduct" xmlAttribute="true" />
+            <property name="age" xmlAttribute="true" />
+            <property name="examinated" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="examxray" class="org.msh.tb.entities.ExamXRay">
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="presentation.id" elementName="presentation" xmlAttribute="true"/>
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="result" xmlAttribute="true" />
+            <property name="evolution" xmlAttribute="true" />
+            <property name="baseline" xmlAttribute="true" />
+            <property name="date" xmlAttribute="true" />
+            <property name="destruction" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="medexam" class="org.msh.tb.entities.MedicalExamination" >
+            <property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="patientRefToFv" use="IGNORE" />
+            <property name="appointmentType" xmlAttribute="true" />
+            <property name="usingPrescMedicines" xmlAttribute="true" />
+            <property name="supervisedTreatment" xmlAttribute="true" />
+            <property name="surgicalProcedure" xmlAttribute="true" />
+            <property name="patientRefBy" xmlAttribute="true" />
+            <property name="nutrtnSupport" xmlAttribute="true" />
+            <property name="patientRefTo" xmlAttribute="true" />
+            <property name="dotDurinIntPhase" xmlAttribute="true" />
+            <property name="clinicalEvolution" xmlAttribute="true" />
+            <property name="refByDate" xmlAttribute="true" />
+            <property name="refToDate" xmlAttribute="true" />
+            <property name="date" xmlAttribute="true" />
+            <property name="weight" xmlAttribute="true" />
+            <property name="height" xmlAttribute="true" />
+            <property name="heartRate" xmlAttribute="true" />
+            <property name="bloodPressureMin" xmlAttribute="true" />
+            <property name="bloodPressureMax" xmlAttribute="true" />
+            <property name="respRateRest" xmlAttribute="true" />
+            <property name="temperature" xmlAttribute="true" />
+            <property name="surgicalProcedureDesc" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="sideEffect" class="org.msh.tb.entities.CaseSideEffect" >
+        	<property name="id" xmlAttribute="true" use="REQUIRED"/>
+            <property name="tbcase.id" elementName="tbcase" use="REQUIRED" xmlAttribute="true" />
+            <property name="sideEffect.value.id" elementName="sideeffect" xmlAttribute="true"/>
+            <property name="sideEffect.complement" elementName="complement" />
+            <property name="substance.id" elementName="substance" xmlAttribute="true"/>
+            <property name="substance2.id" elementName="substance2" xmlAttribute="true"/>
+		    <property name="lastTransaction" use="IGNORE" />
+            <property name="clientId" use="IGNORE" />
+            <property name="resolved" xmlAttribute="true" />
+            <property name="month" xmlAttribute="true" />
+        </objectGraph>
+        
+        <objectGraph name="casetag" class="org.msh.tb.sync.CaseTag">
+            <property name="caseId" xmlAttribute="true" use="REQUIRED" />
+            <property name="tagId" xmlAttribute="true" use="REQUIRED" />
+        </objectGraph>
+
+        <objectGraph name="deleted-entity" class="org.msh.tb.entities.DeletedEntity">
+            <property name="entityName" elementName="entity" xmlAttribute="true" />
+            <property name="entityId" elementName="serverId" xmlAttribute="true" />
+            <property name="id" use="IGNORE" />
+            <property name="unitToBeDeleted" use="IGNORE" />
+        </objectGraph>
+
+    </objectCollection>
+</graphSchema>

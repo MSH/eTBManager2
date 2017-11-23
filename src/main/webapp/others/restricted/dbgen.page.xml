@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+	<restrict>#{s:hasRole('WORKSPACES')}</restrict>
+	
+	<navigation>
+		<rule if-outcome="success">
+			<redirect view-id="/others/restricted/dbgen.xhtml">
+				<message>Testing database is being generated. It may take a few minutes depending on the number of cases to be generated, but you may continue using the system</message>
+			</redirect>
+		</rule>
+	</navigation>
+</page>

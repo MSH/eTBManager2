@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['meds.orders.shipment']}" />
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:160px;" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+    
+    <table width="100%" style="font-size: 12px;margin-bottom:10px;border-collapse:collapse">
+    <tr><td><b>#{messages['Order.unitFrom']}: </b>#{order.unitFrom.name}
+    </td><td><b>#{messages['Order.unitTo']}: </b>#{order.unitTo.name}
+    </td></tr>
+    </table>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.orderDate']}:</ui:define>
+    	<h:outputText value="#{order.orderDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Order.approvingDate']}:</ui:define>
+    	<h:outputText value="#{order.approvingDate}" converter="localeDateConverter" />
+    </s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+    	<ui:define name="label">#{messages['Order.shippingDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="future" value="false" /> 
+    	<ui:param name="datefield" value="#{order.shippingDate}" /> 
+    </s:decorate>
+    
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<ui:param name="redasterisk" value="#{orderHome.requiredObservation}" />
+    	<h:inputTextarea id="ordercomments" value="#{orderCommentsHome.orderComment.comment}" maxlength="200" style="width:400px;height:40px;" />
+    </s:decorate>
+
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+<p/>
+
+<h:panelGroup id="pnlitems">
+<b>#{messages['Order.items']}:</b>
+<table width="100%">
+	<a:repeat value="#{orderHome.sources}" var="s">
+	<tr><td class="colheader">
+		<b>#{s.source.name}</b>
+	</td></tr>
+	<tr><td>
+		<table width="100%" class="table1" style="margin-bottom:15px;">
+			<tr><th><h:outputText value="#{messages['Medicine']}" styleClass="collh" /></th>
+				<th><h:outputText value="#{messages['OrderItem.approvedQuantity']}" /></th>
+				<th><h:outputText value="#{messages['OrderItem.shippedQuantity']}" /></th>
+				<th>#{messages['form.action']}</th>
+			</tr>
+			<a:repeat var="it" value="#{s.items}">
+				<tr class="highlight"><td class="col" style="height:25px;">
+					<div class="medicine-icon" style="float:left"/>
+					#{it.item.medicine}
+				</td>
+				<s:fragment rendered="#{it.item.data==true}">
+				<tr><td colspan="6">
+ 				   <h:outputText value="#{messages['meds.movs.invalidqtd']}" styleClass="error"/>
+ 				</td></tr> 
+				</s:fragment>
+				<td class="colc">
+						<h:outputText value="#{it.item.approvedQuantity}"><f:convertNumber pattern="#,###,###"/></h:outputText>
+				</td>
+				<td class="colc">
+					<h:outputText value="#{messages['meds.orders.unavailable']}" rendered="#{it.unavailable}" style="font-weight:bold;color:#F5AA0A;font-size:12px;" />
+					<h:outputText value="#{it.item.shippedQuantity}" rendered="#{not it.unavailable}"><f:convertNumber pattern="#,###,###"/></h:outputText>
+				</td>
+				<td class="colc">
+					<a:commandLink ajaxSingle="true" 
+						action="#{orderShippingHome.initBatchesSelection(it.item)}"
+						reRender="batchselpnl" oncomplete="showBatchesSelectionDlg();" 
+						style="width:120px;display:block;">
+						<span>#{messages['meds.selbatches']}</span>
+					</a:commandLink>
+				</td>
+				</tr>
+				
+				<tr><td colspan="4">
+					<table width="450px">
+					<a:repeat var="b" value="#{it.item.batches}">
+						<tr>
+						<td>
+							<div class="batch-icon" />
+						</td>
+						<td class="col">
+							#{messages['Batch.manufacturer']} : #{b.batch.manufacturer}<br/> 
+							#{messages['Batch.batchNumber']} : #{b.batch.batchNumber}<br/>
+							#{messages['Batch.expiryDate']} : 
+								<h:outputText value="#{b.batch.expiryDate}"  converter="localeDateConverter" />
+								<br/>
+						</td>
+						<td class="col">
+							#{messages['Movement.quantity']} : 
+								<h:outputText value="#{b.quantity}"><f:convertNumber pattern="#,###,###"/></h:outputText><br/>
+							<s:fragment rendered="#{s:hasRole('VIEW_MEDICINE_PRICES')}">
+							#{messages['global.unitPrice']} : 
+								<h:outputText value="#{b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.0000"/></h:outputText><br/>
+							#{messages['global.totalPrice']} : 
+								<h:outputText value="#{b.quantity * b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.00"/></h:outputText>
+							</s:fragment>
+						</td></tr>
+					</a:repeat>
+					</table>
+					<br/>
+				</td></tr>
+			</a:repeat>
+		</table>
+	</td></tr>
+	</a:repeat>
+</table>
+</h:panelGroup>
+
+<div class="form-footer">
+    <a:commandLink action="#{orderShippingHome.registerShipping}" styleClass="button" 
+    	onclick="if (!disableButton(this)) return false;" reRender="main, messages">
+    	<span>#{messages['form.ok']}</span>
+    </a:commandLink>
+    <s:link action="cancel" styleClass="button-alt" >
+    	<span>#{messages['form.cancel']}</span>
+    </s:link>
+</div>
+
+</h:form>
+
+<s:decorate template="/layout/batchselection.xhtml" >
+<ui:param name="quantitytitle" value="#{messages['OrderItem.quantityToShip']}" />
+
+	<a:commandLink action="#{orderShippingHome.finishBatchesSelection}"
+		onclick="if (!disableButton(this)) return false;if (!validateBatchSelection(this)) {enableButton();return false;}" 
+		oncomplete="enableButton();hideBatchesSelectionDlg();" reRender="pnlitems" styleClass="button">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+</s:decorate>
+
+</ui:define>
+
+</ui:composition>  

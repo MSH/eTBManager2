@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['labs.newreq.samples']}" />
+<ui:param name="topmenu" value="4" />
+
+<ui:define name="naveg">
+	<s:link value="#{messages['labs']}" view="/labs/index.xhtml" />
+	<div class="item selected">
+		<s:link value="#{title}" />
+	</div>
+</ui:define>
+
+<ui:define name="left">
+	<h:form>
+
+
+	</h:form>
+</ui:define>
+
+<ui:define name="content">
+<h:form styleClass="form1">
+<h1>#{title}</h1>
+<s:decorate id="bodydiv" template="/layout/casebody.xhtml">
+
+	<a:repeat value="#{caseSamplesList.samples}" var="it">
+	
+		<s:decorate template="/labs/sampledisplay.xhtml">
+			<ui:param name="sample" value="#{it}" />
+		</s:decorate>
+	</a:repeat>
+</s:decorate>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>  

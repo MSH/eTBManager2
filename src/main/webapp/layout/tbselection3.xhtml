@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+		>
+
+    <div class="prop">
+                
+        <s:label styleClass="name" style="#{empty labelstyle? '': labelstyle}">
+            <ui:insert name="label"/>
+            <s:span style="color:red;" rendered="#{required or redasterisk}">*</s:span>
+        </s:label>
+        
+        <span class="value #{invalid?'fielderror':''}">
+            <s:validateAll>
+			<h:selectOneMenu id="cbselau" value="#{tbunitselection.auselection.unitLevel1}" required="#{required}" rendered="#{not tbunitselection.level1ReadOnly}">
+				<s:selectItems var="it" value="#{tbunitselection.adminUnits}" noSelectionLabel="-" label="#{it.name}"/>
+				<s:convertEntity />
+				<a:support event="onchange" ajaxSingle="true" reRender="pnlunits" focus="cbunits"/>
+			</h:selectOneMenu>
+			
+			<s:fragment rendered="#{tbunitselection.level1ReadOnly}">
+				<span class="right-icon" /><h:outputText value="#{tbunitselection.adminUnit.fullDisplayName}"/>
+			</s:fragment>
+
+			<h:panelGroup id="pnlunits">
+			<h:selectOneMenu id="cbunits" value="#{tbunitselection.tbunit}" required="#{required}" rendered="#{!tbunitselection.readOnly}">
+        		<s:selectItems value="#{tbunitselection.options}" var="it" label="#{it.name}" noSelectionLabel="-" />
+		      	<s:convertEntity/>
+		      	<ui:insert name="events" />
+		    </h:selectOneMenu>
+		    <h:outputText value="#{tbunitselection.tbunit}" rendered="#{tbunitselection.readOnly}" />
+		    <ui:insert />
+		    </h:panelGroup>
+        
+            </s:validateAll>
+        </span>
+        
+        <s:message styleClass="error"/>        
+
+    </div>
+
+</ui:composition>

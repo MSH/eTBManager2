@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:s="http://jboss.com/products/seam/taglib"
+				xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+
+<ui:param name="labelstyle" value="width:150px;" />
+
+<table id="tblfilters" style="border-collapse: collapse;width:100%;"><tr><td>          
+   <h2>#{messages['cases.details.addressnotif']}</h2>
+	<ui:param name="required" value="false" />
+
+	<s:decorate template="/layout/auselection.xhtml">
+		<ui:param name="auselection" value="#{caseFilters.auselection}" />
+		<ui:param name="noSelUseAll" value="true" />
+	</s:decorate>
+
+    <h2>#{messages['cases.healthUnit']}</h2>
+	<s:decorate template="/layout/tbselection2.xhtml">
+		<ui:param name="tbunitselection" value="#{caseFilters.tbunitselection}" />
+		<ui:param name="unitlabel" value="#{messages['form.name']}" />
+		
+		<h:selectOneRadio value="#{caseFilters.filterHealthUnit}" >
+			<s:selectItems var="v" value="#{filterHealthUnits}" label="#{messages[v.key]}" />
+			<s:convertEnum />
+		</h:selectOneRadio>
+	</s:decorate>
+
+   <h2>#{messages['cases.details.case']}</h2>
+
+	<s:decorate template="/layout/editname.xhtml">
+		<ui:define name="label">#{messages['cases.casesearching.patient']}:</ui:define>
+		<ui:param name="patientdata" value="#{caseFilters}" />
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Patient.recordNumber']}:</ui:define>
+		<h:inputText value="#{caseFilters.recordNumber}" style="width:120px;"></h:inputText>
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml" >
+		<ui:define name="label">#{messages['CaseClassification']}:</ui:define>
+		<h:selectOneMenu value="#{caseFilters.classification}" id="classification">
+			<s:selectItems value="#{globalLists.caseClassifications}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['CaseState']}:</ui:define>
+		<h:selectOneMenu value="#{caseFilters.caseState}" >
+			<s:selectItems value="#{caseStates}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+    <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['CaseState.MOVED_SECONDLINE']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.movedToSecLineReg}" >
+            <s:selectItems value="#{yesNoList}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['ValidationState']}:</ui:define>
+		<h:selectOneMenu value="#{caseFilters.validationState}" >
+			<s:selectItems value="#{globalLists.validationState}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['PatientType']}:</ui:define>
+		<h:selectOneMenu id="patType" value="#{caseFilters.patientType}" >
+			<s:selectItems value="#{patientTypesALL}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+        <div id="prevTreatType" style="#{caseFilters.patientType != 'PREVIOUSLY_TREATED' ? 'display:none' : ''}">
+            <h:selectOneMenu value="#{caseFilters.previouslyTreatedType}" >
+                <s:selectItems var="it" value="#{prevTreatedTypes}" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+        </div>
+	</s:decorate>
+
+    <rich:jQuery selector="#patType" query="change(function(){ showPrevTreatType(this); })" />
+
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['InfectionSite']}:</ui:define>
+		<h:selectOneMenu value="#{caseFilters.infectionSite}" >
+			<s:selectItems value="#{infectionSites}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+			<s:convertEnum />
+		</h:selectOneMenu>
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['PrescribedMedicine']}:</ui:define>
+		<h:selectOneMenu id="prescribedMedicine" value="#{caseFilters.prescribedMedicine}" style="width:490px">
+			<s:selectItems value="#{medicines}" var="x" label="#{x}" noSelectionLabel="-"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+    <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['DiagnosisType']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.diagnosisType}" >
+            <s:selectItems value="#{diagnosisTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml">
+        <ui:define name="label">#{messages['DrugResistanceType']}:</ui:define>
+        <h:selectOneMenu value="#{caseFilters.drugResistanceType}" >
+            <s:selectItems value="#{drugResistanceTypes}" var="x" label="#{messages[x.key]}" noSelectionLabel="-" />
+            <s:convertEnum />
+        </h:selectOneMenu>
+    </s:decorate>
+
+   <h2>#{messages['cases.casesearching.filterdates']}</h2>
+
+   <div id="datesdiv" style="padding:6px;">
+   	<h:selectBooleanCheckbox value="#{caseFilters.registrationDate}" />#{messages['TbCase.registrationDate']}
+   	<h:selectBooleanCheckbox value="#{caseFilters.diagnosisDate}" style="margin-left:20px;" />#{messages['TbCase.diagnosisDate']}
+   	<h:selectBooleanCheckbox value="#{caseFilters.iniTreatmentDate}" style="margin-left:20px;" />#{messages['TbCase.iniTreatmentDate']}
+   	<h:selectBooleanCheckbox value="#{caseFilters.outcomeDate}" style="margin-left:20px;" />#{messages['TbCase.outcomeDate']}
+   </div>
+
+	<div id="perioddiv">
+	<s:decorate id="ini" template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
+		<h:selectOneMenu id="inimonth" value="#{caseFilters.iniMonth}" onchange="onChangePeriod()">
+			<f:selectItems value="#{months}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu id="iniyear" value="#{caseFilters.iniYear}" style="margin-left:10px;" onchange="onChangePeriod()">
+			<f:selectItems value="#{years}"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="end" template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
+		<h:selectOneMenu id="endmonth" value="#{caseFilters.endMonth}">
+			<f:selectItems value="#{months}" onchange="onChangePeriod()"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu id="endyear" value="#{caseFilters.endYear}" style="margin-left:10px;">
+			<f:selectItems value="#{years}" onchange="onChangePeriod()"/>
+		</h:selectOneMenu>
+	</s:decorate>
+	</div>
+
+	<rich:jQuery name="showdates" timing="onJScall" selector="#datesdiv" query="show(500)" />
+	<rich:jQuery name="hidedates" timing="onJScall" selector="#datesdiv" query="hide(500)" />
+<script type="text/javascript">
+<!--
+function isPatientTypePrevTreat(cb) {
+    return ((cb.selectedIndex >= 0) && (cb.options[cb.selectedIndex].value == 'PREVIOUSLY_TREATED'));
+}
+function showPrevTreatType(cb) {
+    if (isPatientTypePrevTreat(cb))
+        jQuery('#prevTreatType').show(500);
+    else jQuery('#prevTreatType').hide(500);
+}
+function onChangePeriod() {
+	vals = mountDateValues();
+	ini = vals[0] + vals[1];
+	fim = vals[2] + vals[3];
+	if ((ini==1)||(fim==1))
+		hidedates();
+	else showdates();
+}
+function mountDateValues() {
+	index=0;
+	var vals=new Array();
+	jQuery('#perioddiv select').each(function() {
+		vals[index]=this.selectedIndex>0;
+		index++;
+	});
+	return vals;
+}
+function validateFilters() {
+	vals=mountDateValues();
+	if (((vals[0]+vals[1])==1)||((vals[2]+vals[3])==1)) {
+		alert('#{messages['cases.casesearching.dterror']}');
+		return false;
+	}
+	return true;
+}
+-->
+</script>
+
+</td></tr></table>
+    
+</ui:composition>

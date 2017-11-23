@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Add configuration fields in workspace table about how validation will be handled by case classification -->
+	<changeSet id="8.1" author="rmemoria">
+	    <addColumn tableName="workspace">
+	        <column name="caseValidationTB" type="int" />
+	        <column name="caseValidationDRTB" type="int" />
+	        <column name="caseValidationNTM" type="int" />
+	    </addColumn>
+
+	    <update tableName="workspace">
+	        <column name="caseValidationTB" valueNumeric="1" />
+	        <column name="caseValidationDRTB" valueNumeric="1" />
+	        <column name="caseValidationNTM" valueNumeric="1" />
+	    </update>
+
+	    <sql>update workspace set caseValidationTB=2 where startTBTreatBeforeValidation=1</sql>
+	    <sql>update workspace set caseValidationDRTB=2 where startDRTBTreatBeforeValidation=1</sql>
+
+	    <dropColumn tableName="workspace" columnName="startTBTreatBeforeValidation"/>
+	    <dropColumn tableName="workspace" columnName="startDRTBTreatBeforeValidation"/>
+	</changeSet>
+	
+	<!-- Add configuration for minimum and maximum stock quantities -->
+	<changeSet id="8.2" author="rmemoria">
+	    <renameColumn tableName="workspace" oldColumnName="displayCaseNumber" newColumnName="confirmedCaseNumber" columnDataType="int"/>
+	    
+	    <addColumn tableName="workspace">
+	        <column name="minStockOnHand" type="int" />
+	        <column name="maxStockOnHand" type="int" />
+	        <column name="suspectCaseNumber" type="int" />
+	    </addColumn>
+
+	    <update tableName="workspace">
+	        <column name="minStockOnHand" value="1" />
+	        <column name="maxStockOnHand" value="8" />
+	        <column name="suspectCaseNumber" value="1" />
+	        <column name="confirmedCaseNumber" value="1" />
+	    </update>
+	</changeSet>
+	
+</databaseChangeLog>

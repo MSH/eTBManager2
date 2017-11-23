@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="1" author="msantos">
+		<addColumn tableName="tbunit">
+			<column name="limitDateMedicineMovement" type="date" >
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<addColumn tableName="workspace">
+			<column name="expiredMedicineAdjustmentType_ID" type="int" >
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Fix a foreign key problem on movement-->
+	<changeSet id="2" author="msantos">
+		<dropForeignKeyConstraint baseTableName="movement" constraintName="FKF9D200AFAB3243E7"/>
+		<addForeignKeyConstraint constraintName="FKF9D200AFAB3243E7" referencedTableName="fieldvalue" onDelete="SET NULL" onUpdate="CASCADE"
+			baseColumnNames="ADJUSTMENT_ID" baseTableName="movement" referencedColumnNames="id"/>
+	</changeSet>
+
+</databaseChangeLog>

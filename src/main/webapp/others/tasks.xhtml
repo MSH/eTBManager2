@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="Testing async tasks" />
+
+<ui:define name="menu_lateral">
+</ui:define>
+
+<ui:define name="content">
+<h1>#{title}</h1>
+	<h:form >
+
+		<h2>This page demonstrate the execution of tasks and its monitoring in the task manager</h2>
+		
+		<p class="hint">
+		When clicking the <b>"Run task"</b> button, the system does the following:
+		<ul class="hint">
+			<li>
+				<b>Server:</b> Starts a new task in the server side registering it in the <i>taskManager</i>;
+				 entering in a loop from 1 to 100. Each  
+			</li>
+			<li>
+				<b>Server:</b> The task starts a loop from 1 to 100 delaying (Thread.sleep) its execution in each step of the looping;  
+			</li>
+			<li>
+				<b>Client:</b> Display the list of tasks under execution refreshing its content each 1.5 seconds (using a:pool);  
+			</li>
+		</ul>
+		</p>
+
+		<h:panelGroup id="pnlTasks">
+
+		<s:fragment rendered="#{not empty taskManager.tasks}">
+			<a:poll reRender="tbltasks" interval="1500" ajaxSingle="true"/>
+
+			<div class="spacer" />
+
+			<h:dataTable id="tbltasks" value="#{taskManager.tasks}" var="it" styleClass="table1">
+				<h:column>
+					<f:facet name="header">Task Id</f:facet>
+					#{it.id}
+					<br/>
+					#{it.class}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">Description</f:facet>
+					#{it.displayName}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">Status</f:facet>
+					#{it.status}
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">Progress</f:facet>
+					#{it.progress}
+					<div class="progress-icon" style="width:#{it.progress}%">
+						<!-- &nbsp;  -->
+					</div>
+				</h:column>
+			</h:dataTable>
+		</s:fragment>
+		</h:panelGroup>
+
+		<div class="spacer" />
+		
+			<a:commandLink action="#{taskTestingHome.runTask}" styleClass="button" ajaxSingle="true" reRender="pnlTasks">
+				<span>Run task</span>
+			</a:commandLink>	
+			
+			<div class="spacer" />
+			<div class="hint">
+			You may click it several times while other tasks are still running
+			</div>		
+
+	
+	</h:form>
+</ui:define>
+
+</ui:composition>  

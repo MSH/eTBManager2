@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                template="/layout/report.xhtml">
+
+<ui:param name="title" value="#{messages['manag.rel5']}" />
+<ui:param name="labelstyle" value="width:200px;" />
+<ui:param name="showunit" value="0" />
+
+<ui:define name="content">
+
+<s:decorate template="/layout/display.xhtml">
+	<ui:define name="label">#{messages['Tbunit']}:</ui:define>
+	#{reportSelection.tbunit.name}
+</s:decorate>
+
+<s:decorate template="/layout/display.xhtml" >
+   	<ui:define name="label">#{messages['global.inimonthyear']}:</ui:define>
+   	<h:outputText value="#{reportSelection.iniMonth}" converter="monthYearConverter">
+   		<f:param name="year" value="#{reportSelection.iniYear}"/>
+   	</h:outputText>
+</s:decorate>
+
+<s:decorate template="/layout/display.xhtml" >
+   	<ui:define name="label">#{messages['global.endmonthyear']}:</ui:define>
+   	<h:outputText value="#{reportSelection.endMonth}" converter="monthYearConverter">
+   		<f:param name="year" value="#{reportSelection.endYear}"/>
+   	</h:outputText>
+</s:decorate>
+
+
+<table class="table1" style="margin-top:10px;" width="400px">
+<tr>
+	<th>#{messages['reports.orderEvent']}</th>
+	<th>#{messages['reports.averageDays']}</th>
+	<th>#{messages['reports.orderCount']}</th>
+</tr>
+<tr><td class="highlight colc">#{messages['reports.authorizing']}</td>
+	<td class="colc">
+		#{orderLeadTimeReport.authorizing.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+	</td>
+	<td class="colc">
+		#{orderLeadTimeReport.authorizing.numOrders}
+	</td>
+</tr>
+<tr><td class="highlight colc">#{messages['reports.shipping']}</td>
+	<td class="colc">
+		#{orderLeadTimeReport.shipping.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+	</td>
+	<td class="colc">
+		#{orderLeadTimeReport.shipping.numOrders}
+	</td>
+</tr>
+<tr><td class="highlight colc">#{messages['reports.receiving']}</td>
+	<td class="colc">
+		#{orderLeadTimeReport.receiving.averageDays==0?'-':orderLeadTimeReport.authorizing.averageDays}
+	</td>
+	<td class="colc">
+		#{orderLeadTimeReport.receiving.numOrders}
+	</td>
+</tr>
+</table>
+
+</ui:define>
+
+</ui:composition>  

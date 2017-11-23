@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      template="/layout/template_new.xhtml"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+        
+<ui:param name="title" value="#{adminUnitHome.managed? messages['admin.adminunits.edt']: messages['admin.adminunits.new']}" />
+<ui:param name="topmenu" value="3" />
+
+<ui:param name="labelstyle" value="width:150px" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+	<div class="form-content">
+    <s:decorate template="/layout/edit.xhtml" rendered="#{adminUnit.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{adminUnit.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" rendered="#{adminUnit.id != null}">
+    	<ui:define name="label">#{messages['global.level']}:</ui:define>
+    	<h:outputText value="#{adminUnit.code}" />
+    </s:decorate>
+
+	<s:decorate template="/layout/audisplay.xhtml">
+		<ui:param name="auselection" value="#{adminUnitHome.auselection}" />
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" rendered="#{not defaultWorkspace.hasAlternateLocale}">
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:inputText value="#{adminUnit.name.name1}" maxlength="100" style="width : 320px;" required="true" 
+        	validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name1"/>
+        	<f:param id="where" value="it.parent.id = #{adminUnit.parent.id==null?'null':adminUnit.parent.id}" />
+        </h:inputText>
+    </s:decorate>
+
+    <s:fragment template="/layout/edit.xhtml" rendered="#{defaultWorkspace.hasAlternateLocale}">
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label"><b>#{messages['form.name']}:</b><br/><span style="font-weight:normal;">(#{defaultWorkspace.defaultDisplayLocale})</span></ui:define>
+        <h:inputText value="#{adminUnit.name.name1}" maxlength="100" style="width : 320px;" required="true" validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name1"/>
+        	<f:param id="where" value="it.parent.id = #{adminUnit.parent.id==null?'null':adminUnit.parent.id}" />
+        </h:inputText>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label"><b>#{messages['form.name']}:</b><br/><span style="font-weight:normal;">(#{defaultWorkspace.alternateDisplayLocale}):</span></ui:define>
+        <h:inputText value="#{adminUnit.name.name2}" maxlength="100" style="width : 320px;" required="true" validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="name.name2"/>
+        	<f:param id="where" value="it.parent.id = #{adminUnit.parent.id==null?'null':adminUnit.parent.id}" />
+        </h:inputText>
+    </s:decorate>
+
+    </s:fragment>
+
+	<div id="parentreadonly">
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['admin.adminunits.parentunit']}:</ui:define>
+		<h:outputText value="#{adminUnit.parent.name} (#{adminUnit.parent.countryStructure.name})" rendered="#{adminUnit.parent != null}"/>
+		<h:outputText value="#{messages['admin.adminunits.noparentunit']}" rendered="#{adminUnit.parent == null}"/>
+		<a href="#" onclick="jQuery('#edtparent').show(); jQuery('#parentreadonly').hide();"> #{messages['admin.adminunits.editparent']}</a>
+	</s:decorate>
+	</div>
+	
+	
+	<div id="edtparent"> 
+	<h2>#{messages['admin.adminunits.parentunit']}</h2>
+	<s:decorate template="/layout/auselection.xhtml">
+		<ui:param name="auselection" value="#{adminUnitHome.auselectionparent}" />
+		<ui:param name="rerender" value="main:structureseldec" />
+	</s:decorate>
+	</div>
+	
+	<rich:jQuery selector="#edtparent" timing="onload" query="hide()" rendered="#{(adminUnit.parent eq adminUnitHome.auselectionparent.selectedUnit)}"/>
+	<rich:jQuery selector="#parentreadonly" timing="onload" query="hide()" rendered="#{not(adminUnit.parent eq adminUnitHome.auselectionparent.selectedUnit)}"/>
+	
+    <s:decorate template="/layout/edit.xhtml" id="structureseldec">
+    	<ui:define name="label">#{messages['admin.adminunits.countrystructure']}:</ui:define>
+    	<h:selectOneMenu value="#{adminUnit.countryStructure}" required="true" id="structuresel">
+    		<s:selectItems var="it" value="#{adminUnitHome.structures}" label="#{it.name}" noSelectionLabel="-" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['global.legacyId']}:</ui:define>
+        <h:inputText value="#{adminUnit.legacyId}" maxlength="50" style="width : 120px;" validator="#{adminUnitHome.validateUniqueValue}">
+        	<f:param id="field" value="legacyId"/>
+        </h:inputText>
+    </s:decorate>
+    
+    </div>
+    
+    <div class="form-footer">
+		<a:commandLink action="#{adminUnitHome.persist}" styleClass="button" reRender="main,messages" onclick="if (!disableButton(this)) return false;">
+			<span>#{messages['form.save']}</span>
+		</a:commandLink>		
+		<s:link view="/admin/adminunits.xhtml" styleClass="button-alt" propagation="end">
+			<f:param name="id" value="#{null}" />
+			<f:param name="parentid" value="#{adminUnitHome.parentId}" />
+			<span>#{messages['form.cancel']}</span>
+		</s:link>
+    </div>
+
+
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</h:form>
+</ui:define>
+</ui:composition> 

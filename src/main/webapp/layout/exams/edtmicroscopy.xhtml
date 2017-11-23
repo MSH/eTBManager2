@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:aj="https://ajax4jsf.dev.java.net/ajax">
+
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="examHome" value="#{examMicroscopyHome}" />
+
+    <s:decorate template="#{examTemplateWrapper}" id="dec2">
+        <ui:param name="examprefix" value="mic" />
+
+        <ui:define name="afterdatecollected">
+            <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages['SpecimenType']}:</ui:define>
+                <h:selectOneMenu id="micsp" value="#{examMicroscopy.sampleType}">
+                    <s:selectItems value="#{globalLists.microscopySampleTypes}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+                    <aj:support event="onchange" reRender="otherspecimen" ajaxSingle="true" process="specimen" />
+                    <s:convertEnum />
+                </h:selectOneMenu>
+                <s:span id="otherspecimen">
+                    <h:outputText value=": " rendered="#{examMicroscopy.sampleType.ordinal() == 1}"/>
+                    <h:inputText value="#{examMicroscopy.otherSampleType}" maxlength="50" style="width:200px;" rendered="#{examMicroscopy.sampleType.ordinal() == 1}"/>
+                </s:span>
+            </s:decorate>
+        </ui:define>
+
+        <ui:define name="aftersamplenumber">
+            <s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">#{messages['VisualAppearance']}:</ui:define>
+                <h:selectOneMenu id="micva" value="#{examMicroscopy.visualAppearance}">
+                    <s:selectItems value="#{globalLists.microscopyVisualAppearence}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+                    <s:convertEnum />
+                </h:selectOneMenu>
+            </s:decorate>
+        </ui:define>
+
+        <s:decorate template="/layout/dateedit.xhtml" id="releasedatedec">
+            <ui:define name="label">#{messages['cases.exams.dateRelease']}:</ui:define>
+            <ui:param name="required" value="false" />
+            <ui:param name="future" value="true" />
+            <ui:param name="datefield" value="#{examMicroscopy.dateRelease}" />
+            <ui:param name="edtid" value="micdtrelease" />
+        </s:decorate>
+
+        <s:decorate template="/layout/edit.xhtml" id="resultdec">
+            <ui:define name="label">#{messages['cases.details.result']}:</ui:define>
+            <ui:param name="redasterisk" value="#{true}" />
+            <h:selectOneMenu id="miccbres2" value="#{examMicroscopy.result}" required="false" onchange="examResultChanged(this, false);">
+                <s:selectItems value="#{microscopyResults}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+                <s:convertEnum />
+            </h:selectOneMenu>
+        </s:decorate>
+
+        <div id="afbdiv1" style="display:block;width:600px;" >
+            <div id="pnlrespositive" style="#{(not empty examMicroscopy.result) and examMicroscopy.result == 'POSITIVE' ? 'display:block' : 'display:none'}">
+                <s:decorate id="afbdec" template="/layout/edit.xhtml" >
+                    <ui:define name="label">#{messages['cases.exams.afb']}:</ui:define>
+                    <h:inputText id="micafb" value="#{examMicroscopy.numberOfAFB}"
+                                 onkeypress="return numbersOnly(this,event, null);"
+                                 onkeyup="updateBMI(this, event);"
+                                 style="width:80px;"
+                                 maxlength="3">
+                    </h:inputText>
+                </s:decorate>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            <!--
+            function examResultChanged(cb, immediate) {
+                var s = cb.options[cb.selectedIndex].value;
+                if (s=='POSITIVE')
+                    jQuery('#pnlrespositive').show(immediate?0:500);
+                else{
+                    document.getElementById('dec1:dec2:dec3:formexam:afbdec:micafb').value = '';
+                    jQuery('#pnlrespositive').hide(immediate?0:500);
+                }
+            }
+            function clearHiddenFields() {
+                document.getElementById('dec1:dec2:dec3:formexam:releasedatedec:micdtreleaseInputDate').value = '';
+                document.getElementById('dec1:dec2:dec3:formexam:afbdec:micafb').value = '';
+                document.getElementById('dec1:dec2:dec3:formexam:resultdec:miccbres2').options[0].selected = "true";
+            }
+            -->
+        </script>
+        <rich:jQuery selector="#cbres2" timing="onload" query="each( function(){ examResultChanged(this, true); })" />
+    </s:decorate>
+
+</ui:composition>

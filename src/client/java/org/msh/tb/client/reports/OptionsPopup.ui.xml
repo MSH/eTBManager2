@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:h='urn:import:org.msh.tb.client.ui'
+        >
+	
+	<ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
+
+    <h:MenuPanel ui:field="pnlMenu">
+        <g:Anchor ui:field="lnkNew"><ui:text from="{msg.newReport}" /></g:Anchor>
+        <g:Anchor ui:field="lnkAddIndicator"><ui:text from="{msg.addIndicator}" /></g:Anchor>
+        <g:Anchor ui:field="lnkSave"><ui:text from="{msg.saveReport}" /></g:Anchor>
+        <g:Anchor ui:field="lnkSaveAs"><ui:text from="{msg.saveReportAs}" />...</g:Anchor>
+        <g:Anchor ui:field="lnkDelete"><ui:text from="{msg.deleteReport}" /></g:Anchor>
+        <g:Anchor ui:field="lnkSettings"><ui:text from="{msg.options}" />...</g:Anchor>
+    </h:MenuPanel>
+
+</ui:UiBinder>

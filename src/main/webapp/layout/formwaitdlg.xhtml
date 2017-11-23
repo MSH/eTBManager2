@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+        >
+
+<a:form id="main"  onsubmit="javascript:Richfaces.showModalPanel('waitdlg');">
+	<ui:insert />
+</a:form>
+
+<ui:include src="/layout/waitdlg.xhtml" />
+    
+</ui:composition>
