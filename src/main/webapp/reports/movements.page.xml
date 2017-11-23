@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd">
+
+		<restrict>#{s:hasRole('MOVS')}</restrict>
+		<param name="firstResult" value="#{movements.firstResult}" />
+<!-- 		<param name="firstResult" value="#{batchMovements.firstResult}" />  -->
+		<param name="bt" value="#{movementFilters.batchesOutput}" converterId="javax.faces.Boolean"/>
+		<param name="dt" value="#{movementFilters.date}" converterId="dateURLConverter" />
+		<param name="mt" value="#{movementFilters.type}" />
+		<param name="srcid" value="#{sourceHome.id}" converterId="javax.faces.Integer" />
+		<param name="medid" value="#{medicineHome.id}" converterId="javax.faces.Integer" />
+
+</page>

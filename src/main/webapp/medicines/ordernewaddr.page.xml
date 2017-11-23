@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd"
+	conversation-required="true" no-conversation-view-id="/medicines/index.xhtml">
+
+	<restrict>#{userSession.canCreateOrder}</restrict>
+	<navigation>
+		<rule if-outcome="prev-page">
+			<redirect view-id="/medicines/ordernew.xhtml" />
+		</rule>
+		<rule if-outcome="shipaddress-updated">
+			<redirect view-id="/medicines/ordernewpost.xhtml" />
+		</rule>
+		<rule if-outcome="cancel">
+			<end-conversation before-redirect="true" />
+			<redirect view-id="/medicines/index.xhtml"></redirect>
+		</rule>
+	</navigation>
+
+</page>

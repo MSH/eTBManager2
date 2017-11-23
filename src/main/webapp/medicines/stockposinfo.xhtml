@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+ 	  			xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+                 
+
+<script type="text/javascript">
+function showStockPosInfoDlg() {
+	Richfaces.showModalPanel('stockdlg');
+}
+
+function hideStockPosInfoDlg() {
+	Richfaces.hideModalPanel('stockdlg');
+}
+function batchValidationErrors() {
+fld = document.getElementById("formbatch:maximunSeverity");
+if (fld != null)
+	return fld.value == "2";
+else return false;
+} 
+</script>
+
+
+<rich:modalPanel id="stockdlg" autosized="true" width="530" zindex="2000">
+	<f:facet name="header">
+		<h:outputText id="title1" value="#{messages['meds.stockpos.info']}" />
+	</f:facet>
+<h:panelGroup id="stockpnl">
+	<ui:param name="labelstyle" value="width:100px;" />
+	<a:form id="formstock" rendered="#{stockPosHome.item!=null}">
+    <table width="100%">
+    <tr><td>
+    	<div class="medicine-icon" style="float:left" />
+    	<h2>#{stockPosHome.item.medicine}</h2>
+	</td></tr>
+	<tr><td>
+		<div style="float:right;">
+			#{messages['meds.stockpos.msg1']}
+			<br/>
+			<s:link value="#{messages['meds.stockpos.adjust']}" view="/medicines/adjustedt.xhtml">
+				<f:param name="id" value="#{stockPosHome.item.id}" />
+			</s:link>
+		</div>
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
+			<h:outputText value="#{stockPosHome.item.quantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['Source']}:</ui:define>
+			#{stockPosHome.item.source.name}
+		</s:decorate>
+
+		<div class="paragraph">
+			#{messages['StoragePosReport.lastMovement']}
+		</div>
+
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['Movement.date']}:</ui:define>
+			#{stockPosHome.lastMovement.date}
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['Movement.quantity']}:</ui:define>
+			<h:outputText value="#{stockPosHome.lastMovement.quantity}">
+				<f:convertNumber pattern="###,###,###"/>
+			</h:outputText>
+		</s:decorate>
+		<s:decorate template="/layout/display.xhtml">
+			<ui:define name="label">#{messages['MovementType']}:</ui:define>
+			#{messages[stockPosHome.lastMovement.type.key]}
+			<s:fragment rendered="#{not empty stockPosHome.lastMovement.comment}">
+				<br/>
+				#{stockPosHome.lastMovement.comment}
+			</s:fragment>
+		</s:decorate>
+	</td></tr>
+    <tr><td align="right">
+			<s:link value="#{messages['form.return']}" styleClass="button" onclick="hideStockPosInfoDlg(); return false;"/>
+    </td></tr>
+    
+    </table>
+    
+	</a:form>
+
+</h:panelGroup>
+</rich:modalPanel>
+    
+</ui:composition>

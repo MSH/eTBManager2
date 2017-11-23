@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="topmenu" value="0" />
+
+<ui:param name="title" value="XML test" />
+
+<ui:define name="content">
+
+	<h:form>
+	<p>
+		This is simply a page for XML testing
+	</p>
+	<div style="padding:10px;">
+		<div style="float:left;height:40px">
+			<span class="icon-log-NEW" />
+		</div>
+		<span style="font-weight:bold;">Novo - Caso de TB-DR</span>
+		<br/>
+		Aloísio da Silva Jardim
+		<br/>
+		<div style="font-size:12px;padding-left:60px;padding-top:10px;">
+			<h:outputText id="code" value="#{xmltest.xml}" escape="false" converter="detailHtmlConverter"/>
+		</div>
+	</div>
+	<a:commandLink action="#{xmltest.test}" styleClass="button-alt" ajaxSingle="true" reRender="code">
+		<span>Test!</span>
+	</a:commandLink>
+	</h:form>
+</ui:define>
+
+</ui:composition>            

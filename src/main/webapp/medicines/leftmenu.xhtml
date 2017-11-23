@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h:form>
+	<div class="vertical-menu">
+	<s:fragment rendered="#{userSession.medicineManagementStarted}">
+
+	<s:fragment rendered="#{userSession.canCheckReceiving}">
+		<h2>#{messages['meds.receiving']}</h2>	
+		<s:link view="/medicines/edtrec.xhtml" rendered="#{s:hasRole('RECEIV_EDT')}" >
+			<f:param name="id" value="#{null}" />
+			<div class="new-icon" style="float:left"/>#{messages['meds.receiving.new']}
+		</s:link>
+		<s:link value="#{messages['meds.receiving.viewall']}" view="/medicines/receivings.xhtml" propagation="none" rendered="#{userSession.canCheckReceiving}"/>
+	</s:fragment>
+
+	<s:fragment rendered="#{s:hasRole('ORDERS')}">
+		<h2>#{messages['meds.orders']}</h2>	
+		<s:link view="/medicines/ordernew.xhtml" rendered="#{userSession.canCreateOrder}" >
+			<div class="new-icon" style="float:left;"/>#{messages['meds.orders.new']}
+		</s:link>
+		<s:link value="#{messages['meds.orders.viewopen']}" view="/medicines/orders.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
+		<!-- <s:link value="#{messages['meds.orders.viewopen']}" action="#{orderHome.selectOpenOrder()}" view="/medicines/openOrder.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>  -->
+		<s:link value="#{messages['meds.orders.viewall']}" view="/medicines/ordershistory.xhtml" propagation="none" rendered="#{userSession.canCheckOrders}"/>
+	</s:fragment>
+
+	<s:fragment rendered="#{s:hasRole('TRANSFER')}">
+		<h2>#{messages['meds.transfer']}</h2>	
+		<s:link view="/medicines/transfedt.xhtml" rendered="#{s:hasRole('NEW_TRANSFER')}" >
+			<div class="new-icon" style="float:left"/>#{messages['meds.transfer.new']}
+		</s:link>
+		<s:link value="#{messages['meds.transfer.viewopen']}" view="/medicines/transfer.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}" />
+		<s:link value="#{messages['meds.transfer.viewhistory']}" view="/medicines/transferhistory.xhtml" propagation="none" rendered="#{userSession.canCheckTransfers}" />
+	</s:fragment>
+
+	<s:fragment rendered="#{userSession.canCheckDispensing}">
+		<h2>#{messages['meds.dispensing']}</h2>	
+		<s:link id="lnknew" 
+			view="#{userSession.tbunit.patientDispensing?'/medicines/dispcasenew.xhtml':'/medicines/dispedt.xhtml'}" 
+			rendered="#{s:hasRole('DISP_PAC_EDT')}">
+			<f:param name="id" value="#{null}" />
+			<div class="new-icon" style="float:left;"/>#{messages['meds.dispensing.new']}
+		</s:link>
+		<s:link value="#{messages['meds.dispensing.view']}" view="/medicines/dispensing.xhtml" propagation="none" /> 
+	</s:fragment>
+	
+	<h2>#{messages['meds.reports']}</h2>
+	<s:link value="#{messages['meds.movs']}" view="/medicines/movements.xhtml" propagation="none" rendered="#{userSession.canCheckMovements}"/>
+	<s:link value="#{messages['manag.rel2']}" view="/medicines/releststockpos.xhtml" rendered="#{userSession.canViewEstPositionReport}"/>
+	<s:link value="#{messages['manag.rel3']}" view="/medicines/relstockevol.xhtml" rendered="#{userSession.canViewStockEvolutionReport}"/>
+	<s:link value="#{messages['manag.rel5']}" view="/medicines/reltreatcost.xhtml" rendered="false" />
+	
+
+	<s:fragment rendered="#{s:hasRole('MED_INIT_REM')}">
+	<h2>#{messages['form.otheroptions']}</h2>
+	<a:commandLink action="#{medicineManStartHome.cancelMedicineManagement}"
+		onclick="if (!confirm('#{messages['meds.start.removeconfirm']}')) {return false;}" >
+		<span><div class="delete-icon" style="float:left"/>#{messages['meds.start.remove']}</span>
+	</a:commandLink>
+	</s:fragment>
+	
+	<s:fragment rendered="false">
+	<s:fragment rendered="#{userSession.canSetupUnit}">
+	<hr/>
+	<s:link value="#{messages['meds.unitsetup']}" view="/medicines/unitsetup.xhtml" propagation="none" />
+	</s:fragment>
+	</s:fragment>
+	
+	</s:fragment>
+	</div>
+	
+	</h:form>
+</ui:composition>

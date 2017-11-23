@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['manag.rel1']}" />
+
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="2" />
+<ui:param name="labelstyle" value="width:180px;" />
+<ui:param name="left" value="0" />
+
+<ui:define name="naveg" >
+	<s:link value="#{messages['manag']}" view="/management/index.html" propagation="none" />
+</ui:define>
+
+<ui:define name="icons">
+<s:link onclick="refreshresult();return false;" style="float:right;margin-right:10px;">
+	<div class="excel-icon" />
+</s:link>
+</ui:define>
+
+<ui:define name="print-link">
+	<h:panelGroup id="pnlPrintLink">
+	<s:link value="#{messages['global.print']}" rendered="#{not stockPosReport.executing}" target="_blank">
+		<f:param name="print" value="1"/>
+	</s:link>
+
+	<s:link view="/reports/rel1.xhtml" rendered="#{stockPosReport.executing}" target="_blank">
+		<ui:include src="/layout/print_icon.xhtml" />
+	</s:link>
+	</h:panelGroup>
+</ui:define>
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main">
+<table width="100%">
+<tr><td>
+	<s:decorate id="source" template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu id="source" value="#{reportSelection.source}">
+            <s:selectItems var="s" value="#{sources}" label="#{s.abbrevName} - #{s.name}" noSelectionLabel="#{messages['form.noselection']}"/>
+            <s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate id="reg" template="/layout/display.xhtml">
+		<ui:define name="label">#{reportSelection.auselection.labelLevel1}:</ui:define>
+		<h:selectOneMenu value="#{reportSelection.auselection.unitLevel1}" rendered="#{not reportSelection.auselection.level1ReadOnly}">
+            <s:selectItems var="s" value="#{reportSelection.auselection.optionsLevel1}" label="#{s.name}" noSelectionLabel="#{messages['form.noselection']}"/>
+            <s:convertEntity />
+		</h:selectOneMenu>
+		<h:outputText value="#{reportSelection.auselection.unitLevel1.name}" rendered="#{reportSelection.auselection.level1ReadOnly}" />
+	</s:decorate>
+	
+	<s:decorate id="medLine" template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['MedicineLine']}:</ui:define>
+		<h:selectOneMenu id="medicineLine" value="#{reportSelection.medicineLine}">
+            <s:selectItems var="s" value="#{medicineLines}" label="#{messages[s.key]}" noSelectionLabel="#{messages['form.noselection']}"/>
+            <s:convertEnum/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+    <s:decorate template="/layout/dateedit.xhtml" >
+        <ui:define name="label">#{messages['global.date']}:</ui:define>
+        <ui:param name="datefield" value="#{stockPosReport.date}" />
+    </s:decorate>
+</td></tr>
+<tr><td align="right">
+	<a:commandLink styleClass="button" action="#{stockPosReport.execute}" reRender="pnlresult,pnlPrintLink"
+		onclick="if (!disableButton(this)) return false;"
+		oncomplete="enableButton()">
+		<span>#{messages['form.generate']}</span>
+	</a:commandLink>
+	<a:commandLink id="refreshlink" style="display:none" styleClass="button" action="#{stockPosReport.execute}" reRender="pnlresult,pnlPrintLink"
+		onclick="if (!disableButton(this)) return false;"
+		oncomplete="enableButton();generateexcel();">
+		<span>#{messages['form.generate']}heyhey</span>
+	</a:commandLink>
+	<h:commandLink style="display:none;" id="excellink" action="#{stockPosReport.downloadExcel()}" />
+</td></tr>
+</table>
+
+<h:panelGroup id="pnlresult" width="100%">
+<s:fragment rendered="#{facesContext.renderResponse}">
+<h:outputText value="#{messages['cases.details.noresultfound']}" styleClass="warn" rendered="#{empty stockPosReport.medicines}" />
+<s:fragment rendered="#{not empty stockPosReport.medicines}">
+<div class="spacer" />
+<table class="table1 small" >
+	<tr>
+	<th width="200px">
+		#{levelInfo.nameLevel1} / #{messages['Tbunit']}
+	</th>
+	<a:repeat value="#{stockPosReport.medicines}" var="it">
+	<th width="120px" title="#{it}">
+		#{it.abbrevName}<br/>#{it.strength} #{it.strengthUnit}
+	</th>
+	</a:repeat>
+	</tr>
+	
+	<a:repeat value="#{stockPosReport.root.children}" var="p">
+	<tr>
+		<td class="highlight colb" >#{p.item.name}
+		</td>
+		<c:forEach begin="0" end="#{stockPosReport.medicines.size-1}" var="val">
+		<td align="right" class="highlight colb">
+			<h:outputText value="#{p.quantities[val]}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		</c:forEach>
+	</tr>
+		<a:repeat value="#{p.children}" var="it">
+		<tr>
+			<td class="colb">#{it.item.name}</td>
+			<c:forEach begin="0" end="#{stockPosReport.medicines.size-1}" var="i">
+			<td align="right" class="colb">
+				<h:outputText value="#{it.quantities[i]}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</td>
+			</c:forEach>
+		</tr>
+		</a:repeat>
+	</a:repeat>
+
+	<tr>
+		<th>
+			#{messages['global.total']}
+		</th>
+		<c:forEach begin="0" end="#{stockPosReport.medicines.size-1}" var="i">
+			<th align="right">
+				<h:outputText value="#{stockPosReport.root.quantities[i]}" >
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</th>
+		</c:forEach>
+
+	</tr>
+</table>
+</s:fragment>
+</s:fragment>
+</h:panelGroup>
+
+</h:form>
+
+<script type="text/javascript">
+	function refreshresult(){
+		document.getElementById('main:refreshlink').click();
+	}
+	function generateexcel(){
+		document.getElementById('main:excellink').click();
+	}
+</script>
+
+</ui:define>
+
+</ui:composition>  

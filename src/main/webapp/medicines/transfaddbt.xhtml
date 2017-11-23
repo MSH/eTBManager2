@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['meds.movs.newtransfer']} - #{messages['Batch']} - #{messages['form.new']}" />
+
+<ui:param name="topmenu" value="1" />
+<ui:param name="labelstyle" value="width:180px;" />
+
+<ui:define name="content">
+    <table class="table1" width="650px">
+    <tr><td>
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['Source']}:</ui:define>
+    	#{medicineTransferHome.source.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['meds.movs.from']}:</ui:define>
+    	#{medicineTransferHome.fromTbunit.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml" >
+    	<ui:define name="label">#{messages['meds.movs.to']}:</ui:define>
+		#{medicineTransferHome.toTbunit.name}
+    </s:decorate>
+
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['form.refdate']}:</ui:define>
+    	<h:outputText value="#{medicineTransferHome.transferDate}" converter="localeDateConverter" />
+	</s:decorate>
+	
+	</td></tr>
+	<tr><td><hr/></td></tr>
+	<tr><td>
+	
+    <s:decorate template="/layout/display.xhtml">
+    	<ui:define name="label">#{messages['Medicine']}:</ui:define>
+		#{batchTransferHome.item.medicine}
+	</s:decorate>
+	
+	</td></tr>
+	<tr><th>#{messages['meds.movs.itensmov']}</th></tr>
+	
+	<tr><td>
+
+	<h:form id="main">
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
+    	<h:inputText value="#{batchTransferHome.batch.batchNumber}" maxlength="30" required="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
+    	<h:inputText value="#{batchTransferHome.batch.manufacturer}" maxlength="80" required="true" style="width:200px;" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
+    	<h:inputText id="dt" value="#{batchTransferHome.batch.expiryDate}" required="true" maxlength="10">
+        	<s:convertDateTime timeZone="#{timezones.default}"/>
+    	</h:inputText>
+    	<s:selectDate for="dt" dateFormat="dd/MM/yyyy">
+        	<h:graphicImage url="#{request.contextPath}/public/themes/default/images/dtpick.gif" style="margin-left:5px;cursor:pointer"/>
+    	</s:selectDate>
+	</s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['meds.movs.transferqtty']}:</ui:define>
+    	<h:inputText value="#{batchTransferHome.quantity}" required="true">
+    	</h:inputText>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
+    	<h:inputText value="#{batchTransferHome.batch.totalPrice}" required="true">
+    	</h:inputText>
+    </s:decorate>
+
+	<h:commandLink action="#{batchTransferHome.addBatch}" value="#{messages['form.add']}" styleClass="button" style="display:block;"/>
+	</h:form>
+		
+	</td></tr>
+	<tr><td>
+	</td></tr>
+	
+	<tr><td>
+		<h:form>
+		<h:dataTable value="#{batchTransferHome.newBatches}" var="b" styleClass="table1" width="100%" columnClasses="coll,coll,colc,colr,colr,colc" rowClasses="lin1,lin2" rendered="#{not empty batchTransferHome.newBatches}">
+
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Batch.manufacturer']} - #{messages['Batch.batchNumber']}" styleClass="collh"/>
+				</f:facet>
+				#{b.batch.manufacturer} - #{b.batch.batchNumber}
+			</h:column>
+
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="#{messages['Batch.expiryDate']}" />
+				</f:facet>
+				<h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+			</h:column>
+
+			<h:column>
+				<f:facet name="header"><h:outputText value="#{messages['meds.movs.transferqtty']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{b.quantity}" style="width:60;"></h:outputText>
+			</h:column>
+
+			<h:column>
+				<f:facet name="header"><h:outputText value="#{messages['Batch.totalPrice']}" styleClass="colrh" /></f:facet>
+				<h:outputText value="#{b.batch.totalPrice}">
+					<f:convertNumber pattern="#,###,###0.00"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">#{messages['form.action']}</f:facet>
+				<h:commandLink value="#{messages['form.remove']}" action="#{batchTransferHome.remBatch(b)}" />
+			</h:column>
+		</h:dataTable>
+		</h:form>
+	</td></tr>
+    <tr><td align="right">
+            <s:link action="#{batchTransferHome.selectNewBatches}" value="#{messages['form.ok']}" styleClass="button" rendered="#{not empty batchTransferHome.newBatches}" />
+			<s:link action="/medicines/transfedt.xhtml" value="#{messages['form.cancel']}" styleClass="button-alt" />
+    </td></tr>
+    
+    </table>
+    
+</ui:define>
+
+</ui:composition>  

@@ -1,293 +1,278 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.msh</groupId>
-	<artifactId>etbmanager</artifactId>
-	<version>2.3.0</version>
-	<packaging>pom</packaging>
-	<name>eTB Manager</name>
-	<description>eTB Manager Web Suite</description>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.msh</groupId>
+    <artifactId>etbmanager</artifactId>
+    <version>2.3.0</version>
+    <name>eTB Manager</name>
+    <description>eTB Manager Web Application</description>
+    <packaging>war</packaging>
 
-	<modules>
-		<module>generic</module>
-		<module>namibia</module>
-        <module>nigeria</module>
-        <module>cambodia</module>
-        <module>bangladesh</module>
-		<module>moldova</module>
-	</modules>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH:mm</maven.build.timestamp.format>
         <buildDate>${maven.build.timestamp}</buildDate>
         <workspace-context></workspace-context>
         <war.filename>etbmanager</war.filename>
-		<app.country-extension></app.country-extension>
-	</properties>
 
-	<developers>
-		<developer>
-			<id>rmemoria</id>
-			<name>Ricardo Memória</name>
-			<email>rmemoria@msh.org</email>
-			<roles>
-				<role>Architect</role>
-				<role>Developer</role>
-			</roles>
-			<organization>MSH</organization>
-			<timezone>-3</timezone>
-		</developer>
-	</developers>
+        <app.development>false</app.development>
+        <app.datasource>mdrtbDatasource</app.datasource>
+        <app.webcontext>etbmanager</app.webcontext>
+    </properties>
 
-	<profiles>
-		<profile>
-			<id>development</id>
-			<properties>
-				<app.development>true</app.development>
+    <developers>
+        <developer>
+            <id>rmemoria</id>
+            <name>Ricardo Memória</name>
+            <email>rmemoria@gmail.com</email>
+            <roles>
+                <role>Architect</role>
+                <role>Developer</role>
+            </roles>
+            <organization>MSH</organization>
+            <timezone>-3</timezone>
+        </developer>
+    </developers>
+
+    <profiles>
+        <profile>
+            <id>development</id>
+            <properties>
+                <app.development>true</app.development>
                 <app.datasource>mdrtbDatasource</app.datasource>
-				<app.webcontext>etbmanager</app.webcontext>
-				<war.filename>etbmanager${app.country-extension}</war.filename>
-			</properties>
-		</profile>
-		<profile>
-			<id>production</id>
-			<properties>
-				<app.development>false</app.development>
-                <app.datasource>mdrtbDatasource</app.datasource>
-				<app.webcontext>etbmanager</app.webcontext>
-				<war.filename>etbmanager${app.country-extension}</war.filename>
-			</properties>
-		</profile>
+                <app.webcontext>etbmanager</app.webcontext>
+                <war.filename>etbmanager${app.country-extension}</war.filename>
+            </properties>
+        </profile>
         <profile>
             <id>test</id>
             <properties>
-				<app.development>false</app.development>
+                <app.development>false</app.development>
                 <app.datasource>mdrtbDatasource-test${workspace-context}</app.datasource>
-				<app.development>false</app.development>
-				<app.webcontext>etbmanager-test${app.country-extension}</app.webcontext>
-				<war.filename>etbmanager-test${app.country-extension}</war.filename>
+                <app.development>false</app.development>
+                <app.webcontext>etbmanager-test${app.country-extension}</app.webcontext>
+                <war.filename>etbmanager-test${app.country-extension}</war.filename>
             </properties>
         </profile>
-	</profiles>
+    </profiles>
 
 
-	<repositories>
-		<repository>
-			<id>central</id>
-			<url>http://repo.maven.apache.org/maven2</url>
-		</repository>
-		<repository>
-			<id>jboss-releases</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-		</repository>
-		<repository>
-			<id>java.net</id>
-			<url>http://download.java.net/maven/2/</url>
-		</repository>
-		<repository>
-			<id>rmemoria</id>
-			<url>http://www.etbmanager.org/repository</url>
-		</repository>
-		<repository>
-			<id>nuxeo</id>
-			<url>https://maven-us.nuxeo.org/nexus/content/repositories/public</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>jboss-releases</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>rmemoria</id>
+            <url>http://www.etbmanager.org/repository</url>
+        </repository>
+        <repository>
+            <id>nuxeo</id>
+            <url>https://maven-us.nuxeo.org/nexus/content/repositories/public</url>
+        </repository>
+    </repositories>
 
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam</artifactId>
-			<version>2.2.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam-ui</artifactId>
-			<version>2.2.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam-debug</artifactId>
-			<version>2.2.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam-excel</artifactId>
-			<version>2.2.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam-remoting</artifactId>
-			<version>2.2.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam-mail</artifactId>
-			<version>2.2.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.seam</groupId>
-			<artifactId>jboss-seam-ioc</artifactId>
-			<version>2.2.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.facelets</groupId>
-			<artifactId>jsf-facelets</artifactId>
-			<version>1.1.15.B1</version>
-		</dependency>
-		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-			<version>1.6.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.richfaces.framework</groupId>
-			<artifactId>richfaces-impl</artifactId>
-			<version>3.3.3.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.richfaces.ui</groupId>
-			<artifactId>richfaces-ui</artifactId>
-			<version>3.3.3.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate</artifactId>
-			<version>3.3.1.GA</version>
-			<type>pom</type>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.3.1.ga</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<version>1.2</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<version>2.6.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-digester</groupId>
-			<artifactId>commons-digester</artifactId>
-			<version>1.8.1</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.rmemoria</groupId>
-			<artifactId>datastream</artifactId>
-			<version>1.2.8</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.jexcelapi</groupId>
-			<artifactId>jxl</artifactId>
-			<version>2.6.12</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-servlet</artifactId>
-			<version>2.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
-			<version>2.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.el</groupId>
-			<artifactId>jboss-el</artifactId>
-			<version>1.0_02.CR5</version>
-		</dependency>
-		<dependency>
-			<groupId>opensymphony</groupId>
-			<artifactId>quartz</artifactId>
-			<version>1.6.0</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam-ui</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam-debug</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam-excel</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam-remoting</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam-mail</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam-ioc</artifactId>
+            <version>2.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.facelets</groupId>
+            <artifactId>jsf-facelets</artifactId>
+            <version>1.1.15.B1</version>
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.richfaces.framework</groupId>
+            <artifactId>richfaces-impl</artifactId>
+            <version>3.3.3.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.richfaces.ui</groupId>
+            <artifactId>richfaces-ui</artifactId>
+            <version>3.3.3.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate</artifactId>
+            <version>3.3.1.GA</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.3.1.ga</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>2.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rmemoria</groupId>
+            <artifactId>datastream</artifactId>
+            <version>1.2.8</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.jexcelapi</groupId>
+            <artifactId>jxl</artifactId>
+            <version>2.6.12</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.el</groupId>
+            <artifactId>jboss-el</artifactId>
+            <version>1.0_02.CR5</version>
+        </dependency>
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>quartz</artifactId>
+            <version>1.6.0</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.axis</groupId>
-			<artifactId>axis</artifactId>
-			<version>1.4</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.xml</groupId>
-			<artifactId>jaxrpc-api</artifactId>
-			<version>1.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.msh</groupId>
-			<artifactId>gwt-seam</artifactId>
-			<version>0.3.1</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml</groupId>
+            <artifactId>jaxrpc-api</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.msh</groupId>
+            <artifactId>gwt-seam</artifactId>
+            <version>0.3.1</version>
+        </dependency>
 
         <!-- Rest support using resteasy -->
         <dependency>
             <groupId>org.jboss.seam</groupId>
             <artifactId>jboss-seam-resteasy</artifactId>
             <version>2.2.1.Final</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>jcl-over-slf4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.activation</groupId>
-					<artifactId>activation</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.jcip</groupId>
-					<artifactId>jcip-annotations</artifactId>
-				</exclusion>
-			</exclusions>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.jcip</groupId>
+                    <artifactId>jcip-annotations</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
@@ -300,38 +285,38 @@
             <version>2.2.1.GA</version>
         </dependency>
 
-		<!-- These dependencies are declared here as provided, otherwise they'll 
-			be included in the war lib -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>xpp3</groupId>
-			<artifactId>xpp3_min</artifactId>
-			<version>1.1.3.4.O</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.thoughtworks.xstream</groupId>
-			<artifactId>xstream</artifactId>
-			<version>1.3.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.0.4</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.el</groupId>
-			<artifactId>el-api</artifactId>
-			<version>1.0</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- These dependencies are declared here as provided, otherwise they'll
+            be included in the war lib -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3_min</artifactId>
+            <version>1.1.3.4.O</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -340,14 +325,14 @@
             <scope>provided</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.8</version>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.8</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>3.3</version>
@@ -395,14 +380,33 @@
             <artifactId>httpclient</artifactId>
             <version>4.2.5</version>
         </dependency>
-	</dependencies>
+    </dependencies>
 
 
-	<build>
-		<plugins>
+    <build>
+        <finalName>${war.filename}</finalName>
 
-            <!-- source code configuration -->
-<!--            <plugin>
+        <resources>
+            <!-- will filter just the persistence.xml -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>META-INF/persistence.xml</include>
+                </includes>
+            </resource>
+            <!-- Will include all other resources -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>META-INF/persistence.xml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>1.1</version>
@@ -415,23 +419,95 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src/java</source>
+                                <source>src/main/java</source>
+                                <source>src/client/java</source>
                             </sources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
--->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <filtering>true</filtering>
+                            <directory>src/main/webapp/WEB-INF</directory>
+                            <targetPath>WEB-INF</targetPath>
+                            <includes>
+                                <include>**/web.xml</include>
+                                <include>**/components.xml</include>
+                                <include>**/jboss-web.xml</include>
+                                <!-- include any other file types you want to filter -->
+                            </includes>
+                        </resource>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                            <excludes>
+                                <exclude>**/web.xml</exclude>
+                                <exclude>**/components.xml</exclude>
+                                <exclude>**/jboss-web.xml</exclude>
+                                <exclude>custom/**/*</exclude>
+                            </excludes>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                    <packagingExcludes>WEB-INF/deploy/**</packagingExcludes>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Built-Date>${buildDate}</Built-Date>
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                            <Country-Code>${workspace-context}</Country-Code>
+                            <Build-Number>${buildNumber}</Build-Number>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <show>private</show>
+                    <doctitle>eTB Manager version ${project.version}</doctitle>
+                </configuration>
+            </plugin>
+
+            <!-- JBOSS automatic deploy -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jboss-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <hostName>localhost</hostName>
+                    <port>8080</port>
+                    <fileNames>
+                        <fileName>${basedir}/target/${war.filename}.war</fileName>
+                    </fileNames>
+                    <jbossHome>${env.JBOSS_HOME}</jbossHome>
+                    <serverName>default</serverName>
+                    <fileName>target/${war.filename}.war</fileName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
 
             <!-- Configuration of the build number generated during build -->
             <plugin>
@@ -452,33 +528,33 @@
                 </configuration>
             </plugin>
 
-			<!-- GWT compile -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.6.1</version>
-				<executions>
-					<execution>
-						<configuration>
-							<module>org.msh.tb.etbmanager</module>
-						</configuration>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+            <!-- GWT compile -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>2.6.1</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <module>org.msh.tb.etbmanager</module>
+                        </configuration>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-			<!-- Including the maven resources plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
+            <!-- Including the maven resources plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
 
             <!-- JBOSS automatic deploy -->
             <plugin>
@@ -497,49 +573,72 @@
                 </configuration>
             </plugin>
 
-			<!-- JMeter integration with maven -->
-			<plugin>
-				<groupId>com.lazerycode.jmeter</groupId>
-				<artifactId>jmeter-maven-plugin</artifactId>
-				<version>1.10.1</version>
-				<executions>
-					<execution>
-						<id>jmeter-tests</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jmeter</goal>
-						</goals>
-						<configuration>
-							<testResultsTimestamp>false</testResultsTimestamp>
-							<overrideRootLogLevel>DEBUG</overrideRootLogLevel>
-							<suppressJMeterOutput>false</suppressJMeterOutput>
-							<ignoreResultFailures>true</ignoreResultFailures>
-							<propertiesUser>
-								<appname>${app.webcontext}</appname>
-							</propertiesUser>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+            <!-- JMeter integration with maven -->
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>1.10.1</version>
+                <executions>
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                        <configuration>
+                            <testResultsTimestamp>false</testResultsTimestamp>
+                            <overrideRootLogLevel>DEBUG</overrideRootLogLevel>
+                            <suppressJMeterOutput>false</suppressJMeterOutput>
+                            <ignoreResultFailures>true</ignoreResultFailures>
+                            <propertiesUser>
+                                <appname>${app.webcontext}</appname>
+                            </propertiesUser>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-		</plugins>
+        </plugins>
+    </build>
 
-	</build>
-	<url>https://www.etbmanager.org</url>
-	<organization>
-		<name>MSH - Management Science for Health</name>
-		<url>www.msh.org</url>
-	</organization>
-	<scm>
-		<connection>scm:svn:https://www.etbmanager.org/svn_desktop/trunk</connection>
-		<url>https://www.etbmanager.org/svn/etbmanager/trunk</url>
-	</scm>
-	<issueManagement>
-		<system>Redmine</system>
-		<url>http://dev.msh.org/redmine</url>
-	</issueManagement>
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>http://dev.etbmanager.org/jenkins</url>
-	</ciManagement>
+
+    <reporting>
+        <plugins>
+            <!-- Generate org.msh.reports about testing results -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+            </plugin>
+
+            <!-- Generate javadoc for the project -->
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <show>private</show>
+                    <doctitle>eTB Manager version ${project.version}</doctitle>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+
+    <url>https://www.etbmanager.org</url>
+    <organization>
+        <name>MSH - Management Science for Health</name>
+        <url>www.msh.org</url>
+    </organization>
+    <scm>
+        <connection>scm:svn:https://www.etbmanager.org/svn_desktop/trunk</connection>
+        <url>https://www.etbmanager.org/svn/etbmanager/trunk</url>
+    </scm>
+    <issueManagement>
+        <system>Redmine</system>
+        <url>http://dev.msh.org/redmine</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>http://dev.etbmanager.org/jenkins</url>
+    </ciManagement>
 </project>

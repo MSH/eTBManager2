@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+        >
+	
+	<ui:with field='msg' type='org.msh.tb.client.resources.ReportConstants'/>
+	
+	<ui:style>
+	</ui:style>
+
+	<g:HTMLPanel>
+
+        <table width="100%">
+            <tr>
+                <td>
+                    <g:Label ui:field="txtTitle" styleName="subtitle"><ui:text from="{msg.filters}"/></g:Label>
+                </td>
+                <td align="right">
+                    <g:Button ui:field="btnAddFilter" text="{msg.addFilters}"/>
+                </td>
+            </tr>
+        </table>
+        <g:VerticalPanel ui:field="pnlFilters"></g:VerticalPanel>
+	</g:HTMLPanel>
+	
+</ui:UiBinder>

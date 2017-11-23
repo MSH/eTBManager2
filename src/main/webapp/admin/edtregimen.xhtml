@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+        
+<ui:param name="title" value="#{regimen.id==null? messages['admin.regimens.new']: messages['admin.regimens.edt']}" />
+<ui:param name="topmenu" value="3" />
+<ui:param name="waitdlg" value="1" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+<h:form id="main" styleClass="form1">
+
+    <div class="form-content">
+    <s:decorate template="/layout/display.xhtml" rendered="#{regimen.id != null}">
+    	<ui:define name="label">#{messages['form.id']}:</ui:define>
+    	<h:outputText value="#{regimen.id}" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['form.name']}:</ui:define>
+        <h:inputText value="#{regimen.name}" maxlength="100" style="width : 300px;" required="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml">
+    	<ui:define name="label">#{messages['Regimen.caseClassification']}:</ui:define>
+    	<h:selectOneMenu value="#{regimen.caseClassification}" required="true">
+    		<s:selectItems value="#{globalLists.caseClassifications}" var="c" label="#{messages[c.key]}" noSelectionLabel="-"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+
+	<a:commandLink action="#{regimenHome.filterMedicines('INTENSIVE')}" style="float:right;" styleClass="button-alt" 
+			ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl" >
+		<span>#{messages['Regimen.add']}...</span>
+	</a:commandLink>
+	<h2>#{messages['RegimenPhase.INTENSIVE']}</h2>
+
+    <h:panelGroup id="tab1">
+	<h:dataTable value="#{regimen.intensivePhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="table1" rendered="#{not empty regimen.intensivePhaseMedicines}" style="margin-bottom:30px;">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
+			</f:facet>
+			<div class="medicine-icon" style="float:left;"/>
+			<h:outputText value="#{it.medicine}" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Regimen.doseunit']}" styleClass="collh" />
+			</f:facet>
+			<h:inputText id="dose" value="#{it.defaultDoseUnit}" required="true" style="width: 62px;"></h:inputText>
+			<h:message for="dose" styleClass="error" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Regimen.months']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu id="months" value="#{it.monthsTreatment}" required="true" >
+            	<f:selectItems value="#{regimenHome.months}" />
+			</h:selectOneMenu>
+			<h:message for="months" styleClass="error" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Regimen.frequency']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu id="freq" value="#{it.defaultFrequency}" required="true">
+            	<f:selectItems value="#{frequencies}" />
+			</h:selectOneMenu>
+			<h:message for="freq" styleClass="error" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Source']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu id="sourcei" value="#{it.defaultSource}" required="true">
+            	<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            	<s:convertEntity />
+			</h:selectOneMenu>
+			<h:message for="sourcei" styleClass="error"/>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">#{messages['form.action']}</f:facet>
+			<a:commandLink value="#{messages['form.remove']}" action="#{regimenHome.removeMedicine(it)}" reRender="tab1" immediate="true"/>
+		</h:column>		
+	</h:dataTable>
+	</h:panelGroup>
+	
+
+	
+
+	<a:commandLink action="#{regimenHome.filterMedicines('CONTINUOUS')}" style="float:right;" styleClass="button-alt" 
+				ajaxSingle="true" oncomplete="showMedicinesDlg();" reRender="medpnl">
+		<span>#{messages['Regimen.add']}...</span>
+	</a:commandLink>
+	<h2>#{messages['RegimenPhase.CONTINUOUS']}</h2>
+
+    <h:panelGroup id="tab2">
+	<h:dataTable value="#{regimen.continuousPhaseMedicines}" var="it" width="100%" rowClasses="lin1,lin2" styleClass="table1" rendered="#{not empty regimen.continuousPhaseMedicines}" style="margin-bottom:30px;">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Medicine']}" styleClass="collh" />
+			</f:facet>
+			<div class="medicine-icon" style="float:left;"/>
+			<h:outputText value="#{it.medicine}" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Regimen.doseunit']}" styleClass="collh" />
+			</f:facet>
+			<h:inputText value="#{it.defaultDoseUnit}" required="true" style="width: 62px;"></h:inputText>
+		</h:column>
+				
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Regimen.duration']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu id="months" value="#{it.monthsTreatment}" required="true">
+            	<f:selectItems value="#{regimenHome.months}" />
+			</h:selectOneMenu>
+			<h:message for="months" styleClass="error" />
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Regimen.frequency']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu value="#{it.defaultFrequency}" required="true">
+            	<f:selectItems value="#{frequencies}" />
+			</h:selectOneMenu>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['Source']}" styleClass="collh" />
+			</f:facet>
+			<h:selectOneMenu id="sourcec" value="#{it.defaultSource}" required="true">
+            	<s:selectItems value="#{sources}" var="c" label="#{c.name}" noSelectionLabel="-" />
+            	<s:convertEntity />
+			</h:selectOneMenu>
+			<h:message for="sourcec" styleClass="error"/>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">#{messages['form.action']}</f:facet>
+			<a:commandLink value="#{messages['form.remove']}" action="#{regimenHome.removeMedicine(it)}" reRender="tab2" immediate="true"/>
+		</h:column>		
+	</h:dataTable>
+	</h:panelGroup>
+</div>
+
+	<div class="form-footer">   
+            <a:commandLink action="#{regimenHome.persist}" 
+            	styleClass="button" onclick="disableButton(this)"
+            	reRender="main,messages">
+            	<span>#{messages['form.save']}</span>
+            	</a:commandLink>  
+            <a:commandLink action="cancel" styleClass="button-alt" ajaxSingle="true" onclick="disableButton(this)">
+             <span>#{messages['form.cancel']}</span>
+             </a:commandLink>
+   </div>
+
+
+	<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+</h:form>
+
+   
+<s:decorate id="dlg" template="/layout/medicineselection.xhtml" >
+	<ui:param name="title" value="#{messages['form.selmeds']}" />
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button"
+   		onclick="if (!disableButton(this)) return false;"  
+   		oncomplete="hideMedicinesDlg();"  reRender="main:tab1" rendered="#{regimenHome.phase=='INTENSIVE'}">
+   		<span>#{messages['form.ok']}</span>
+   	</a:commandLink>
+   	<a:commandLink action="#{regimenHome.addMedicines}" styleClass="button"
+   		onclick="if (!disableButton(this)) return false;"  
+   		oncomplete="hideMedicinesDlg();"  reRender="main:tab2" rendered="#{regimenHome.phase=='CONTINUOUS'}">
+   	<span>#{messages['form.ok']}</span>
+   	</a:commandLink>
+</s:decorate>
+
+
+</ui:define>
+        
+</ui:composition> 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://jboss.com/products/seam/pdf"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+
+<s:fragment rendered="#{(indicatorController.executing)}">
+<h:outputText value="#{messages['form.norecordfound']}" rendered="#{empty series.items}" styleClass="warn"/>
+<s:fragment rendered="#{not empty series.items}">
+<table width="100%">
+<tr><td valign="top" align="left" >
+	<h:dataTable value="#{series.items}" var="it" styleClass="tabela1" rowClasses="lin1,lin2" 
+		columnClasses="colb,colrb,colrb" width="380px">
+		
+		<h:column>
+			<f:facet name="header">#{seriestitle}</f:facet>
+			<f:facet name="footer"><b>TOTAL</b></f:facet>
+		
+			#{it.key}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['manag.ind.numc']}" styleClass="colrh" />
+			</f:facet>
+			<f:facet name="footer">
+				<h:outputText value="#{series.total}" styleClass="colrh" style="font-weight:bold;">
+					<f:convertNumber pattern="#,###,##0"/>
+				</h:outputText>
+			</f:facet>
+		
+			<h:outputText value="#{it.value}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="#{messages['global.perc']}" styleClass="colrh" />
+			</f:facet>
+			<f:facet name="footer">
+				<h:outputText value="100%" styleClass="colrh" style="font-weight:bold;" />
+			</f:facet>
+		
+			<h:outputText value="#{it.perc}" >
+				<f:convertNumber pattern="#,###,##0.0"/>
+			</h:outputText>%
+		</h:column>
+	</h:dataTable>
+</td><td valign="top"  align="right">
+
+<p:barchart width="350" height="#{series.chartHeight}" title="#{title}" 
+	orientation="horizontal" rangeAxisLabel="#{messages['manag.ind.numc']}">
+	<p:series key="ind" seriesPaint="#5289CE" borderPaint="#a0a0a0">
+		<ui:repeat value="#{series.items}" var="it">
+			<p:data columnKey="#{it.key}" key="#{it.key}" value="#{it.value}" />
+		</ui:repeat>
+	</p:series>
+</p:barchart>
+</td></tr></table>
+
+</s:fragment>
+</s:fragment>
+
+</ui:composition>

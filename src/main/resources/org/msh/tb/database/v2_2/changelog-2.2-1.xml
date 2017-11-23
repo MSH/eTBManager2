@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="2.2.1" author="rmemoria">
+        <createTable tableName="gxalertdata">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="systemName" type="varchar(255)"></column>
+            <column name="hostId" type="varchar(255)"></column>
+            <column name="assay" type="varchar(255)"></column>
+            <column name="assayVersion" type="varchar(10)"></column>
+            <column name="sampleId" type="varchar(45)"></column>
+            <column name="patientId" type="varchar(255)"></column>
+            <column name="user" type="varchar(255)"></column>
+            <column name="testStartedOn" type="datetime"></column>
+            <column name="testEndedOn" type="datetime"></column>
+            <column name="reagentLotId" type="varchar(255)"></column>
+            <column name="cartridgeExpirationDate" type="datetime"></column>
+            <column name="cartridgeSerial" type="varchar(255)"></column>
+            <column name="moduleSerial" type="varchar(255)"></column>
+            <column name="instrumentSerial" type="varchar(255)"></column>
+            <column name="softwareVersion" type="varchar(255)"></column>
+            <column name="resultIdMtb" type="int"></column>
+            <column name="resultIdRif" type="int"></column>
+            <column name="deviceSerial" type="varchar(255)"></column>
+            <column name="notes" type="varchar(255)"></column>
+            <column name="messageSentOn" type="datetime"></column>
+            <column name="assayHostTestCode" type="varchar(255)"></column>
+            <column name="resultText" type="varchar(255)"></column>
+            <column name="computerName" type="varchar(255)"></column>
+            <column name="recordDate" type="datetime"></column>
+            <column name="lastTransaction_ID" type="int"></column>
+            <column name="WORKSPACE_ID" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2.2.2" author="rmemoria">
+        <sql>update sys_user set ulaAccepted=false where ulaAccepted is null</sql>
+    </changeSet>
+
+    <changeSet id="2.2-1.3" author="msantos">
+        <sql>ALTER TABLE tbcase DROP COLUMN rifampcinResistance</sql>
+    </changeSet>
+
+    <!-- updates field case definition field according to exams -->
+    <!-- The logic changed check the query bellow. id 2.2-1.10 -->
+    <changeSet id="2.2-1.4" author="msantos">
+        <sql>
+            update tbcase
+            set casedefinition = 1
+            where diagnosisType = 1;
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from exammicroscopy e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from exammicroscopy e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from exammicroscopy e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from exammicroscopy e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
+            );
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from examculture e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examculture e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from examculture e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examculture e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
+            );
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.id = (select max(id)
+            from examxpert e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examxpert e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.id = (select max(id)
+            from examxpert e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examxpert e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt; tbcase.initreatmentdate))
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="2.2-1.5" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="treatmentCategory" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.6" author="msantos">
+        <addColumn tableName="tbcase">
+            <column name="initialRegimenWithSecondLineDrugs" type="boolean" />
+        </addColumn>
+    </changeSet>
+
+    <!-- Solve inconsistence. Initial Regimen was not being erased when undoing the treatment -->
+    <changeSet id="2.2-1.7" author="msantos">
+        <sql>
+            update tbcase set REGIMEN_INI_ID = null where initreatmentdate is null;
+        </sql>
+    </changeSet>
+
+    <!-- Updates fields initialRegimenWithSecondLineDrugs and treatmentCategory -->
+    <changeSet id="2.2-1.8" author="msantos">
+        <sql>
+            <!--Updates all tbcase with tratment setting false on initialRegimenWithSecondLineDrugs-->
+            update tbcase
+            set initialRegimenWithSecondLineDrugs = false
+            where initreatmentdate is not null;
+
+            <!-- Updates all tbcase with second line medicine on initial regimen setting true on initialRegimenWithSecondLineDrugs -->
+            update tbcase c
+            inner join regimen r on c.REGIMEN_INI_ID = r.id
+            inner join medicineregimen medreg on medreg.regimen_id = r.id
+            inner join medicine med on med.id = medreg.medicine_id
+            set initialRegimenWithSecondLineDrugs = true
+            where initialRegimenWithSecondLineDrugs = false
+            and med.line = 1;
+
+            <!-- Updates all tbcase with second line medicine on current regimen setting true on initialRegimenWithSecondLineDrugs -->
+            update tbcase c
+            inner join regimen r on c.REGIMEN_ID = r.id
+            inner join medicineregimen medreg on medreg.regimen_id = r.id
+            inner join medicine med on med.id = medreg.medicine_id
+            set initialRegimenWithSecondLineDrugs = true
+            where c.REGIMEN_INI_ID is null
+            and initialRegimenWithSecondLineDrugs = false
+            and med.line = 1;
+
+            <!-- Updates all tbcase with second line medicine on individualized regimen setting true on initialRegimenWithSecondLineDrugs -->
+            update tbcase c
+            inner join prescribedmedicine prescmed on prescmed.case_id = c.id
+            inner join medicine med on med.id = prescmed.medicine_id
+            set initialRegimenWithSecondLineDrugs = true
+            where c.REGIMEN_INI_ID is null and c.regimen_id is null
+            and initialRegimenWithSecondLineDrugs = false
+            and med.line = 1;
+
+            <!-- calculates the field treatment category -->
+            update tbcase set treatmentCategory = 2 where initialRegimenWithSecondLineDrugs = true;
+            update tbcase set treatmentCategory = 0 where initialRegimenWithSecondLineDrugs = false and patientType in (0,48);
+            update tbcase set treatmentCategory = 1 where initialRegimenWithSecondLineDrugs = false and patientType not in (0,48);
+        </sql>
+    </changeSet>
+
+    <changeSet id="2.2.6" author="rmemoria">
+        <addColumn tableName="tbcase">
+            <column name="otherExtrapulmonary" type="varchar(200)" />
+            <column name="otherExtrapulmonary2" type="varchar(200)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.9" author="rmemoria">
+        <addColumn tableName="exammicroscopy">
+            <column name="numberSamplesCollected" type="int"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.9b" author="rmemoria">
+        <addColumn tableName="fieldvalue">
+            <column name="enabled" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.9c" author="rmemoria">
+        <update tableName="fieldvalue">
+            <column name="enabled" valueBoolean="true" />
+        </update>
+    </changeSet>
+
+    <changeSet id="2.2-1.10" author="rmemoria">
+        <addColumn tableName="tag">
+            <column name="displayOrder" type="int" />
+            <column name="summary" type="bool" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.11" author="rmemoria">
+        <update tableName="tag">
+            <column name="summary" valueBoolean="false" />
+        </update>
+    </changeSet>
+    <!-- updates secDrugsReceived field in all workspaces -->
+    <changeSet id="2.2-1.9" author="msantos">
+        <sql>
+            update tbcase c
+            set secDrugsReceived = null;
+
+            update tbcase c
+            set secDrugsReceived = 0
+            where c.classification = 1 and
+            exists(select * from prevtbtreatment p
+            inner join res_prevtbtreatment r on r.PREVTBTREATMENT_ID = p.id
+            inner join substance s on s.id = r.SUBSTANCE_ID
+            where s.line = 1 and p.case_id = c.id);
+
+            update tbcase c
+            set secDrugsReceived = 1
+            where secDrugsReceived is null and
+            c.classification = 1 and
+            exists(select * from prevtbtreatment p
+            inner join res_prevtbtreatment r on r.PREVTBTREATMENT_ID = p.id
+            inner join substance s on s.id = r.SUBSTANCE_ID
+            where s.line = 0 and p.case_id = c.id);
+
+            update tbcase c
+            set secDrugsReceived = 1
+            where secDrugsReceived is null and
+            c.classification = 1 and
+            not exists(select * from prevtbtreatment p where p.case_id = c.id);
+
+            update tbcase c
+            set secDrugsReceived = 2
+            where secDrugsReceived is null
+            and c.classification = 1;
+        </sql>
+    </changeSet>
+
+    <!-- updates field case definition field according to exams - NEW LOGIC -->
+    <changeSet id="2.2-1.10" author="msantos">
+        <sql>
+            update tbcase
+            set casedefinition = 1
+            where diagnosisType = 1;
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from exammicroscopy e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from exammicroscopy e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from exammicroscopy e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from exammicroscopy e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt;= tbcase.initreatmentdate))
+            );
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from examculture e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examculture e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.id = (select max(id)
+            from examculture e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examculture e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt;= tbcase.initreatmentdate))
+            );
+
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.id = (select max(id)
+            from examxpert e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examxpert e2
+            where e2.case_id = e1.case_id))
+            );
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            initreatmentdate is not null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.id = (select max(id)
+            from examxpert e1
+            where e1.case_id = e.case_id
+            and e1.datecollected = (select max(datecollected)
+            from examxpert e2
+            where e2.case_id = e1.case_id and e2.datecollected &lt;= tbcase.initreatmentdate))
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="2.2-1.100" author="rmemoria">
+        <addColumn tableName="examrequest">
+            <column name="registeredBy" type="int" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-1.101" author="rmemoria">
+        <update tableName="examrequest">
+            <column name="registeredby" valueNumeric="1"></column>
+            <where>registeredby is null</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="2.2-3" author="msantos">
+        <createTable tableName="deletedentity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="entityName" type="varchar(255)"/>
+            <column name="entityId" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Add specific permission to allow or deny the user to log into the desktop version -->
+    <changeSet id="2.2-4" author="msantos">
+        <!-- Insert specific row in the list of roles -->
+        <insert tableName="userrole">
+            <column name="id" valueNumeric="301"/>
+            <column name="changeable" valueBoolean="false" />
+            <column name="code" value="055400"/>
+            <column name="role_name" value="DESKTOPACCESS" />
+            <column name="internalUse" valueBoolean="false" />
+            <column name="byCaseClassification" valueBoolean="false" />
+        </insert>
+
+        <!-- Insert the permission to all profiles that start with the name "administ" -->
+        <sql>
+            INSERT INTO userpermission(canchange, canexecute, grantPermission, profile_id, role_id)
+            SELECT false, true, true, id, 301 from userprofile
+            WHERE name like "%administ%"
+            AND NOT EXISTS(SELECT * FROM userpermission WHERE role_id=301 AND profile_id=userprofile.id)
+        </sql>
+    </changeSet>
+
+    <!-- Add specific permission to allow or deny the user to log into the desktop version -->
+    <changeSet id="2.2-4.2" author="msantos">
+        <sql>update userrole set code = '060000' where id = 301</sql>
+    </changeSet>
+
+    <changeSet id="2.2-5" author="msantos">
+        <addColumn tableName="tbunit">
+            <column name="lastSyncDate" type="date" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.2-6" author="msantos">
+        <addColumn tableName="deletedentity">
+            <column name="UNIT_TO_BE_DELETED_ID" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- updates field case definition field according to exams, the logic has changed -->
+    <changeSet id="2.2-7" author="msantos">
+        <sql>
+            update tbcase
+            set casedefinition = null;
+
+            update tbcase
+            set casedefinition = 1
+            where diagnosisType = 1;
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is not null and
+            exists (
+            select e.case_id
+            from exammicroscopy e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.datecollected &lt; DATE_SUB(tbcase.iniContinuousPhase,INTERVAL 8 DAY));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is not null and
+            exists (
+            select e.case_id
+            from examculture e
+            where
+            e.case_id = tbcase.id and
+            e.result in (1,2,3,4,5) and
+            e.datecollected &lt; DATE_SUB(tbcase.iniContinuousPhase,INTERVAL 8 DAY));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5));
+
+            update tbcase
+            set casedefinition = 0
+            where diagnosisType = 1 and
+            iniContinuousPhase is not null and
+            exists (
+            select e.case_id
+            from examxpert e
+            where
+            e.case_id = tbcase.id and
+            e.result in (5) and
+            e.datecollected &lt; DATE_SUB(tbcase.iniContinuousPhase,INTERVAL 8 DAY));
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

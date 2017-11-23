@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.com/products/seam/taglib"
+ 	  xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+      xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+      >
+
+
+<rich:tab id="tabresult" label="#{messages['manag.forecast.tabres1']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
+	<table class="table1">
+	<tr>
+		<th rowspan="2">
+			#{messages['Medicine']}
+		</th>
+		<th rowspan="2">
+			#{messages['manag.forecast.stockonhand2']}
+		</th>
+		<th rowspan="2">
+			#{messages['manag.forecast.orderDate']}
+		</th>
+		<th colspan="3">
+			#{messages['manag.forecast.leadtime']}
+			<br/>
+			<h:outputText value="#{forecastingCalculation.leadTimePeriod}" converter="periodConverter" styleClass="small-text"/>
+		</th>
+		<th colspan="8">
+			#{messages['manag.forecast.reviewperiod']} + #{messages['manag.forecast.bufferStock']}
+			<br/>
+			<h:outputText value="#{forecastingCalculation.reviewPeriod}" converter="periodConverter" styleClass="small-text"/>
+		</th>
+	</tr>
+	<tr>
+		<th>
+			#{messages['manag.forecast.stockonorder']}
+		</th>
+		<th>
+			#{messages['manag.forecast.dispensingLeadTime']}
+		</th>
+		<th>
+			#{messages['manag.forecast.expiredquantity']}
+		</th>
+
+		<th>
+			#{messages['manag.forecast.stockafterleadtime']}
+		</th>
+		<th>
+			#{messages['manag.forecast.stockonorder']}
+		</th>
+		<th>
+			#{messages['manag.forecast.expiredquantity']}
+		</th>
+		<th>
+			#{messages['manag.forecast.estcases']}
+		</th>
+		<th>
+			#{messages['manag.forecast.estnewcases']}
+		</th>
+		<th>
+			#{messages['manag.forecast.estqty']}
+		</th>
+		<th>
+			#{messages['global.unitPrice']}
+		</th>
+		<th>
+			#{messages['global.totalPrice']}
+		</th>
+	</tr>
+	<a:repeat value="#{forecasting.medicines}" var="m">
+	<tr>
+		<td class="colb highlight">
+			#{m.medicine}
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.stockOnHand}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.orderDate}" converter="localeDateConverter" 
+				style="width:80px;display:block;"
+				title="#{m.lateOrder? messages['manag.forecast.lateorder']: ''}" 
+				styleClass="#{m.lateOrder? 'error': ''}" rendered="#{not empty m.stockOutDate}">
+			</h:outputText>
+			<h:outputText value="#{forecastingView.noNextProcurrementMessage}" rendered="#{empty m.stockOutDate}" />
+		</td>
+		<td class="colrb highlight">
+			<h:outputText value="#{m.stockOnOrderLT}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb highlight">
+			<h:outputText value="#{m.dispensingQuantityLT}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+
+		<td class="colrb highlight">
+			<h:outputText value="#{m.quantityExpiredLT}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.stockOnHandAfterLT}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.stockOnOrder}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.quantityExpired}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.consumptionCases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.consumptionNewCases}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+		</td>
+		<td class="colrb highlight">
+			<b>
+			<h:outputText value="#{m.quantityToProcure}" >
+				<f:convertNumber pattern="#,###,##0"/>
+			</h:outputText>
+			</b>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.unitPrice}" >
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</td>
+		<td class="colrb">
+			<h:outputText value="#{m.totalPrice}" >
+				<f:convertNumber pattern="#,###,##0.00"/>
+			</h:outputText>
+		</td>
+	</tr>
+	</a:repeat>
+	</table>
+
+</rich:tab>
+
+
+
+<rich:tab label="#{messages['manag.forecast.tabres2']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
+<table width="100%" class="table1">
+<tr>
+	<th>#{messages['Medicine']}
+	</th>
+	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
+	<th class="tt">
+		#{it}
+	</th>
+	</a:repeat>
+</tr>
+<a:repeat value="#{forecastingView.resultTable.rows}" var="r">
+<tr class="highlight">
+	<td class="colb" colspan="#{r.results.size + 1}">
+		<b>#{r.medicine.medicine}</b>
+	</td>
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.stockonhand']}</b>
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb vl">
+		<h:outputText value="#{s.stockOnHand}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+		<a:commandLink rendered="#{not empty s.batchesConsumed}" 
+			onclick="showDetailResult(#{s.medicine.id},#{s.monthIndex}); return false;" styleClass="plus-icon" style="display:block;" title="#{messages['manag.forecast.batchdet']}">
+		</a:commandLink>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.qtdmissing']}</b>
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb vl">
+		<h:outputText value="#{s.quantityMissing}" style="#{s.quantityMissing==0?'':'color:red;font-weight:bold'}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.tabres2.cell3']}</b>
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb vl">
+		<h:outputText value="#{s.quantityExpired}" rendered="#{s.quantityExpired!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.stockonorder']}</b>
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb vl">
+		<h:outputText value="#{s.stockOnOrder}" rendered="#{s.stockOnOrder!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.tabres2.cell1']}</b>
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb vl">
+		<h:outputText value="#{s.consumptionCases}" rendered="#{s.consumptionCases!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="vl highlight" style="min-width:150px;width:150px;text-align:left">
+		<b>#{messages['manag.forecast.tabres2.cell2']}</b>
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb vl">
+		<h:outputText value="#{s.consumptionNewCases}" rendered="#{s.consumptionNewCases!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+</a:repeat>
+</table>
+</rich:tab>
+
+
+
+
+<rich:tab label="#{messages['manag.forecast.tabres3']}" rendered="#{forecasting.hasResult and facesContext.renderResponse}">
+<table width="100%" class="table1">
+
+<tr>
+	<th colspan="2">#{messages['Regimen']}
+	</th>
+	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
+	<th>
+		#{it}
+	</th>
+	</a:repeat>
+</tr>
+<a:repeat value="#{forecasting.regimens}" var="reg">
+<tr>
+	<td rowspan="3" class="colb highlight">
+		#{reg.regimen}
+	</td>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell1']}
+	</td>
+	<a:repeat value="#{reg.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numCasesOnTreatment}" rendered="#{s.numCasesOnTreatment!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell2']}
+	</td>
+	<a:repeat value="#{reg.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numNewCases}" rendered="#{s.numNewCases!=0}">
+			<f:convertNumber pattern="#,###,##0.##" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb">
+		#{messages['global.total']}
+	</td>
+	<a:repeat value="#{reg.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.totalCases}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+</a:repeat>
+<tr class="highlight">
+	<td class="colb" colspan="2">
+		#{messages['regimens.standard']} (#{messages['global.total']})
+	</td>
+	<a:repeat value="#{forecasting.totalRegimens}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantity}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb" colspan="2">
+		#{messages['regimens.individualized']} (#{messages['global.total']})
+	</td>
+	<a:repeat value="#{forecasting.totalIndividualized}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantity}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb" colspan="2">
+		#{messages['global.total']}
+	</td>
+	<a:repeat value="#{forecasting.total}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.quantity}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+
+
+<tr>
+	<th colspan="2">#{messages['Medicine']}
+	</th>
+	<a:repeat value="#{forecastingView.resultTable.columns}" var="it">
+	<th>
+		#{it}
+	</th>
+	</a:repeat>
+</tr>
+<a:repeat value="#{forecastingView.resultTable.rows}" var="r">
+<tr>
+	<td rowspan="3" class="colb highlight">
+		#{r.medicine.medicine}
+	</td>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell1']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numCasesOnTreatment}" rendered="#{s.numCasesOnTreatment!=0}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr>
+	<td class="colb">
+		#{messages['manag.forecast.tabres3.cell2']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.numNewCases}" rendered="#{s.numNewCases!=0}">
+			<f:convertNumber pattern="#,###,##0.##" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+<tr class="highlight">
+	<td class="colb">
+		#{messages['global.total']}
+	</td>
+	<a:repeat value="#{r.results}" var="s">
+	<td class="colrb">
+		<h:outputText value="#{s.totalCases}">
+			<f:convertNumber pattern="#,###,##0" />
+		</h:outputText>
+	</td>
+	</a:repeat>
+</tr>
+</a:repeat>
+</table>
+</rich:tab>
+
+<rich:tab label="#{messages['form.details']}" rendered="#{forecasting.hasResult}">
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Medicine']}:</ui:define>
+		<h:selectOneMenu value="#{forecastingView.medicineIndex}">
+			<f:selectItems value="#{forecastingView.medicineItems}" />
+			<a:support event="onchange" reRender="pnldetails" ajaxSingle="true"/>
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<h:panelGroup id="pnldetails">
+	<h:dataTable value="#{forecastingView.medicine.periods}" var="p" styleClass="table1" 
+		rendered="#{not empty forecastingView.medicine.periods}" columnClasses="colb,colrb,colrb,colrb,colrb,colrb,colrb,colrb,colrb">
+		<h:column>
+			<f:facet name="header">
+				#{messages['global.period']}
+			</f:facet>
+			<h:outputText value="#{p.period}" converter="periodConverter" style="display:block;width:250px" />
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonhand']}
+			</f:facet>
+			<h:outputText value="#{p.stockOnHand}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estcases']}
+			</f:facet>
+			<h:outputText value="#{p.estConsumptionCases}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.estnewcases']}
+			</f:facet>
+			<h:outputText value="#{p.estConsumptionNewCases}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['reports.estimatedcons']} <br/>(#{messages['global.total']})
+			</f:facet>
+			<h:outputText value="#{p.estimatedConsumption}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.stockonorder']}
+			</f:facet>
+			<h:outputText value="#{p.quantityInOrder}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.tabres2.cell3']}
+			</f:facet>
+			<h:outputText value="#{p.quantityExpired}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">
+				#{messages['manag.forecast.qtdmissing']}
+			</f:facet>
+			<h:outputText value="#{p.quantityMissing}" >
+				<f:convertNumber pattern="#,###,##0" />
+			</h:outputText>
+		</h:column>
+	</h:dataTable>
+	</h:panelGroup>
+</rich:tab>
+
+<a:jsFunction name="showDetailResult" reRender="resultDetailsPnl" action="#{forecastingView.initializeResult}" 
+	ajaxSingle="true" oncomplete="showModalAutoTop('resultDetailsDlg');">
+	<a:actionparam name="param1" assignTo="#{forecastingView.medicineId}" converter="javax.faces.Integer" />
+	<a:actionparam name="param2" assignTo="#{forecastingView.monthIndex}" converter="javax.faces.Integer" />
+</a:jsFunction>
+
+</ui:composition>  
+

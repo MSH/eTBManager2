@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.contacts']}" />
+<ui:param name="left" value="0" />
+<ui:param name="waitdlg" value="1" />
+<ui:param name="topmenu" value="0" />
+
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml" id="maindec">
+	<a:form id="formexam" styleClass="form1">
+
+	<div class="form-content">
+    <s:decorate id="dt" template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.name']}:</ui:define>
+    	<h:inputText value="#{tbContact.name}" required="true" style="width:320px;"/>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['Gender']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContact.gender}" required="true">
+    		<s:selectItems value="#{genders}" var="it" noSelectionLabel="-" label="#{messages[it.key]}" />
+    		<s:convertEnum />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbCase.age']}:</ui:define>
+    	<h:inputText value="#{tbContact.age}" required="true" />
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.contactType']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContact.contactType}" required="true">
+    		<s:selectItems value="#{fieldsQuery.contactTypes}" var="s" noSelectionLabel="-" label="#{s.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.examined']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContact.examinated}" required="false" onchange="showEvaluationDetails(this)">
+			<f:selectItem itemLabel="#{messages['global.yes']}" itemValue="#{true}"/>
+			<f:selectItem itemLabel="#{messages['global.no']}" itemValue="#{false}"/>
+    	</h:selectOneMenu>
+    </s:decorate>
+
+	<div id="evaluationDate" style="display:#{tbContact.examinated ? '' : 'none'}">
+		<s:decorate template="/layout/dateedit.xhtml" id="evaldateDec">
+			<ui:define name="label">#{messages['global.date']}:</ui:define>
+			<ui:param name="required" value="false" />
+			<ui:param name="future" value="true" />
+			<ui:param name="datefield" value="#{tbContact.dateOfExamination}" />
+			<ui:param name="id" value="evaldate"/>
+		</s:decorate>
+	</div>
+
+    <s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['TbContact.conduct']}:</ui:define>
+    	<h:selectOneMenu value="#{tbContact.conduct}" required="false">
+    		<s:selectItems value="#{fieldsQuery.contactConducts}" var="s" noSelectionLabel="-" label="#{s.name}" />
+    		<s:convertEntity />
+    	</h:selectOneMenu>
+    </s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml" >
+    	<ui:define name="label">#{messages['global.comments']}:</ui:define>
+    	<h:inputTextarea value="#{tbContact.comments}" style="width:500px;height:80px;"/>
+    </s:decorate>
+
+	</div>
+
+	<div class="form-footer">
+		<div style="float:right;">
+			<span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+		</div>
+            <a:commandLink action="#{tbContactHome.persist}" styleClass="button" reRender="formexam" 
+            	oncomplete="enableButton()"
+            	onclick="if (!disableButton(this)) return false;" >
+            	<span>#{messages['form.save']}</span>
+            </a:commandLink>
+            <s:link view="/cases/casedata.xhtml" styleClass="button-alt" onclick="disableButton(this);">
+            	<f:param name="id" value="#{caseHome.id}"/>
+            	<span>#{messages['form.cancel']}</span>
+            </s:link>
+    </div>
+    
+	</a:form>
+
+	<script type="text/javascript">
+	<!--
+	function showEvaluationDetails(cb) {
+		if (cb.options[cb.selectedIndex].value == 'true')
+			jQuery('#evaluationDate').show(500);
+		else{
+			document.getElementById('maindec:formexam:evaldateDec:edtdateInputDate').value = '';
+			jQuery('#evaluationDate').hide(500);
+		}
+	}
+	-->
+	</script>
+
+</s:decorate>
+
+
+<p/>
+
+
+</ui:define>
+
+</ui:composition>  

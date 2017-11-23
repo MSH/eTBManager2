@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+        >
+
+	<table border="0"><tr><td>
+	<div style="border:1px solid ##{bordercolor};background-color: ##{backgroundcolor};display:block;width:100%;">
+	<div style="background: transparent url(#{request.contextPath}/public/themes/default/images/#{pngfile}lt.png) no-repeat left top; position:relative; left:-1px; top:-1px; ">
+	<div style="background: transparent url(#{request.contextPath}/public/themes/default/images/#{pngfile}rt.png) no-repeat right top; position:relative; left:2px; ">
+	<div style="background: transparent url(#{request.contextPath}/public/themes/default/images/#{pngfile}lb.png) no-repeat left bottom; position:relative; left:-2px; top:2px;">
+	<div style="background: transparent url(#{request.contextPath}/public/themes/default/images/#{pngfile}rb.png) no-repeat right bottom; position:relative; left:2px; ">
+		<div style="padding:10px;">
+		<ui:insert />
+		</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</td></tr></table>
+    
+</ui:composition>

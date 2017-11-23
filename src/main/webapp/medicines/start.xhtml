@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                template="/layout/template_new.xhtml">
+
+    <ui:param name="title" value="#{messages['meds.start']}"/>
+    <ui:param name="topmenu" value="1" />
+    <ui:param name="left" value="0" />
+    <ui:param name="labelstyle" value="width:180px;" />
+
+
+    <ui:define name="content">
+
+        <s:decorate template="/layout/unitsel.xhtml">
+            <ui:param name="pagestyle" value="width:780px;" />
+            <p/>
+            <h:form id="main">
+                <table width="100%">
+                    <tr><td>
+
+                        <s:decorate template="/layout/dateedit.xhtml" >
+                            <ui:define name="label">#{messages['Tbunit.medManStartDate']}:</ui:define>
+                            <ui:param name="required" value="true" />
+                            <ui:param name="future" value="false" />
+                            <ui:param name="datefield" value="#{medicineManStartHome.startDate}" />
+                        </s:decorate>
+                        <p/>
+
+                    </td></tr>
+                    <tr><td>
+                        <b>#{messages['meds.start.medtitle']}</b>
+                    </td></tr>
+                    <tr><td>
+                        <h:panelGroup id="medicines">
+
+                            <h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty medicineManStartHome.sourcesInfo}" style="color:#b0b0b0;padding:5px;"/>
+                            <s:fragment rendered="#{not empty medicineManStartHome.sourcesInfo}">
+                                <a:repeat value="#{medicineManStartHome.sourcesInfo}" var="s">
+                                    <table width="100%" class="table1">
+                                        <tr>
+                                            <td colspan="7" class="highlight">
+                                                #{s.source.name}
+                                            </td>
+                                        </tr>
+                                        <tr><th>#{messages['Medicine']}</th>
+                                            <th>#{messages['Batch.expiryDate']}</th>
+                                            <th align="right">#{messages['Batch.numContainers']}</th>
+                                            <th align="right">#{messages['meds.movs.availableqtty']}</th>
+                                            <th align="right">#{messages['global.unitPrice']}</th>
+                                            <th align="right">#{messages['global.totalPrice']}</th>
+                                            <th>#{messages['form.action']}</th>
+                                        </tr>
+                                        <a:repeat value="#{s.items}" var="it">
+                                            <tr class="lin1">
+                                                <td class="colb" colspan="3">
+                                                    <div class="medicine-icon" />
+                                                    <h:outputText value="#{it.medicine}" />
+                                                </td>
+                                                <td class="colrb"><b>
+                                                    <h:outputText value="#{it.quantity}" >
+                                                        <f:convertNumber pattern="#,###,###,##0"/>
+                                                    </h:outputText>
+                                                </b></td>
+                                                <td class="colrb"><b>
+                                                    <h:outputText value="#{it.unitPrice}" >
+                                                        <f:convertNumber pattern="#,###,##0.0000"/>
+                                                    </h:outputText>
+                                                </b></td>
+                                                <td class="colrb"><b>
+                                                    <h:outputText value="#{it.totalPrice}" >
+                                                        <f:convertNumber pattern="#,###,##0.00"/>
+                                                    </h:outputText></b></td>
+                                                <td class="colcb">
+                                                    <a:commandLink value="#{messages['meds.receiving.newbatch']}"
+                                                                   action="#{medicineManStartHome.startNewBatch(it)}"
+                                                                   reRender="batchpnl" oncomplete="showBatchDlg();" ajaxSingle="true" styleClass="right-icon"/>
+                                                </td>
+                                            </tr>
+
+                                            <a:repeat value="#{it.batches}" var="b">
+                                                <tr>
+                                                    <td class="colb" style="padding-left:35px;">
+                                                        <s:decorate template="/layout/batch.xhtml" >
+                                                            <ui:param name="batch" value="#{b.batch}" />
+                                                        </s:decorate>
+                                                    </td>
+                                                    <td class="colcb">
+                                                        <h:outputText value="#{b.batch.expiryDate}" converter="localeDateConverter" />
+                                                    </td>
+                                                    <td class="colrb">
+                                                        <h:outputText value="#{b.batch.numContainers}" >
+                                                            <f:convertNumber pattern="#,###,##0"/>
+                                                        </h:outputText>
+                                                        <h:outputText value="(#{b.batch.quantityContainer})" style="margin-left:5px;">
+                                                            <f:convertNumber pattern="#,###,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="colrb">
+                                                        <h:outputText value="#{b.quantity}"><f:convertNumber pattern="#,###,##0" /></h:outputText></td>
+                                                    <td class="colrb">
+                                                        <h:outputText value="#{b.batch.unitPrice}"><f:convertNumber pattern="#,###,##0.0000" /></h:outputText></td>
+                                                    <td class="colrb">
+                                                        <h:outputText value="#{b.batch.totalPrice}"><f:convertNumber pattern="#,###,##0.00" /></h:outputText></td>
+                                                    <td class="colcb">
+                                                        <a:commandLink action="#{medicineManStartHome.startBatchEdit(it,b)}"
+                                                                       value="#{messages['form.edit']}"
+                                                                       reRender="batchpnl"
+                                                                       oncomplete="showBatchDlg();"
+                                                                       ajaxSingle="true"/>
+                                                        <br/>
+                                                        <a:commandLink action="#{medicineManStartHome.deleteBatch(it,b)}"
+                                                                       value="#{messages['form.remove']}"
+                                                                       reRender="medicines"
+                                                                       ajaxSingle="true"
+                                                                       onclick="if (!confirm('#{messages['form.confirm_remove']}')) return false;"/>
+                                                    </td>
+                                                </tr>
+                                            </a:repeat>
+                                        </a:repeat>
+                                    </table>
+                                </a:repeat>
+                            </s:fragment>
+                        </h:panelGroup>
+                    </td></tr>
+                    <tr><td align="right">
+                        <a:commandLink action="#{medicineManStartHome.startMedicineManagement}"
+                                       styleClass="button"
+                                       onclick="openWaitDlg();"
+                                       oncomplete="closeWaitDlg();"
+                                       reRender="main">
+                            <span>#{messages['form.ok']}</span>
+                        </a:commandLink>
+                        <s:link styleClass="button-alt" action="cancel" >
+                            <span>#{messages['form.cancel']}</span>
+                        </s:link>
+                    </td></tr>
+                </table>
+                <span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+
+            </h:form>
+        </s:decorate>
+
+        <script type="text/javascript">
+            <!--
+            function checkprod() {
+                cb = document.getElementById('main:prod:prod');
+                if (cb.options[cb.selectedIndex].text == '-') {
+                    alert("#{messages['drugs.movs.medicinereq']}");
+                    return false;
+                }
+                return true;
+            }
+            -->
+        </script>
+
+        <script type="text/javascript">
+            window.decSeparator = '#{timezones.decimalSeparator}';
+            function showBatchDlg() {
+                showModalAutoTop('batchdlg');
+                jQuery('#formbatch\\:dt\\:dtInputDate').mask('#{messages['locale.dateMask']}');
+            }
+
+            function hideBatchDlg() {
+                Richfaces.hideModalPanel('batchdlg');
+            }
+            function batchValidationErrors() {
+                fld = document.getElementById("formbatch:maximunSeverity");
+                if (fld != null)
+                    return fld.value == "2";
+                else return false;
+            }
+        </script>
+        <rich:modalPanel id="batchdlg" width="530" zindex="2000" autosized="true">
+            <!-- <f:facet name="header">
+                <h:outputText id="title1" value="#{messages['form.data_edit']} - #{messages['Batch']}" />
+            </f:facet> -->
+            <h:panelGroup id="batchpnl">
+                <a:region>
+                    <a:form id="formbatch">
+                        <table width="100%" style="border-collapse:collapse;">
+                            <tr><td colspan="2">
+                                <div id="tblsel" style="overflow: auto; width: 505px; height: 270px; padding:0px; margin: 0px;">
+                                    <h:outputText style="font-weight:bold" value="#{medicineManStartHome.batchInfo.batch.batchNumber==null? messages['form.new']: messages['form.data_edit']} - #{messages['Batch']}" />
+                                    <s:decorate template="/layout/display.xhtml" >
+                                        <ui:define name="label">#{messages['Medicine']}:</ui:define>
+                                        <h:outputText value="#{medicineManStartHome.medicineInfo.medicine}" />
+                                    </s:decorate>
+
+                                    <s:decorate template="/layout/edit.xhtml" >
+                                        <ui:define name="label">#{messages['Batch.batchNumber']}:</ui:define>
+                                        <h:inputText id="batchnumber" value="#{medicineManStartHome.batchInfo.batch.batchNumber}" size="30" required="true">
+                                            <a:support event="onchange" reRender="formbatch" action="#{medicineManStartHome.verifyBatch}" ajaxSingle="true"
+                                                       process="batchnumber,batchlabfab" focus="batchlabfab"/>
+                                        </h:inputText>
+                                    </s:decorate>
+
+                                    <s:decorate template="/layout/edit.xhtml" >
+                                        <ui:define name="label">#{messages['Batch.manufacturer']}:</ui:define>
+                                        <h:inputText id="batchlabfab" value="#{medicineManStartHome.batchInfo.batch.manufacturer}" size="80" style="width:250px">
+                                            <a:support event="onchange" reRender="formbatch" action="#{medicineManStartHome.verifyBatch}" ajaxSingle="true"
+                                                       process="batchnumber,batchlabfab" focus="batchlabfab"/>
+                                        </h:inputText>
+                                    </s:decorate>
+
+                                    <s:decorate template="/layout/dateedit.xhtml" >
+                                        <ui:define name="label">#{messages['Batch.expiryDate']}:</ui:define>
+                                        <ui:param name="required" value="true" />
+                                        <ui:param name="datefield" value="#{medicineManStartHome.batchInfo.batch.expiryDate}" />
+                                    </s:decorate>
+
+                                    <hr/>
+
+                                    <s:decorate id="qtd" template="/layout/edit.xhtml" >
+                                        <ui:define name="label">#{messages['meds.movs.availableqtty']}:</ui:define>
+                                        <h:inputText id="qtd" value="#{medicineManStartHome.batchInfo.quantity}" required="true" onkeypress="return numbersOnly(this,event);" >
+                                            <f:validateDoubleRange minimum="1"/>
+                                        </h:inputText>
+                                        (#{medicineManStartHome.medicineInfo.medicine.dosageForm})
+                                    </s:decorate>
+
+                                    <s:decorate id="qtdcon" template="/layout/edit.xhtml" >
+                                        <ui:define name="label">#{messages['Batch.quantityContainer']}:</ui:define>
+                                        <h:inputText id="qtdcon" value="#{medicineManStartHome.batchInfo.batch.quantityContainer}" required="true" onkeypress="return numbersOnly(this,event);" >
+                                            <f:validateDoubleRange minimum="1"/>
+                                        </h:inputText>
+                                        (#{medicineManStartHome.medicineInfo.medicine.dosageForm})
+                                    </s:decorate>
+
+                                    <s:decorate id="uprice" template="/layout/edit.xhtml" >
+                                        <ui:define name="label">#{messages['global.unitPrice']}:</ui:define>
+                                        <h:inputText id="uprice" value="#{medicineManStartHome.batchInfo.batch.unitPrice}" required="true"
+                                                     converter="currencyConverter" onkeyup="return changeUnitPrice(this);">
+                                        </h:inputText>
+                                    </s:decorate>
+
+                                    <s:decorate id="tprice" template="/layout/edit.xhtml" >
+                                        <ui:define name="label">#{messages['global.totalPrice']}:</ui:define>
+                                        <h:inputText id="tprice" value="#{medicineManStartHome.batchInfo.batch.totalPrice}" required="true"
+                                                     converter="currencyConverter" onkeyup="return changeTotalPrice(this);">
+                                            <f:validateDoubleRange minimum="0.01"/>
+                                        </h:inputText>
+                                    </s:decorate>
+                                    <h:inputHidden id="maximunSeverity" value="#{facesContext.maximumSeverity.ordinal}" rendered="#{facesContext.maximumSeverity != null}" />
+
+                                </div>
+                            </td></tr>
+                            <tr><td>
+                                <span style="color:red;">*</span> #{messages['javax.faces.component.UIInput.REQUIRED']}
+                                <ui:include src="/layout/waitstatus.xhtml" />
+                            </td>
+                                <td align="right">
+                                    <a:commandLink action="#{medicineManStartHome.finishBatchEditing}" styleClass="button"
+                                                   reRender="batchpnl,medicines"
+                                                   data="#{medicineManStartHome.validated}"
+                                                   onclick="if (!disableButton(this)) return false;"
+                                                   oncomplete="enableButton();if (data) hideBatchDlg();">
+                                        <span>#{messages['form.ok']}</span>
+                                    </a:commandLink>
+                                    <s:link styleClass="button-alt" onclick="hideBatchDlg(); return false;" propagation="end">
+                                        <span>#{messages['form.cancel']}</span>
+                                    </s:link>
+                                </td></tr>
+
+                        </table>
+
+                    </a:form>
+                </a:region>
+            </h:panelGroup>
+        </rich:modalPanel>
+
+    </ui:define>
+
+</ui:composition>

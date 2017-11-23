@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:a="https://ajax4jsf.dev.java.net/ajax"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template_new.xhtml">
+
+<ui:param name="title" value="#{messages['cases.regs']}" />
+
+<ui:param name="topmenu" value="0" />
+<ui:param name="labelstyle" value="width:180px" />
+
+<ui:define name="content">
+<h1>#{title}</h1>
+
+<s:decorate template="/layout/casebody.xhtml" rendered="#{caseHome.canEditTreatment}">
+	<a:form id="main">
+	<h:panelGroup id="pnltreatment">
+	
+	<div class="button-bar">
+		<a:commandLink 
+			onclick="showPeriodDlg();"
+			action="#{treatmentHome.startTreatmentPeriodEditing}"
+			reRender="formperiod" styleClass="button-alt" ajaxSingle="true" >
+			<span>#{messages['cases.regimens.changeperiod']}...</span>
+		</a:commandLink>
+
+		<a:commandLink
+			onclick="showMedicineDlg();"
+			action="#{treatmentHome.startAddMedicine}"
+			reRender="formmedicine" styleClass="button-alt" ajaxSingle="true">
+			<span>#{messages['Regimen.add']}...</span>
+		</a:commandLink>
+	</div>
+	
+	<div style="padding-left:4px;padding-top:10px;padding-bottom:10px;">
+	<s:decorate template="/layout/display.xhtml">
+		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+		#{tbcase.regimen!=null ? (tbcase.regimen.name): messages['regimens.individualized']}
+		<h:panelGroup id="msgindiv">
+		<s:fragment rendered="#{treatmentHome.regimenMovedToIndivid}">
+			<span class="alert-icon" />
+			<span class="hint">#{messages['cases.treat.regmovedtoindivid']}</span>
+		</s:fragment>
+		</h:panelGroup>
+		<a:commandLink  
+			action="#{treatmentHome.startRegimenChange}"
+			reRender="formregimen"
+			ajaxSingle="true"
+			style="margin-left:10px" 
+			onclick="showRegimenDlg();" >
+			<span>#{messages['cases.regimens.change']}...</span>
+		</a:commandLink>
+	</s:decorate>						
+
+	<div class="paragraph">#{messages['FilterHealthUnit.TREATMENT_UNIT']}</div>	
+    <s:decorate template="/layout/tbselection.xhtml" >
+    	<ui:param name="tbunitselection" value="#{treatmentHome.tbunitselection}" />
+    	<ui:param name="required" value="true" />
+    </s:decorate>
+	</div>						
+
+	<s:decorate template="treattable.xhtml">
+		<ui:param name="editing" value="true" />
+	</s:decorate>
+
+	</h:panelGroup>
+
+	<div class="button-bar">
+	<a:commandLink action="#{treatmentHome.saveChanges}" styleClass="button" 
+            	reRender="main,messages" 
+            	oncomplete="enableButton();"
+            	onclick="if (!disableButton(this)) return false;"  >
+		<span>#{messages['form.save']}</span>
+    </a:commandLink>
+
+	<a:commandLink action="cancel" styleClass="button-alt" immediate="true" onclick="disableButton(this)">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
+	</div>
+
+<script type="text/javascript"><!--
+waitdiv = '<div style="float:left" class="wait-icon"/>';
+function showMedicineDlg() {
+	jQuery('#formmedicine .form-content').html(waitdiv);
+	Richfaces.showModalPanel('medicinedlg');
+}
+function showPeriodDlg() {	
+	jQuery('#formperiod .form-content').html(waitdiv);
+	Richfaces.showModalPanel('perioddlg'); 
+}
+function showRegimenDlg() { 
+	jQuery('#formregimen .form-content').html(waitdiv);
+	Richfaces.showModalPanel('regimendlg'); 
+} 
+function showRemoveDlg() { 
+	jQuery('#formremove .form-content').html(waitdiv);
+	Richfaces.showModalPanel('removedlg'); 
+} 
+function formButtonPost(button) {
+	if (!disableButton(button)) return false;
+	return true;
+}
+
+--></script>
+
+ 
+	</a:form>
+</s:decorate>
+
+</ui:define>
+
+<ui:define name="dialogs">
+
+<rich:modalPanel id="perioddlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['cases.treat']}</f:facet>
+	<ui:param name="labelstyle" value="width:150px" />
+	<h:form id="formperiod" style="padding:10px;">
+
+	<div class="form-content">
+	<h:panelGroup rendered="#{treatmentHome.formEditing=='TREATMENT'}">
+	<h:messages globalOnly="true" styleClass="error" layout="table" />
+
+	<h2>#{messages['RegimenPhase.INTENSIVE']}</h2>
+	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniTreatmentDate}">
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/>
+    	<ui:param name="checkDeathDate" value="true" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniTreatmentDate}">
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+		<h:outputText value="#{treatmentHome.iniDate}" converter="localeDateConverter"/>
+	</s:decorate>
+
+	<h2>#{messages['RegimenPhase.CONTINUOUS']}</h2>
+	<s:decorate template="/layout/dateedit.xhtml" rendered="#{treatmentHome.canChangeIniContinuousPhase}">
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{treatmentHome.iniContinuousPhase}"/>
+    	<ui:param name="checkDeathDate" value="true" />
+	</s:decorate>
+	
+	<s:decorate template="/layout/display.xhtml" rendered="#{not treatmentHome.canChangeIniContinuousPhase}">
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+		<h:outputText value="#{treatmentHome.iniContinuousPhase}" converter="localeDateConverter"/>
+	</s:decorate>
+
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
+    	<ui:param name="edtid" value="edtEndContPhase"/> 
+	</s:decorate>
+	</h:panelGroup>
+	</div>
+	
+	<div class="button-bar">	
+	<a:commandLink action="#{treatmentHome.endTreatmentPeriodEditing}"
+		data="#{treatmentHome.validated}"
+		styleClass="button" reRender="formperiod,messages"
+		onclick="if (!formButtonPost(this)) return false;"
+		oncomplete="if (!data) {enableButton(); return false;} Richfaces.hideModalPanel('perioddlg'); updateTreatmentTable();">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink> 
+
+	<a:commandLink styleClass="button-alt" onclick="Richfaces.hideModalPanel('perioddlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
+	</div>
+	
+	</h:form>
+</rich:modalPanel>
+
+
+
+<rich:modalPanel id="removedlg" width="500" autosized="true" zindex="2000" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['form.remove']}</f:facet>
+	<ui:param name="labelstyle" value="width:150px" />
+	<h:form id="formremove" style="padding:10px;">
+
+	<div class="form-content">
+	<h:panelGroup id="removepnl" rendered="#{treatmentHome.formEditing=='REMOVE'}">
+	<h:messages globalOnly="true" styleClass="error" layout="table" />
+
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{treatmentHome.iniDate}"/>
+    	<ui:param name="checkDeathDate" value="true" />
+	</s:decorate>
+
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{treatmentHome.endDate}"/> 
+	</s:decorate>
+	</h:panelGroup>
+	</div>
+	
+	<div class="button-bar">
+	<a:commandLink action="#{treatmentHome.endRemovePeriod}"
+		data="#{treatmentHome.validated}"
+		styleClass="button" reRender="formremove,msgindiv"
+		onclick="formButtonPost(this)"
+		oncomplete="this.disabled=false;if (!data) return false; Richfaces.hideModalPanel('removedlg');updateTreatmentTable();">
+		<span>#{messages['form.remove']}</span>
+	</a:commandLink>
+
+	<a:commandLink styleClass="button-alt"  
+		onclick="Richfaces.hideModalPanel('removedlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
+	</div>
+	</h:form>
+</rich:modalPanel>
+
+
+
+
+<rich:modalPanel id="medicinedlg" width="700" autosized="true" zindex="2000" 
+	trimOverlayedElements="false">
+	<f:facet name="header">#{messages['PrescribedMedicine']}</f:facet>
+	<ui:param name="labelstyle" value="width:110px" />
+	<h:form id="formmedicine" style="padding:10px;">
+
+	<div class="form-content">
+	<h:panelGroup rendered="#{treatmentHome.formEditing=='MEDICINE'}">
+
+	<h:messages globalOnly="true" styleClass="error" layout="table" />
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Medicine']}:</ui:define>
+		<h:selectOneMenu value="#{prescribedMedicine.medicine}" required="true"> 
+			<s:selectItems var="med" value="#{medicines}" noSelectionLabel="-" label="#{med}"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Period.iniDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{prescribedMedicine.period.iniDate}"/>
+    	<ui:param name="checkDeathDate" value="true" />
+	</s:decorate>
+
+	<s:decorate template="/layout/dateedit.xhtml">
+		<ui:define name="label">#{messages['Period.endDate']}:</ui:define>
+    	<ui:param name="required" value="true" /> 
+    	<ui:param name="datefield" value="#{prescribedMedicine.period.endDate}"/> 
+	</s:decorate>
+	
+	<s:div style="display:block;height:40px;" rendered="#{not treatmentHome.newPrescribedMedicine}">
+		<h:selectBooleanCheckbox value="#{treatmentHome.preservePreviousPeriod}"/>#{messages['cases.treat.preservePreviousPeriod']}
+	</s:div>
+
+	<s:decorate template="/layout/edit.xhtml" >
+		<ui:define name="label">#{messages['PrescribedMedicine.doseUnit']}:</ui:define>
+		<h:selectOneMenu value="#{prescribedMedicine.doseUnit}" required="true" >
+           	<f:selectItems value="#{treatmentHome.doses}" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['PrescribedMedicine.frequency']}:</ui:define>
+		<h:selectOneMenu value="#{prescribedMedicine.frequency}" required="true" >
+			<f:selectItem itemLabel="-" itemValue="#{null}" />
+           	<f:selectItems value="#{frequencies}" />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['Source']}:</ui:define>
+		<h:selectOneMenu value="#{prescribedMedicine.source}" required="true" >
+			<s:selectItems var="s" value="#{sources}" noSelectionLabel="-" label="#{s}"/>
+			<s:convertEntity />
+		</h:selectOneMenu>
+	</s:decorate>
+
+	<s:decorate template="/layout/edit.xhtml">
+		<ui:define name="label">#{messages['global.comments']}:</ui:define>
+		<h:inputTextarea value="#{prescribedMedicine.comments}" style="width:400px;height:40px;"/>
+	</s:decorate>
+	</h:panelGroup>
+	</div>
+		
+	<div class="button-bar">
+	<a:commandLink 
+		action="#{treatmentHome.endMedicineEditing}"
+		data="#{treatmentHome.validated}"
+		styleClass="button"
+		onclick="formButtonPost(this)" 
+		reRender="formmedicine,msgindiv" 
+		oncomplete="enableButton();if (!data) return false;Richfaces.hideModalPanel('medicinedlg');updateTreatmentTable();">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+		
+	<a:commandLink styleClass="button-alt"  
+		onclick="Richfaces.hideModalPanel('medicinedlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
+	</div>
+	</h:form>
+</rich:modalPanel>
+
+
+
+<rich:modalPanel id="regimendlg" width="550" autosized="true" zindex="2000" trimOverlayedElements="false">
+	<f:facet name="header">#{messages['cases.regs']}</f:facet>
+	<ui:param name="labelstyle" value="width:110px" />
+	<h:form id="formregimen" style="padding:10px;">
+
+	<div class="form-content">
+	<h:panelGroup id="regimenpnl" rendered="#{treatmentHome.formEditing=='REGIMEN'}" >
+	<h:messages styleClass="error" layout="table" globalOnly="true" />
+	<s:decorate template="/layout/display.xhtml" >
+		<ui:define name="label">#{messages['Regimen']}:</ui:define>
+    	<h:selectOneMenu value="#{caseRegimenHome.regimen}" required="true">
+    		<s:selectItems value="#{caseRegimenHome.availableRegimens}" var="it" label="#{it.name}" noSelectionLabel="-"/>
+    		<s:convertEntity />
+    		<a:support event="onchange" reRender="regimenpnl" ajaxSingle="true" 
+    			action="#{caseRegimenHome.refresh}" /> 
+    	</h:selectOneMenu>
+	</s:decorate>
+	
+	<div style="overflow: auto; width: 100%; height:300px;border: 1px gray solid; padding:0px; margin: 0px;">
+	<s:fragment rendered="#{not empty caseRegimenHome.regimen}">
+		<a:repeat value="#{caseRegimenHome.phases}" var="p">
+		<table width="100%" cellpadding="2" cellspacing="0" style="margin-bottom:4px;margin-bottom:1px;border:2px solid #d0d0d0;">
+		<tr><td style="background-color:#e0e0e0" height="30px">
+				<div style="text-transform: uppercase;font-weight:bold;">#{messages[p.phase.key]}</div>
+				<span style="margin-right:10px;"><b>#{messages['global.period']}:</b></span>
+				#{p.months} #{messages['global.months']}
+		</td></tr>
+		<tr><td>
+
+		<h:panelGroup id="meds">
+		<h:outputText value="#{messages['edtrec.nomedicine']}" rendered="#{empty p.medicines}" styleClass="warn"/>
+		<h:dataTable value="#{p.medicines}" var="m" width="100%" styleClass="table1" columnClasses="coll,colc,colc,colc"  
+		   rowClasses="lin1,lin2" style="clear:left;" rendered="#{not empty p.medicines}">
+		<h:column>
+			<f:facet name="header">#{messages['Medicine']}</f:facet>
+			#{m.medicine}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">#{messages['PrescribedMedicine.doseUnit']}</f:facet>
+			<h:selectOneMenu id="dose" value="#{m.doseUnit}" required="true">
+				<f:selectItems value="#{treatmentHome.doses}" />
+			</h:selectOneMenu>
+			<h:message for="dose" styleClass="error" />
+		</h:column>
+
+		</h:dataTable>
+		</h:panelGroup>
+		</td>
+		</tr></table>
+		</a:repeat>
+	</s:fragment>
+	</div>
+	</h:panelGroup>
+	</div>
+	
+	<div class="button-bar">
+	<a:commandLink action="#{treatmentHome.endRegimenChange}"
+		data="#{treatmentHome.validated}" onclick="if (!disableButton(this)) return false;" 
+		styleClass="button" reRender="regimenpnl,main"
+		oncomplete="if (!data) return false; Richfaces.hideModalPanel('regimendlg');">
+		<span>#{messages['form.ok']}</span>
+	</a:commandLink>
+
+	<a:commandLink styleClass="button-alt"  
+		onclick="Richfaces.hideModalPanel('regimendlg'); return false;">
+		<span>#{messages['form.cancel']}</span>
+	</a:commandLink>
+	</div>
+	</h:form>
+</rich:modalPanel>
+
+<ui:include src="/layout/waitdlg.xhtml" />
+
+</ui:define>
+
+</ui:composition>  
